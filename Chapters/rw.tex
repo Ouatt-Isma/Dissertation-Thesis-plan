@@ -1,0 +1,397 @@
+
+
+
+\chapter{Background and Related Work}
+% \todo[inline]{Estimated Nb Pages: 11 - 13}
+\section{Reasoning under uncertainty (maybe to be improved)}
+\todo[inline]{Estimated Nb Pages: 2}
+
+\subsection{Probabilistic and Bayesian Theory}
+\todo[inline]{READY}
+
+When assuming an objective and fully observable setting, classical binary logic can be used to assert propositions about the state of a variable as either true or false~\cite{boole1847mathematical}. For example, let $X$ be a binary variable representing the operational status of a sensor, where $X = 1$ denotes ``functional'' and $X = 0$ denotes ``faulty''.  If the internal state of the sensor is fully observable and reliable diagnostic information is available, the proposition ``the sensor is functional'' can be asserted as either true or false with certainty. However, real-world systems are rarely fully observable or deterministic. In many practical situations, the truth value of a proposition cannot be determined with certainty due to inherent variability, incomplete information, or limited observations.
+
+Probability logic~\cite{vonNeumann1956ProbabilisticLogics,Nilsson1986ProbabilisticLogic} extends binary logic by allowing propositions to take truth values in the continuous interval $[0,1]$, thereby modeling uncertainty. 
+A probability value can be interpreted as the likelihood that a proposition holds, enabling partial truth assignments and quantitative reasoning under uncertainty. 
+This framework has proven highly effective for modeling randomness and variability in complex systems. 
+However, probability theory implicitly assumes that probability values themselves are known or can be reliably estimated from sufficient evidence.
+
+In practice, this assumption is often violated. Probabilities are typically inferred from finite data, subjective judgment, or imperfect measurements, which introduces an additional layer of uncertainty that standard probability theory does not explicitly represent. 
+Moreover, probability assignments are usually observer-dependent: they reflect the belief of an individual or system given its available information, rather than an objective property of the world.
+
+Bayesian theory~\cite{gelman2013bayesian,jaynes03,Bernardo:1319894} addresses some of these challenges by treating probabilities as degrees of belief (given the knowledge) and updating them through Bayes’ rule as new evidence becomes available. 
+Bayesian inference provides a principled mechanism for incorporating prior knowledge and observational data, and it is widely used in statistics and machine learning~\cite{barberBRML2011}. 
+Nonetheless, Bayesian probability remains a single-layer uncertainty framework: uncertainty is encoded solely in probability distributions over random variables.
+
+% This limitation becomes apparent when distinguishing between uncertainty due to inherent randomness of a variable (aleatoric uncertainty) and uncertainty due to lack of knowledge or insufficient evidence (epistemic uncertainty). 
+% Consider the example of a coin toss with outcomes $H$ (heads) and $T$ (tails). 
+% An observer with no information about the coin may assign $P(H)=P(T)=0.5$. 
+% Another observer, who knows that the coin is perfectly balanced and that external conditions are controlled, may assign the same probabilities $P(H)=P(T)=0.5$, but with substantially higher confidence in this assessment. 
+% In both cases, Bayesian probability yields identical probability values, despite the fundamentally different states of knowledge underlying them.
+
+This limitation becomes apparent when distinguishing between uncertainty due to inherent randomness of a variable (aleatoric uncertainty) and uncertainty due to lack of knowledge or insufficient evidence (epistemic uncertainty). 
+Reconsider the binary sensor variable $X \in \{0,1\}$, where $X=1$ denotes that the sensor is functional and $X=0$ denotes that it is faulty. 
+An observer who has access to zero information may assign $P(X=1) = P(X=0) =0.5$, reflecting uncertainty about the sensor’s state as he has none information. Another observer may possess detailed information: for example, evidence that the sensor hardware is new and properly calibrated (supporting $X=1$), combined with recent intermittent signal dropouts or abnormal readings (supporting $X=0$). 
+When these pieces of evidence are considered together, this observer may also assign $P(X=1)=P(X=0)=0.5$, but for a fundamentally different reason namely, the presence of conflicting evidence rather than pure ignorance.
+% Another observer, who has verified that the sensor hardware is new, properly calibrated, and operating under controlled conditions, may also assign $P(X=1)=0.5$ if no faults have yet been observed, but with substantially higher confidence in this assessment. In both cases, Bayesian probability yields the same probability value, despite the fundamentally different levels of knowledge and evidence available to the observers. 
+The probability value captures uncertainty about the sensor state itself, but it does not encode uncertainty about the reliability of the probability estimate. For the first observer, the uncertainty about the probability estimate is high, while in the second case it's low. 
+
+This example illustrates a key limitation of probabilistic and Bayesian frameworks: they cannot distinguish between uncertainty arising from randomness of the variable itself and uncertainty arising from ignorance or lack of evidence. 
+As a result, probabilistic models conflate confidence in a probability estimate with the probability value itself. 
+This motivates the need for extended uncertainty representations that explicitly model uncertainty about probabilities, enabling a separation between beliefs and uncertainty. 
+Such representations form the foundation for evidence-based theories of uncertainty, including Dempster--Shafer theory and Subjective Logic, which are discussed in the following sections.
+
+\subsection{Dempster-Shafer Theory}
+Dempster-Shafer Theory (DST)~\cite{shafer1976mathematical,beynon2000dempster} and Subjective Logic (SL)~\cite{josang2016subjective,josang2001logic} explicitly integrate the subjective nature and ownership of beliefs in its formalism, allowing the combination of different beliefs about the same proposition.
+
+In DST, probability values are assigned to sets of possibilities rather than single events. 
+Furthermore, Dempster-Shafer’s rule of combination is associative, commutative and non-idempotent~\cite{josang2012dempster} and the functions are simple to implement and compute.  
+These properties of Dempster-Shafer's rule of combination are beneficial for real-time applications as sources can be combined sequentially, and at a random order~\cite{dezert2014on}. 
+However, these results should be considered with caution, as a later study~\cite{dezert2014on} showed that the order in which sources get aggregated may impact the results. 
+Another downside of the DST is that it can lead to counter-intuitive results when combining conflicting sources~\cite{zadeh2013on}, meaning that the rule cannot be applied if the two sources are in complete opposition.
+Finally, the original formalisation of DST does not model the aspect of trust transitivity.
+These limitations of the DST are addressed in the Subjective Logic (SL) theory~\cite{josang2016subjective,josang2001logic}. 
+
+\textbf{Information Fusion}
+\todo[inline]{Finish Previous paragraph with something like fusing information helps having more source so reduce uncertainty}
+
+In various domains, such as sensor fusion, expert system development, and most notably multi-agent systems, there is an increasing demand for information fusion or aggregation.
+Within the realm of multi-agent systems, knowledge refers to the information acquired through agents’ observations, often termed as belief or belief base~\cite{pigozzi2007aggregation}. 
+Previous research efforts~\cite{pigozzi2007aggregation, gregoire2006logic} have represented belief using propositional logic-based formalisms. 
+For instance, Grégoire and Konieczny~\cite{gregoire2006logic}  conducted a survey on logic-based information fusion approaches, exploring their connection to multi-agent negotiation. 
+Lastly, there have been various methods for belief fusion proposed in the literature~\cite{pigozzi2007aggregation,konieczny2002merging,tamargo2012modeling,tran2013axiomatic} that provide general basis for knowledge or information aggregation.
+However, the above-mentioned studies have primarily focused on the field of information systems.
+
+Munz and Dietmayer~\cite{munz2011using} propose an approach to enhance sensor fusion system detection performance, measured in terms of detection rate versus false alarm rate. 
+To achieve this, they employ an algorithm that directly incorporates Dempster-Shafer Theory-based sensory information.
+In other related work~\cite{tang2017improved}, Dempster-Shafer Theory (DST) is also utilized to model sources of uncertainty before applying evidence fusion. 
+\cite{munz2011using,tang2017improved}  are mainly concerned with the fusion of data in a single system, where the set of sensors are the multi-sources, rather than the fusion of information or knowledge across multiple independent systems in a multi-agent system setup.
+
+
+
+
+
+\section{
+% Trust Network Analysis with 
+Subjective Logic and Trust}
+\todo[inline]{Estimated Nb Pages: 4}
+Subjective Logic (SL) \cite{josang2016subjective,josang2001logic} is a framework for artificial reasoning based on probabilistic logic and Dempster-Shafer theory of evidence~\cite{dempster1968generalization,shafer1976mathematical}. SL inherently allows:
+\begin{enumerate}
+  \item uncertainties representation as part of the fundamental building block of SL, called \emph{subjective opinion}, and
+  \item reasoning about the uncertainties through a process of \emph{belief fusion} in which multiple subjective opinions are aggregated based on the selected fusion operator. 
+\end{enumerate}
+
+We explain subjective opinions and belief fusion in more detail in~\cref{subsec:SL_opinions_fusion}.
+Additionally, in Section~\ref{subsec:SL_STN}, we explain more advanced SL concepts---\emph{subjective trust networks} and \emph{trust discounting}---since they are relevant for the contributions that we make as part of this paper. 
+
+\subsection{Subjective Opinions} \label{subsec:SL_opinions}
+%
+are the fundamental building blocks of SL.
+The representation of a subjective opinion is a composite function consisting of belief masses, uncertainty mass and base rate. 
+Formally, a subjective opinion expresses a belief about a state of a variable $X$ which takes its values from a domain $\mathbb{X}$ (\ie, a state space). 
+The domain is the set of all different possible states for $X$. 
+The different values of a domain are exclusive, \ie, only one state value is possible at any moment in time-, and exhaustive, \ie, all possible state values are included in the domain. 
+Domains can be binary (exactly two values) or $n$-ary ($n$ values) where $n > 2$. 
+A binary domain can be denoted $\mathbb{X} = \{x, \overline{x}\}$, where $\overline{x}$ is the complement (negation) of $x$.
+
+The notation $\omega_X^A$ is used to denote opinions in subjective logic, where the subscript $X$ indicates the target variable or proposition to which the opinion applies, and the superscript $A$ indicates the subject agent/source who holds the opinion. 
+%Superscripts can be omitted when it is implicit or irrelevant who the belief owner is.
+
+\begin{definition}[Binomial Opinion~\cite{josang2016subjective}] \label{binomial_opinion}
+Let $\mathbb{X} = \{x, \overline{x}\}$ be a binary domain with binomial random variable $X \in \mathbb{X}$. A binomial opinion about the truth/presence of value $x$ is the ordered quadruplet $\omega_x = (b_x,d_x,u_x,a_x)$, where the additivity requirement $b_x+d_x+u_x =1$ is satisfied, and where the respective parameters are defined as: 
+
+\indent $b_x$ : belief mass in support of $x$ being TRUE (i.e. $X = x$),\\
+\indent $d_x$ : disbelief mass in support of $x$ being FALSE (i.e. $X = \overline{x}$), \\
+\indent $u_x$: uncertainty mass representing the vacuity of evidence, \\
+\indent $a_x$ : base rate, i.e., prior probability of $x$ without any evidence.
+\end{definition}
+
+The projected probability of a binomial opinion about value x is defined by:
+\begin{equation} \label{eq:projected_prob}
+	P(x) = b_x + a_x u_x.
+\end{equation}
+
+
+\todo[inline]{To be merged and intro of SL}
+
+Subjective Logic (SL)~\cite{10.5555/3031657} is a probabilistic logic framework designed to reason under uncertainty by explicitly modeling belief, disbelief, and uncertainty. It is widely used in reputation based system~\cite{LIU2011547} and neural network trust assessment~\cite{dataai,ouattaracalibration}. It extends classical and Bayesian logic to support subjective opinions that reflect partial or incomplete knowledge. 
+Subjective Logic introduces uncertainty as a first-class element, permitting random variables to explicitly quantify confidence (or lack thereof) in a given proposition.
+%
+The notion of \emph{subjective opinion} is one of the main building blocks of the SL theory.
+A binomial subjective opinion about an event $x$ of binary variable $X$ held by agent $A$ is represented as:
+\(
+\omega^A_{X=x} = (b, d, u, a) 
+\) where $b$ is the belief mass supporting $X=x$ being true, $d$ is the disbelief mass supporting $X=x$ being false, $u$ is the uncertainty mass (i.e., the lack of evidence), and $a$ is the base rate (the prior probability of $X=x$).
+
+These components satisfy the constraint: $b + d + u = 1$, and the projected probability of $X=x$ being true is defined as:
+\(
+P(x) = b(x) + a(x) \cdot u(x).
+\)
+
+Subjective Logic provides a rigorous mathematical framework for reasoning in environments where knowledge is incomplete, conflicting, or uncertain---an essential feature in trust-based systems.
+
+
+
+
+\subsection{Subjective Trust Networks} \label{subsec:SL_STN}
+%
+Subjective Logic can be used to analyse trust through Subjective Trust Networks (STNs). 
+STNs represent trust and belief relationships from agents, via other agents and sensors to target entities/variables, where each trust and belief relationship is expressed as a subjective opinion ($\omega$)~\cite{josang2016subjective}. 
+In~\cref{fig:STN}, we show a simple example of an STN graph, where the goal is to derive the functional trust $\omega^A_X$. 
+The main SL operators used for STN graph processing are the \emph{fusion operators} and \emph{trust discounting}.
+For example, $\omega^A_X$ is calculated as follows:
+\begin{equation} \label{eq1}
+\omega^A_X = \omega_X^{[A;B]}\odot \omega_X^{[A;C]}=(\omega^A_B\otimes_{_{TE}}\omega^B_X)\odot(\omega^A_C\otimes_{_{TE}}\omega^C_X),
+\end{equation}
+%
+where the discounted opinions $\omega_X^{[A;B]} = \omega^A_B\otimes_{_{TE}}\omega^B_X$ and $\omega_X^{[A;C]} = \omega^A_C\otimes_{_{TE}}~\omega^C_X$ are fused together. 
+
+Previously, we explained that there are various types of fusion operators and the decision on which operator should be used is application- and use case-dependent.
+Hence, in Eq.~\cref{eq1}, with $\odot$ we annotate a generic fusion operator.
+%
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.7]{img/discount/STN.pdf}
+    \caption{STN example}
+    \label{fig:STN}
+\end{figure}
+
+Referring again to one of the paths in~\cref{fig:STN} (\eg, $ABX$ and~\cref{fig:tdis}), we can see that analyst $A$ receives information from $B$, which could be a vehicle or a sensor in an example from the automotive domain. Analyst $A$ forms an opinion on the trustworthiness of $B$ regarding the specific information (trust scope) provided about a variable $X$. 
+According to the transitive trust principle, the figure shows that  
+A trusts B (though referral trust), since A knows that B has a direct observation or experience with X for a concrete scope (\ie, B has a functional or direct trust on X). 
+Using both $A$'s trust in $B$ ($\omega^A_B$) and $B$'s opinion about $X$ ($\omega^B_X$) received by $A$, $A$ derives an opinion about $X$ ($\omega^A_X$).
+
+
+\textbf{Different Trust Discounting Operators} \label{subsec:TD_operators}
+%
+In his book~\cite{josang2016subjective}, J{\o}sang proposes two trust discount operators for 1) Two-Edge Path and 2) Multi-Edge Path.
+The process of trust discounting for Two-Edge Path is shown in~\cref{fig:tdis}. 
+As the name suggests, this trust discounting operator ($\otimes_{_{TE}}$) discounts the opinions on two edges: one referral trust $\omega^A_B$ from node A to node B, and one functional trust $\omega^B_X$ from node B to variable X. 
+%
+\begin{figure}
+\centering
+    \includegraphics[width=0.7\textwidth]{img/discount/tdis.pdf}
+    \caption{Trust discounting for Two-Edge Path~\cite[Ch.14.3]{josang2016subjective}}
+    \label{fig:tdis}
+    \vspace*{-0.3cm}
+\end{figure}
+%
+
+The Two-Edge Path Discounting Operator ($\otimes_{_{TE}}$) is defined as follows~\cite{josang2016subjective}:
+%
+\begin{equation}
+    \label{equ:td}
+    \omega_X^{[A;B]} = \omega^A_B \otimes_{_{TE}} \omega^B_X:
+        \begin{cases}
+            b^{[A;B]}_X &= P^A_B b^B_X\\
+            d^{[A;B]}_X &= P^A_B d^B_X \\
+            u^{[A;B]}_X &= 1 - (b^{[A;B]}_X + d^{[A;B]}_X)\\
+            a^{[A;B]}_X &=  a^B_X\\
+        \end{cases}
+\end{equation}
+where $P^A_B$ is the projected probability (see Eq.~\cref{eq:projected_prob}).
+The Two-Edge Path discount operator is equivalent to the \emph{Base Rate Sensitive Transitivity} that J{\o}sang et al. propose in~\cite{josang2006exploring} (cf.~\cref{sec:related_work}).
+
+The trust discounting for Multi-Edge Path describes how trust discounting is performed for longer trust paths, in situations when there are more than two adjacent edges, as shown in~\cref{fig:tdism}.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/discount/tdisM.pdf}
+    \caption{Trust Discounting for Multi-Edge Path~\cite[Ch.14.3]{josang2016subjective}}
+    \label{fig:tdism}
+\end{figure}
+%
+Namely,~\cref{fig:tdism} shows a trust path from node $A_1$ to variable $X$ via an arbitrary number of intermediate nodes $A_2, A_3, \dots, A_n$.
+
+The derived opinion $\omega_X^{[A_1; \ldots ;A_n]}$ on Multi-Edge Paths is defined as follows:
+%
+\begin{align}
+\label{equ:tdm}
+    \omega_X^{[A_1; \ldots ;A_n]} &=[\omega^{A_1}_{A_2};  \ldots; \omega^{A_{n-1}}_{A_n}] \otimes_{_{{ME}}} \omega^{A_n}_X:
+    \\
+        &\begin{cases}
+            b^{[A_1;...;A_n]}_X &= P^{A_1}_{A_n} b^{A_n}_X\\
+            d^{[A_1;...;A_n]}_X &= P^{A_1}_{A_n} d^{A_n}_X\\
+            u^{[A_1;...;A_n]}_X &= 1 - (b^{[A_1;...;A_n]}_X + d^{[A_1;...;A_n]}_X)\\
+            a^{[A_1;...;A_n]}_X &=  a^{A_n}_X\\
+        \end{cases} \notag
+\end{align}
+
+where $ P^{A_1}_{A_n}$ is the projected probability of the referral trust path $[A_1;...;A_n]$, computed as 
+%
+\begin{equation}
+\label{equ:proj_prob}
+P^{A_1}_{A_n} = \prod_{i=1}^n P^{A_i}_{A_{i+1}}.
+\end{equation}
+
+We want to emphasise that the operators for Two-Edge Path Trust Discounting ($\otimes_{_{TE}}$) and Multi-Edge Path Trust Discounting ($\otimes_{_{ME}}$) are two different operators. 
+Hence, we label them with two different symbols, as we also show in~\cref{table:TD_operators}.
+Additionally, please note that in order to apply these discount operators, the last edge should always be a functional trust edge.
+
+\begin{table}[h!]
+\caption{Trust discount operators}
+\hspace*{-0.4cm}
+\begin{tabular}{ |c|c|c|} 
+ \hline
+\textbf{Operator Name}  & \textbf{Symbol} & \textbf{Function} \\ \hline
+ Two-Edge Path \newline Eq.~\cref{equ:td},~\cref{fig:tdis} & $\otimes_{_{TE}}$ & $\omega^A_B \otimes_{_{TE}} \omega^B_X$ \\ \hline
+ Multi-Edge Path \newline Eq.~\cref{equ:tdm},~\cref{fig:tdism}  & $\otimes_{_{ME}}$ & $[\omega^{A_1}_{A_2}; \dots; \omega^{A^{n-1}}_{A_n}] \otimes_{_{ME}} \omega^{A_n}_X$ \\ \hline
+ Referral-Edge Path \newline    Eq.~\cref{equ:tdr},~\cref{fig:tdisRE}  & $\otimes_{_{RE}}$ & $((\omega^{A_1}_{A_2} \otimes_{_{RE}} \dots )\otimes_{_{RE}} \omega^{A_{n-2}}_{A_{n-1}}) \otimes_{_{RE}} \omega^{A_{n-1}}_{A_{n}}$ \\ 
+ \hline
+\end{tabular}
+\label{table:TD_operators}
+\end{table}
+    
+
+
+
+
+
+
+
+
+\textbf{Trust Propagation and Transitivity.}
+%
+J{\o}sang et al. in~\cite{josang2006exploring} investigates possible formalism for different types of trust propagation and transitivity implemented using belief reasoning based on SL. 
+As part of this work the authors propose three trust transitivity operators: \emph{Uncertainty Favouring Trust Transitivity}, \emph{Opposite Belief Favouring} and \emph{Base Rate Sensitive Transitivity}.
+However, the limitation of these three operators is the same as the fusion operators that are originally proposed in the SL~\cite{josang2016subjective}. 
+Namely, none of the existing operators supports trust discounting only on referral edges. 
+
+
+
+\todo[inline]{from DSPG Paper}
+\textbf{Subjective Trust Networks}
+
+A subjective trust network models the trust relationships among various agents or entities using Subjective Logic opinions. Each node in the network represents an entity, and each directed edge represents the trust of one entity toward another, expressed as a binomial opinion.
+%
+Formally, a trust network is represented as a directed graph $G = (V, E)$ where each edge $(A, B) \in E$ carries an opinion $\omega^A_B$ about the trustworthiness of $B$ according to $A$.
+%
+To infer trust from a source node to a target node that are not directly connected, SL employs two key operators:
+\begin{itemize}
+    \item \textbf{Discounting ($\otimes$)\cite{5319267}\cite{10706345}}: Used to propagate trust through intermediaries and it captures the concept of trust transitivity. If $A$ trusts $B$, and $B$ trusts $C$, then $A$ can derive a discounted opinion about $C$ (cf. Figure~\ref{fig:tdis}). 
+    \item \textbf{Fusion ($\oplus$)\cite{8009820}}: Used to combine multiple trust opinions about the same entity (cf. Figure~\ref{fig:tfuse}). \vspace{-0.3cm}
+\end{itemize}
+\begin{figure}
+\centering
+\begin{subfigure}{0.495\textwidth}
+    \includegraphics[width=\textwidth]{img/dspg/tdis.pdf}
+    \caption{Trust discounting of opinions}
+    \label{fig:tdis}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.495\textwidth}
+    \includegraphics[width=\textwidth]{img/dspg/tfuse.pdf}
+    \caption{Fusion of trust-discounted opinions}
+    \label{fig:tfuse}
+\end{subfigure}
+\caption{Trust operators~\cite{10.5555/3031657}}
+\label{fig:figures}
+\end{figure}
+These operations require that the underlying graph structure satisfies certain properties. In particular, trust computation using only these operators is guaranteed to be valid and well-defined when the graph is a Directed Series-Parallel Graph (DSPG). When the network is not a DSPG, transformation is necessary---a core focus of this paper.
+
+\textbf{Belief Fusion}
+%
+allows multiple opinions regarding the same proposition to be merged or aggregated into a single, collective opinion. 
+
+Several \emph{fusion operators} have been proposed that are unique to the theory: \emph{constraint fusion, cumulative fusion, averaging fusion, weighted fusion}, and \emph{consensus \& compromise fusion}.
+Depending on the concrete scenario, we might need to choose among different fusion operators with different properties.
+Additionally, J{\o}sang~\cite{josang2016subjective} has also proposed a \emph{trust discount operator} for deriving trust on transitive paths. 
+Since the trust discounting operator is essential for our work, we explain it in more detail in the upcoming section. 
+For a more detailed explanation on the other operators, including their mathematical definitions, please refer to~\cite{josang2017multi,josang2016subjective}.
+
+
+\subsubsection{Trust Discounting Operators}
+\subsubsection{Belied Fusion Operators}
+
+
+\subsection{Directed Series-Parallel Graphs (DSPG)}\label{sec:dspg}
+
+In Trust Network Analysis with Subjective Logic (TNA-SL), Directed Series-Parallel Graphs (DSPGs) serve as the canonical structure for enabling valid trust computation using discounting and fusion operators. These operations are only well-defined when applied to graphs that respect specific structural properties, namely those of a DSPG. 
+
+We begin by defining the notion of a Series-Parallel Graph, which forms the basis for DSPGs.
+\begin{definition}[Series-Parallel Graph]
+\label{def:spgraphs}
+    An SP-graph (Series-Parallel graph) can be recursively reduced to a single edge between the source node $s$ and the sink node $t$ using the following two procedures:
+\begin{enumerate}[(i)]
+        \item Replace a pair of edges incident to a node of degree 2 (excluding source and sink) with a single edge.
+    \item Replace a pair of parallel edges with a single edge between their common endpoints.
+\end{enumerate}
+\end{definition}
+\noindent For clarity, Figure~\ref{fig:spgraph} illustrates a step-by-step graph reduction. The example demonstrates four reductions:
+\emph{Reduction 1} is obtained by applying procedure (i) four times.
+\emph{Reduction 2} results from two applications of procedure (ii).
+\emph{Reduction 3} is obtained by two more applications of procedure (i).
+Finally, in Reduction 4 a single edge is produced by a single application of procedure (ii).
+The fact that the graph reduces into a single edge in this way proves that it
+is an SP-graph.
+%
+\begin{figure}
+    \centering
+\includegraphics[width=0.5\linewidth]{img/dspg/spgraphs.pdf}
+    \caption{Procedure for reducing an SP-graph into a single edge, from~\cite{10.5555/3031657}}
+    \label{fig:spgraph}
+\end{figure}
+
+An SP-graph that is also directed and acyclic, and that contains a unique source and sink, is referred to as a Directed Series-Parallel Graph (DSPG).
+
+\begin{definition}[Directed Series-Parallel Graph]
+     A DSPG is a directed, acyclic SP-graph composed entirely of paths from a unique source node to a unique sink node. 
+\end{definition}
+These definitions are essential to ensure the proper reduction of DSPGs during trust propagation and to detect potential violations of DSPG structure that require transformation.
+
+Furthermore, in the context of a subjective trust network, DSPG analysis refers to the process of computing the derived opinion of a source on a target using only SL fusion and discounting. This computation is possible only when the trust graph is a DSPG.
+
+To model the structural constraints in DSPG analysis, the following definitions have been introduced in~\cite{10.5555/3031657}:
+
+\begin{definition}[Parallel Path Subnetwork (PPS)]
+    \label{def:pps}
+    A \emph{Parallel Path Subnetwork (PPS)} is a subgraph between two connected nodes $A$ and $B$ where:
+    \begin{itemize}
+        \item the \emph{out-degree} of node $A$, denoted $outDegree(A)$ (i.e., the number of outgoing edges from $A$), is at least 2, and
+        \item the \emph{in-degree} of node $B$, denoted $inDegree(B)$ (i.e., the number of incoming edges to $B$), is at least 2.
+    \end{itemize}
+\end{definition}
+
+\begin{definition}[Nesting Level(NL)]
+    \label{def:nl}
+    The nesting level of an edge in a DSPG is defined as the number PPSs the edge belongs to.
+\end{definition}
+
+\noindent Per these definitions, the PPS list in Figure~\ref{fig:ppsv} consists of $(A, C)$, $(C, G)$, and $(A, G)$, yielding an edge nesting level of 2.
+Furthermore, based on these definitions, Jøsang~\cite{10.5555/3031657} proposed an algorithm for computing trust over DSPGs. The flowchart of the proposed algorithm can be seen in Figure~\ref{fig:algsynth1}. 
+%In that method, each reduction step replaces a PPS with a single edge and updates its nesting level (step (f)).
+This method replaces each PPS with a single edge during reduction, updating its nesting level accordingly (see Step (f) in Figure~\ref{fig:algsynth1}).
+
+
+
+
+
+\todo[inline]{From PaTAS Paper}
+\section{Uncertainty Quantification in Neural Networks}
+\todo[inline]{Estimated Nb Pages: 2}
+Quantifying trust and uncertainty in neural networks has become a central research topic, particularly in safety-critical domains. Incorrect yet confident predictions can have severe consequences. For example, data poisoning occurs when both the training and test datasets contain systematically mislabeled samples. However, the model may obtain good accuracy, precision, and recall on the poisoned test set. This observation creates the illusion of dependability despite having learned harmful or erroneous patterns. Standard metrics therefore fail to capture subtleties of model trustworthiness. As a result, diverse frameworks have been proposed to model and propagate uncertainty and trust, yet significant limitations remain as we will point out next.
+
+Uncertainty quantification (UQ) aims to estimate predictive reliability by modeling uncertainty at different levels, typically epistemic (model-based) and aleatoric (data-based)~\cite{kendall2017uncertainties}. Foundational methods include Bayesian neural networks~\cite{neal1996bayesian,blundell2015weightuncertaintyneuralnetworks,pmlr-v80-depeweg18a}, Monte Carlo dropout~\cite{gal2016dropoutbayesianapproximationrepresenting}, and ensembles~\cite{lakshminarayanan2017simplescalablepredictiveuncertainty}. Dropout provides an efficient Bayesian approximation~\cite{gal2016dropoutbayesianapproximationrepresenting}, while Bayes by Backprop~\cite{blundell2015weightuncertaintyneuralnetworks} learns weight distributions that enhance generalization and exploration in reinforcement learning. Extensions with latent variables explicitly decompose predictive uncertainty into epistemic and aleatoric components~\cite{pmlr-v80-depeweg18a}, improving decision-making in active and reinforcement learning through risk-sensitive criteria.
+
+Despite these advances, estimating and calibrating both forms of uncertainty in complex models remains challenging~\cite{Gawlikowski2023}. Studies report frequent over- or under-confidence, with uncertainty estimates often degrading under real-world conditions~\cite{begoli2019need,2506.07461,1906.02530}. In medical AI, uncalibrated confidence has been linked to critical misjudgments~\cite{wolf2025medvlms, begoli2019need}. Even well-performing models can produce unreliable confidence scores under dataset shifts~\cite{1906.02530}. Consequently, researchers have explored post-hoc calibration, such as temperature scaling~\cite{guo2017calibrationmodernneuralnetworks}, which adjusts output probabilities to better align predicted and observed frequencies. However, these approaches operate only at the output layer and assume clean data, which can still yield misleading confidence when inputs or training data are corrupted.
+
+\section{Subjective Logic Approaches to Trust}
+\todo[inline]{Estimated Nb Pages: 2}
+Subjective Logic (SL) provides a probabilistic framework for modeling belief, disbelief, and uncertainty, offering a structured approach to trust reasoning. Evidential deep learning~\cite{sensoy2018evidentialdeeplearningquantify} applies SL principles by representing class predictions as subjective opinions parameterized through a Dirichlet distribution. The model jointly predicts outcomes and quantifies confidence, distinguishing between low-confidence predictions and high-uncertainty regions such as out-of-distribution inputs. Although effective, this method assumes clean data and lacks input-level trust assessment, while PaTAS directly models such factors.
+
+Other SL-based methods focus on interpretable trust quantification. A calibration-based approach~\cite{11124121} clusters model outputs into subjective opinions to derive per-prediction trust scores without accessing internal parameters. While simple and model-agnostic, it again assumes trustworthy datasets and neglects input evidence. The DeepTrust framework by Cheng et~al.~\cite{10.3389/frai.2020.00054} instead adopts a white-box perspective, integrating dataset evidence during training to assess global model trustworthiness. Although holistic, DeepTrust’s use of SL fusion and multiplication operators lacks algebraic consistency. In particular, it maps neural-network addition to Subjective Logic fusion and neural-network multiplication to SL opinion multiplication, even though these two SL operators belong to different algebraic domains, since fusion operates over agents’ opinions whereas multiplication operates over variables, without clear explanation. Moreover, its formulation of trust backpropagation is specified only at a single-layer level, making its theoretical extension to deeper architectures unclear despite empirical evaluations on complex networks. 
+
+PaTAS addresses these limitations by introducing a coherent and well motivated, layer-wise propagation mechanism compatible with deep architectures.
+
+\section{Trust and Uncertainty Propagation}
+\todo[inline]{Estimated Nb Pages: 2}
+Recent work on uncertainty propagation seeks to improve both accuracy and computational efficiency. Mae et~al.~\cite{MAE2021394} proposed a sampling-free conversion of dropout-trained networks into Bayesian models using variance propagation. Monchot et~al.~\cite{pmlr-v202-monchot23a} employed Gaussian Mixture Models and a Split-and-Merge algorithm with a Wasserstein criterion to propagate input uncertainty without assuming Gaussianity, achieving convergence guarantees at low cost. Astudillo and Net~\cite{astudillo2011propagation} extended these ideas to multi-layer perceptrons for speech recognition, showing that observation uncertainty enhances robustness even in hybrid MLP-HMM systems.
+
+Beyond neural architectures, Ziegler and Lausen~\cite{ziegler2004spreading} proposed the Appleseed model for trust propagation in social networks using dynamic spreading activation. Though not originally intended for neural systems, it demonstrates the value of viewing trust as a structural, context-dependent quantity, an idea further developed in PaTAS.
+
+Existing approaches demonstrate growing interest in uncertainty and trust modeling to assess trust in neural networks, yet they often neglect the joint influence of input quality, data reliability, and model parameters on prediction trust. The trustworthiness of an output cannot be viewed as a fixed property of the model alone but must depend on the corresponding input and its propagation through the network. PaTAS addresses these gaps by modeling trust as a dynamic property distributed across inputs, parameters, and activations, enabling consistent and interpretable trust propagation that reflects both data quality and network structure.
+
+\section{Training Dataset Quality}
+\todo[inline]{Estimated Nb Pages: 1}
+\section{Synthesis and Gap Summary}
+\todo[inline]{Estimated Nb Pages: 1}
