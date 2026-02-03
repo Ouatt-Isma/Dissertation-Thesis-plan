@@ -1,0 +1,191 @@
+% Chapter Template
+
+\chapter{Introduction} % Main chapter title
+\todo[inline]{Estimated Nb Pages: 14-17}
+\label{chap:intro} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+\section{Research Cpntext and Motivation}
+\subsection{Why Trust in Neural Networks Matters}
+\label{sec:motivation}
+\todo[inline]{Why do we need to quantify trust in NN}
+\todo[inline]{Estimated Nb Pages: 2}
+\ac{AI} has evolved into a general-purpose technology that underpins a growing number of computational systems used to support or automate decision-making across diverse domains. Advances in data availability, computing power, and learning algorithms have enabled \ac{AI} systems to perform tasks that were traditionally considered to require human intelligence, including perception, pattern recognition, prediction, and planning. As a result, AI-based systems are increasingly embedded in real-world processes that operate at scale and interact directly with individuals, organizations, and societies.
+
+Within this broad landscape, \ac{ML}  has emerged as a dominant approach for building adaptive and data-driven \ac{AI} systems. Rather than relying on explicitly programmed rules, \ac{ML}  systems infer patterns and decision functions from data, allowing them to generalize to previously unseen inputs. This shift from rule-based systems to learned models has substantially expanded the scope and performance of \ac{AI} applications, while also reducing direct human control over internal decision logic.
+
+Neural networks, and in particular deep neural networks, form the backbone of many state-of-the-art \ac{ML}  systems. Their expressive power and scalability have led to widespread adoption in applications where complex, high-dimensional data must be processed, such as computer vision, natural language processing, and sequential decision-making. Neural networks are increasingly deployed in domains where their outputs influence decisions with significant consequences, including healthcare diagnostics~\cite{Shahid2019-eq}, financial prediction~\cite{NBERw31502}, and autonomous driving~\cite{10604830}. In such settings, incorrect or overconfident predictions may lead not only to technical failure but also to physical harm, economic loss, or violations of fundamental rights. As a result, the question of whether a neural network can be trusted has become as important as how accurately it performs.
+
+
+Recent policy and regulatory efforts explicitly recognize trustworthiness as a foundational requirement for \ac{AI} systems. The Ethics Guidelines for Trustworthy \ac{AI} published by the European Commission’s High-Level Expert Group identify trustworthiness as resting on three pillars: lawful AI, ethical AI, and robust AI. In this framework, robustness includes technical reliability, safety, and the ability to properly handle uncertainty, while ethical \ac{AI} emphasizes transparency, accountability, and human oversight~\cite{ec2019ethics}. These guidelines make clear that trust is not an abstract or optional property, but a prerequisite for the acceptable deployment of \ac{AI} systems in society.
+
+From a conceptual perspective, trust is inseparably linked to risk and vulnerability. In the organizational and behavioral sciences, trust is commonly defined as a willingness to accept vulnerability to the actions of another party under conditions of uncertainty and risk. The integrative model of trust proposed by Mayer, Davis, and Schoorman formalizes trust as the willingness of a trustor to be vulnerable to a trustee based on expectations regarding the trustee’s ability, benevolence, and integrity~\cite{55a601e8-f397-31d9-a222-5b5dd8d0bb15}. Importantly, this definition distinguishes trust from related notions such as predictability, confidence, or mere cooperation. Trust only becomes relevant when negative outcomes are possible and when the trustor cannot fully monitor or control the trustee.
+
+This conceptualization of trust translates naturally to \ac{AI} systems. When a human user relies on the output of a neural network, for example in a medical diagnosis or an automated decision-support tool, the user becomes vulnerable to the system’s errors, biases, and miscalibrated confidence estimates. The user typically lacks full visibility into the internal reasoning of the model and cannot directly verify the correctness of each prediction. As in human trust relationships, reliance on a neural network therefore involves a willingness to accept risk based on expectations about the system’s competence, reliability, and alignment with intended goals.
+
+Despite this parallel, most current approaches to evaluating neural networks focus primarily on predictive performance metrics such as accuracy, precision, or recall. While these metrics are essential, they do not capture whether a model is trustworthy in the sense required for high-stakes decision-making. A highly accurate model may still be unsafe if it is poorly calibrated, systematically biased, or trained on unreliable data. Conversely, a model with lower accuracy may be more trustworthy if it appropriately expresses uncertainty and avoids overconfident predictions in unfamiliar situations.
+
+Furthermore, trust in neural networks is not solely a property of the model architecture or its learned parameters. It is inherently multi-layered and depends on the quality of the training data, the reliability of labels, the behavior of the learning process, and the way uncertainty is propagated from inputs to outputs. Dataset biases, labeling inconsistencies, and hidden correlations can undermine trust long before inference is performed. Without explicit mechanisms to assess and propagate trust across these components, users are left with opaque confidence scores that provide little guidance for risk-aware decision-making.
+
+These considerations motivate the need for a formal and interpretable framework for trust in neural networks. Such a framework should explicitly represent uncertainty, distinguish between lack of evidence and conflicting evidence, and support principled reasoning about how trust evolves as new information becomes available. It should also align with established theories of trust and risk, while remaining operational within modern \ac{ML}  pipelines. This thesis addresses these requirements by grounding trust assessment in Subjective Logic and by developing mechanisms to quantify, propagate, and aggregate trust across datasets, network structures, and model outputs.
+
+
+
+\subsection{Challenges in Quantifying Trust and Uncertainty in Neural Networks}
+\label{sec:quantification_challenges}
+\todo[inline]{Need of a challenge related to the opacity and black box nature of models}
+Although the need for trust in neural network based systems is increasingly acknowledged, the quantification of trust and uncertainty remains an open and challenging problem. Unlike classical performance metrics, trust is not directly observable and cannot be measured through a single empirical quantity. Instead, it emerges from a combination of evidence, uncertainty, and risk, all of which must be represented in an interpretable manner.
+
+A first challenge concerns the absence of a clear and unified definition of trust in the context of neural networks. In practice, trust is often implicitly equated with predictive accuracy, confidence scores, or reliability estimates. However, these quantities capture only limited aspects of trust and do not account for the conditions under which a system may fail or behave unpredictably. Without a formal definition that distinguishes trust from related concepts, quantitative assessments remain ad hoc and difficult to compare across models and application domains.
+
+A second challenge relates to the representation of uncertainty. Most neural networks produce probabilistic outputs that are commonly interpreted as measures of confidence. However, such probabilities do not distinguish between uncertainty arising from insufficient evidence and uncertainty caused by conflicting evidence. For example, a prediction based on few training examples and a prediction derived from strongly disagreeing labels may both result in similar probability values, despite reflecting fundamentally different trust situations. This limitation complicates the interpretation of model outputs and undermines their usefulness for risk-aware decision-making.
+
+A third challenge lies in the quantification of trust at different levels of abstraction. Trust may pertain to individual predictions, to model components, to datasets, or to entire learning pipelines. Existing evaluation practices typically focus on aggregate, dataset-level metrics, which obscure local variations in trust and uncertainty. As a result, instances that are inherently ambiguous or poorly supported by data are often treated on equal footing with well-supported cases. Quantifying trust at finer granularity requires representations that can operate consistently across multiple levels of the system.
+
+Another challenge concerns the integration of data-related uncertainty into trust assessments. Neural networks are highly sensitive to the quality of training data, yet data-related issues such as labeling noise, annotator disagreement, and sampling bias are rarely incorporated into quantitative trust measures. In many cases, uncertainty introduced during data collection is implicitly absorbed by the learning process and remains invisible at inference time. This disconnect makes it difficult to reason about how much confidence should be placed in predictions that are based on unreliable or contentious data.
+
+Finally, there is a challenge associated with the propagation and aggregation of trust and uncertainty. In complex neural network architectures, trust assessments derived from different sources, such as data quality, model calibration, or component reliability, must be combined to form an overall judgment. Standard probabilistic frameworks offer limited support for such aggregation, particularly when sources of evidence are heterogeneous or partially dependent. Without principled operators for combining and propagating trust, quantitative assessments risk being inconsistent or misleading.
+
+These challenges illustrate that quantifying trust and uncertainty in neural networks requires more than probabilistic prediction and performance evaluation. It calls for representations that explicitly encode evidence, disagreement, and ignorance, and for reasoning mechanisms that support consistent propagation and aggregation of trust across system components. Addressing these challenges is the central objective of this thesis, which adopts Subjective Logic as a formal foundation for trust quantification in neural network systems.
+
+\section{Problem Statement and Research Questions}
+\label{sec:pbstate}
+\todo[inline]{Estimated Nb Pages: 3}
+\todo[inline]{Need to find the research question from the motivation and gap discussed in the first section, the challenges discuss in the second section and the goal to discuss just now}
+
+\todo[inline]{Start with the Goal of the Thesis}
+The primary goal of this thesis is to develop a principled and interpretable framework for quantifying trust and uncertainty in neural network based systems. Rather than treating trust as an implicit byproduct of predictive performance or probabilistic confidence, this thesis aims to formalize trust as a measurable quantity grounded in evidence, uncertainty, and risk. The overarching objective is to enable trust-aware reasoning that supports informed reliance on neural network outputs in high-stakes decision-making contexts.
+
+To achieve this goal, the thesis focuses on the explicit representation of uncertainty and trust at multiple levels of abstraction, including datasets, model components, and individual predictions. The proposed framework seeks to distinguish between different sources of uncertainty, such as lack of evidence and conflicting evidence, and to make these distinctions operational within modern \ac{ML} pipelines. By doing so, the thesis aims to move beyond scalar confidence scores toward richer representations that better reflect the conditions under which neural network predictions should be trusted.
+
+A central requirement of the proposed approach is interpretability. Trust quantification is intended not only to support automated reasoning, but also to remain understandable to human stakeholders who must ultimately decide whether and how to rely on AI systems. For this reason, the framework emphasizes transparency in how trust assessments are constructed, propagated, and combined, and avoids reliance on opaque or purely heuristic measures.
+
+The scope of this thesis is deliberately focused on the quantification and propagation of trust and uncertainty, rather than on improving predictive accuracy or designing new neural network architectures. While performance considerations remain important, they are treated as complementary to, rather than substitutes for, trust assessment. The thesis does not aim to replace existing uncertainty estimation techniques, but instead to provide a unifying layer that integrates evidence from data quality, model behavior, and calibration into coherent trust evaluations.
+
+In summary, the goal of this thesis is to establish a formal foundation for trust-aware neural computation that enables consistent, interpretable, and evidence-based trust assessments. This foundation is intended to support more responsible deployment of neural network systems by making explicit the assumptions, uncertainties, and risks that underlie their predictions.
+
+
+\todo[inline]{Continue with the research questions}
+
+The overarching research question guiding this thesis is:
+\begin{rqbox}{Phd Research Question}
+    How can trust and uncertainty in neural network systems be quantified in an evidence-based manner?
+\end{rqbox}
+
+Addressing this question requires tackling several interrelated problems that span theoretical foundations, model-level assessment, data-level assessment, and system-level trust propagation. For clarity and coherence, the problem is decomposed into four parts, each corresponding to a major part of the thesis.
+
+\subsection{Part I: Foundations of Trust and Uncertainty}
+\label{subsec:ps_foundations}
+
+The first problem addressed in this thesis concerns the lack of a unified and operational foundation for representing trust and uncertainty in computational systems. While uncertainty is widely studied in machine learning and statistics, trust is often treated implicitly or conflated with related concepts such as confidence, accuracy, or reliability. This conceptual ambiguity complicates the development of quantitative trust assessments that are theoretically grounded and interpretable.
+
+Furthermore, existing probabilistic frameworks are limited in their ability to distinguish between different sources of uncertainty, such as lack of evidence and conflicting evidence. In the absence of formal representations that make these distinctions explicit, trust assessments remain ad hoc and difficult to propagate across system components.
+
+This motivates the first research question:
+
+\begin{quote}
+\textbf{RQ1:} How can trust be formally represented and propagated in uncertain systems?
+\end{quote}
+
+This question is addressed in Part I of the thesis, which introduces the theoretical foundations of uncertainty, trust, and Subjective Logic, and establishes the formal basis required for subsequent trust quantification and propagation.
+
+\subsection{Part II: Quantifying Trust in Black-Box Neural Networks}
+\label{subsec:ps_blackbox}
+
+The second problem concerns the quantification of trust in black-box neural networks. Modern neural networks often operate as opaque systems whose internal decision processes are difficult to interpret. As a result, trust assessments are frequently based on output probabilities or aggregate performance metrics, despite their limited ability to capture uncertainty, miscalibration, or unreliability at the level of individual predictions.
+
+In particular, existing evaluation methods do not provide interpretable measures of trust that reflect the quality of evidence supporting a prediction or the degree of uncertainty associated with it. This limitation is especially problematic in high-stakes settings where users must decide whether to rely on model outputs without access to internal model states.
+
+This leads to the second research question:
+
+\begin{quote}
+\textbf{RQ2:} How can trust be quantified in black-box neural networks?
+\end{quote}
+
+This question is addressed in Part II of the thesis, which focuses on the development of evidence-based trust quantification methods for neural networks treated as black-box systems.
+
+\subsection{Part III: Assessing Trustworthiness of Training Datasets}
+\label{subsec:ps_datasets}
+
+The third problem addressed in this thesis arises from the strong dependence of neural network behavior on the quality of training data. While considerable effort is devoted to model design and optimization, the trustworthiness of training datasets is often assumed rather than assessed. In practice, datasets may suffer from labeling noise, annotator disagreement, sampling bias, or insufficient coverage of the target domain.
+
+These data-related issues introduce uncertainty that propagates through the training process and affects model reliability, yet they are rarely quantified in a systematic manner. Without explicit assessment of dataset trustworthiness, it is difficult to interpret model behavior or attribute uncertainty observed at inference time to its underlying causes.
+
+This motivates the third research question:
+
+\begin{quote}
+\textbf{RQ3:} How can the trustworthiness of AI training datasets be assessed?
+\end{quote}
+
+This question is addressed in Part III of the thesis, which proposes methods for quantifying dataset trustworthiness and explicitly modeling uncertainty introduced during data collection and labeling.
+
+\subsection{Part IV: Trust Propagation from Data to Inference}
+\label{subsec:ps_propagation}
+
+The final problem addressed in this thesis emerges naturally from the preceding motivation, challenges, and research goals. As discussed in Section~\ref{sec:motivation}, trust in neural networks is fundamentally linked to vulnerability and risk at the point of decision-making, where users rely on model outputs despite limited visibility into their internal processes. Section~\ref{sec:quantification_challenges} further highlights that trust and uncertainty arise from multiple sources, including data quality, model behavior, and input conditions, and that these sources are rarely accounted for in a unified manner. Finally, Section~\ref{sec:goal} establishes the objective of developing a formal and interpretable framework capable of quantifying trust across system components.
+
+Despite this, existing machine learning pipelines typically treat training and inference as separate stages, with uncertainty estimates produced at inference time largely disconnected from the conditions under which the model was trained. Trust assessments derived from dataset properties, labeling processes, or training dynamics are seldom propagated into inference, and trust in individual inputs is rarely combined with model-level reliability in a principled way. As a result, confidence estimates provided at inference time often obscure the provenance of uncertainty and fail to reflect how multiple sources of trust or distrust jointly influence the final prediction.
+
+This separation poses a fundamental limitation for evidence-based trust assessment. A prediction produced by a neural network is not solely a function of the input and learned parameters, but the outcome of an entire pipeline that includes dataset trustworthiness, training procedures, and inference conditions. Without explicit mechanisms to propagate trust from data through training and into inference, it is not possible to determine how uncertainty accumulates, attenuates, or interacts across stages. Consequently, users are left with confidence scores that do not adequately represent the true level of vulnerability associated with relying on the model output.
+
+Addressing this limitation requires a system-level perspective in which trust and uncertainty are treated as quantities that evolve throughout the learning and inference process. Such a perspective must account for how uncertainty introduced during data collection influences learned parameters, how training dynamics affect model reliability, and how trust in the input at inference time interacts with previously established model trust. Quantifying these interactions is essential for producing trust assessments that are consistent, interpretable, and aligned with the conceptual understanding of trust outlined earlier in the thesis.
+
+This leads to the fourth research question:
+
+\begin{quote}
+\textbf{RQ4:} How do dataset trustworthiness, the training process, and trust in the input during inference jointly influence trust in the output of a neural network?
+\end{quote}
+
+This question is addressed in Part IV of the thesis, which investigates mechanisms for propagating and aggregating trust across data, models, and inference processes in order to produce coherent, evidence-based trust assessments at the level of model outputs.
+
+
+
+
+\section{Contributions of the Thesis}
+\label{sec:contributions}
+\todo[inline]{Estimated Nb Pages: 3}
+This thesis makes the following key contributions:
+
+\begin{enumerate}
+    \item \textbf{Optimized Trust Network Analysis:} An improved framework for DSPG synthesis and analysis that preserves structural information and ensures correct trust propagation in complex networks.
+    
+    \item \textbf{Novel Trust Discounting Operators:} A new trust discount operator for referral-only paths that is consistent with existing Subjective Logic operators and preserves opinion structure.
+    
+    \item \textbf{Calibration Trust Quantification:} An interpretable, evidence-based method for assessing neural network calibration using Subjective Logic.
+    
+    \item \textbf{Dataset Trustworthiness Assessment:} A formal framework for quantifying dataset trust at multiple levels, including sampling bias and labeling reliability.
+    
+    \item \textbf{Parallel Trust Assessment System (PaTAS):} A unified system that operates in parallel with neural networks to propagate trust through layers and produce trust-aware outputs.
+\end{enumerate}
+
+Together, these contributions form a coherent framework for trust-aware neural computation.
+
+
+\section{Structure of the Dissertation}
+\label{sec:structure}
+\todo[inline]{Estimated Nb Pages: 1}
+In chapter 2 we ... 
+\todo[inline]{ (1) Background and RW} => and required formal foundation
+\todo[inline]{ (2) DSPG}
+\todo[inline]{ (2) Black box quantification of trust}
+\todo[inline]{ (3) Training Dataset is one of the most important part in the building of NN. His trustworthiness matters a lot}
+\todo[inline]{ (4) PTAS}
+\todo[inline]{ (5) Improve trust}
+\todo[inline]{ Link between (4) and (5)? Can (4) be used to evaluate in (5)}
+This dissertation is organized as follows.
+
+Part~I introduces the theoretical foundations of uncertainty, trust, and Subjective Logic, and reviews related work.  
+Part~II presents the core technical contributions of the thesis, corresponding to the research questions and published papers.  
+Part~III synthesizes the contributions, discusses limitations, and outlines directions for future research.
+
+Each chapter in Part~II is self-contained while contributing to a unified trust framework, reflecting the monograph nature of this dissertation.
+
+
+%-----------------------------------
+%	SUBSECTION 2
+%-----------------------------------
+
+
+
