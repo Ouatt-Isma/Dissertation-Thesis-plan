@@ -1,0 +1,33 @@
+
+@INPROCEEDINGS{11124121,
+  author={Ouattara, Koffi Ismael and Krontiris, Ioannis and Dimitrakos, Theo and Kargl, Frank},
+  booktitle={2025 28th International Conference on Information Fusion (FUSION)}, 
+  title={Quantifying Calibration Error in Neural Networks Through Evidence-Based Theory}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-8},
+  keywords={Uncertainty;Autonomous systems;Neural networks;Redundancy;Medical services;Real-time systems;Calibration;Reliability;Logic;Artificial intelligence;Neural Network Trustworthiness;Subjective Logic;Confidence Calibration;Expected Calibration Error (ECE);Belief Fusion},
+  doi={10.23919/FUSION65864.2025.11124121}}
+
+
+@misc{ouattara2025assessingtrustworthinessaitraining,
+      title={Assessing Trustworthiness of AI Training Dataset using Subjective Logic -- A Use Case on Bias}, 
+      author={Koffi Ismael Ouattara and Ioannis Krontiris and Theo Dimitrakos and Frank Kargl},
+      year={2025},
+      eprint={2508.13813},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2508.13813}, 
+}
+
+misc{ouattara2025patasframeworktrustpropagation,
+      title={PaTAS: A Framework for Trust Propagation in Neural Networks Using Subjective Logic}, 
+      author={Koffi Ismael Ouattara and Ioannis Krontiris and Theo Dimitrakos and Dennis Eisermann and Houda Labiod and Frank Kargl},
+      year={2025},
+      eprint={2511.20586},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2511.20586}, 
+}
+
