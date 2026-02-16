@@ -1,0 +1,172 @@
+
+
+\chapter{Subjective Logic Fusion Operators}
+\label{app:SL_ops}
+
+\begin{definition}[Constraint Fusion Operator~\cite{josang2016subjective}]
+Assume the domain $X$ and its hyperdomain $\mathcal{R}(X)$, and let the hypervariable $X$ take values from $\mathcal{R}(X)$.
+Let agent $A$ hold opinion $\omega_X^A$ and agent $B$ hold opinion $\omega_X^B$.
+The superscripts $A$ and $B$ identify the belief sources.
+
+The belief constraint fusion operator, denoted by $\circ$, is defined as
+\[
+\omega_X^{A\&B} = \omega_X^A \circ \omega_X^B .
+\]
+
+For all $x \in \mathcal{R}(X)$, the fused opinion $\omega_X^{A\&B}$ is given by
+\[
+b_X^{(A\&B)}(x) = \frac{\mathrm{Har}(x)}{1-\mathrm{Con}},
+\]
+\[
+u_X^{(A\&B)} = \frac{u_X^A u_X^B}{1-\mathrm{Con}},
+\]
+\[
+a_X^{(A\&B)}(x) =
+\begin{cases}
+\dfrac{a_X^A(x)(1-u_X^A)+a_X^B(x)(1-u_X^B)}{2-u_X^A-u_X^B}, & u_X^A+u_X^B<2,\\[1em]
+\dfrac{a_X^A(x)+a_X^B(x)}{2}, & u_X^A=u_X^B=1.
+\end{cases}
+\]
+
+The harmony and conflict terms are defined as
+\[
+\mathrm{Har}(x)= b_X^A(x)u_X^B + b_X^B(x)u_X^A
++ \sum_{x^A\cap x^B=x} b_X^A(x^A)b_X^B(x^B),
+\]
+\[
+\mathrm{Con}=\sum_{x^A\cap x^B=\emptyset} b_X^A(x^A)b_X^B(x^B).
+\]
+\end{definition}
+
+
+
+\begin{definition}[Cumulative Fusion Operator~\cite{josang2016subjective}]
+Let $\omega_X^A$ and $\omega_X^B$ be opinions of sources $A$ and $B$ over the same variable $X$.
+The cumulatively fused opinion $\omega_X^{(A\oplus B)}$ is defined as follows.
+
+\textbf{Case I:} $u_X^A \neq 0 \ \vee\ u_X^B \neq 0$
+\[
+b_X^{(A\oplus B)}(x)=
+\frac{b_X^A(x)u_X^B+b_X^B(x)u_X^A}{u_X^A+u_X^B-u_X^A u_X^B},
+\]
+\[
+u_X^{(A\oplus B)}=
+\frac{u_X^A u_X^B}{u_X^A+u_X^B-u_X^A u_X^B},
+\]
+\[
+a_X^{(A\oplus B)}(x)=
+\begin{cases}
+\dfrac{a_X^A(x)u_X^B+a_X^B(x)u_X^A-(a_X^A(x)+a_X^B(x))u_X^A u_X^B}
+{u_X^A+u_X^B-2u_X^A u_X^B},
+& u_X^A\neq1 \ \vee\ u_X^B\neq1,\\[1em]
+\dfrac{a_X^A(x)+a_X^B(x)}{2},
+& u_X^A=u_X^B=1.
+\end{cases}
+\]
+
+\textbf{Case II:} $u_X^A=u_X^B=0$
+\[
+b_X^{(A\oplus B)}(x)=\gamma_X^A b_X^A(x)+\gamma_X^B b_X^B(x),
+\quad
+u_X^{(A\oplus B)}=0,
+\]
+\[
+a_X^{(A\oplus B)}(x)=\gamma_X^A a_X^A(x)+\gamma_X^B a_X^B(x),
+\]
+where
+\[
+\gamma_X^A=\lim_{\substack{u_X^A\to0\\u_X^B\to0}}\frac{u_X^B}{u_X^A+u_X^B},
+\qquad
+\gamma_X^B=\lim_{\substack{u_X^A\to0\\u_X^B\to0}}\frac{u_X^A}{u_X^A+u_X^B}.
+\]
+
+We write $\omega_X^{(A\oplus B)}=\omega_X^A\oplus\omega_X^B$.
+\end{definition}
+
+
+\begin{definition}[Averaging Belief Fusion Operator~\cite{josang2016subjective}]
+Let $\omega_X^A$ and $\omega_X^B$ be opinions over $X$.
+The averaged opinion $\omega_X^{(A\otimes B)}$ is defined as follows.
+
+\textbf{Case I:} $u_X^A \neq 0 \ \vee\ u_X^B \neq 0$
+\[
+b_X^{(A\otimes B)}(x)=
+\frac{b_X^A(x)u_X^B+b_X^B(x)u_X^A}{u_X^A+u_X^B},
+\]
+\[
+u_X^{(A\otimes B)}=
+\frac{2u_X^A u_X^B}{u_X^A+u_X^B},
+\]
+\[
+a_X^{(A\otimes B)}(x)=\frac{a_X^A(x)+a_X^B(x)}{2}.
+\]
+
+\textbf{Case II:} $u_X^A=0 \ \wedge\ u_X^B=0$
+\[
+b_X^{(A\otimes B)}(x)=\gamma_X^A b_X^A(x)+\gamma_X^B b_X^B(x),
+\quad
+u_X^{(A\otimes B)}=0,
+\]
+\[
+a_X^{(A\otimes B)}(x)=\gamma_X^A a_X^A(x)+\gamma_X^B a_X^B(x),
+\]
+where
+\[
+\gamma_X^A=\lim_{\substack{u_X^A\to0\\u_X^B\to0}}\frac{u_X^B}{u_X^A+u_X^B},
+\qquad
+\gamma_X^B=\lim_{\substack{u_X^A\to0\\u_X^B\to0}}\frac{u_X^A}{u_X^A+u_X^B}.
+\]
+
+We write $\omega_X^{(A\otimes B)}=\omega_X^A\otimes\omega_X^B$.
+\end{definition}
+
+
+\begin{definition}[Weighted Belief Fusion Operator~\cite{josang2016subjective}]
+Let $\omega_X^A$ and $\omega_X^B$ be opinions over $X$.
+The weighted fused opinion $\omega_X^{(A\odot B)}$ is defined as follows.
+
+\textbf{Case I:} $(u_X^A\neq0 \ \vee\ u_X^B\neq0)\ \wedge\ (u_X^A\neq1 \ \vee\ u_X^B\neq1)$
+\[
+b_X^{(A\odot B)}(x)=
+\frac{b_X^A(x)(1-u_X^A)u_X^B+b_X^B(x)(1-u_X^B)u_X^A}
+{u_X^A+u_X^B-2u_X^A u_X^B},
+\]
+\[
+u_X^{(A\odot B)}=
+\frac{(2-u_X^A-u_X^B)u_X^A u_X^B}
+{u_X^A+u_X^B-2u_X^A u_X^B},
+\]
+\[
+a_X^{(A\odot B)}(x)=
+\frac{a_X^A(x)(1-u_X^A)+a_X^B(x)(1-u_X^B)}
+{2-u_X^A-u_X^B}.
+\]
+
+\textbf{Case II:} $u_X^A=0 \ \wedge\ u_X^B=0$
+\[
+b_X^{(A\odot B)}(x)=\gamma_X^A b_X^A(x)+\gamma_X^B b_X^B(x),
+\quad
+u_X^{(A\odot B)}=0,
+\]
+\[
+a_X^{(A\odot B)}(x)=\gamma_X^A a_X^A(x)+\gamma_X^B a_X^B(x).
+\]
+
+\textbf{Case III:} $u_X^A=1 \ \wedge\ u_X^B=1$
+\[
+b_X^{(A\odot B)}(x)=0,\quad
+u_X^{(A\odot B)}=1,\quad
+a_X^{(A\odot B)}(x)=\frac{a_X^A(x)+a_X^B(x)}{2}.
+\]
+
+We write $\omega_X^{(A\odot B)}=\omega_X^A\odot\omega_X^B$.
+\end{definition}
+
+
+\begin{definition}[Consensus \& Compromise Fusion~\cite{josang2016subjective}]
+Let $\omega_X^A$ and $\omega_X^B$ be separate opinions about variable $X$.
+The CC-fused opinion is denoted by
+\[
+\omega_X^{A\diamond B}=\omega_X^A \diamond \omega_X^B .
+\]. See more in the original book~\cite{josang2016subjective}.
+\end{definition}
