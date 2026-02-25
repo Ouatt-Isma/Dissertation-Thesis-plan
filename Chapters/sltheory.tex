@@ -159,23 +159,9 @@ These properties form the structural backbone of the optimized synthesis and ana
 \section{Optimized DSPG Synthesis Criteria}
 \label{sec:optimized_criteria}
 
-Having established the structural role of PNPS in Section~\ref{sec:pnps}, we now derive optimized criteria for DSPG synthesis. The goal of synthesis is to determine whether adding a branch between two existing nodes preserves the DSPG property.
+\subsection{PNPS-Based Reformulation of DSPG Synthesis Original Criteria}
 
-\subsection{Original DSPG Synthesis Criteria}
-
-J{\o}sang proposed the following criteria for safely adding a branch from node $A$ to node $B$ in a DSPG:
-
-\begin{enumerate}
-    \item The target node $B$ must be reachable from the source node $A$ in the current graph.
-    \item The source and target nodes must have equal nesting levels.
-    \item The nesting level of the source and target nodes must be less than or equal to the nesting level of every intermediate node on the path between them.
-\end{enumerate}
-
-These conditions guarantee that the addition does not introduce structural inconsistencies during reduction. However, they are overly restrictive. In particular, requiring equality of nesting levels prevents adding edges from a PNPS source to its intermediate node or from an intermediate node to its target, even when such additions do not violate DSPG properties.
-
-\subsection{PNPS-Based Reformulation}
-
-Using the PNPS structural framework introduced earlier, we reformulate the criteria in structural terms.
+As we have seen in the previous \cref{sec:dspg}, original \ac{SL} work, listed some criteria to be used when synthesizing a \ac{DSPG} from a non \ac{DSPG}. Using the PNPS definition introduced earlier, we reformulate the criteria in structural terms.
 
 \begin{corollary}[PNPS-Based DSPG Criteria]
 \label{cor:pnps-criteria}
@@ -243,7 +229,7 @@ For soundness, assume the criteria are satisfied. Then neither $A$ nor $B$ intro
 For completeness, assume that adding the branch preserves the DSPG property. Then no PNPS structural constraint is violated. Consequently, if $A$ were an intermediate node of some PNPS $p$ while $B$ were outside $p$, the addition would create an illegal exit from $p$, contradicting DSPG preservation. The same reasoning applies symmetrically. Hence the optimized criteria must hold.
 \end{proof}
 
-\subsection{Nesting-Level Formulation}
+\paragraph{Nesting-Level Formulation}
 
 The optimized criteria admit a simple arithmetic restatement in terms of Node Nesting Level (NNL).
 
@@ -263,7 +249,7 @@ The optimized criteria are equivalent to:
 
 The only difference from the original criteria is that equality of nesting levels is relaxed to a difference of at most one. This relaxation precisely captures admissible additions from a PNPS source to its intermediate nodes or from intermediate nodes to its target.
 
-\subsection{Structural Consequences}
+\paragraph{Structural Consequences}
 
 The optimized criteria provide three improvements:
 
@@ -863,5 +849,5 @@ The proposed Referral-Edge Path operator therefore satisfies three essential pro
 These properties make it structurally and probabilistically coherent for modeling transitive trust in Subjective Trust Networks.
 
 
-\subsection{End-to-End Evaluation of the Complete \ac{TNA-SL} Framework}
+\subsection{End-to-End Evaluation of the Complete \acs{TNA-SL} Framework}
 \label{subsec:eval_pipeline}
