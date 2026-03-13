@@ -60,23 +60,7 @@ location = {Vancouver, BC, Canada},
 series = {NIPS '24}
 }
 
-@inproceedings{10.1145/3605098.3635966,
-author = {Herd, Benjamin and Burton, Simon},
-title = {Can you trust your ML metrics? Using Subjective Logic to determine the true contribution of ML metrics for safety},
-year = {2024},
-isbn = {9798400702433},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/3605098.3635966},
-doi = {10.1145/3605098.3635966},
-abstract = {Metrics such as accuracy, precision, recall, F1 score, etc. are generally used to assess the performance of machine learning (ML) models. From a safety perspective, relying on such single point estimates to evaluate safety requirements is problematic since they only provide a partial and indirect evaluation of the true safety risk associated with the model and its potential errors. In order to obtain a better understanding of the performance insufficiencies in the model, factors that could influence the quantitative evaluation of safety requirements such as test sample size, dataset size and model calibration need to be taken into account. In safety assurance, arguments typically combine complementary and diverse evidence to strengthen confidence in the safety claims. In this paper, we make a first step towards a more formal treatment of uncertainty in ML metrics by proposing a framework based on Subjective Logic that allows for modelling the relationship between primary and secondary pieces of evidence and the quantification of resulting uncertainty. Based on experiments, we show that single point estimates for common ML metrics tend to overestimate model performance and that a probabilistic treatment using the proposed framework can help to evaluate the probable bounds of the actual performance.},
-booktitle = {Proceedings of the 39th ACM/SIGAPP Symposium on Applied Computing},
-pages = {1579–1586},
-numpages = {8},
-keywords = {machine learning, safety assurance, uncertainty, subjective logic},
-location = {Avila, Spain},
-series = {SAC '24}
-}
+
 
 
 @misc{gao2024comprehensivesurveyevidentialdeep,
@@ -113,13 +97,19 @@ abstract = {Decision-making on clinical Electroencephalogram (EEG) holds signifi
       url={https://arxiv.org/abs/2306.11113}, 
 }
 
-@INPROCEEDINGS{8594905,
-  author={Zhao, Xujiang and Chen, Feng and Cho, Jin-Hee},
-  booktitle={2018 IEEE International Conference on Data Mining (ICDM)}, 
-  title={Deep Learning Based Scalable Inference of Uncertain Opinions}, 
-  year={2018},
-  volume={},
-  number={},
-  pages={807-816},
-  keywords={Uncertainty;Data models;Bayes methods;Complexity theory;Prediction algorithms;Deep learning;Predictive models;Uncertainty;Subjective Logic;Graphical Convolutional Network (GCN);Variational Autoencoder (VAE);Network Mining},
-  doi={10.1109/ICDM.2018.00096}}
+
+@InProceedings{pmlr-v199-cheng22a,
+  title = 	 {Trustworthiness Evaluation and Trust-Aware Design of CNN Architectures},
+  author =       {Cheng, Mingxi and Sun, Tingyang and Nazarian, Shahin and Bogdan, Paul},
+  booktitle = 	 {Proceedings of The 1st Conference on Lifelong Learning Agents},
+  pages = 	 {1086--1102},
+  year = 	 {2022},
+  editor = 	 {Chandar, Sarath and Pascanu, Razvan and Precup, Doina},
+  volume = 	 {199},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {22--24 Aug},
+  publisher =    {PMLR},
+  pdf = 	 {https://proceedings.mlr.press/v199/cheng22a/cheng22a.pdf},
+  url = 	 {https://proceedings.mlr.press/v199/cheng22a.html},
+  abstract = 	 {Convolutional neural networks (CNNs) are known to be effective tools in many deep learning application areas. Despite CNN’s good performance in terms of classical evaluation metrics such as accuracy and loss, quantifying and ensuring a high degree of trustworthiness of such models remains an unsolved problem raising questions in applications where trust is an important factor. In this work, we propose a framework to evaluate the trustworthiness of CNNs. Towards this end, we develop a trust-based pooling layer for CNNs to achieve higher accuracy and trustworthiness in applications with noise in input features. We further propose TrustCNets consisting of trustworthiness-aware CNN building blocks, i.e., one or more conv layers followed by a trust-based pooling layer. TrustCNets can stack together as a trust-aware CNN architecture or be plugged into deep learning architectures to improve performance. In our experiments, we evaluate the trustworthiness of popular CNN building blocks and demonstrate the performance of our TrustCNet empirically with multiple datasets.}
+}
