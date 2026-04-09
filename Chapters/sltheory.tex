@@ -1,72 +1,102 @@
 
-
-
-\chapter{Optimized \acs{DSPG} Synthesis and Trust Network Analysis with Subjective Logic [By End of March]}
-\label{chap:tnasl}
-\todo[inline]{Should I mention that this chapters are based on my papers where I contributed with others}
 \todo[inline]{Add Evaluation to show the time complexity, especially the Nesting Level Computation}
+
+\chapter{Optimization of \acs{DSPG} Synthesis and \aclu{TNA-SL} [31/03]}
+\label{chap:tnasl}
+This chapter presents an optimized framework for \acf{TNA-SL} which is often used to generate expression in phase I of the Trust Assessment methodology. The chapter introduces foundational, algorithmic, and operator level improvements that address several limitations of the classical \ac{TNA-SL} methodology. In particular, we propose a refined structural representation of trust networks based on \acf{PNPS}, derive optimized \ac{DSPG} synthesis criteria that preserve more information, develop an improved \ac{DSPG} analysis algorithm that reduces computational overhead, and introduce a new referral-edge path discounting operator ensuring consistent trust propagation over referral chains. The \ac{PNPS} structural concept was initially introduced through collaboration between Huawei colleagues and research partners in Luxembourg. Building on this definition, all theoretical developments presented in this chapter, including the formalization, analysis, and proofs of the proposed properties and algorithms, were carried out in this work.
+
+The results presented in this chapter are based on two peer-reviewed publications. The structural and algorithmic optimization of \ac{DSPG} synthesis and analysis were published in \cite{10.1007/978-3-032-08887-1_4} and presented at the RuleML+RR 2025 conference. The referral-edge trust discounting operator and its theoretical properties were presented in \cite{10706345} at the FUSION 2024 conference. This chapter unifies these contributions into a coherent framework for efficient and information-preserving trust inference.
+
 \section{Introduction}
-
 \acf{TNA-SL}, introduced by J{\o}sang~\cite{10.5555/1151699.1151710}, enables trust reasoning under uncertainty by propagating and aggregating subjective opinions along graph structures. In the methodology introduced in \cref{chap:Trust_method}, \ac{TNA-SL} is used on \ac{STN} to generate the expression in phase I. However, as discussed in \cref{sec:dspg}, a fundamental structural requirement of \ac{TNA-SL} is that the underlying trust network must be a \ac{DSPG}. This structural constraint ensures that trust propagation through discounting and fusion operators is well-defined and yields unambiguous results.
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[->,>=stealth, node distance=2.5cm] 
+% Nodes 
+\node (input) {Input}; 
+\node[circle,draw,right of=input] (n1) {}; 
+\node[circle,draw,right of=n1, yshift=1cm] (n2) {}; 
+\node[circle,draw,right of=n2, yshift=-2cm] (n3) {}; 
+\node[circle,draw,right of=n3, yshift=1cm] (n4) {}; 
+\node[right of=n4] (output) {Output}; 
 
-In practice, real-world trust networks rarely satisfy the \ac{DSPG} property. In practical applications trust relationships form complex directed acyclic graphs that contain structural patterns incompatible with DSPG constraints. Consequently, a transformation step, commonly referred to as \ac{DSPG} synthesis, is required prior to trust inference.
+% Layer labels
+\node[above=1.8cm of n1] {|Input Layer|};
+\node[above=0.8cm of n2, xshift=0.2cm] {Hidden Layer 1|};
+\node[above=2.8cm of n3, xshift=0.6cm] {Hidden Layer 2|};
+\node[above=1.8cm of n4, xshift=0.8cm] {Output Layer|};
 
-\ac{DSPG} synthesis approach proposed in the original work of J{\o}sang~\cite{10.5555/1151699.1151710} incrementally adds branches while verifying structural criteria. 
-% As formalized in~\cite{10.1007/978-3-032-08887-1_4}, 
-This method relies on overly restrictive conditions and often remove edges considered structurally unsafe. Although this guarantees DSPG compliance, it introduces two major limitations.
+% Connections 
+\draw (input) -- (n1); 
+\draw (n1) -- (n2); 
+\draw (n1) -- (n3); 
+\draw (n2) -- (n3); 
+\draw (n2) -- (n4); 
+\draw (n3) -- (n4); 
+\draw (n4) -- (output); 
+\end{tikzpicture}
+    \caption{Example of a directed acyclic graph representing a neural network topology that does not satisfy the \ac{DSPG} structural constraint. Nodes in a given layer connect both to the immediately following layer and to deeper layers, creating overlapping paths that makes the graph non \ac{DSPG}.}
+    \label{fig:on_dspg_NN}
+\end{figure}
+
+In practice, many real-world trust networks and computational graphs do not naturally satisfy the \ac{DSPG} property. For example, \aclu{NN} architectures such as ResNet~\cite{he2015deepresiduallearningimage} and DenseNet~\cite{huang2018denselyconnectedconvolutionalnetworks} often contain connections that skip intermediate layers or create overlapping dependency paths, as illustrated in \cref{fig:on_dspg_NN}. Such structures form directed acyclic graphs that are not \ac{DSPG}. Similarly, real-world trust networks frequently exhibit complex connectivity patterns where trust relationships intersect across multiple paths. Consequently, a transformation step, referred to as \ac{DSPG} synthesis, is required to convert an arbitrary directed acyclic trust network into a structurally valid \ac{DSPG} prior to performing trust inference.
+
+\ac{DSPG} synthesis approach proposed in the original work of J{\o}sang~\cite{10.5555/1151699.1151710} incrementally adds branches while verifying structural criteria. This method relies on overly restrictive conditions and often removes edges considered structurally unsafe, even though adding these edges would not violate \ac{DSPG} compliance. This issue introduces two major limitations.
 \begin{enumerate}
     \item \textbf{Information loss.} Structurally meaningful trust relationships may be discarded, even when they do not fundamentally violate the \ac{DSPG} requirements.
-    \item \textbf{Misaligned optimization objective.} Prior approaches implicitly assume that minimizing uncertainty should be the primary objective of synthesis. In practice, preserving as much structural information as possible should be the primary objective.
+    \item \textbf{Misaligned optimization objective.} Prior approaches implicitly assume that minimizing uncertainty should be the primary objective of synthesis. In practice, preserving as much information as possible should be the primary objective.
 \end{enumerate}
 
-These observations reveal a structural inefficiency in existing DSPG synthesis methods. The criteria are overly conservative, and the transformation objective is not aligned with information preservation.
+These observations reveal a structural inefficiency in existing \ac{DSPG} synthesis methods. The criteria are overly conservative, and the transformation objective is not aligned with information preservation.
 
-At the same time, the \ac{DSPG} analysis phase performed after synthesis suffers from a computational inefficiency. The classical \ac{TNA-SL} reduction (\ac{DSPG} analysis) procedure repeatedly recomputes the \acf{NL} of edges a after each structural transformation. Since \acp{NL} determine the order in which \acp{PPS} are reduced, each reduction step requires a global recomputation of \acp{NL} across the graph. For large trust networks this leads to significant computational overhead and limits the scalability of the analysis procedure.
+At the same time, the \ac{DSPG} analysis phase performed after synthesis suffers from a computational inefficiency. The classical \ac{TNA-SL} reduction (\ac{DSPG} analysis) procedure repeatedly recomputes the \acf{NL} of the edges after each structural transformation. Since \acp{NL} determine the order in which \acp{PPS} are reduced, each reduction step requires a global recomputation of \acp{NL} across the graph. For large trust networks this leads to significant computational overhead and limits the scalability of the analysis procedure.
 
 Finally, classical \ac{SL} trust discounting operators, namely the Two-Edge Path and Multi-Edge Path operators (\cref{table:TD_operators}), assume that the final edge of a path represents functional direct trust. As illustrated in the \ac{IMA} use case, certain network topologies require the discounting of referral-only paths during the reduction process. However, the existing trust discounting operators assume that the final edge of a path represents functional direct trust, which prevents their consistent application in such cases.
 
 Therefore, the limitations of \ac{TNA-SL} are threefold:
 \begin{itemize}
     \item A structural limitation caused by overly restrictive \ac{DSPG} synthesis criteria.
-    \item An operator-level limitation caused by incomplete trust discounting semantics for referral-only paths.
     \item A computational limitation arising from the repeated recomputation of edge \acp{NL} during \ac{DSPG} analysis, which increases the time complexity of trust inference.
+    \item An operator-level limitation caused by incomplete trust discounting semantics for referral-only paths.
 \end{itemize}
-
-This chapter addresses the three aspects in a unified framework.
+This chapter addresses these three limitations within a unified optimization framework.
 
 \subsection*{Unified Optimization Perspective}
 
 We propose an improved \ac{TNA-SL} framework that improves computational efficiency, preserves information, and ensures discounting consistency.
 
-The contributions of this chapter are fourfold.
-
+This chapter presents five contributions.
 \begin{enumerate}
-    \item \textbf{Refined structural characterization via \ac{PNPS}.} We introduce the concept of \acf{PNPS}, which refines the classical definition of \acf{PPS}. This reformulation provides stronger structural guarantees and enables more efficient detection of DSPG violations.
+    \item \textbf{Refined structural characterization via \ac{PNPS}.} We introduce the concept of \acf{PNPS}, which refines the classical definition of \acf{PPS}. This reformulation provides stronger structural guarantees and enables more efficient detection of \ac{DSPG} violations.
 
-    \item \textbf{Optimized \ac{DSPG} synthesis criteria.} We derive revised synthesis criteria that admit a strictly larger class of edges while preserving \ac{DSPG} compliance. Unlike prior strategies, the proposed approach prioritizes maximal information retention during synthesis.
-    
+    \item \textbf{Optimized \ac{DSPG} synthesis criteria.} We derive a better synthesis criteria that admit a strictly larger class of edges while preserving \ac{DSPG} compliance. Unlike prior strategies, the proposed approach prioritizes maximal information retention during synthesis.
+
+    \item \textbf{Optimized \ac{DSPG} synthesis algorithm.}
+    Building on the revised synthesis criteria, we propose an algorithm that incrementally constructs a \ac{DSPG} while maximizing structural information retention. The algorithm maintains structural consistency through \ac{PNPS}-based containment tracking and allows efficient verification of synthesis conditions.
+
     \item \textbf{Optimized \ac{DSPG} analysis algorithm.}
     By operating on \ac{PNPS} structures rather than \ac{PPS}, the proposed algorithm ensures structural isolation during reductions and streamlines the computation of \acp{NL}, thereby reducing unnecessary recomputations. We formally establish the corresponding \ac{NL} preservation properties.
-    \todo[inline]{add: Optimized algorithm  for DSPG Synthesis, }
-
+    
     \item \textbf{Referral-edge path discounting operator.} To resolve inconsistencies in referral-only chains, we introduce a novel trust discount operator that extends \ac{SL} discounting semantics to paths composed entirely of referral edges. The proposed operator is compatible with existing Two-Edge and Multi-Edge operators and preserves expected trust attenuation properties across increasing path lengths~\cite{10706345}.
 \end{enumerate}
 Taken together, these contributions make \ac{TNA-SL} more general, more information-preserving, and more computationally efficient. As a result, the framework becomes better suited for complex systems such as \acp{NN}, where trust must be propagated across heterogeneous and potentially unreliable information sources.
 
-The remainder of this chapter formalizes the proposed framework. Section~\ref{sec:pnps} introduces the \ac{PNPS} concept and the associated structural reformulation.  Section~\ref{sec:optimized_criteria} presents the optimized \ac{DSPG} synthesis criteria. Section~\ref{sec:optimized_analysis} details the optimized analysis algorithm and establishes its correctness properties. Section~\ref{sec:referral_path_operator} introduces the new referral-edge discount operator and analyzes its compatibility with classical Subjective Logic operators. Section~\ref{sec:eval_tnasl} presents the evaluation. Finally, Section~\ref{sec:summary_tnsl} concludes the chapter.
+The remainder of this chapter formalizes the proposed framework. \cref{sec:pnps} introduces the \ac{PNPS} concept and the associated structural reformulation.  \cref{sec:optimized_criteria} presents the improved \ac{DSPG} synthesis criteria, while \cref{sec:optimized_algorithm} introduces the algorithm that implements DSPG synthesis based on these criteria. \cref{sec:optimized_analysis} details the optimized analysis algorithm and establishes its correctness properties. \cref{sec:referral_path_operator} introduces the new referral-edge discount operator and analyzes its compatibility with classical Subjective Logic operators. \cref{sec:eval_tnasl} presents the evaluation. Finally, \cref{sec:summary_tnsl} concludes the chapter.
 
 \section{Parallel Non-Intersecting Path Subnetworks}
 \label{sec:pnps}
 
-To address the limitations of \ac{DSPG} synthesis and analysis procedures identified in the introduction, we refine the notion of \ac{PPS} originally used in \ac{DSPG} analysis. While \ac{PPS} structures are sufficient for defining the classical \ac{DSPG} reductions order, they are not strong enough to guarantee structural isolation during analysis and \ac{NL} updates. 
+To address the limitations of \ac{DSPG} synthesis and analysis procedures identified in the introduction, we refine the notion of \ac{PPS} originally used in \ac{DSPG} analysis. While \ac{PPS} structures are sufficient for defining the reduction order in classical \ac{DSPG} analysis, they are not strong enough to guarantee structural isolation during analysis and \ac{NL} updates.
 
-For example, consider the graph shown in \cref{fig:ppsv}. If the \ac{PPS} between nodes \(A\) and \(C\) is reduced into a single edge \(AC\), the \ac{NL} of this newly created edge becomes \(0\), while the \acp{NL} of the remaining edges decrease by one. This global update illustrates that reductions based solely on \ac{PPS} structures do not preserve local structural isolation during the reduction process. To overcome this limitation, we introduce a stricter structural construct called the \acf{PNPS}. This refinement plays a central role in enabling both a clearer formalization of \ac{DSPG} structures and stable \ac{NL} computation after \ac{PNPS} reduction into a single edge.
+For example, consider the graph shown in \cref{fig:ppsv,fig:pnps}. If the \ac{PPS} between nodes \(A\) and \(C\) is reduced into a single edge \(A\to C\), the \ac{NL} of this newly created edge becomes \(0\), while the \acp{NL} of the remaining edges decrease by one. This global update illustrates that reductions based on \ac{PPS} structures do not preserve local structural isolation during the reduction process, since the transformation affects the \aclp{NL} of edges outside the reduced subnetwork.
+
+To overcome this limitation, we introduce a stricter structural construct called the \acf{PNPS}. This refinement plays a central role in enabling both a clearer formalization of \ac{DSPG} structures and stable \ac{NL} computation after \ac{PNPS} reduction into a single edge.
 
 \begin{definition}[\aclu{PNPS}]
 \label{def:pnps}
-Let $(A,B)$ be a \aclu{PPS} (\cref{def:pps}). It is called a \ac{PNPS} if and only if there exist at least two non-intersecting directed paths from the source $A$ to the sink $B$.
+Let $(A,B)$ be a \ac{PPS} (\cref{def:pps}). It is called a \ac{PNPS} if and only if there exist at least two non-intersecting directed paths from the source $A$ to the sink $B$.
 \end{definition}
-The key difference between \ac{PPS} and \ac{PNPS} lies in the non-intersection requirement. This distinction is illustrated in \cref{fig:pnps}. For instance, although $(A,G)$ qualifies as a \ac{PPS}, it is not a \ac{PNPS} because we cannot find two non-intersecting paths between $A$ and $G$.
+The key difference between \ac{PPS} and \ac{PNPS} lies in the non-intersection requirement. This distinction is illustrated in \cref{fig:pnps}. For instance, although $(A,G)$ qualifies as a \ac{PPS}, it is not a \ac{PNPS} because we cannot find two non-intersecting paths between $A$ and $G$. On the other hand, if we add a path from $A$ to $G$ via a new node $H$, then $(A,G)$ becomes a \ac{PNPS}. 
 
 \begin{figure}[]
     \centering
@@ -89,8 +119,8 @@ The key difference between \ac{PPS} and \ac{PNPS} lies in the non-intersection r
         \draw[->] (5) -- node[midway, above right]{2} (7);
         \draw[->] (6) -- node[midway, below right]{2}  (7);
         \end{tikzpicture}
-        \caption{PPS edges NL before reduction}
-        \label{fig:ppsv}
+        \caption{\ac{PPS} edges NL before reduction}
+        \label{fig:pps_before}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.49\textwidth}
@@ -107,8 +137,8 @@ The key difference between \ac{PPS} and \ac{PNPS} lies in the non-intersection r
         \draw[->] (5) -- node[midway, above right, text=red]{1} (7);
         \draw[->] (6) -- node[midway, below right, text=red]{1}  (7);
         \end{tikzpicture}
-        \caption{PPS edges NL after reduction}
-        \label{fig:ppsv}
+        \caption{\ac{PPS} edges NL after reduction}
+        \label{fig:pps_after}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.49\textwidth}
@@ -131,7 +161,7 @@ The key difference between \ac{PPS} and \ac{PNPS} lies in the non-intersection r
         \draw[->] (6) -- node[midway, below right]{1}  (7);
         \end{tikzpicture}
         \caption{ \ac{PNPS} edges NL before reduction}
-        \label{fig:pnpsv}
+        \label{fig:pnps_before}
     \end{subfigure}
     \begin{subfigure}{0.49\textwidth}
         \centering
@@ -149,46 +179,154 @@ The key difference between \ac{PPS} and \ac{PNPS} lies in the non-intersection r
         \draw[->] (6) -- node[midway, below right]{1}  (7);
         \end{tikzpicture}
         \caption{ \ac{PNPS} edges NL after reduction}
-        \label{fig:pnpsv}
+        \label{fig:pnps_after}
     \end{subfigure}
-    \caption{Comparison of \ac{PPS} and  \ac{PNPS}}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}[main/.style = {draw, circle}] 
+        \node[main] (1) {$A$}; 
+        \node[main] (2) [above right of=1] {$B$};
+        \node[main] (3) [below right of=1] {$D$}; 
+        \node[main] (4) [below right of=2] {$C$};
+        \node[main] (5) [above right of=4]{$E$}; 
+        \node[main] (6) [below right of=4] {$F$};
+        \node[main] (7) [below right of=5] {$G$};
+        \node[main] (8) [above right of=2] {$H$};
+        \draw[dash dot, ->] (1) to[bend left=60] node[midway, above] {1} (8);
+        \draw[dash dot, ->] (8) to[bend left=60] node[midway, above] {1}  (7);
+        \draw[->] (1) -- node[midway, above left]{2} (2);
+        \draw[->] (1) --  node[midway, below left]{2} (3);
+        \draw[->] (2) -- node[midway, above right]{2} (4);
+        \draw[->] (3) -- node[midway, below right]{2} (4);
+        \draw[->] (4) -- node[midway, above left]{2} (5);
+        \draw[->] (4) --  node[midway, below left]{2} (6);
+        \draw[->] (5) -- node[midway, above right]{2} (7);
+        \draw[->] (6) -- node[midway, below right]{2}  (7);
+        \end{tikzpicture}
+        \caption{ \ac{PNPS} edges NL before reduction}
+        \label{fig:pnps_before}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}[main/.style = {draw, circle}] 
+        \node[main] (1) {$A$}; 
+        \node[main] (4) [below right of=2] {$C$};
+        \node[main] (5) [above right of=4]{$E$}; 
+        \node[main] (6) [below right of=4] {$F$};
+        \node[main] (7) [below right of=5] {$G$};
+        \node[main] (8) [above right of=2] {$H$};
+        \draw[dash dot, ->] (1) to[bend left=60] node[midway, above] {1} (8);
+        \draw[dash dot, ->] (8) to[bend left=60] node[midway, above] {1}  (7);
+        \draw[->, red] (1) -- node[midway, above]{1} (4);
+        \draw[->] (4) -- node[midway, above left]{2} (5);
+        \draw[->] (4) --  node[midway, below left]{2} (6);
+        \draw[->] (5) -- node[midway, above right]{2} (7);
+        \draw[->] (6) -- node[midway, below right]{2}  (7);
+        \end{tikzpicture}
+        \caption{ \ac{PNPS} edges NL after reduction}
+        \label{fig:pnps_after}
+    \end{subfigure}
+    
+    \caption{Comparison between \ac{PPS} and \ac{PNPS} reductions. In the \ac{PPS} case, reducing the subnetwork modifies the \aclp{NL} of edges outside the reduced structure, whereas \ac{PNPS} reductions preserve structural isolation and maintain \aclp{NL}.}
     \label{fig:pnps}
 \end{figure}
 
 
 % \subsection{Structural Characterization of Non-DSPG}
 
-The introduction of  \ac{PNPS} enables a simplified structural characterization of non-\ac{DSPG} graphs.
-
+The introduction of \ac{PNPS} structures enables a simpler characterization of structural violations in a graph. In particular, the following proposition provides a structural way for detecting graphs that do not satisfy the \ac{DSPG} property.
 \begin{proposition}[\ac{DSPG} Structural Constraint]
 \label{prop:dspg}
-A directed acyclic graph is not a \ac{DSPG} if and only if there exists a  \ac{PNPS} whose intermediate node has either:
+A directed acyclic graph is not a \ac{DSPG} if and only if there exists a \ac{PNPS} containing an intermediate node that has either
 \begin{itemize}
-    \item an outgoing edge to a node outside the  \ac{PNPS} (before reaching its target), or
-    \item an incoming edge from a node outside the  \ac{PNPS} (before first reaching its source).
+    \item an outgoing edge to a node outside the \ac{PNPS} (before reaching its target), or
+    \item an incoming edge from a node outside the \ac{PNPS} (before first reaching its source).
 \end{itemize}
+
 \end{proposition}
 
 This proposition provides an operational detection rule. A \ac{PNPS} that satisfies this property cannot be safely reduced to a single edge, as doing so would violate the structural constraints required for a \ac{DSPG}. By focusing exclusively on \ac{PNPS} structures, we obtain stronger structural guarantees and simpler verification conditions.
 
 \section{Optimized \acs{DSPG} Synthesis Criteria}
 \label{sec:optimized_criteria}
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \begin{tikzpicture}[main/.style = {draw, circle}] 
+        \node[main] (A) {$A$}; 
+        \node[main] (B) [right of=A] {$B$};
+        \node[main] (C) [above right of=B]{$C$}; 
+        \node[main] (D) [below right of=C] {$D$};
+        \node[main] (E) [below right of=B] {$E$};
+        \node[main] (F) [above of=C] {$F$};
+        \node[main] (G) [below of=E] {$G$};
+        \node[main] (H) [right of=D] {$H$};
 
+        \draw[->] (A) -- (B);
+        \draw[->] (A) --  (F);
+        \draw[->] (A) --  (G);
+
+        \draw[->] (B) --  (C);
+        \draw[->] (B) --  (E);
+
+        \draw[->] (C) --  (D);
+        \draw[->] (E) --  (D);
+
+        \draw[->] (D) --  (H);
+
+        \draw[->] (F) --  (H);
+        \draw[->] (G) --  (H);
+
+        \draw[->, red] (C) --  (F);
+        \end{tikzpicture}
+        \caption{Edge $C \to F$ makes the graph not \ac{DSPG}}
+        \label{fig:dspg_pnps_out}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \begin{tikzpicture}[main/.style = {draw, circle}] 
+        \node[main] (A) {$A$}; 
+        \node[main] (B) [right of=A] {$B$};
+        \node[main] (C) [above right of=B]{$C$}; 
+        \node[main] (D) [below right of=C] {$D$};
+        \node[main] (E) [below right of=B] {$E$};
+        \node[main] (F) [above of=C] {$F$};
+        \node[main] (G) [below of=E] {$G$};
+        \node[main] (H) [right of=D] {$H$};
+
+        \draw[->] (A) -- (B);
+        \draw[->] (A) --  (F);
+        \draw[->] (A) --  (G);
+        \draw[->] (B) --  (C);
+        \draw[->] (B) --  (E);
+        \draw[->] (C) --  (D);
+        \draw[->] (E) --  (D);
+        \draw[->] (D) --  (H);
+        \draw[->] (F) --  (H);
+        \draw[->] (G) --  (H);
+        \draw[->, red] (F) --  (C);
+        \end{tikzpicture}
+        \caption{Edge $F \to C$ makes the graph not \ac{DSPG}}
+        \label{fig:dspg_pnps_in}
+    \end{subfigure}
+    
+    \caption{\ac{DSPG} \ac{PNPS}-based Characterization}
+    \label{fig:dspg_pnps}
+\end{figure}
 As discussed in \cref{sec:dspg}, the original \ac{SL} work defines a set of criteria to be used when synthesizing a \ac{DSPG} from a non-\ac{DSPG} graph. Using the \ac{PNPS} definition introduced earlier, we reformulate these criteria in structural terms.
 
-\begin{corollary}[\ac{PNPS}-Based DSPG Criteria]
+\begin{corollary}[\ac{PNPS}-Based \ac{DSPG} Criteria]
 \label{cor:pnps-criteria}
-Let $A$ and $B$ be two nodes of the current graph which is assumed to be a \ac{DSPG}. Adding a branch from $A$ to $B$ preserves the DSPG property if and only if:
-
+Let $A$ and $B$ be two nodes of the current graph, which is assumed to be a \ac{DSPG}. Adding a branch from $A$ to $B$ preserves the \ac{DSPG} property if:
 \begin{itemize}
     \item \textbf{Criterion 1}: There exists at least one path from $A$ to $B$ in the current graph.
-    \item \textbf{Criterion 2}: If $A$ is an intermediate node of a \ac{PNPS} $P$, then $B$ must also be an intermediate node of $P$, and conversely.
+    \item \textbf{Criterion 2}: If $A$ is an intermediate node of a \ac{PNPS} $P$, then $B$ must also be an intermediate node of $P$, and vice versa.
 \end{itemize}
 \end{corollary}
 
-This formulation replaces \ac{NNL} arithmetic conditions with a structural containment rule. It directly captures part of the isolation constraint established in \cref{prop:dspg}.
+This formulation replaces \ac{NNL} arithmetic conditions with a structural containment rule. It directly captures part of the structural isolation constraint established in \cref{prop:dspg}.
 
-Before establishing the equivalence between the original \ac{NNL}-based criteria and the structural \ac{PNPS}-based formulation, we introduce an alternative characterization of the \ac{NNL}. While the classical definition of \ac{NNL} is expressed as a counting measure over \acp{PPS}, the structural interpretation of \ac{DSPG} graphs suggests a formulation in terms of the nesting depth of \acp{PNPS}. The following theorem shows that the nesting level of a node can equivalently be expressed as the maximum nesting level of the \acp{PNPS} in which the node appears as an intermediate node. This result provides the bridge between the arithmetic \ac{NNL} formulation and the structural containment rules used in the \ac{PNPS}-based criteria.
+Before establishing the equivalence between the original \ac{NNL}-based criteria and the structural \ac{PNPS}-based formulation, we introduce an alternative characterization of the \ac{NNL}. While the classical definition of \ac{NNL} is expressed as a counting measure over \acp{PPS}, the structural interpretation of \ac{DSPG} graphs suggests a formulation in terms of the nesting depth of \acp{PNPS}. The following theorem shows that the \aclu{NL} of a node can equivalently be expressed as the maximum \aclu{NL} of the \acp{PNPS} in which the node appears as an intermediate node. This result provides the bridge between the arithmetic \ac{NNL} formulation and the structural containment rules used in the \ac{PNPS}-based criteria.
 
 \begin{theorem}[\ac{PNPS}-Based Characterization of \ac{NNL}]
 \label{thm:pnps-nnl}
@@ -231,8 +369,7 @@ v \text{ is an intermediate node of } P
 \right|.
 \]
 
-Thus, $\mathrm{NNL}_G(v)$ counts the number of \acp{PNPS} in which $v$
-appears as an intermediate node.
+Thus, $\mathrm{NNL}_G(v)$ counts the number of subnetworks in which $v$ appears as an intermediate node. In classical \ac{DSPG} analysis these subnetworks correspond to \acp{PPS}, whereas in the present formulation we reason over the equivalent \ac{PNPS} structures.
 
 Let
 \[
@@ -275,19 +412,19 @@ which implies
 \]
 
 By definition of $\mathrm{PNL}$,
-\[
-\mathrm{PNL}_G(P^\star)
-=
-\min\left\{
-\mathrm{NL}_G(e)
-\;\middle|\;
-e \text{ is an edge of } P^\star
-\right\},
-\]
+\begin{equation}
+    \mathrm{PNL}_G(P^\star)
+    =
+    \min\left\{
+    \mathrm{NL}_G(e)
+    \;\middle|\;
+    e \text{ is an edge of } P^\star
+    \right\},
+\end{equation}
 and thus
 \begin{equation}
     \label{eq:proof_nnl_1}
-    \mathrm{PNL}_G(P^\star)\ge |\mathcal{P}_G(v)|.
+    \mathrm{PNL}_G(P^\star)\ge |\mathcal{P}_G(v)|
 \end{equation}
 
 Conversely, consider an edge $e_v\in P^\star$ whose sink is $v$.
@@ -350,7 +487,7 @@ This proves the claim.
 
 \begin{theorem}[Equivalence of Criteria]
 \label{thm:criteria-equivalence}
-When the current graph is \ac{DSPG} (\cref{def:dspg_original_criteria}), J{\o}sang's original criteria are logically equivalent to the \ac{PNPS}-based DSPG criteria of \cref{cor:pnps-criteria}.
+When the current graph is \ac{DSPG} (\cref{def:dspg_original_criteria}), J{\o}sang's original criteria are logically equivalent to the \ac{PNPS}-based \ac{DSPG} criteria of \cref{cor:pnps-criteria}.
 \end{theorem}
 
 \begin{lemma}\label{lemma}
@@ -406,7 +543,7 @@ If $A$ is an intermediate node of a PNPS $P$ and $B$ is not. This means that the
 
 Although equivalent to the original formulation, the \ac{PNPS}-based perspective reveals that strict equality of \acp{NNL} is not strictly necessary. Structural correctness is preserved as long as no  \ac{PNPS} isolation constraint is violated. We therefore introduce optimized criteria.
 
-\begin{definition}[Optimized DSPG Synthesis Criteria]
+\begin{definition}[Optimized \ac{DSPG} Synthesis Criteria]
 \label{def:optimized-criteria}
 A branch from $A \to B$ can be safely added if and only if:
 
@@ -463,7 +600,7 @@ The difference compared to the original criteria is that we allow $A$ or $B$ to 
 \caption{New maximal-NL PNPS after edge addition}
 \label{fig:pr}
 \end{subfigure}
-\caption{Illustrative example supporting the proof of the DSPG synthesis criteria}
+\caption{Illustrative example supporting the proof of the \ac{DSPG} synthesis criteria}
 \end{figure}
 
 
@@ -480,16 +617,16 @@ Let $A \rightarrow B$ be a candidate branch.
 \begin{proof}
 This proof is based on the logical structure outlined in Lemma~\ref{lemma}
 
-For \ref{thm:firstpart}: We know that if $A$ is an intermediate node of a PNPS $p$ then $B$ is an intermediate node of $p$ and if $B$ is an intermediate node of a PNPS $p$ then $A$ is an intermediate node of $p$ implies that the DSPG property not broken. What we need to show in this proof is that adding an edge from the source to an intermediate node or from an intermediate node to the sink inside a PNPS $p$ with maximum Nesting Level does not affect the DSPG property of the graph. We are doing the proof for the maximum NL because it is the same as doing the proof for any PNPS since what we want to know is whether we can still reduce a PNPS to a single edge using the DSPG analysis algorithm depicted in Figure~\ref{fig:algsynth2}. During the reduction process, the reduction will be done for this PNPS when the PNPS will be the most nested (the PNPS with maximum Nesting Level).
+For \ref{thm:firstpart}: We know that if $A$ is an intermediate node of a PNPS $p$ then $B$ is an intermediate node of $p$ and if $B$ is an intermediate node of a PNPS $p$ then $A$ is an intermediate node of $p$ implies that the \ac{DSPG} property not broken. What we need to show in this proof is that adding an edge from the source to an intermediate node or from an intermediate node to the sink inside a PNPS $p$ with maximum Nesting Level does not affect the \ac{DSPG} property of the graph. We are doing the proof for the maximum NL because it is the same as doing the proof for any PNPS since what we want to know is whether we can still reduce a PNPS to a single edge using the \ac{DSPG} analysis algorithm depicted in Figure~\ref{fig:algsynth2}. During the reduction process, the reduction will be done for this PNPS when the PNPS will be the most nested (the PNPS with maximum Nesting Level).
     \begin{itemize}
         \item add an edge from the source $A$ to an intermediate node $C$:
-        Assuming that the current PNPS has max NL, adding this branch does not break the DSPG property because after adding this branch the max NL will be increased by one. Then the new PNPS with maximum NL will be the new one created  $[A,C]$. This new PNPS will be like Figure~\ref{fig:pr} because it is clear that there is only one path from $A$ to $C$ otherwise $A$ and $C$ would have been the source and sink of a PNPS with NL greater than NL of $p$.
+        Assuming that the current PNPS has max NL, adding this branch does not break the \ac{DSPG} property because after adding this branch the max NL will be increased by one. Then the new PNPS with maximum NL will be the new one created  $[A,C]$. This new PNPS will be like Figure~\ref{fig:pr} because it is clear that there is only one path from $A$ to $C$ otherwise $A$ and $C$ would have been the source and sink of a PNPS with NL greater than NL of $p$.
     
         \item add an edge from an intermediate node $C$ to the target $B$: Same logic as before. We can just reverse the graph and use the same proof.
     \end{itemize}
 
     
-For \ref{thm:secondpart}: $A$ to $B$ does not break DPSG property. Assuming that the first criterion of criteria defined in \cref{cor:pnps-criteria} is fulfilled, then \cref{prop:dspg} implies that $A$ to $B$ fulfilled Criterion 2 of the optimized Criteria for DSPG Synthesis.
+For \ref{thm:secondpart}: $A$ to $B$ does not break DPSG property. Assuming that the first criterion of criteria defined in \cref{cor:pnps-criteria} is fulfilled, then \cref{prop:dspg} implies that $A$ to $B$ fulfilled Criterion 2 of the optimized Criteria for \ac{DSPG} Synthesis.
 \end{proof}
 % \paragraph{Nesting-Level Formulation}
 
@@ -533,7 +670,7 @@ In previous \cref{sec:optimized_criteria}, we established necessary and sufficie
 
 % \subsection{Algorithm Overview}
 
-Let $G = (V,E)$ be a directed acyclic graph that may not satisfy the DSPG property. The synthesis procedure constructs a subgraph $G' \subseteq G$ that is DSPG-compliant. The key idea is based on previous work~\cite{4622580}:
+Let $G = (V,E)$ be a directed acyclic graph that may not satisfy the \ac{DSPG} property. The synthesis procedure constructs a subgraph $G' \subseteq G$ that is \ac{DSPG}-compliant. The key idea is based on previous work~\cite{4622580}:
 \begin{enumerate}
     \item Enumerate all source-to-sink paths in $G$.
     \item Initialize $G'$ with one valid path.
@@ -552,11 +689,11 @@ This mapping allows constant-time verification of \ac{PNPS} containment constrai
 
 Algorithm~\ref{alg:dspg-synth} presents the synthesis procedure.
 \begin{algorithm}[H]
-\caption{Optimized DSPG Synthesis}
+\caption{Optimized \ac{DSPG} Synthesis}
 \label{alg:dspg-synth}
 \begin{algorithmic}[1]
 \Require Directed acyclic graph $G = (V,E)$
-\Ensure DSPG subgraph $G' \subseteq G$
+\Ensure \ac{DSPG} subgraph $G' \subseteq G$
 \State $paths \gets$ GetAllPaths($G$)
 \State Sort $paths$ by uncertainty or length
 \State $G' \gets$ $paths.pop()$ \Comment{Initialize with first path}
@@ -573,6 +710,32 @@ Algorithm~\ref{alg:dspg-synth} presents the synthesis procedure.
 
     \EndIf
 \EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{\ac{DSPG} Local Checker}
+\begin{algorithmic}[1]
+\Require Dictionary $\textit{nodesToPNPS}$, source node $src$, target node $target$
+\If{there is a path from $src$ to $target$}
+    \State $pathNodes \gets$ list of all intermediate nodes in this path
+\Else
+    \State \Return $\{bool: False\}$
+\EndIf
+
+\If{$nodesToPNPS[src] \neq None$}
+    \If{$target \notin nodesToPNPS[src]$}
+        \State \Return $\{bool: False\}$
+    \EndIf
+\EndIf
+
+\If{$nodesToPNPS[target] \neq None$}
+    \If{$src \notin nodesToPNPS[target]$}
+        \State \Return $\{bool: False\}$
+    \EndIf
+\EndIf
+
+\State \Return $\{bool: True,\; intermediateNodes: pathNodes\}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -600,49 +763,19 @@ Algorithm~\ref{alg:dspg-synth} presents the synthesis procedure.
 \end{algorithmic}
 \end{algorithm}
 
+The procedures \texttt{DSPGChecker} and \texttt{UpdatePNPS} support the incremental synthesis process. The function \texttt{DSPGChecker} verifies whether a candidate branch $(src,target)$ satisfies the optimized synthesis criteria. It first checks the existence of a path from $src$ to $target$, and then ensures that the structural containment conditions imposed by \cref{def:optimized-criteria} are respected using the current \texttt{nodesToPNPS} mapping. If the branch is admissible, the procedure returns the intermediate nodes along the corresponding path. 
 
-The function \texttt{DSPGChecker} verifies the optimized criteria:
-\begin{enumerate}
-    \item Existence of a path from $A$ to $B$.
-    \item Structural containment consistency according to Definition~\ref{def:optimized-criteria}.
-\end{enumerate}
-\todo[inline]{Add text regarding DSPGChecker algorithm}
-\begin{algorithm}
-\caption{DSPG Local Checker}
-\begin{algorithmic}[1]
-\Require Dictionary $\textit{nodesToPNPS}$, source node $src$, target node $target$
-\If{there is a path from $src$ to $target$}
-    \State $pathNodes \gets$ list of all intermediate nodes in this path
-\Else
-    \State \Return $\{bool: False\}$
-\EndIf
+The procedure \texttt{UpdatePNPS} then updates the mapping \texttt{nodesToPNPS} to maintain the invariant that each node is associated with the most deeply nested \ac{PNPS} in which it appears as an intermediate node. When a new branch creates or extends a \ac{PNPS} between two nodes, the intermediate nodes of the existing path and those of the new branch are examined. Nodes that become part of a more deeply nested \ac{PNPS} are updated accordingly, while nodes already belonging to a deeper \ac{PNPS} remain unchanged.  This ensures that the mapping always reflects the highest nested structural context of each node.
 
-\If{$nodesToPNPS[src] \neq None$}
-    \If{$target \notin nodesToPNPS[src]$}
-        \State \Return $\{bool: False\}$
-    \EndIf
-\EndIf
 
-\If{$nodesToPNPS[target] \neq None$}
-    \If{$src \notin nodesToPNPS[target]$}
-        \State \Return $\{bool: False\}$
-    \EndIf
-\EndIf
-
-\State \Return $\{bool: True,\; intermediateNodes: pathNodes\}$
-\end{algorithmic}
-\end{algorithm}
-
-Following we show different properties of the \cref{alg:dspg-synth}.
-
-The correctness of the algorithm relies on the invariant that $nodesToPNPS[v]$ always stores the most deeply nested  \ac{PNPS} in which node $v$ appears as an intermediate node.
+Following we show different properties of the \cref{alg:dspg-synth}. The correctness of the algorithm relies on the invariant that $nodesToPNPS[v]$ always stores the most deeply nested  \ac{PNPS} in which node $v$ appears as an intermediate node.
 \begin{theorem}
 Let $a$ and $b$ be two nodes, and assume that we have a mapping 
 $nodesToPNPS$ which maps a node to the highest nested PNPS it is part of.
 Then we have
 
 \begin{align}
-    nodesToPNPS[a] = None \;\text{ or }\; b \in nodesToPNPS[a]
+    nodesToPNPS[a] = None \; \text{ or }\; b \in nodesToPNPS[a]
 \iff \notag \\
 \text{if node } a \text{ is an intermediate node of a PNPS } p
 \text{ then } b \text{ is inside } p . \notag 
@@ -713,20 +846,20 @@ PNPS it belongs to.
 
 \begin{theorem}[Algorithm Soundness]
 \label{thm:alg-sound}
-At every iteration, $G'$ remains DSPG.
+At every iteration, $G'$ remains \ac{DSPG}.
 \end{theorem}
 
 \begin{proof}
-The algorithm adds a branch only if it satisfies the optimized synthesis criteria of \cref{thm:optimized-sound}. By soundness of those criteria, the addition preserves the DSPG property. Since the initial path is trivially DSPG and each step preserves the invariant, the resulting graph remains DSPG.
+The algorithm adds a branch only if it satisfies the optimized synthesis criteria of \cref{thm:optimized-sound}. By soundness of those criteria, the addition preserves the \ac{DSPG} property. Since the initial path is trivially \ac{DSPG} and each step preserves the invariant, the resulting graph remains \ac{DSPG}.
 \end{proof}
 
 \begin{theorem}[Algorithm Completeness]
 \label{thm:alg-complete}
-If a branch can be added without violating the DSPG property, the algorithm will accept it.
+If a branch can be added without violating the \ac{DSPG} property, the algorithm will accept it.
 \end{theorem}
 
 \begin{proof}
-By completeness of the optimized criteria in \cref{thm:optimized-sound}, any branch that preserves DSPG must satisfy the structural containment conditions. The \texttt{DSPGChecker} verifies exactly these conditions. Therefore admissible branches are not rejected.
+By completeness of the optimized criteria in \cref{thm:optimized-sound}, any branch that preserves \ac{DSPG} must satisfy the structural containment conditions. The \texttt{DSPGChecker} verifies exactly these conditions. Therefore admissible branches are not rejected.
 \end{proof}
 
 % \subsection{Termination}
@@ -754,42 +887,31 @@ Although path enumeration may be expensive in theory, in trust networks the grap
 
 % \subsection{Structural Implications}
 
-This completes the structural synthesis component of the framework. In the next section, we turn to optimized DSPG analysis and \acp{NL} computation during reduction.
+This completes the structural synthesis component of the framework. In the next section, we turn to optimized \ac{DSPG} analysis and \acp{NL} computation during reduction.
 
 \section{Optimized \acs{DSPG} Analysis and \acs{PNPS}-Based Reduction}
 \label{sec:optimized_analysis}
+Once a \ac{DSPG} has been synthesized, trust inference proceeds through structural reduction. Classical \ac{DSPG} analysis recursively reduces the graph by replacing the most nested \acp{PPS} with a single edge whose subjective opinion corresponds to the expression obtained by combining the opinions along the paths of the \ac{PPS}. This process continues until only one edge remains between the global source and the global sink.
 
-Once a \ac{DSPG} graph has been synthesized, trust inference proceeds through structural reduction. Classical \ac{DSPG} analysis reduces the graph recursively by collapsing \ac{PPS} into single edges until only one edge remains between the global source and sink.
-
-In this section, we demonstrate that replacing \ac{PPS} with  \ac{PNPS} leads to a more stable and structurally isolated reduction process. We formalize the reduction procedure and analyze nesting-level evolution.
-
-% \subsection{PNPS-Based Reduction Principle}
-
-In the classical formulation, a \ac{DSPG} is recursively reduced using two operations:
+In the classical formulation, reduction relies on two elementary operations:
 \begin{enumerate}
-    \item Series reduction, which collapses two consecutive edges incident to a node of degree two.
-    \item Parallel reduction, which collapses parallel edges into a single edge.
+    \item Series reduction, which reduces two consecutive edges incident to a node of degree two.
+    \item Parallel reduction, which reduces parallel edges into a single edge.
 \end{enumerate}
 
-\todo[inline]{the following is not clear at all} In the \ac{PPS}-based framework, identifying valid parallel structures may require global structural reasoning. Furthermore, nesting-level updates are implicitly derived and can be difficult to track precisely.
+However, in the \ac{PPS}-based framework these reductions are not structurally isolated. Replacing a \ac{PPS} with a single edge may alter the structure of other \acp{PPS} in the graph. For example, in \cref{fig:pnps}, reducing the \ac{PPS} \(A \to C\) modifies the connectivity of the graph and the subnetwork \(A \to G\) is no longer a \ac{PPS}. As a consequence, reductions can propagate structural changes across the graph, making the evolution of \acp{NL} difficult to track precisely.
 
+In this section, we show that replacing \ac{PPS} with \ac{PNPS} yields a structurally localized reduction process.  We formalize the corresponding reduction procedure and analyze the resulting \aclu{NL} updates.
 
-
-
-
-Using \ac{PNPS}, reduction becomes structurally localized.
 \begin{definition}[ \ac{PNPS} Reduction]
 Let $P$ be a  \ac{PNPS} with source $A$ and target $B$. A  \ac{PNPS} reduction replaces the entire subnetwork $P$ with a single edge $(A,B)$ whose subjective opinion equals the fusion of the discounted opinions along the paths in \(P\).
 \end{definition}
 
-The key advantage of \ac{PNPS} is that structural isolation is guaranteed by Definition~\ref{def:pnps} (\cref{fig:pnps}). Since the parallel paths are node-disjoint, collapsing the subnetwork does not create unintended structural interactions.
+The analysis algorithm proceeds by iteratively selecting a \ac{PNPS} with maximum \ac{NL} and reduces it. The key advantage of \ac{PNPS} is that structural isolation is guaranteed (\cref{fig:pnps}). Since the parallel paths are node-disjoint, reducing the most nested subnetwork does not create unintended structural interactions. 
 
-Reduction proceeds by iteratively selecting a \ac{PNPS} with maximum \ac{NL}.
+The proposed optimized analysis algorithm relies on the fact that reducing a \ac{PNPS} allows updates of \acp{NL} in a controlled manner.
 
-
-The optimized analysis algorithm relies on the fact that reducing a  \ac{PNPS} preserves structural consistency and updates \acp{NL} in a controlled manner.
-
-\begin{theorem}[\ac{PNPS}  Reduction Preservation and Nesting Update]
+\begin{theorem}[\ac{PNPS} Reduction Preservation and Nesting Update]
 \label{thm:pnps-reduction}
 Let $G$ be a \ac{DSPG}, and let $\text{pnps}_1$ be a \ac{PNPS} in $G$ with the maximum Nesting Level. Then:
 \begin{enumerate}
@@ -801,16 +923,13 @@ The theorem formalizes two essential properties.
 
 First, reduction is isolated. The transformation of a maximally nested  \ac{PNPS} does not alter the structural hierarchy of remaining  \acp{PNPS}.
 
-Second, \acp{NL} decrease in a strictly controlled manner. This guarantees termination of the reduction process and preserves ordering among nested structures.
+Second, \acp{NL} decrease in a strictly controlled manner. This guarantees termination of the reduction process and allows ordering among nested structures.
 
 
-The proof of \cref{thm:pnps-reduction} relies on structural relationships between nested  \acp{PNPS}.
-
-Before proving Theorem~\ref{thm:pnps-reduction}, we need to introduce several elementary results that characterize the structural relationships between nested PNPSs. These results are necessary to justify both the isolation property and the nesting level update described above.
+The proof of \cref{thm:pnps-reduction} relies on structural relationships between nested \acp{PNPS}. Before providing the proof, we need to introduce several elementary results that characterize the structural relationships between nested PNPSs. These results are necessary to justify both the isolation property and the nesting level update described above.
 \begin{theorem}
-\label{thrm:anlsys1}
-\label{thrm:anlsys2}
-Consider a DSPG and two PNPSs, $pnps_1$ and $pnps_2$, such that $NL(pnps_1) > NL(pnps_2)$. Then:
+\label{thrm:anlsys}
+Consider a \ac{DSPG} and two PNPSs, $pnps_1$ and $pnps_2$, such that $NL(pnps_1) > NL(pnps_2)$. Then:
 \begin{enumerate}
     \item \label{thm:p1} If a node $s$ is the common source of both $pnps_1$ and $pnps_2$, then $s$ must have at least one outgoing edge that is in $pnps_2$ but not in $pnps_1$.
     \item \label{thm:p2} If a node $t$ is the common target of both $pnps_1$ and $pnps_2$, then $t$ must have at least one incoming edge that is in $pnps_2$ but not in $pnps_1$.
@@ -822,36 +941,33 @@ Consider a DSPG and two PNPSs, $pnps_1$ and $pnps_2$, such that $NL(pnps_1) > NL
 For part~\ref{thm:p1} of the theorem.
 If $NL(pnps_1) > NL(pnps_2)$, then $pnps_1$ and $pnps_2$ don't have the same target (since they already have the same source). Thus:
 \begin{itemize}
-    \item  either $pnps_1$ is inside $pnps_2$: If $s$ does not have at least one outgoing edge to a node which is inside $pnps_2$ and outside $pnps_1$ it means that all paths from $s$ to target of $pnps_2$ will be through $pnps_1$ since from an intermediate node of $pnps_1$ we cannot go outside $pnps_1$ without reaching the target of $pnps_1$. The consequence is that we will not be able to find two non-intersecting paths therefore the graph is not DSPG;
+    \item  either $pnps_1$ is inside $pnps_2$: If $s$ does not have at least one outgoing edge to a node which is inside $pnps_2$ and outside $pnps_1$ it means that all paths from $s$ to target of $pnps_2$ will be through $pnps_1$ since from an intermediate node of $pnps_1$ we cannot go outside $pnps_1$ without reaching the target of $pnps_1$. The consequence is that we will not be able to find two non-intersecting paths therefore the graph is not \ac{DSPG};
     
-    \item or $pnps_1$ is not inside $pnps_2$ and $Nodes(pnps_1) \cap Nodes(pnps_1) \neq \{s\}$: In this case the graph cannot be a DSPG because it means that $pnps_1$ has an intermediate node $n_1$ inside $pnps_2$ (which are not $s$) and a node $n_2$  outside $pnps_2$. $n_2$ is an intermediate node of $pnps_2$ (otherwise it’s the target node of $pnps_2$, and in this case it impossible to have $NL(pnps_1)>NL(pnps_2 )$). Therefore, from $n_1$ (intermediate node of $pnps_2$) we can reach $n_2$ (outside $pnps_2$)  without visiting the target of $pnps_2$
+    \item or $pnps_1$ is not inside $pnps_2$ and $Nodes(pnps_1) \cap Nodes(pnps_1) \neq \{s\}$: In this case the graph cannot be a \ac{DSPG} because it means that $pnps_1$ has an intermediate node $n_1$ inside $pnps_2$ (which are not $s$) and a node $n_2$  outside $pnps_2$. $n_2$ is an intermediate node of $pnps_2$ (otherwise it’s the target node of $pnps_2$, and in this case it impossible to have $NL(pnps_1)>NL(pnps_2 )$). Therefore, from $n_1$ (intermediate node of $pnps_2$) we can reach $n_2$ (outside $pnps_2$)  without visiting the target of $pnps_2$;
     
-    \item or $pnps_1$ is not inside $pnps_2$ and $Nodes(pnps_1) \cap Nodes(pnps_1) = \{s\}$: In this case $s$ has at least one outgoing edge to a node which is inside $pnps_2$ and outside $pnps_1$ 
-    
+    \item or $pnps_1$ is not inside $pnps_2$ and $Nodes(pnps_1) \cap Nodes(pnps_1) = \{s\}$: In this case $s$ has at least one outgoing edge to a node which is inside $pnps_2$ and outside $pnps_1$.
 \end{itemize}
 
-The part~\ref{thm:p2} of the theorem is the dual case of item. Reverse the graph and apply the same reasoning.
+The part~\ref{thm:p2} of the theorem is the dual case of part~\ref{thm:p1}. Reverse the graph and apply the same reasoning.
 \end{proof}
 
 \begin{figure}
     \centering
 \includegraphics[width=0.5\textwidth]{img/dspg/newsynth.pdf}
-    \caption{Our optimized DSPG analysis algorithm}
+    \caption{Our optimized \ac{DSPG} analysis algorithm}
     \label{fig:algsynth2}
 \end{figure}
 \begin{corollary}
 \label{corol:synth}
-Considering a DSPG, if a PNPS $pnps_1$ is nested in another PNPS $pnps_2$ and $pnps_1 \neq pnps_2$, then $pnps_2$ has at least one edge not in $pnps_1$.
+Considering a \ac{DSPG}, if a PNPS $pnps_1$ is nested in another PNPS $pnps_2$ and $pnps_1 \neq pnps_2$, then $pnps_2$ has at least one edge not in $pnps_1$.
 \end{corollary}
 \begin{proof}
     If a PNPS $pnps_1$ is nested in another PNPS $pnps_2$, we can distinguish between two cases:
 \begin{enumerate}
     \item $pnps_1$ and $pnps_2$ do not share the same source and also do not share the same target nodes: if they don't have the same source then the path from the source of $pnps_2$ to the source of $pnps_1$ contains edges outside $pnps_1$. Same reasoning  if they don't have the same target.
-    \item $pnps_1$ shares the source or the target (or both) with $pnps_2$: application of Theorems \cref{thrm:anlsys1}.
+    \item $pnps_1$ shares the source or the target (or both) with $pnps_2$: application of Theorems \cref{thrm:anlsys}.
 \end{enumerate}
 \end{proof}
-
-
 We now return to the proof of \cref{thm:pnps-reduction} stated above. 
 \begin{proof}
     When reducing a PNPS with the maximum Nesting Level (denoted as $pnps_1$), two structural cases arise:
@@ -859,75 +975,26 @@ We now return to the proof of \cref{thm:pnps-reduction} stated above.
     \item $pnps_1$ is a non nested PNPS, or
     \item $pnps_1$  is nested within another PNPS (denoted as $pnps_2$).
 \end{enumerate}
-In case (1), $pnps_1$ has a Nesting Level equal to 1. After its reduction, all other PNPSs remains the same and the resulting edge has a Nesting Level of 0. In the case (2), since at least one edge --- denoted as $e$ --- in $pnps_2$ is not part of $pnps_1$ (Corrolary~\ref{corol:synth}), $NL(e)$ will remain unchanged and we select it such that its Nesting Level equals that of $pnps_2$ (this follows from  \cref{thrm:anlsys1} with $pnps_1$ Nesting Level equals $pnps_2$ Nesting Level plus 1. Such a PNPS($pnps_2$) exists, as the Nesting Level increments one by one). As a result, the Nesting Level of $pnps_1$ is preserved, since the new edge has Nesting Level reduced by one which is still greater than or equal to that of $pnps_2$.
+In case (1), $pnps_1$ has a Nesting Level equal to 1. After its reduction, all other PNPSs remains the same and the resulting edge has a Nesting Level of 0. In the case (2), since at least one edge --- denoted as $e$ --- in $pnps_2$ is not part of $pnps_1$ (Corrolary~\ref{corol:synth}), $NL(e)$ will remain unchanged and we select it such that its Nesting Level equals that of $pnps_2$ (this follows from \cref{thrm:anlsys} with $pnps_1$ Nesting Level equals $pnps_2$ Nesting Level plus 1. Such a PNPS($pnps_2$) exists, as the Nesting Level increments one by one). As a result, the Nesting Level of $pnps_1$ is preserved, since the new edge has Nesting Level reduced by one which is still greater than or equal to that of $pnps_2$.
 \end{proof}
 
 \begin{theorem}[Reduction Ordering]
 \label{thm:reduction-ordering}
-Let $G$ be a DSPG. Reducing a  \ac{PNPS} with maximum \ac{NL} preserves the nesting structure of all remaining  \acp{PNPS}.
+Let $G$ be a \ac{DSPG}. Reducing a  \ac{PNPS} with maximum \ac{NL} preserves the nesting structure of all remaining  \acp{PNPS}.
 \end{theorem}
 
 \begin{proof}
 This follows directly from \cref{thm:pnps-reduction}. A maximally nested  \ac{PNPS} is structurally contained within no other \ac{PNPS} of higher \ac{NL}. Therefore its reduction does not modify the structural boundaries of less nested  \acp{PNPS}.
 \end{proof}
+This ordering guarantees that reduction progresses from the most deeply nested structures outward, ensuring easy \ac{NL} updates.
 
-This ordering guarantees that reduction progresses from the most deeply nested structures outward, ensuring structural consistency.
-
-
-
-
-
-
-
-
-\subsection{Correctness and Implications for Trust Inference}
-
-Replacing PPS with\ac{PNPS} produces three fundamental improvements:
-
+In summary Replacing \ac{PPS} with \ac{PNPS} produces three fundamental improvements:
 \begin{enumerate}
-    \item \textbf{Stronger isolation guarantees.}  \ac{PNPS} ensures that intermediate nodes cannot connect to external structures without violating DSPG.
-    
-    \item \textbf{Simplified detection of non-DSPG patterns.} Structural violations become local and verifiable through \cref{prop:dspg}.
-    
+    \item \textbf{Stronger isolation guarantees.}  \ac{PNPS} ensures that intermediate nodes cannot connect to external structures without violating \ac{DSPG}.
+    \item \textbf{Simplified detection of non-\ac{DSPG} patterns.} Structural violations become local and verifiable through \cref{prop:dspg}.
     \item \textbf{Stable nesting updates.} \cref{thm:pnps-reduction} guarantees predictable nesting-level evolution during reduction.
 \end{enumerate}
-
 These properties form the structural backbone of the optimized synthesis and analysis framework presented in the next sections.
-
-
-\begin{theorem}[Correctness of \ac{PNPS}-Based Reduction]
-\label{thm:analysis-correct}
-Let $G$ be a DSPG. Iterative \ac{PNPS}-based reduction yields a single edge between the global source and sink whose opinion equals the trust inference result defined by Subjective Logic operators.
-\end{theorem}
-
-\begin{proof}
-Since every DSPG can be reduced by successive series and parallel reductions, and since  \ac{PNPS} is a stricter form of PPS that preserves structural equivalence, every PPS reduction step is captured by a \ac{PNPS} reduction.
-
-At each reduction step, subjective opinions are combined using valid fusion and discount operators. Because  \ac{PNPS} structures are node-disjoint, operator application is well-defined and free of ambiguity.
-
-Since \acp{NL} decrease strictly and the graph is finite, the process terminates with a single edge representing the global trust evaluation.
-\end{proof}
-
-
-The \ac{PNPS}-based approach improves classical analysis in three aspects:
-
-\begin{enumerate}
-    \item \textbf{Structural isolation.} Node-disjointness guarantees reduction does not affect unrelated structures.
-    \item \textbf{Deterministic nesting updates.} \acp{NL} decrease in a controlled and predictable manner.
-    \item \textbf{Simplified detection.} Structural violations can be identified locally using \cref{prop:dspg}.
-\end{enumerate}
-
-In contrast, PPS-based reduction may require global reasoning to ensure that intermediate nodes do not create unintended structural exits.
-
-
-
-The \ac{PNPS}-based reduction framework guarantees that:
-
-\begin{itemize}
-    \item Every reduction step corresponds to a valid trust operator application.
-    \item No structural ambiguity arises during fusion.
-    \item Information retention achieved during synthesis is preserved during analysis.
-\end{itemize}
 
 This completes the structural component of the optimized framework. We now turn to the operator-level limitation identified previously.
 
@@ -941,10 +1008,23 @@ This completes the structural component of the optimized framework. We now turn 
 \section{Trust Discounting for Referral Paths}
 \label{sec:referral_path_operator}
 
-In DSPG Analysis, trust propagation along referral paths plays a central role in deriving consistent opinions between distant nodes. While classical trust discounting operators allow the combination of a referral edge with a functional edge, they do not guarantee consistency when multiple referral edges appear consecutively in a path. In particular, the projected probability of the resulting opinion is not always equal to the product of the projected probabilities along the path. This limitation becomes critical when reducing  \ac{PNPS} structures, where multi-edge referral chains frequently arise.
+In \ac{DSPG} Analysis, trust propagation along referral paths plays a central role in deriving consistent opinions between distant nodes. While classical trust discounting operators allow the combination of a referral edge with a functional edge, they do not guarantee consistency when multiple referral edges appear consecutively in a path. In particular, the projected probability of the resulting opinion is not always equal to the product of the projected probabilities along the path, which makes it inconsistent with the Multi Edge Trust Discounting. In clear, if we have a pattern in a graph like the one depicted in \cref{fig:rs2} 
+\begin{align} \label{eq:TE}
+    \omega^{A_1}_{A_n} &= \omega^{[A_1;\ldots;A_{n-2}]}_{A_{n-1}}\otimes_{_{ME}} \omega^{A_{n-1}}_{A_{n}} \\
+    &=(\omega^{A_1}_{A_2} \otimes_{_{TE}}( \dots \otimes_{_{TE}} (\omega^{A_{n-2}}_{A_{n-1}} \otimes_{_{TE}} \omega^{A_{n-1}}_{A_{n}}) \notag \\ 
+    &\neq((\omega^{A_1}_{A_2} \otimes_{_{TE}} \dots )\otimes_{_{TE}} \omega^{A_{n-2}}_{A_{n-1})} \otimes_{_{TE}} \omega^{A_{n-1}}_{A_{n}} \, \text{non associativity of } \otimes_{_{TE}} \notag
+\end{align}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/discount/rs2.pdf}
+    \caption{Generic referral path with the same numerical opinion for each edge}
+    \label{fig:rs2}
+\end{figure}
+
 
 To address this issue, we introduce a new \emph{Referral-Edge Path Trust Discounting Operator}, denoted by $\otimes_{RE}$. 
-This operator enables consistent trust propagation over two or more consecutive referral edges while preserving probabilistic coherence.
+This operator enables consistent trust propagation over two or more consecutive referral edges while preserving probabilistic coherence implied by the Multi Edge Trust Discounting.
 
 \begin{definition}[Referral-Edges Trust Discountion]
     Let $\omega_B^A = (b_B^A, d_B^A, u_B^A, a_B^A)$ denote the referral trust opinion of agent $A$ about agent $B$, and let $\omega_C^B = (b_C^B, d_C^B, u_C^B, a_C^B)$ denote the referral trust opinion of $B$ about $C$. 
@@ -989,9 +1069,9 @@ P_C^{[A;B]} = (b_B^A + u_B^A a_B^A)(b_C^B + u_C^B a_C^B) = P_B^A P_C^B.
 \]
 \end{proof}
 
-This property guarantees probabilistic consistency across arbitrarily long referral chains in optimized DSPGs.
+This property guarantees probabilistic consistency across arbitrarily long referral chains in optimized \acp{DSPG}.
 
-In DSPG reduction, referral paths may contain more than two edges. Therefore, the operator must be associative to ensure path-independent evaluation.
+In \ac{DSPG} reduction, referral paths may contain more than two edges. Therefore, the operator must be associative to ensure path-independent evaluation.
 
 \begin{theorem}[Associativity over Multi-Edge Referral Paths]
 \label{thm:associativity_RE}
@@ -1007,7 +1087,7 @@ The operator $\otimes_{RE}$ is associative. For any referral chain $A \rightarro
 The belief component on both sides equals $b_B^A b_C^B b_D^C$, and the disbelief component equals $b_B^A b_C^B d_D^C$. Since projected probability multiplicativity holds recursively, both expressions yield identical projected probabilities. Given equality of belief, disbelief, and projected probability, uncertainty and base rate coincide. Therefore, the two expressions are equal.
 \end{proof}
 
-Associativity ensures that trust propagation over referral chains in optimized DSPGs is independent of grouping, which is essential for \ac{PNPS}-based reductions.
+Associativity ensures that trust propagation over referral chains in optimized \acp{DSPG} is independent of grouping, which is essential for generalization of the operator.
 
 % \subsection{Non-Idempotency}
 \begin{theorem}[Referral-Edges Trust Discounting Idempotence]
@@ -1024,11 +1104,71 @@ Associativity ensures that trust propagation over referral chains in optimized D
 
 This property reflects the fact that repeated referral propagation accumulates uncertainty unless the opinion corresponds to absolute belief or total vacuity.
 
-% \subsection{Interpretation in Optimized DSPGs}
 
-Within an optimized \ac{DSPG}, referral edges represent meta-trust relationships between nodes. The operator $\otimes_{RE}$ enables consistent reduction of multi-edge referral paths into a single equivalent edge while preserving projected probability semantics. This guarantees that \ac{PNPS}-based reductions performed in \cref{sec:optimized_analysis} do not alter the probabilistic interpretation of trust values.
+Within \ac{DSPG}, referral edges represent meta-trust relationships between nodes. The operator $\otimes_{RE}$ enables consistent reduction of multi-edge referral paths into a single equivalent edge while preserving projected probability semantics. This guarantees that \ac{PNPS}-based reductions performed in \cref{sec:optimized_analysis} is consistent and do not alter the probabilistic interpretation of trust values.
 
-As a consequence, optimized DSPG synthesis and trust propagation become algebraically coherent, structurally consistent, and probabilistically well-founded.
+
+To show the consistency between our newly proposed Referral-Edge Path discounting operator and Multi-Edge Path discounting operator, we reduce the STN depicted in~\cref{fig:rs1}. By reducing we refer to $\omega_X^A$ opinion derivation. We can distinguish two methods for this purpose.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.35\textwidth]{img/discount/rs1.pdf}
+    \caption{Three edges path with numerical value}
+    \label{fig:rs1}
+\end{figure}
+
+\paragraph{Method 1---Trust Discounting with Multi-Edge Path}
+In this method we use the Multi-Edge Trust Discounting operator~(Eq.~\ref{equ:tdm} and ~\cref{fig:tdism}) to compute $\omega_X^A$ through the transitive path $ABCX$. This computation is done by firstly calculating $P_C^A$ of the referral path $ABC$ which is set to $P^A_B P^B_C$. Then multiply $P_C^A$ by the belief and disbelief of the functional trust $\omega^C_X$ as follows:
+\begin{equation}
+    \label{equ:td3m}
+    \omega_X^{[A;B;C]}:
+        \begin{cases}
+            b_X^{[A;B;C]} &= P^A_C b^C_X\\
+            d_X^{[A;B;C]} &= P^A_C d^C_X\\
+            u_X^{[A;B;C]} &= 1 - (b^{[A;B;C]}_X + d^{[A;B;C]}_X)\\
+            a_X^{[A;B;C]} &=  a^C_X
+        \end{cases}
+\end{equation} where $P^A_C = P^A_BP^B_C$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/discount/tdisr.pdf}
+    \caption{Method 2 applied to STN depicted in~\cref{fig:rs1}}
+    \label{fig:tdisr}
+\end{figure}
+
+\paragraph{Method 2---Trust Discounting with Referral-Edge Path (our new discounting operator) + Two-Edge Path}
+%
+Here we firstly discount the two referral trust opinions ($\omega^A_B, \omega^B_C$) using our new operator (\cref{equ:tdr_dissertation}) to calculate $\omega_C^{[A;B]}$. 
+Then we discount $\omega_C^{[A;B]}$ with $\omega_X^C$ using the Two-Edge Discount ($\otimes_{TE}$) calculated as follows:
+%
+\begin{equation}
+    \label{equ:tdp}
+    \omega_X^{[A;B;C]}:
+        \begin{cases}
+            b_X^{[A;B;C]} &= P_C^{[A;B]} b^C_X\\
+            d_X^{[A;B;C]} &=  P_C^{[A;B]} d^C_X\\
+            u_X^{[A;B;C]} &= 1 - (b^{[A;B;C]}_X + d^{[A;B;C]}_X)\\
+            a_X^{[A;B;C]} &=  a^C_X
+        \end{cases}
+\end{equation}
+As depicted in~\cref{fig:tdisr}, this method is a step by step process, which is not the case for Method 1. \newline
+
+To show equivalence between these two methods, let's denote by $\omega_1$ and $\omega_2$ the result obtained using Method 1 and Method 2, respectively. 
+Our goal is to prove that $\omega_1=\omega_2$ using~\cref{thm:projected_probability_preservation}:
+
+\begin{align}
+    \notag
+    P_C^{[A;B]} = P_B^{A} P_C^{B} &\Leftrightarrow P_C^{[A;B]}=P^A_BP^B_C \\
+    \notag
+    &\Leftrightarrow P_C^{[A;B]}=P^A_C  \\
+    \notag
+    &\Leftrightarrow \omega_1 = \omega_2. \notag
+\end{align}
+
+
+
+
+As a consequence, optimized \ac{DSPG} synthesis and trust propagation become algebraically coherent, structurally consistent, and probabilistically well-founded.
 
 
 
@@ -1037,9 +1177,7 @@ As a consequence, optimized DSPG synthesis and trust propagation become algebrai
 \subsection{Evaluation of Optimized \acs{DSPG} Synthesis}
 \label{subsec:eval_synthesis}
 
-In Section~\ref{sec:optimized_criteria} we formally proved the correctness and optimal retention properties of the proposed \ac{DSPG} synthesis criteria. In particular, we demonstrated that the \ac{PNPS}-based reduction preserves structural validity while avoiding unnecessary edge elimination. Therefore, the purpose of this evaluation is not to re-establish correctness, but to assess the practical impact of the optimized synthesis on the final derived trust opinions.
-
-Specifically, we investigate how retaining or discarding structurally valid edges influences the uncertainty of the final trust estimate. This analysis highlights the practical benefits of our retention criteria compared to the original synthesis rules.
+In \cref{sec:optimized_criteria} we formally proved the correctness and optimal retention properties of the proposed \ac{DSPG} synthesis criteria. The purpose of this evaluation is not to re-establish correctness, but to assess the practical impact of the optimized synthesis on the final derived trust opinions. Specifically, we investigate how retaining or discarding structurally valid edges influences the uncertainty of the final trust estimate. This analysis highlights the practical benefits of our retention criteria compared to the original synthesis rules.
 
 \paragraph{Experimental Setup}
 
@@ -1088,14 +1226,9 @@ We set
 \]
 and analyze how the final uncertainty of $\omega_A^E$ evolves as $u$ increases from $0$ to $1$.
 
-Figure~\ref{fig:uncertainty_curves} presents the resulting uncertainty curves under two different fusion operators.
+Figure~\ref{fig:uncertainty_curves} presents the resulting uncertainty curves under two different fusion operators: Cumulative Fusion and Averaging Fusion.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.4\textwidth]{img/discount/rs2.pdf}
-    \caption{Generic referral path with the same numerical opinion for each edge}
-    \label{fig:rs2}
-\end{figure}
+
 
 \begin{figure}
     \centering
@@ -1114,16 +1247,17 @@ Figure~\ref{fig:uncertainty_curves} presents the resulting uncertainty curves un
 
 \paragraph{Cumulative Fusion.}
 
-When cumulative fusion is used, including the additional edge $\omega_E^B$ consistently lowers the uncertainty of the final opinion $\omega_A^E$, even when $\omega_E^B$ is highly uncertain. This behavior reflects the cumulative nature of the operator: additional independent evidence, even if partially uncertain, reduces overall uncertainty. Discarding $\omega_E^B$ therefore removes useful supporting evidence and leads to uniformly higher uncertainty.
+When cumulative fusion is used, including the additional edge $\omega_E^B$ consistently lowers the uncertainty of the final opinion $\omega_A^E$, even when $\omega_E^B$ is highly uncertain. This behavior reflects the cumulative nature of the operator: additional independent evidence, even if highly uncertain, reduces overall uncertainty. Discarding $\omega_E^B$ therefore removes useful supporting evidence and leads to uniformly higher uncertainty.
 
 \paragraph{Averaging Fusion.}
-With averaging fusion, the effect depends on the uncertainty level of $\omega_E^B$. When $u(\omega_E^B)$ is small, retaining the edge reduces the final uncertainty. As $u(\omega_E^B)$ approaches $1$, the contribution of $\omega_E^B$ becomes increasingly detrimental, eventually producing higher uncertainty than the case where the edge is removed. This illustrates that averaging fusion is more sensitive to low-quality inputs. However, eliminating structurally valid edges still discards potentially informative trust paths.
+With averaging fusion, the effect depends on the uncertainty level of $\omega_E^B$. When $u(\omega_E^B)$ is small, retaining the edge reduces the final uncertainty. As $u(\omega_E^B)$ approaches $1$, the contribution of $\omega_E^B$ becomes increasingly harmful to the overall uncertainty, eventually resulting in greater uncertainty than when the edge is removed. This illustrates that averaging fusion uncertainty is more sensitive to low-quality inputs. However, eliminating structurally valid edges still discards potentially informative trust paths.
 
-These results confirm the practical relevance of the optimized DSPG synthesis criteria. Although minimizing uncertainty alone is not a sufficient objective, preserving structurally valid trust edges ensures that all meaningful trust evidence is retained. The optimized criteria therefore improve inference robustness by preventing premature information loss while maintaining structural correctness.
+These results confirm the practical relevance of the optimized \ac{DSPG} synthesis criteria. Although minimizing uncertainty alone is not a sufficient objective, preserving structurally valid trust edges ensures that all meaningful trust evidence is retained. The optimized criteria therefore improve inference robustness by preventing premature information loss while maintaining structural correctness.
 
 
-\subsection{Evaluation of \acs{DSPG} Analysis }
-\todo[inline]{Evaluate the Time}
+\subsection{Evaluation of \acs{DSPG} Synthesis + Analysis Computational Time}
+\todo[inline]{Evaluate the Time: Make \ac{DSPG} Synthesis+analysis using previous criteria and method vs our criteria. Record the average time as the size of the ACG increases}
+\todo[inline]{Language to use. Probably python. Code for our Method is already available in Go, but we will have to code the Original one}
 \subsection{Evaluation of Referral-Edge Trust Discounting}
 \label{subsec:eval_referral}
 
@@ -1136,7 +1270,7 @@ These results confirm the practical relevance of the optimized DSPG synthesis cr
 \end{figure}
 
 
-In Section~\ref{sec:meth}, we analytically proved the equivalence between two methods for computing trust over multi-edge referral paths: 
+In \cref{sec:referral_path_operator}, we analytically proved the equivalence between two methods for computing trust over multi-edge referral paths: 
 
 \begin{itemize}
     \item Method 1: Multi-Edge Path discounting.
@@ -1145,20 +1279,14 @@ In Section~\ref{sec:meth}, we analytically proved the equivalence between two me
 
 The goal of this section is to numerically validate this equivalence and to illustrate the limitations of the classical Two-Edge Path operator when applied to multiple referral edges.
 
-\subsubsection{Comparison with Multi-Edge and Two-Edge Operators}
-
-We consider the STN depicted in Figure~\ref{fig:rs1}. The following experimental setups are evaluated:
-
+We consider the STN depicted in \cref{fig:rs1}. The following experimental setups are evaluated:
 \begin{description}
     \item[Setup 1] Computation of $\omega_X^A$ using the Multi-Edge Path operator (Method 1).
     \item[Setup 2] Computation of $\omega_X^A$ using Referral-Edge Path operator followed by Two-Edge Path operator (Method 2).
     \item[Setup 3] Computation of $\omega_X^A$ using the Two-Edge Path operator applied twice.
 \end{description}
 
-\paragraph{Validation of Analytical Equivalence}
-
-Using the opinion values from Figure~\ref{fig:rs1}, we obtain:
-
+Using the opinion values from \cref{fig:rs1}, we obtain:
 \begin{enumerate}
     \item Setup 1:
     \[
@@ -1179,9 +1307,7 @@ Using the opinion values from Figure~\ref{fig:rs1}, we obtain:
     \]
 \end{enumerate}
 
-The identical numerical results confirm the analytical equivalence established earlier. The proposed operator therefore preserves the semantics of the Multi-Edge Path operator when used in combination with Two-Edge discounting.
-
-\paragraph{Demonstrating the Limitation of Two-Edge Discounting}
+The identical numerical results confirm the analytical equivalence established earlier.
 
 We now apply Setup 3, where the Two-Edge Path operator is used to discount two referral edges:
 
@@ -1197,37 +1323,26 @@ This result differs significantly from Setups 1 and 2.
 
 This numerical inconsistency confirms that the Two-Edge Path operator cannot be applied iteratively to referral edges. It lacks associativity and does not preserve projected probability multiplicativity over referral chains. This validates the necessity of the proposed Referral-Edge Path operator.
 
-\subsubsection{Evaluation on Generic Referral Chains}
-
-To further analyze operator behavior, we consider the generic referral path illustrated in Figure~\ref{fig:rs2}. The path contains only referral edges, each assigned the identical opinion:
-
+To further analyze operator behavior, we consider the generic referral path illustrated in \cref{fig:rs2}. The path contains only referral edges, each assigned the identical opinion:
 \[
 (0.5, 0.4, 0.1, 0.8)
 \]
 
 The number of intermediate nodes varies, allowing us to observe how belief, disbelief, uncertainty, and projected probability evolve as the referral path length increases.
 
-We compare:
+We compare the Referral-Edge Path operator (RE) with the Two-Edge Path operator (TE).
 
-\begin{itemize}
-    \item Referral-Edge Path operator (RE)
-    \item Two-Edge Path operator (TE)
-\end{itemize}
 
 The cumulative expressions are:
-
 \begin{align}
+\label{eq:RE_eval}
 \omega^{A_1}_{A_n}
 &=
 ((\omega^{A_1}_{A_2} \otimes_{RE} \dots )
 \otimes_{RE}
 \omega^{A_{n-2}}_{A_{n-1}})
 \otimes_{RE}
-\omega^{A_{n-1}}_{A_n}
-\label{eq:RE_eval}
-\end{align}
-
-\begin{align}
+\omega^{A_{n-1}}_{A_n} \\
 \omega^{A_1}_{A_n}
 &=
 ((\omega^{A_1}_{A_2} \otimes_{TE} \dots )
@@ -1235,77 +1350,67 @@ The cumulative expressions are:
 \omega^{A_{n-2}}_{A_{n-1}})
 \otimes_{TE}
 \omega^{A_{n-1}}_{A_n}
-\label{eq:TE_eval}
+% \label{eq:TE_eval}
 \end{align}
 
 Since the Two-Edge operator is not associative, different grouping strategies yield different results. For consistency, we follow a fixed left-to-right grouping.
 
-\paragraph{Observed Behavior}
 
-Figure~\ref{fig:eval} illustrates the evolution of belief, disbelief, uncertainty, and projected probability as the path length increases.
 
-For both operators:
+\cref{fig:eval} illustrates the evolution of belief, disbelief, uncertainty, and projected probability as the path length increases.
 
-\begin{itemize}
-    \item Belief decreases.
-    \item Disbelief decreases.
-    \item Uncertainty increases.
-\end{itemize}
+For both operators, Belief decreases, Disbelief decreases and Uncertainty increases.
 
 However, their projected probability behaviors differ fundamentally:
-
 \begin{itemize}
     \item For the Referral-Edge operator, projected probability decreases toward zero as the path length increases.
     \item For the Two-Edge operator, projected probability increases toward the base rate value $0.8$.
 \end{itemize}
 
-\paragraph{Analytical Explanation}
+% \paragraph{Analytical Explanation}
 
-From the definitions of the operators:
+% From the definitions of the operators:
 
-For Two-Edge discounting:
-\[
-b^{[A;B]}_C = P_B^A b_C^B
-\]
+% For Two-Edge discounting:
+% \[
+% b^{[A;B]}_C = P_B^A b_C^B
+% \]
 
-For Referral-Edge discounting:
-\[
-b^{[A;B]}_C = b_B^A b_C^B
-\]
+% For Referral-Edge discounting:
+% \[
+% b^{[A;B]}_C = b_B^A b_C^B
+% \]
 
-Since the projected probability satisfies:
-\[
-P_B^A = b_B^A + a_B^A u_B^A \geq b_B^A,
-\]
+% Since the projected probability satisfies:
+% \[
+% P_B^A = b_B^A + a_B^A u_B^A \geq b_B^A,
+% \]
 
-the Two-Edge operator produces larger belief and disbelief components than the Referral-Edge operator. Consequently, the uncertainty mass for Two-Edge discounting is smaller.
+% the Two-Edge operator produces larger belief and disbelief components than the Referral-Edge operator. Consequently, the uncertainty mass for Two-Edge discounting is smaller.
 
-This explains why the uncertainty curve for RE lies above TE in Figure~\ref{fig:eval}.
+% This explains why the uncertainty curve for RE lies above TE in Figure~\ref{fig:eval}.
 
-\paragraph{Impact of Base Rate Sensitivity}
+% \paragraph{Impact of Base Rate Sensitivity}
 
-Although the Referral-Edge operator produces higher uncertainty, it prevents excessive sensitivity to the base rate.
+% Although the Referral-Edge operator produces higher uncertainty, it prevents excessive sensitivity to the base rate.
 
-Under Two-Edge discounting, as uncertainty approaches one and belief and disbelief approach zero, the projected probability converges toward the base rate of the final edge. In this example, this leads to convergence toward $0.8$ for long paths.
+% Under Two-Edge discounting, as uncertainty approaches one and belief and disbelief approach zero, the projected probability converges toward the base rate of the final edge. In this example, this leads to convergence toward $0.8$ for long paths.
 
-This behavior masks the structural weakening of long referral chains.
+% This behavior masks the structural weakening of long referral chains.
 
-In contrast, the proposed operator maintains multiplicative projected probability decay. As the number of referral edges increases, the projected probability decreases toward zero. This aligns with the intuition that long referral chains should represent weaker trust.
+% In contrast, the proposed operator maintains multiplicative projected probability decay. As the number of referral edges increases, the projected probability decreases toward zero. This aligns with the intuition that long referral chains should represent weaker trust.
 
-\paragraph{Interpretation}
-
-The proposed Referral-Edge Path operator therefore satisfies three essential properties:
-
-\begin{enumerate}
-    \item Associativity over referral chains.
-    \item Preservation of projected probability multiplicativity.
-    \item Reduced sensitivity to base rate dominance.
-\end{enumerate}
-
-These properties make it structurally and probabilistically coherent for modeling transitive trust in Subjective Trust Networks.
+% % \paragraph{Interpretation}
 
 
-\subsection{End-to-End Evaluation of the Complete \acs{TNA-SL} Framework}
-\label{subsec:eval_pipeline}
+% The proposed Referral-Edge Path operator therefore satisfies two essential properties:
+% \begin{enumerate}
+%     \item Associativity over referral chains.
+%     \item Preservation of projected probability multiplicativity.
+% \end{enumerate}
+
+% These properties make it probabilistically consistent for modeling transitive trust in Subjective Trust Networks.
+
+
 \section{Summary \& Conclusions}
 \label{sec:summary_tnsl}

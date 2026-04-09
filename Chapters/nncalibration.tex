@@ -1,13 +1,218 @@
 
 
-\chapter{Method for Neural Network Calibration Quantification [End of March]}
+\chapter{Calibration-Based Trust Assessment of Neural Networks}
 \label{chap:bb}
-\todo[inline]{Estimated Nb Pages: 11}
-\todo[inline]{Distinguish between black box and white box should have been made before}
-\todo[inline]{Here an example a black box approach }
-\todo[inline]{show advantages and limitations at the end}
-\todo[inline]{Which part of the methdology it is, what is the proposition, no STN, expression generation, direct trust opinion quantification, evidence coming from expected calibration error ...}
-\input{Chapters/structure}
+\noindent
+The previous chapters introduced and evaluated a framework for assessing the trustworthiness of \ac{NN} systems through its pipeline based on its internal behaviour. However, in many practical settings \ac{ML} models are deployed as black boxes, making it difficult to assess trust based on internal components or training processes. In such cases, trust must be inferred from observable properties of the model. One important property is calibration, which measures the alignment between predicted probabilities and empirical outcomes. In this chapter, we propose a method to quantify \ac{NN} calibration within the Evidence based \aclu{TAF} introduced in this dissertation. This chapter builds on work published and presented at the International Conference on Information Fusion (Fusion 2025)\cite{11124121}.
 
-\section{General Trust Assessment Methodology}
-\section{}
+\todo[inline]{Which part of the methdology it is, what is the proposition, no STN, expression generation, direct trust opinion quantification, evidence coming from expected calibration error ...}
+% \input{Chapters/structure}
+
+% \section{General Trust Assessment Methodology}
+% \section{}
+
+\section{Introduction}
+
+The previous chapters introduced a general methodology for assessing trustworthiness in AI systems through evidence-based reasoning and \acf{SL}. In many practical scenarios, however, \aclu{NN} are deployed as black-box systems where the internal architecture and training process are not observable. In such settings, trust assessment must rely on observable properties of the model’s predictions rather than internal inspection.
+
+One particularly important observable property is the calibration of predicted probabilities. Calibration measures the degree to which a model’s confidence estimates correspond to empirical correctness. A well-calibrated model produces probability estimates that accurately reflect the likelihood of outcomes. For instance, among predictions made with confidence $0.8$, approximately $80\%$ should be correct. Calibration therefore provides an indirect but informative signal about the reliability of a model’s probabilistic predictions and is widely used when evaluating \ac{ML} systems deployed in high-stakes domains. \todo[]{In fact in some scenario, those predicted probabilities are really important when taking a decision....., \cite{}}
+
+Despite its importance, calibration is typically assessed using scalar metrics such as the \acf{ECE}. While these metrics capture the average deviation between predicted confidence and empirical accuracy, they provide only a limited view of model reliability. In particular, traditional calibration metrics do not explicitly represent the uncertainty associated with calibration estimates, \todo[]{This should be much more clear:} nor do they provide an interpretable framework for reasoning about trust. As a result, they cannot be directly integrated into the evidence-based trust assessment methodology developed in this dissertation.
+
+To address this limitation, this chapter introduces a framework for quantifying neural network calibration within the \ac{SL} trust modeling paradigm. The central idea is to interpret calibration behavior as observable evidence that can be converted into trust opinions. Predicted probabilities are partitioned into clusters over the interval $[0,1]$, and for each cluster, the relationship between empirical accuracy and predicted confidence is used to derive positive and negative evidence. These evidence quantities are then mapped to \ac{SL} trust opinions, which explicitly represent belief, disbelief, and uncertainty regarding the reliability of the model’s predictions. The resulting opinions characterize the trustworthiness of predictions across different regions of the probability space. By combining these cluster-level opinions through fusion operators, the framework produces a global trust assessment of the \ac{NN}’s calibration behavior. This approach therefore extends traditional calibration analysis by introducing uncertainty-aware trust quantification that can be integrated into the broader trust assessment \todo[]{Check:}and eventually combined with other trust assessment.
+
+This chapter makes the following contributions. First, it introduces a method for extracting calibration evidence from predicted probabilities. Second, it proposes a mapping from calibration evidence to \ac{SL} trust opinions, enabling uncertainty-aware trust quantification. Third, it demonstrates experimentally that the resulting trust representation provides richer insight into model reliability than traditional calibration metrics alone.
+
+The remainder of this chapter is organized as follows. Section~\ref{sec:calibration_sl} presents the subjective logic framework for calibration-based trust assessment, describing the extraction of calibration evidence and the construction of trust opinions. Section~\ref{sec:calibration_experiments} evaluates the proposed approach experimentally and analyzes its behavior in comparison with traditional calibration metrics. Finally, the chapter concludes with a summary of the main findings and their implications for trustworthy AI evaluation.
+
+
+\section{Subjective Logic Framework for Calibration Trust}
+As introduced in Chapter~\ref{chap:Trust_method}, the general trust assessment methodology follows three main phases: (i) generation of a trust expression representing incorporating the proposition to be evaluated, (ii) identification and collection of evidence from relevant trust sources, and (iii) evaluation of the expression through subjective logic operators to obtain the final trust opinion.
+
+In the context of \ac{NN} calibration, the trust proposition of interest is the reliability of the predicted probabilities produced by the model. More specifically, we seek to assess whether the confidence scores generated by the neural network accurately reflect the true likelihood of correct predictions. Unlike previous applications of the methodology, this scenario does not require the generation of a complex logical expression. Calibration can be directly observed through the predicted probabilities and empirical outcomes. Consequently, the trust assessment can be performed by directly extracting evidence from calibration behavior and converting this evidence into trust opinions. The following subsections describe how calibration evidence is extracted from model predictions and how it is used to construct trust opinions representing the reliability of the model's confidence estimates.
+
+\begin{algorithm}
+\caption{Overall Process for Calibration Trust Evaluation}
+\begin{algorithmic}[1]
+    \State \textbf{Input:} Predicted probabilities from a neural network for each class for a set of input
+    \State \textbf{Output:} Trust opinion on the neural network
+    \State \textbf{Step 1: Clustering Predicted Probabilities}
+    \State Cluster the predicted probabilities into \(M\) groups based on their values within the range $[0, 1]$.
+    \State For each cluster, assign a representative value (e.g., the middle of the interval representing the cluster).
+    \State \textbf{Step 2: Computing Trustworthiness Opinions for each class}
+    \For{each class $c$}
+        \State \textbf{Step 2.1: Computing Trustworthiness Opinions for each cluster}
+        \For {each cluster $i$}
+            \State Set $RP_i$ to the representative of the cluster
+            \State Calculate the number of classifications $n_i$ falling into this cluster.
+            \State Calculate the number of good classification $t_i$ in this cluster.
+            \State Set the number of Positive Evidence $r$ to $t_i$
+            \State Set the number of negative evidence $s$ to $\lvert t_c - n_c*RP_i\rvert$
+            \State Compute trust opinion for the cluster using subjective logic binomial opinion quantification.
+        \EndFor
+        \State Fuse the trust opinions from all clusters using fusion operators to obtain a single trust opinion for the class.
+    \EndFor
+    \State \textbf{Step 3: Final Trust Opinion on Neural Network}
+    \State Fuse the trust opinions from all classes to obtain the final trust opinion for the neural network.
+\end{algorithmic}
+\label{alg:1}
+\end{algorithm}
+
+
+\subsection{Calibration Evidence}
+The first step of the framework consists in extracting evidence about the reliability of predicted probabilities from the calibration behaviour of the \ac{NN}. Given a set of predictions, each prediction provides a confidence value representing the model's estimated probability for a class. Calibration analysis evaluates how well these predicted probabilities align with empirical correctness.
+
+During analaysis, predicted probabilities are partitioned into $M$ clusters covering the interval $[0,1]$. Each cluster corresponds to a range of predicted probabilities and is represented by a representative probability value $RP_i$, typically chosen as the midpoint of the cluster. This clustering groups predictions with similar confidence levels and
+enables a localized analysis of calibration behaviour.
+
+For a given class $c$ and cluster $i$, let $n_i$ denote the number of predictions whose confidence falls within the cluster interval, and let $t_i$ denote the number of correct classifications among these predictions. The empirical accuracy of the cluster is therefore $\frac{t_i}{n_i}$.
+
+Calibration evidence is derived from the comparison between the predicted confidence $RP_i$ and the observed accuracy. Intuitively, when the predicted probability matches the empirical accuracy, the predictions are well calibrated and provide evidence supporting the reliability of the model's confidence estimates. Conversely, deviations between these quantities indicate miscalibration and therefore contribute negative evidence.
+
+In our framework, the number of positive evidence is defined as
+
+\[
+r = t_i
+\]
+
+while the negative evidence captures the deviation between predicted
+confidence and empirical accuracy:
+
+\[
+s = |t_i - n_i \times RP_i|
+\]
+
+which can also be expressed as
+
+\[
+s = n_i \left| \frac{t_i}{n_i} - RP_i \right|.
+\]
+
+This formulation reflects the magnitude of calibration error within the
+cluster. Larger deviations between predicted probability and empirical
+accuracy result in higher negative evidence, indicating lower trust in the
+model's probability predictions for that region of the probability space.
+
+\todo[]{The positive evidence doesn't really model positive evidence in the sense of evidence supporting good calibration. instead it helps modeling the number of data which are classified good. thus this value enables decreasing uncertainty as later we used a prior informative quantification with a fixed W value}
+
+
+\subsection{Construction of Calibration Trust Opinions}
+
+Once calibration evidence has been extracted for each probability cluster, the next step consists of converting this evidence into trust opinions. Using the positive and negative evidence values $(r,s)$ obtained from the previous step, a trust opinion is computed for each probability cluster using the Baseline-Prior Quantification(\cref{eq:baseline_quant}) introduced in \cref{chap:Trust_method}. This mapping produces a cluster-level opinion representing the degree of belief, disbelief, and uncertainty associated with the reliability of predictions within that cluster. Each cluster therefore yields a trust opinion describing the reliability of the model's probability estimates in a specific region of the probability space. To obtain a trust assessment for a given class, the cluster-level opinions are combined using a subjective logic fusion operator.
+
+In our implementation we employ cumulative fusion (\cref{def:cumulative_fuse}), which is associative and commutative and therefore allows the combination of multiple opinions. This operator effectively accumulates evidence from multiple sources. \todo[]{Moreover another property of cumulative fusion that we want here is that the more trust opinion you fuse the less uncertainty you ll get at the end. this behavior is wanted as the more cluster we have the less uncertain we want to be about the assessment.} In practice, since cumulative fusion corresponds to the addition of evidence, we maintain the positive and negative evidence values for each cluster and
+sum them before computing the final opinion. After fusing the cluster-level opinions, a single trust opinion is obtained for each class. The class-level opinions are then fused again to produce a global trust opinion representing the overall reliability of the \ac{NN}'s predicted probabilities.
+
+The computational complexity of the proposed framework is $\mathcal{O}(C \cdot M \cdot N)$, where $C$ is the number of classes, $M$ the number of probability clusters, and $N$ the number of predictions. Since the algorithm scales linearly with the number of predictions, it can be efficiently applied to large datasets and integrated into practical
+evaluation pipelines.
+
+\paragraph{From Static to Dynamic}
+To extend our framework from a static evaluation to a dynamic quantification of trustworthiness \todo[]{meaning instead of having an overall trust score we want to have a trust score for a given output}, we propose maintaining individual opinions for each probability cluster. During the operational phase, after inference, the predicted probabilities can be recorded and mapped to their corresponding clusters. Trustworthiness is then derived for each probability prediction within its respective cluster and label. These trustworthiness scores are subsequently fused using an appropriate fusion operator, dynamically evaluating the  trustworthiness of the output probabilities in real-time as new predictions are made.
+
+\todo[]{Add figure to illustrate the overall process: Predictions
+    ↓
+Probability Clustering
+    ↓
+Calibration Evidence (r,s)
+    ↓
+Subjective Logic Opinions
+    ↓
+Fusion
+    ↓
+Global Trust Opinion}
+
+\section{Experimental Evaluation}
+
+We evaluate the proposed calibration trust framework on two neural networks trained on the MNIST and CIFAR-10 datasets. The objective of the experiments is to analyze how the trustworthiness metrics derived
+from subjective logic—belief (trust), disbelief (distrust), and uncertainty—behave before and after model calibration.
+
+To quantify trustworthiness, the algorithm described in
+Section~\ref{sec:calibration_sl} is applied to the predicted probabilities produced by the neural networks during training. \todo[]{Summarized in Figure ...}
+
+\subsection{Experimental Setup}
+
+The experiments are conducted on two standard image classification datasets.
+\todo[inline]{Same Dataset As PaTAS MNIST, CIFAR 10}
+\begin{comment}
+    \paragraph{MNIST.}
+    The MNIST dataset contains 70,000 grayscale images of handwritten digits (0–9) of size $28 \times 28$. The dataset is divided into 60,000 training images and 10,000 test images.
+    
+    \paragraph{CIFAR-10.}
+    The CIFAR-10 dataset contains 60,000 color images of size $32 \times
+    32$ distributed across 10 classes, with 50,000 images used for training
+    and 10,000 for testing.
+\end{comment}
+
+
+Two neural network architectures are used, one for each dataset.
+
+For MNIST, a fully connected neural network is employed. The input image is flattened into a vector of 784 elements and processed by a dense layer with 128 units and ReLU activation, followed by a final dense layer with 10 units whose outputs are converted into probabilities through the softmax function.
+
+For CIFAR-10, we use a convolutional neural network composed of three convolutional layers with ReLU activation. The first layer uses 32 filters, while the next two use 64 filters with $3\times3$ kernels. Max-pooling layers are applied after the first two convolutional layers. The resulting feature maps are flattened and passed to a dense layer with 64 units before the final softmax output layer.
+
+Both models are trained using the Adam optimizer and cross-entropy loss. The MNIST model is trained for 100 epochs with a batch size of 32, using 90\% of the training data for training and 10\% for validation.
+
+After training, model calibration is performed using temperature scaling. This method introduces a temperature parameter $T$ that scales the output logits before the softmax layer. The parameter is optimized to minimize the negative log-likelihood (NLL) on a validation set, aligning predicted probabilities with empirical correctness.
+
+For the calibration trust analysis, predicted probabilities are partitioned into $M=10$ clusters covering the interval $[0,1]$. Cluster $i$ corresponds to the interval $[\frac{i}{10}, \frac{i+1}{10})$ for $i=0,\ldots,8$, with the final cluster covering $[\frac{9}{10},1]$. Each cluster is represented by the
+midpoint value $\frac{i}{10}+\frac{1}{20}$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/cal/MNIST_ALL.pdf}
+    \caption{MNIST Result}
+    \label{fig:mnist}
+\end{figure}
+
+    
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/cal/CIFAR_ALL.pdf}
+    \caption{CIFAR 10 Result}
+    \label{fig:cifar}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/cal/MNIST_OV.pdf}
+    \caption{Training and Validation Loss of MNIST model During training}
+    \label{fig:mnistovfit}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/cal/CIFAR_OV.pdf}
+    \caption{Training and Validation Loss of CIFAR10 model During training}
+    \label{fig:cifarovfit}
+    \end{subfigure}
+    \label{fig:ovfit}
+\end{figure}
+
+\subsection{Results}
+
+Figures~\ref{fig:mnist} and~\ref{fig:cifar} present the evolution of the trustworthiness metrics during training for the MNIST and CIFAR-10 models, respectively. The metrics, belief (trust), disbelief (distrust), and uncertainty, are computed for each label across 100 training epochs.
+
+Across both datasets, the post-calibration models exhibit significantly more stable trustworthiness behaviour compared to the pre-calibration models. While the trust curves initially start at similar levels, the uncalibrated models gradually experience a decline in belief and a corresponding increase in disbelief and uncertainty.
+
+In contrast, the calibrated models maintain stable trust levels across training epochs. This indicates that temperature scaling improves the reliability of the predicted probabilities and stabilizes the trustworthiness metrics derived from the calibration analysis.
+
+
+\subsection{Discussion}
+
+The behaviour observed for the CIFAR-10 model can be explained by overfitting. As shown in Figure~\ref{fig:cifarovfit}, the gap between training and validation loss increases after approximately ten epochs, indicating a deterioration in generalization performance.
+
+Overfitting leads neural networks to become increasingly overconfident in their predictions, producing poorly calibrated probabilities. As a result, the trustworthiness metrics reflect this miscalibration: belief decreases while disbelief and uncertainty increase for the uncalibrated model.
+
+Temperature scaling mitigates this issue by correcting the confidence levels of the predicted probabilities. Consequently, the calibrated model maintains more stable trustworthiness metrics even after the base model begins to overfit.
+
+The MNIST model exhibits a similar but less pronounced pattern. Because the task is simpler, the model reaches good performance early in training and does not experience severe overfitting. As a result, the difference between pre- and post-calibration trustworthiness is smaller than in CIFAR-10.
+
+Overall, the experiments demonstrate that calibration has a direct impact on the trustworthiness metrics derived from our framework. Models with better-calibrated probability predictions exhibit higher belief and lower disbelief and uncertainty, confirming that the proposed method effectively captures the reliability of neural network confidence estimates.
+
+This demonstrates that calibration behaviour can serve as observable evidence for trust assessment in black-box neural networks. 
+
+\todo[inline]{The evaluation should also show the ECE}
+
+\section{Summary and Conclusion}

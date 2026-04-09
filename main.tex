@@ -68,35 +68,43 @@ title={Research Question~\stepcounter{rq}
 %----------------------------------------------------------------------------------------
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
-\newcommand{\ttitle}{Foundations of Subjective Logic for Trust Assessment and Propagation in AI Pipelines Across the Lifecycle}
-\newcommand{\authorname}{Koffi Ismael Ouattara}
-\newcommand{\supname}{Frank Kargl \\ Theo Dimitakos \\ Houda Labiod}
-
+% \newcommand{\ttitle}{Foundations of Subjective Logic for Trust Assessment and Propagation in AI Pipelines Across the Lifecycle}
+% \newcommand{\authorname}{Koffi Ismael Ouattara}
+% \newcommand{\supname}{Frank Kargl \\ Theo Dimitakos \\ Houda Labiod}
+% \newcommand{\degreename}{Dr.\ rer.\ nat.}
+% \newcommand{\groupname}{Distributed Systems Group (VS)}
+% \newcommand{\deptname}{Institut für Verteilte Systeme}
+% \newcommand{\univname}{Universität Ulm}
+% \newcommand{\keywordnames}{Subjective Logic, Neural Networks, Uncertainty Quantification, Trust Propagation, Trustworthy AI}
 % Dynamic Trust Assessment and Enforcement for Enhanced Neural Network Trustworthiness: An Evidence-Based Theory and Neuro-Symbolic Approach
-\thesistitle{Understanding and Ensuring Trustworthiness in Neural Network: An Evidence-Based Theory and Neuro-Symbolic Approach \ttitle
-\supervisor{Dr. James \textsc{Smith}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
+\thesistitle{Trust Assessment and Propagation in Machine Learning Pipeline based on Subjective Logic}
+\supervisor{Frank Kargl \\ Theo Dimitakos \\ Houda Labiod} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
-\degree{Doctor of Philosophy} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
-\author{John 
-\textsc{Smith}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
+\degree{Dr. rer nat.}
+\author{Koffi Ismael Ouattara} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
-
 \subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{Subjective Logic,
-Neural Networks, Uncertainty Quan-
-tification, Trust Propagation, Trustworthy AI} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
-\university{\href{http://www.university.com}{University Name}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
-\department{\href{http://department.university.com}{Department or School Name}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
-\group{\href{http://researchgroup.university.com}{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
-\faculty{\href{http://faculty.university.com}{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
+Neural Networks, Uncertainty Quantification, Trust Propagation, Trustworthy AI} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
+\university{\href{https://www.uni-ulm.de/}{Universität Ulm}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
+\department{\href{https://www.uni-ulm.de/in/vs/}{Institut für Verteilte Systeme}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\group{\href{https://www.uni-ulm.de/in/vs/}{Distributed Systems Group (VS)}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\faculty{\href{http://faculty.university.com}{}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
-\AtBeginDocument{
-\hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
-\hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
-\hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
-}
+% \AtBeginDocument{
+% \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
+% \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
+% % \hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
+% }
+
+
+% \includeonly{Chapters/Introduction,ovvw}
+% \includeonly{Chapters/Introduction,Chapters/rw}
+\includeonly{Chapters/Introduction}
 
 \begin{document}
+\nocite{5gaa_trust4cav_2025,connect_d31_taf,10.1007/978-3-032-08887-1_4,10706345,ecmldatatrust,trust-aidatatrust,patas,11124121,fotos2025actions,snn}
+
 
 \frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
 
@@ -117,18 +125,41 @@ tification, Trust Propagation, Trustworthy AI} % Keywords for your thesis, this 
 {\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
 \HRule \\[1.5cm] % Horizontal line
  
-\begin{minipage}[t]{0.4\textwidth}
+% \begin{minipage}[t]{0.4\textwidth}
+% \begin{flushleft} \large
+% \emph{Author:}\\
+% \href{http://www.johnsmith.com}{\authorname} % Author name - remove the \href bracket to remove the link
+% \end{flushleft}
+% \end{minipage}
+% \begin{minipage}[t]{0.4\textwidth}
+% \begin{flushright} \large
+% \emph{Supervisor:} \\
+% \href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+% \end{flushright}
+% \end{minipage}
+
+\begin{minipage}[t]{0.45\textwidth}
 \begin{flushleft} \large
-\emph{Author:}\\
-\href{http://www.johnsmith.com}{\authorname} % Author name - remove the \href bracket to remove the link
+\textbf{Author}\\
+\authorname
 \end{flushleft}
 \end{minipage}
-\begin{minipage}[t]{0.4\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
 \begin{flushright} \large
-\emph{Supervisor:} \\
-\href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+\textbf{Supervisors}\\
+\supname
 \end{flushright}
-\end{minipage}\\[3cm]
+\end{minipage}
+
+\vspace{1.5cm}
+
+\begin{center}
+\large
+\textbf{Reviewers}\\
+Prof.\ Frank Kargl\\
+Prof.\ Konrad Rieck
+\end{center}
+
  
 \vfill
 
@@ -169,35 +200,42 @@ tification, Trust Propagation, Trustworthy AI} % Keywords for your thesis, this 
 \rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
 \end{declaration}
 
-\cleardoublepage
 
-%----------------------------------------------------------------------------------------
-%	QUOTATION PAGE
-%----------------------------------------------------------------------------------------
 
-\vspace*{0.2\textheight}
-
-\noindent\enquote{\itshape Thanks to my solid academic training, today I can write hundreds of words on virtually any topic without possessing a shred of information, which is how I got a good job in journalism.}\bigbreak
-
-\hfill Dave Barry
-
-%----------------------------------------------------------------------------------------
-%	ABSTRACT PAGE
-%----------------------------------------------------------------------------------------
-
-\begin{abstract}
-\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
-\end{abstract}
-
-%----------------------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
 The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
+\begin{comment}
+    \begin{itemize}
+    \item Family: Dad, Mom, Wife
+    \item Supervisors: Frank, Theo, Houda
+    \item Yannis 
+    \item Colleague: Hussein, Ana, Gabriele 
+    \item Collab: Gabriele, Huseyin (Lux)
+    \item Friends: Hugues ... 
+\end{itemize}
+\end{comment}
+
 \end{acknowledgements}
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+\noindent\enquote{\itshape There are no facts, only interpretations.}\bigbreak
+\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
+\hfill Friedrich Nietzsche
+\\
+\\
+The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
 
 %----------------------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
@@ -207,29 +245,26 @@ The acknowledgments and the people to thank go here, don't forget to include you
 % \setcounter{tocdepth}{1}
 \tableofcontents % Prints the main table of contents
 
-\listoffigures % Prints the list of figures
-
-\listoftables % Prints the list of tables
-
 %----------------------------------------------------------------------------------------
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
 
 
-\input{acronyms} 
-
+\chapter*{List of Acronyms}
+\addcontentsline{toc}{chapter}{List of Acronyms}
+\input{acronyms}
 %----------------------------------------------------------------------------------------
 %	PHYSICAL CONSTANTS/OTHER DEFINITIONS
 %----------------------------------------------------------------------------------------
 
-\begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
+% \begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
 
-% The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
+% % The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
 
-Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
-%Constant Name & $Symbol$ & $Constant Value$ with units\\
+% Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
+% %Constant Name & $Symbol$ & $Constant Value$ with units\\
 
-\end{constants}
+% \end{constants}
 
 %----------------------------------------------------------------------------------------
 %	SYMBOLS
@@ -241,7 +276,7 @@ Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
 %	DEDICATION
 %----------------------------------------------------------------------------------------
 
-\dedicatory{For/Dedicated to/To my\ldots} 
+% \dedicatory{For/Dedicated to/To my\ldots} 
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
@@ -258,7 +293,8 @@ Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
 % \part{Introduction and Background}
 % \label{part:intro}
 \include{Chapters/Introduction}
-% \include{Chapters/background}
+
+
 \include{Chapters/rw}
 % \part{Methodology, Analysis, Implementation, and Results}
 % \chapter*{Enhances Trust Analysis with Subjective Logic}
@@ -272,22 +308,31 @@ Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
 
 \include{Chapters/methodology}
 \include{Chapters/sltheory}
-\include{Chapters/nncalibration}
+
+\include{Chapters/patasovl}
 \include{Chapters/Datatrust}
 \include{Chapters/ptas}
+
 
 % \chapter*{Improving Neural Network Trustworthiness}
 % \addcontentsline{toc}{chapter}{Improving Neural Network Trustworthiness}
 
 % \include{Chapters/snn}
 
-\include{Chapters/ovl}
+
+\include{Chapters/nncalibration}
+\include{Chapters/usecase}
+
 % \part{Conclusion and Future Work}
 
 \include{Chapters/conclusion}
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
 %----------------------------------------------------------------------------------------
+% \include{ovvw}
+
+\include{Chapters/publications}
+% \addcontentsline{toc}{Publications}
 \printbibliography
 
 \appendix % Cue to tell LaTeX that the following "chapters" are Appendices

@@ -1,20 +1,24 @@
 
 
-\chapter{General Trust Assessment Methodology  [By End of March] }
+\chapter{General Trust Assessment Methodology  [31/03] }
 \label{chap:Trust_method}
-\section{Role of the General Trust Assessment Methodology}
-\label{sec:ch4_role}
-This chapter introduces the \emph{General Trust Assessment Methodology} that serves as the conceptual backbone of this dissertation. The methodology is grounded in the Evidence-based \ac{TAF}, originally developed in the context of multi-agent systems within the Horizon Europe CONNECT project~\cite{connect_d31_taf}and also discussed in the 5GAA white paper on trust evaluation~\cite{5gaa_trust_whitepaper}. In this framework, trust is not assumed or statically assigned
-but instead derived through a structured reasoning process that includes the generation of expressions, the collection of evidence, and the evaluation of these expressions.
+This chapter introduces the \emph{General Trust Assessment Methodology} that forms the conceptual backbone of this dissertation. 
+The methodology builds upon earlier work on trust evaluation developed in the context of connected and autonomous systems, including the Evidence-based \ac{TAF} developed within the Horizon Europe CONNECT project~\cite{connect_d31_taf}, the 5GAA white paper on trust evaluation~\cite{5gaa_trust4cav_2025}, the trust assessment framework presented at the International Conference on Information and Communications Security (ICICS)~\cite{fotos2025actions}, and subsequent work on trustworthy data assessment presented at the Bias Workshop at ECML~\cite{ecmldatatrust}. 
+In this chapter, these contributions are unified and generalized into a methodology for structuring trust assessment problems and deriving trust evaluations so that it can be instantiated across different \ac{ML} contexts.
 
-The objective of this chapter is to abstract and generalize this evidence-based reasoning process so that it can be instantiated across different \ac{AI} contexts. While the technical mechanisms used to compute trust may vary across systems, the underlying reasoning process remains largely invariant. The methodology introduced here therefore provides a unified framework for structuring trust assessment problems and systematically deriving trust evaluations from observable evidence.
+\section{Role of the General Trust Assessment Methodology}
+\label{sec:ch4_role} 
+In line with a zero-trust perspective~\cite{rose2020zero}, trust should not be granted a priori or statically assigned, but instead derived through a well defined assessment. The \acf{TAF} operationalizes this principle through a structured reasoning process involving the generation of expressions, the collection of evidence, and the evaluation of these expressions.
+
+The objective of this chapter is to abstract and generalize this evidence-based reasoning process so that it can be instantiated across different \ac{AI} contexts. While the technical mechanisms used to compute trust may vary across systems, the underlying reasoning process remains largely invariant. The methodology introduced here therefore provides a unified framework for structuring trust assessment problems and deriving trust evaluations from observable evidence.
 
 In the remainder of this dissertation, this general methodology will be instantiated in several distinct settings:
 
 \begin{itemize}
-    \item the trust assessment of neural network prediction calibration (\cref{chap:bb}),
+    
     \item the evaluation of training dataset trustworthiness (\cref{chap:data}),
-    \item the propagation of trust through neural network architectures using the PaTAS framework (\cref{chap:ptas}).
+    \item the propagation of trust through neural network architectures using the PaTAS framework (\cref{chap:patas}),
+    \item the trust assessment of \aclu{NN} prediction calibration (\cref{chap:bb}).
 \end{itemize}
 
 Although these application domains differ in their technical implementations, they share a common conceptual structure. In each case, a \emph{trustor} seeks to determine whether a specific trust proposition holds for a given entity or process, based on available evidence and within a particular contextual setting. The methodology presented in this chapter formalizes this common reasoning structure. In particular, it defines the sequence of steps required to construct a trust assessment and provides guidance on how each step can be operationalized in practice.
@@ -23,7 +27,7 @@ The methodology should therefore be understood as a generic trust reasoning engi
 
 \section{Core Concepts and Notation}
 \label{sec:ch4_core_concepts}
-The terminology follows the principles of the \ac{TAF}, which adopts \acf{SL} as the formal reasoning framework for representing and propagating trust. The notation introduced here is therefore consistent with \ac{SL} representations.
+The terminology follows the principles of the \ac{TAF}, which adopts \acf{SL} as the formal reasoning framework for representing and assessment trust. The notation introduced here is therefore consistent with \ac{SL} representations.
 
 % \subsection{Trustor, Trustee, and Trust Proposition}
 
@@ -92,7 +96,7 @@ Trust sources may include:
 \end{itemize}
 
 
-The outcome of the overall process is referred to as the \emph{\acf{ATL}}.
+The outcome of the overall process of the methodology is referred to as the \emph{\acf{ATL}}.
 \begin{definition}[\aclu{ATL}]
 The \ac{ATL} is the quantified trust opinion assigned by the trustor to a
 trust proposition based on the available evidence and the selected evaluation
@@ -106,7 +110,7 @@ opinion:
 \omega = (t, d, u)
 \]
 
-where $t$ denotes the trust mass (belief of the binomial opinion), $d$ denotes distrust (disbelief of the binomial opinion), and $u$ represents uncertainty. This representation allows the trust assessment to capture not only whether the trustor should trust the proposition, but also the degree of confidence associated with that assessment.
+where $t$ denotes the trust mass (belief of the binomial opinion), $d$ denotes the distrust mass (disbelief of the binomial opinion), and $u$ represents uncertainty. This representation allows the trust assessment to capture not only whether the trustor should trust the proposition, but also the degree of confidence associated with that assessment.
 
 For clarity, the main elements introduced in this section are summarized in \cref{tab:trust_notation}.
 
@@ -120,9 +124,9 @@ $A$ & Trustor (entity performing the trust assessment) \\
 $E$ & Trustee (entity whose property is being evaluated) \\
 $P$ & Trustworthiness property \\
 $\mathcal{T}(E,P)$ & Trust proposition stating that entity $E$ satisfies property $P$ \\
-$\omega=(t,d,u)$ & trust opinion with belief $b$, disbelief $d$, and uncertainty $u$ \\
+$\omega=(t,d,u)$ & trust opinion with belief $t$, disbelief $d$, and uncertainty $u$ \\
 \ac{ATO} & \aclu{ATO} associated with a simple proposition \\ 
-\ac{ATL} & outcome of the assessment\\
+\ac{ATL} & \aclu{ATL}, outcome of the assessment\\
 \bottomrule
 \end{tabular}
 \caption{Notation used in the general trust assessment methodology.}
@@ -131,7 +135,7 @@ $\omega=(t,d,u)$ & trust opinion with belief $b$, disbelief $d$, and uncertainty
 
 These concepts provide the conceptual foundation for the trust assessment process introduced in the next section.
 
-\section{The Trust Assessment Process}
+\section{Trust Assessment Methodology}
 \label{sec:ch4_three_phase}
 
 Having introduced the core concepts and notation, we now present the
@@ -155,7 +159,7 @@ Each phase is described in detail below.
 
 The purpose of this phase is to formally construct an expression that captures the relationships required to evaluate a given trust proposition.
 
-Let $\mathcal{T}$ denote a trust proposition. In general, $\mathcal{T}$ is not directly measurable. Instead, it must be decomposed into a set of simple propositions that correspond to individually assessable properties:
+Let $\mathcal{T}$ denote a trust proposition. In some cases, $\mathcal{T}$ is not directly measurable. Instead, it must be decomposed into a set of simple propositions that correspond to individually assessable properties:
 \[
 \mathcal{T} = f(\mathcal{T}_1, \mathcal{T}_2, \dots, \mathcal{T}_n)
 \]
@@ -208,7 +212,7 @@ trust opinion.
 
 \subsubsection{Identification of Trust Sources and Evidence Collection}
 
-When quantifying the \ac{ATO} associated with a proposition $P_i$, relevant trust sources must first be identified. Trust sources may include, for example, a monitoring component, a sensor error measurement module, a misbehavior detection mechanism, a verification module, a certification authority, or historical performance records. These sources typically provide direct evidence corresponding to observations made by the
+When quantifying the \ac{ATO} associated with a proposition $T_i$, relevant trust sources must first be identified. Trust sources may include, for example, a monitoring component, a sensor error measurement module, a misbehavior detection mechanism, a verification module, a certification authority, or historical performance records. These sources typically provide direct evidence corresponding to observations made by the
 trustor.
 
 Evidence collected from trust sources may take different forms:
@@ -223,7 +227,7 @@ These evidence are then mapped into a structured representation consisting of:
 \begin{itemize}
     \item positive evidence $r_x$,
     \item negative evidence $s_x$,
-    \item and, in some cases, structured uncertainty parameters.
+    \item and, in some cases, uncertainty evidence.
 \end{itemize}
 When countable, it is straightforward to map the evidence into \(r_x\) and \(s_x\). Otherwise, if the evidence is not directly countable, an appropriate interpretation scheme must be devised to convert raw inputs into usable evidence components. For instance, a misbehavior detection mechanism applied to a sensor may either detect misbehavior (negative evidence \(s_x\)) or detect no anomaly (positive evidence\(r_x\)), which provides directly countable evidence. In contrast, continuous measurements of sensor error may require thresholding, normalization, or
 probabilistic transformation before being translated into evidence counts.
@@ -249,7 +253,7 @@ In general, trust opinion quantification can be performed using different models
         u_x = \frac{W}{W + r_x + s_x}
     \end{aligned}
     \end{equation}
-    The default value for the non-informative prior weight \(W\) is 2.
+    The default value for the non-informative prior weight \(W\) is 2. This model comes from the mapping between beta distribution and Binomial Opinion discussed in \cref{subsec:SL_opinions}.
     \item \textbf{Evidence-Weighted Quantification.}  
     This method introduces a weight $w_x$ to account for uncertainty in addition to positive and negative evidence. It is particularly relevant when the evidence itself is associated with an uncertainty score. The belief, disbelief, and uncertainty are computed as:
 
@@ -281,7 +285,7 @@ In general, trust opinion quantification can be performed using different models
 
 Each of these models provides a distinct approach to handling uncertainty. The choice of quantification model depends on the characteristics of the available evidence, and the semantics of uncertainty in the application context.
 
-After quantifying the trust opinions associated with individual trust sources, the resulting opinions are aggregated to derive the \ac{ATO}. One possible approach is to combine them using \ac{SL} fusion operators.
+After quantifying the trust opinions associated with individual trust sources, the resulting opinions are aggregated to derive the \ac{ATO}. One possible approach is to aggregate them using \ac{SL} fusion operators.
 %%%%%%%%%%%%%%
 
 
@@ -331,6 +335,4 @@ In summary, the trust assessment process can be performed in three phases:
     \item Evaluate the expression using \ac{SL} operators such as fusion and trust discounting in order to derive the \ac{ATL}.
 \end{enumerate}
 
-This structured pipeline ensures that trust assessment remains transparent, reproducible, and adaptable across domains. In subsequent chapters, this generic process will be instantiated for dataset trustworthiness, calibration assessment, and \ac{NN} trust propagation.
-
-\todo[inline]{Do I need to add an example? especially since as I said some chapters are already example. TAF paper with Nikos}
+This structured pipeline ensures that trust assessment remains transparent, reproducible, and adaptable across domains. In subsequent chapters, this generic process will be instantiated for dataset trustworthiness, \ac{NN} trust propagation, and \ac{NN} calibration assessment.
