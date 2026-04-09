@@ -3,7 +3,12 @@
 
 \usepackage{mathpazo} % Use the Palatino font by default
 
-\usepackage[backend=bibtex,style=numeric,natbib=true, sorting=none]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage[
+backend=biber,
+style=numeric,
+sorting=none,
+natbib=true
+]{biblatex}
 
 \usepackage{acronym}
 \usepackage[most]{tcolorbox}
@@ -13,7 +18,32 @@
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 \usepackage{lipsum}
 \usepackage{todonotes}
-\addbibresource{bibtex/intro,bibtex/dspg,bibtex/discount,bibtex/patas,bibtex/calibration,bibtex/balancingBias,bibtex/rw,bibtex/uq,bibtex/SL_NN,bibtex/papers,bibtex/attacks}
+\setlength{\marginparwidth}{3cm}
+\setlength{\marginparsep}{0.5cm}
+
+\DeclareBibliographyCategory{ouattara}
+\DeclareBibliographyCategory{ouattaraAll}
+\DeclareBibliographyCategory{ouattaraRep}
+\addbibresource{bibtex/papers.bib}
+\addtocategory{ouattara}{10.1007/978-3-032-08887-1_4,10706345,11124121,trust-aidatatrust,ecmldatatrust,patas}
+\addtocategory{ouattaraRep}{connect_d31_taf,5gaa_trust4cav_2025}
+\addtocategory{ouattaraAll}{fotos2025actions,snn}
+
+
+\addbibresource{bibtex/intro.bib}
+\addbibresource{bibtex/dspg.bib} 
+\addbibresource{bibtex/discount.bib}
+\addbibresource{bibtex/patas.bib}
+\addbibresource{bibtex/calibration.bib}
+\addbibresource{bibtex/balancingBias.bib}
+\addbibresource{bibtex/rw.bib}
+\addbibresource{bibtex/uq.bib}
+\addbibresource{bibtex/SL_NN.bib} 
+\addbibresource{bibtex/attacks.bib}
+\addbibresource{bibtex/NN.bib}
+
+
+
 \usepackage{hyperref}
 \usepackage[capitalise,nameinlink]{cleveref}
 \usepackage{amsthm}

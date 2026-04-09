@@ -1,7 +1,7 @@
 
 
 
-\chapter{Background and Related Work [By End of March]}
+\chapter{Background and Related Work}
 \label{chap:rw}
 \section{Reasoning under uncertainty}
 % \todo[inline]{To be read again, and check the references}
@@ -16,15 +16,15 @@ In practice, this assumption is often violated. Probabilities are typically infe
 
 Bayesian theory~\cite{gelman2013bayesian,jaynes03,Bernardo:1319894} addresses some of these challenges by treating probabilities as degrees of belief (given the knowledge) and updating them through Bayes’ rule as new evidence becomes available. Bayesian inference provides a mechanism for incorporating prior knowledge and observational data, and it is widely used in statistics and \ac{ML}~\cite{barberBRML2011}. Nonetheless, Bayesian probability remains a single-layer uncertainty framework: uncertainty is encoded solely in probability distributions over random variables.
 
-This limitation becomes apparent when distinguishing between uncertainty due to inherent randomness of a variable (aleatoric uncertainty) and uncertainty due to lack of knowledge or insufficient evidence (epistemic uncertainty). Reconsider the binary sensor variable $X \in \{0,1\}$, where $X=1$ denotes that the sensor is functional and $X=0$ denotes that it is faulty. An observer who has access to zero information may assign $P(X=1) = P(X=0) =0.5$, reflecting uncertainty about the sensor’s state as he has none information. Another observer may possess detailed information: for example, evidence that the sensor hardware is new and properly calibrated (supporting $X=1$), combined with recent intermittent signal dropouts or abnormal readings (supporting $X=0$). When these pieces of evidence are considered together, this observer may also assign $P(X=1)=P(X=0)=0.5$, but for a fundamentally different reason namely, the presence of conflicting evidence rather than pure ignorance. In clear, the probability value captures uncertainty about the sensor state itself, but it does not encode uncertainty about the reliability of the probability estimate. For the first observer, the uncertainty about the probability estimate is high, while in the second case it's low. 
+This limitation becomes apparent when distinguishing between uncertainty due to inherent randomness of a variable (aleatoric uncertainty) and uncertainty due to lack of knowledge or insufficient evidence (epistemic uncertainty). Reconsider the binary sensor variable $X \in \{0,1\}$, where $X=1$ denotes that the sensor is functional and $X=0$ denotes that it is faulty. An observer who has access to zero information may assign $P(X=1) = P(X=0) =0.5$, reflecting uncertainty about the sensor’s state as he doesn't have any information. Another observer may possess detailed information: for example, evidence that the sensor hardware is new and properly calibrated (supporting $X=1$), combined with recent intermittent signal dropouts or abnormal readings (supporting $X=0$). When these pieces of evidence are considered together, this observer may also assign $P(X=1)=P(X=0)=0.5$, but for a fundamentally different reason namely, the presence of conflicting evidence rather than pure ignorance. In clear, the probability value captures uncertainty about the sensor state itself, but it does not encode uncertainty about the reliability of the probability estimate. For the first observer, the uncertainty about the probability estimate is high, while in the second case it is low. 
 
-This example illustrates a key limitation of probabilistic and Bayesian frameworks: they cannot distinguish between uncertainty arising from randomness of the variable itself and uncertainty arising from ignorance or lack of evidence. As a result, probabilistic models conflate confidence in a probability estimate with the probability value itself. This distinction is not only philosophical; it becomes critical in complex and opaque systems such as neural networks. In \ac{ML} pipelines, predictive probabilities are often treated as direct indicators of confidence or trustworthiness. However, a predictive probability of $0.5$ may arise from fundamentally different epistemic situations: insufficient training data, strong but contradictory training signals, distributional shift at inference time, or intrinsic ambiguity in the input itself. When these different situations are expressed as the same probability value, the nature of the supporting evidence is no longer visible.
+This example illustrates a key limitation of probabilistic and Bayesian frameworks: they cannot distinguish between uncertainty arising from randomness of the variable itself and uncertainty arising from ignorance or lack of evidence. As a result, probabilistic models conflate confidence in a probability estimate with the probability value itself. This distinction is not only philosophical; it becomes critical in complex and opaque systems such as \acfp{NN}. In \ac{ML} pipelines, predictive probabilities are often treated as direct indicators of confidence or trustworthiness. However, a predictive probability of $0.5$ may arise from fundamentally different epistemic situations: insufficient training data, strong but contradictory training signals, distributional shift at inference time, or intrinsic ambiguity in the input itself. When these different situations are expressed as the same probability value, the nature of the supporting evidence is no longer visible.
 
-This motivates the need for extended uncertainty representations that explicitly model uncertainty about probabilities, enabling a separation between beliefs and uncertainty. Such representations form the foundation for second order uncertainty and evidence-based theories, including Dempster--Shafer theory and Subjective Logic, which are discussed in the following sections.
+This motivates the need for extended uncertainty representations that explicitly model uncertainty about probabilities, enabling a separation between beliefs and uncertainty. Such representations form the foundation for second order uncertainty and evidence-based theories, including \aclu{DST} and \aclu{SL}, which are discussed in the following sections.
 
 \subsection{Second Order Probability}
 
-A fundamental limitation of classical probability theory is that it assumes agents are always able to specify precise probability values for uncertain events. In many real-world settings, however, decision makers are uncertain not only about outcomes, but also about the probabilities themselves. This observation motivates the notion of \emph{second-order probability}, which explicitly represents probabilities about probabilities of events rather than just probabilities of events. As formalized by Baron, a second-order probability distribution \( Q(P) \) can be interpreted as the probability that the \emph{true} probability of a proposition takes the value \( P \) \cite{Baron1987}. Coming back to the example of a binary sensor state \(X \in \{0,1\}\), the second-order probability distribution \( Q(P) \) is naturally defined over the interval \([0,1]\), where \(P\) denotes the underlying probability \(P(X=1)\). In this setting, uncertainty does not only concern the sensor outcome directly, but also the value of the probability governing that outcome. A common and convenient choice for modeling such second-order uncertainty is the \emph{Beta distribution}, which is defined over \([0,1]\).
+A fundamental limitation of classical probability theory is that it assumes agents are always able to specify precise probability values for uncertain events. In many real-world settings, however, decision makers are uncertain not only about outcomes, but also about the probabilities themselves. This observation motivates the notion of \emph{second-order probability}, which explicitly represents probabilities about probabilities of events rather than just probabilities of events. As formalized by Baron, a second-order probability distribution \( Q(P) \) can be interpreted as the probability that the true probability of a proposition takes the value \( P \) \cite{Baron1987}. Coming back to the example of a binary sensor state \(X \in \{0,1\}\), the second-order probability distribution \( Q(P) \) is naturally defined over the interval \([0,1]\), where \(P\) denotes the underlying probability \(P(X=1)\). In this setting, uncertainty does not only concern the sensor outcome directly, but also the value of the probability governing that outcome. A common and convenient choice for modeling such second-order uncertainty is the \emph{Beta distribution}, which is defined over \([0,1]\).
 
 \begin{definition}[Beta Distribution]
 \label{def:beta}
@@ -32,11 +32,11 @@ A random variable \(P \in [0,1]\) follows a Beta distribution with parameters \(
 \[
 f(P \mid \alpha, \beta) = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} P^{\alpha-1}(1-P)^{\beta-1},
 \]
-where \(\Gamma(\cdot)\) is the Gamma function.
+where \(\Gamma(\cdot)\) is the Gamma function. Example of distributions are illustrated in \cref{fig:beta_distribution}.
 \end{definition}
 
 The parameters \(\alpha\) and \(\beta\) can be interpreted as pseudo-counts of positive evidence (evidence supporting \(P(X=1)\)) and negative evidence (evidence supporting \(P(X=0)\)), respectively. Large values of \(\alpha+\beta\) correspond to high confidence in the estimated probability: 
-\[\mathbb{E}_Q (P) = \int_0^1 p Q(p) dp \, ,\] while small values of \(\alpha+\beta\) reflect substantial epistemic uncertainty. As such, the Beta distribution provides a representation of second-order uncertainty over binary events.
+\[\mathbb{E}_Q (P) = \int_0^1 p Q(p) dp \, , \quad Var_Q (P) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha+\beta+1)} \, , \] while small values of \(\alpha+\beta\) reflect substantial epistemic uncertainty. As such, the Beta distribution provides a representation of second-order uncertainty over binary events.
 
 \begin{figure}[t]
     \centering
@@ -67,7 +67,7 @@ f(\mathbf{P} \mid \boldsymbol{\alpha}) =
 \frac{\Gamma\left(\sum_{k=1}^{K} \alpha_k\right)}{\prod_{k=1}^{K} \Gamma(\alpha_k)}
 \prod_{k=1}^{K} P_k^{\alpha_k - 1},
 \]
-defined over the probability simplex \( \Delta^{K-1} \).
+defined over the probability simplex \( \Delta^{K-1} \). An example is illustrated in \cref{fig:dirichlet_distribution}.
 \end{definition}
 
 
@@ -76,7 +76,7 @@ Similarly to the Beta case, the Dirichlet parameters encode the strength and bal
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.65\linewidth]{img/rw/dirichlet_simplex.pdf}
-    \caption{Example Dirichlet distributions over a three-class probability simplex, illustrating different degrees of second-order uncertainty.}
+    \caption{Example of Dirichlet probability densities over the 2-simplex (visualized in barycentric coordinates).}
     \label{fig:dirichlet_distribution}
 \end{figure}
 
@@ -87,7 +87,7 @@ An alternative framework for representing uncertainty under incomplete informati
 This relationship is particularly relevant for uncertainty-aware trust modeling. Second-order probability provides a probabilistic foundation for reasoning about uncertainty in probability estimates, while belief-function-based frameworks offer practical tools for representing ignorance and aggregating evidence. The next section presents Dempster–Shafer theory in detail, introducing the basic belief assignment formalism and Dempster’s rule of combination for evidence aggregation.
 \subsection{Dempster--Shafer Theory}
 \label{sec:dst}
-\ac{DST}, also known as the theory of belief functions, was introduced to address limitations of classical probabilistic reasoning when evidence is incomplete, imprecise, or conflicting~\cite{dempster1968generalization,shafer1976mathematical,beynon2000dempster}. 
+\acf{DST}, also known as the theory of belief functions, was introduced to address limitations of classical probabilistic reasoning when evidence is incomplete, imprecise, or conflicting~\cite{dempster1968generalization,shafer1976mathematical,beynon2000dempster}. 
 Unlike Bayesian probability theory, which assigns probabilities directly to individual events, \ac{DST} allows belief to be assigned to sets of possibilities, allowing part of it to remain uncommitted and explicitly representing uncertainty arising from lack of information.
 
 In \ac{DST}, knowledge about a variable is represented through a \ac{BBA}, which distributes belief mass over subsets of the frame of discernment rather than over single outcomes: 
@@ -102,7 +102,7 @@ m(\emptyset)=0,
 \sum_{A\in 2^{X}} m(A)=1.
 \]
 
-This formulation enables a clear distinction between uncertainty due to ignorance and uncertainty due to randomness. In particular, belief mass assigned to composite sets represents epistemic uncertainty, while belief mass assigned to singleton sets reflects support for specific hypotheses. 
+Belief mass assigned to composite sets represents epistemic uncertainty, while belief mass assigned to singleton sets reflects support for specific hypotheses. 
 
 \paragraph{Example}
 Recall the binary sensor example introduced earlier, where 
@@ -139,9 +139,7 @@ m^{A \oplus B}(C)
 =
 \frac{
 \displaystyle \sum_{A_i \cap B_j = C} m^A(A_i)\, m^B(B_j)
-}{
-1 - \displaystyle \sum_{A_i \cap B_j = \emptyset} m^A(A_i)\, m^B(B_j)
-},
+}{1 - K},
 \qquad \forall C \subseteq \Omega,\; C \neq \emptyset.
 \end{equation}
 The denominator corresponds to the normalization factor, where
@@ -154,34 +152,32 @@ represents the total conflict between the two belief assignments.
 
 The rule is associative, commutative, and non-idempotent~\cite{josang2012dempster}, which allows evidence to be combined incrementally and without enforcing a fixed aggregation order. 
 These properties make \ac{DST} attractive for real-time and distributed applications, such as sensor fusion, where evidence arrives sequentially from multiple sources~\cite{LEFEVRE2002149, osti_800792, 1006807, Khan2019TimeDomain}.
-Now, let's examine related work on how \ac{DST} principles operate in multi-source settings, where information may arrive sequentially, concurrently, or from heterogeneous agents. This perspective naturally leads to a broader consideration of information fusion and multi-source reasoning within the \ac{DST} framework.
 
-\subsubsection{Information Fusion and Multi-source Reasoning}
-Information fusion aims to combine evidence from multiple sources in order to reduce uncertainty and improve decision quality. Such a requirement naturally arises in a wide range of domains, including sensor fusion, expert systems, and multi-agent systems. In multi-agent settings, agents acquire knowledge through observations or communication, and this knowledge is often represented as beliefs or belief bases~\cite{pigozzi2007aggregation}.
+% Now, let's examine related work on how \ac{DST} principles operate in multi-source settings, where information may arrive sequentially, concurrently, or from heterogeneous agents. This perspective naturally leads to a broader consideration of information fusion and multi-source reasoning within the \ac{DST} framework.
 
-Early work on belief fusion relied primarily on propositional logic-based formalisms~\cite{gregoire2006logic}, and a variety of belief merging operators have been proposed to resolve inconsistencies and aggregate knowledge~\cite{konieczny2002merging,pigozzi2007aggregation,tamargo2012modeling,tran2013axiomatic}. While these approaches provide important theoretical foundations for information aggregation, they typically assume logical consistency or focus on abstract knowledge bases, limiting their applicability to uncertainty-aware reasoning in real-world systems.
+\marginpar{Information Fusion}
+Information fusion aims to combine evidence from multiple sources in order to reduce uncertainty and improve decision quality. Such a requirement naturally arises in a wide range of domains, including sensor fusion, expert systems, and multi-agent systems. \ac{DST} has been widely applied to information fusion in practical systems, particularly in sensor-based applications. For example, Munz and Dietmayer~\cite{munz2011using} employ \ac{DST} to enhance detection performance in sensor fusion systems by explicitly modeling uncertainty and combining sensory evidence. Similarly, Tang et al.~\cite{tang2017improved} use \ac{DST} to represent uncertainty in multi-sensor data before applying evidence fusion.
 
-\ac{DST} has been widely applied to information fusion in practical systems, particularly in sensor-based applications. For example, Munz and Dietmayer~\cite{munz2011using} employ \ac{DST} to enhance detection performance in sensor fusion systems by explicitly modeling uncertainty and combining sensory evidence. Similarly, Tang et al.~\cite{tang2017improved} use \ac{DST} to represent uncertainty in multi-sensor data before applying evidence fusion.
-
+\marginpar{DST Limitations}
 These works primarily address fusion within a single system, where multiple sensors act as information sources. However, the use of Dempster’s rule requires careful consideration. Although the rule is mathematically well-defined, later studies have shown that the combination of highly conflicting sources can lead to counter-intuitive or unstable results~\cite{zadeh2013on,dezert2014on}. In cases of extreme conflict, the normalization step inherent in Dempster’s rule may amplify minor evidence and suppress uncertainty, producing misleading conclusions. As a result, \ac{DST} may become unsuitable when sources strongly disagree or when their reliability differs significantly.
 
 A further structural limitation of the original \ac{DST} formulation is that it does not explicitly model trust relationships between information sources. Evidence is combined at the level of belief masses without incorporating a formal representation of source credibility. All sources are implicitly assumed to be equally reliable, and the theory provides no native mechanism to express trust transitivity or to discount evidence based on the credibility of its origin. This limitation is particularly restrictive in multi-agent systems and distributed environments, where information is often obtained through chains of referrals and where source reliability is heterogeneous.  
 
-These observations motivate extensions of \ac{DST} that explicitly integrate trust representation, source credibility, and trust transitivity within the uncertainty framework. Subjective Logic~\cite{josang2016subjective} builds upon \ac{DST} by introducing subjective opinions with explicit uncertainty mass and formal trust-discounting operators. This extension enables principled reasoning about trust propagation and evidence aggregation in distributed and multi-agent systems, while preserving a clear connection to the underlying belief-function foundations.
+These observations motivate extensions of \ac{DST} that explicitly integrate trust representation, source credibility, and trust transitivity within the uncertainty framework. \aclu{SL}~\cite{josang2016subjective} builds upon \ac{DST} by introducing subjective opinions with explicit uncertainty mass and formal trust-discounting operators. This extension enables principled reasoning about trust propagation and evidence aggregation in distributed and multi-agent systems, while preserving a clear connection to the underlying belief-function foundations.
 
 \section{Subjective Logic and Trust}
 
-\ac{SL}~\cite{josang2016subjective,josang2001logic} is a formal framework for reasoning under uncertainty, grounded in probabilistic logic and the \ac{DST}. 
+\acf{SL}~\cite{josang2016subjective,josang2001logic} is a formal framework for reasoning under uncertainty, grounded in probabilistic logic and the \ac{DST}. 
 It extends classical and Bayesian reasoning by explicitly representing uncertainty as a first-class element of its formalism. 
 In particular, \ac{SL} enables:
 \begin{enumerate}
   \item the explicit representation of uncertainty as part of its fundamental building block, called a \emph{subjective opinion}, and
-  \item reasoning about uncertainty through \emph{belief fusion} and \emph{trust-discounting}, where multiple subjective opinions are combined using well-defined operators.
+  \item reasoning under uncertainty through \emph{belief fusion}, \emph{trust-discounting}, and Bayesian reasoning where multiple subjective opinions are combined using well-defined operators.
 \end{enumerate}
 
-\ac{SL} models degrees of beliefs and uncertainty associated with propositions, allowing an agent to express not only what it believes, but also how confident it is in that belief. This makes \ac{SL} particularly suitable for trust modeling and reputation-based systems~\cite{LIU2011547}, as well as for uncertainty-aware assessment of \ac{ML} systems~\cite{sensoy2018evidentialdeeplearningquantify, 10.3389/frai.2020.00054}. By explicitly distinguishing between belief supported by evidence and uncertainty due to lack or conflict of evidence, \ac{SL} addresses limitations identified in probabilistic and Bayesian frameworks.
+\ac{SL} models degrees of beliefs and uncertainty associated with propositions, allowing an agent to express not only what it believes, but also how confident it is in that belief. This makes \ac{SL} particularly suitable for trust modeling and reputation-based systems~\cite{LIU2011547}, as well as for uncertainty-aware assessment of \ac{ML} systems~\cite{sensoy2018evidentialdeeplearningquantify, 10.3389/frai.2020.00054}. By explicitly distinguishing between belief supported by evidence and uncertainty due to lack of evidence, \ac{SL} addresses limitations identified in probabilistic and Bayesian frameworks.
 
-A core concept of Subjective Logic is the notion of a \emph{subjective opinion}. In the following, we introduce subjective opinions and their formal properties, before presenting the belief fusion and trust discounting operators that enable reasoning and trust propagation in complex systems.
+A core concept of \aclu{SL} is the notion of a \emph{subjective opinion}. In the following, we introduce subjective opinions and their formal properties, before presenting the inferential, belief fusion and trust discounting operators that enable trust propagation in complex systems.
 
 
 \subsection{Subjective Opinions} 
@@ -198,13 +194,13 @@ A core concept of Subjective Logic is the notion of a \emph{subjective opinion}.
     \caption{Binomial Opinion \( (0.4, 0.2, 0.4, 0.9)\) Visualization.}
     \label{fig:bin_op_visual}
 \end{figure}
-Subjective opinion is a fundamental building block of Subjective Logic. A subjective opinion represents an agent’s belief about the state of a variable, explicitly capturing both supported belief and residual uncertainty. Formally, a subjective opinion expresses a belief about a variable $X$ that takes values from a domain $\mathbb{X}$, also referred to as the state space. The domain $\mathbb{X}$ is assumed to be \emph{exhaustive}, meaning that it contains all possible states of $X$, and \emph{exclusive}, meaning that only one state can hold at any given time ($\mathbb{X}$ may be binary or multi-valued). The notation \(\omega_X^A\) denotes a subjective opinion held by agent $A$ about variable $X$. The subscript indicates the target variable or proposition, while the superscript identifies the belief owner. When the belief owner is implicit or irrelevant, the superscript may be omitted for simplicity.
+Subjective opinion is a fundamental building block of \ac{SL}. A subjective opinion represents an agent’s belief about the state of a variable, explicitly capturing both supported belief and residual uncertainty. Formally, a subjective opinion expresses a belief about a variable $X$ that takes values from a domain $\mathbb{X}$, also referred to as the state space. The domain $\mathbb{X}$ is assumed to be \emph{exhaustive}, meaning that it contains all possible states of $X$, and \emph{exclusive}, meaning that only one state can hold at any given time. Note that $\mathbb{X}$ may be binary or multi-valued. The notation \(\omega_X^A\) denotes a subjective opinion held by agent $A$ about variable $X$. The subscript indicates the target variable or proposition, while the superscript identifies the belief owner. When the belief owner is implicit or irrelevant, the superscript may be omitted for simplicity.
 
 \begin{definition}[Binomial Opinion~\cite{josang2016subjective}] \label{binomial_opinion}
-Let $\mathbb{X} = \{x, \overline{x}\}$ be a binary domain with binomial random variable $X \in \mathbb{X}$. $\overline{x}$ denotes the complement (negation) of $x$, and vice versa.
+Let $\mathbb{X} = \{x, \overline{x}\}$ be a binary domain with binomial random variable $X \in \mathbb{X}$. $\overline{x}$ denotes the complement (negation) of $x$.
 A binomial subjective opinion about the truth of value $x$ is defined as the ordered quadruplet
 \[
-\omega_x = (b_x, d_x, u_x, a_x),
+\omega_x = \omega_{X=x} = (b_x, d_x, u_x, a_x),
 \]
 where the additivity constraint $b_x + d_x + u_x = 1$ holds, and:
 \begin{itemize}
@@ -222,13 +218,13 @@ A binomial opinion can be projected onto a probability value using the expected 
 This projection enables compatibility with classical probabilistic reasoning, while preserving the richer internal representation of beliefs and uncertainty.
 
 
-In the context of trust modeling, trust is typically represented as a binomial subjective opinion $(t, d, u)$, where $t$ denotes trust (belief), $d$ denotes distrust (disbelief), and $u$ represents uncertainty. 
+In the context of trust modeling, trust is typically represented as a binomial subjective opinion $(t, d, u)$, where $t$ denotes trust mass (belief), $d$ denotes distrust mass (disbelief), and $u$ represents uncertainty. 
 
 \paragraph{Mapping to the Beta Distribution.}
 
-There exists a bijective mapping between binomial subjective opinions and Beta \acp{PDF}. This mapping enables a probabilistic interpretation of belief masses and establishes a bridge between Subjective Logic and Bayesian statistics.
+There exists a bijective mapping between binomial subjective opinions and Beta \acp{PDF}. This mapping enables a probabilistic interpretation of belief masses and establishes a bridge between \aclu{SL} and second order probability.
 
-Consider a Beta distribution parameterized by $(\alpha, \beta)$ over the probability variable $p_x \in [0,1]$ (see~\cref{def:beta}) where $\alpha > 0$ and $\beta > 0$ represent evidence supporting $x$ and $\overline{x}$ respectively.
+Consider a Beta distribution parameterized by $(\alpha, \beta)$ over the probability variable $p_x \in [0,1]$ (see~\cref{def:beta}) where $\alpha > 0$ and $\beta > 0$ are correlated with the amount of evidence supporting $x$ and $\overline{x}$ respectively.
 
 Let $r_x$ and $s_x$ denote positive and negative evidence for $x$. \(\alpha\) and \(\beta\) can be expressed as following:
 
@@ -285,18 +281,17 @@ Given the mapping between \(p_x \sim Beta(\alpha,\beta)\) and \(\omega_x=\left(b
 \end{equation}
 
 
-To summarize, this bijective mapping ensures that:
+To summarize, this bijective mapping shows that:
 \begin{itemize}
     \item High belief corresponds to concentrated density around high probability values;
-    \item High uncertainty corresponds to a flat (uniform) Beta distribution;
-    \item A vacuous opinion $(0,0,1,a_x)$ maps to a uniform $\mathrm{Beta}(1,1)$ distribution.
+    \item High uncertainty corresponds to a flat (uniform) Beta distribution; a vacuous opinion $(0,0,1,a_x)$ maps to a uniform $\mathrm{Beta}(1,1)$ distribution.
 \end{itemize}
 
 The geometric interpretation of binomial opinions is illustrated in ~\cref{fig:bin_op_visual}. The left subfigure shows the barycentric triangle representation, where belief, disbelief, and uncertainty form a 2-simplex. The right subfigure shows the equivalent Beta density, whose expectation corresponds exactly to the projected probability in \cref{eq:projected_prob}.
 
 
 \begin{definition}[Multinomial Opinion~\cite{josang2016subjective}]
-Let \(\mathbb{X} = \{x_1, \dots, x_k\}\) be a domain with \(k > 2\) mutually exclusive and exhaustive states. A multinomial opinion assigns belief masses \(b_{x_i}\) to each state \(x_i \in \mathbb{X}\), together with a global uncertainty mass \(u\), such that:
+Let \(\mathbb{X} = \{x_1, \dots, x_k\}\) be a domain with \(k > 2\) states. A multinomial opinion assigns belief masses \(b_{x_i}\) to each state \(x_i \in \mathbb{X}\), together with a global uncertainty mass \(u\), such that:
 \[
 \sum_{i=1}^{k} b_{x_i} + u = 1,
 \]
@@ -326,23 +321,21 @@ and the bijective mapping between multinomial opinion $\omega_X = (\{b_{x_i}\}, 
 Under this bijection, the projected probability of the multinomial opinion coincides exactly with the expected value of the Dirichlet distribution:
 
 \begin{equation}
-\mathbb{E}[p_i] = \frac{\alpha_i}{\sum \alpha_j} = b_{x_i} + a_{x_i} u = P_{\omega_X}(x_i).
+\mathbb{E}[p_i] = \frac{\alpha_i}{\sum \alpha_j} = b_{x_i} + a_{x_i} u = P_{i}(\omega_X).
 \end{equation}
-This equality ensures mathematical consistency between subjective opinions and Bayesian probability theory.
+This equality ensures consistency with the mapping.
 
 
-To make subjective opinions operational, \ac{SL} provides a set of reasoning operators for combining, revising, and discounting opinions. More precisely, \ac{SL} offers (i) \emph{inferential operators} for propagating opinions through conditional relationships (e.g., deduction and abduction), (ii) \emph{logical operators} such as binomial multiplication for combining opinions over independent propositions, and (iii) \emph{belief fusion} and \emph{trust discounting} operators for aggregating opinions from multiple sources and accounting for source reliability.
-\begin{definition}[Inferential Operators~\cite{josang2006trust}]
+To make subjective opinions operational, \ac{SL} provides a set of reasoning operators for combining, revising, and discounting opinions. More precisely, \ac{SL} offers (i) \emph{inferential operators} for propagating opinions through conditional relationships (e.g., deduction and abduction), (ii) \emph{logical operators} such as binomial multiplication for combining opinions over independent propositions, (iii) \emph{belief fusion} for aggregating opinions from multiple sources, and (iv) \emph{trust discounting} operators for accounting for source reliability.
+\begin{definition}[Inferential Operators~\cite{10.5555/1151699.1151710}]
 \label{def:inferential_ops}
 Inferential operators extend Bayesian-style reasoning to subjective opinions 
 by enabling belief propagation through conditional relationships.
 
 Let $A$ be an agent reasoning about variables $X$ and $Y$. 
-Assume that $A$ holds a conditional opinion $\omega^A_{Y \mid X}$ 
-representing the strength of the implication $X \Rightarrow Y$.
+Assume that $A$ holds an opinion $\omega^A_{Y \mid X}$ on the conditional relationship $X$ implies $Y$ ($X \Rightarrow Y$). This represents the opinion on $X$ given $Y$. 
 
-The principal inferential operators are:
-
+The main inferential operators are:
 \begin{itemize}
     \item \textbf{Deduction:} derive an opinion $\omega^A_Y$ 
     from an opinion $\omega^A_X$ using $\omega^A_{Y \mid X}$.
@@ -368,15 +361,12 @@ that the road is icy.
 \begin{definition}[Binomial Multiplication~\cite{josang2016subjective}]
 \label{def:binomial_multiplication}
 
-Let $\mathbb{X} = \{x,\bar{x}\}$ and $\mathbb{Y} = \{y,\bar{y}\}$ 
-be two independent binary domains. 
+Let $X \in \{x,\bar{x}\}$ and $Y \in \{y,\bar{y}\}$ 
+be two independent binary random variables. 
 Let $\omega_x = (b_x,d_x,u_x,a_x)$ and 
-$\omega_y = (b_y,d_y,u_y,a_y)$ be binomial opinions 
-on $x$ and $y$, respectively.
+$\omega_y = (b_y,d_y,u_y,a_y)$ be binomial opinions on $X$ and $Y$, respectively.
 
-Assuming independence between $x$ and $y$, 
-the binomial opinion on the conjunction $(x \wedge y)$ is defined as
-
+The binomial opinion on the conjunction $(x \wedge y)$ is defined as
 \begin{equation}
 \label{eq:binomial_product}
 \omega_{x \wedge y} = \omega_x \cdot \omega_y :
@@ -398,7 +388,7 @@ a_{x \wedge y}
 \right.
 \end{equation}
 
-The operator $\cdot$ denotes binomial opinion multiplication.
+The operator $(\cdot)$ denotes binomial opinion multiplication.
 \end{definition}
 
 Fusion and trust discounting operators are introduced in the following subsections.
@@ -412,13 +402,13 @@ Belief fusion operators enable multiple subjective opinions about the same propo
     \label{fig:sl_belief_fusion}
 \end{figure}
 
-In Subjective Logic, fusion is not governed by a single universal operator; instead, multiple fusion operators are defined, each corresponding to different assumptions about the nature of the evidence sources and the fusion situation~\cite{josang2016subjective,josang2017multi}.
+In \ac{SL}, fusion is not governed by a single universal operator; instead, multiple fusion operators are defined, each corresponding to different assumptions about the nature of the evidence sources and the fusion situation~\cite{josang2016subjective,josang2017multi}.
 
 The need for multiple fusion operators arises from the observation that belief sources may differ in important ways, including their independence, reliability, degree of conflict, and the intended semantics of aggregation. Applying an inappropriate fusion operator can lead to misleading or counter-intuitive results. This is precisely what can happen with Dempster’s rule of combination, as
 discussed earlier, where highly conflicting sources may yield counter-intuitive
 results. Consequently, scenario with different characteristics might need different fusion operator.
 
-Subjective Logic defines the following principal fusion operators: \emph{constraint fusion}, \emph{cumulative fusion}, \emph{averaging fusion}, \emph{weighted fusion}, and \emph{consensus \& compromise fusion}. Each operator satisfies different algebraic properties, such as idempotence, associativity, and the existence of a neutral element, which reflect the assumptions under which the operator is valid.
+\aclu{SL} defines the following principal fusion operators: \emph{constraint fusion}, \emph{cumulative fusion}, \emph{averaging fusion}, \emph{weighted fusion}, and \emph{consensus \& compromise fusion}. Each operator satisfies different algebraic properties, such as idempotence, associativity, and the existence of a neutral element, which reflect the assumptions under which the operator is valid.
 
 \begin{figure}
     \centering
@@ -436,12 +426,13 @@ J{\o}sang~\cite{josang2016subjective} proposes a structured decision procedure f
 \end{itemize}
 
 We now review the principal belief fusion operators defined in
-Subjective Logic. For each operator, we provide its formal definition
+\aclu{SL}. For each operator, we provide its formal definition
 together with a brief discussion of the assumptions under which it is
 semantically appropriate.
 
-\begin{definition}[Constraint Fusion Operator~\cite{josang2016subjective}]
-Assume the domain $X$ and its hyperdomain $\mathcal{R}(X)$, and let the hypervariable $X$ take values from $\mathcal{R}(X)$.
+\begin{definition}[Constraint Fusion Operator~\cite{josang2016subjective} inspired by the Dempster’s Rule of Combination]
+\label{def:constraint_fuse}
+Assume the domain $\mathbb{X}$ and its hyperdomain $\mathcal{R}(\mathbb{X})$, and let the hypervariable $X$ take values from $\mathcal{R}(\mathbb{X})$.
 Let agent $A$ hold opinion $\omega_X^A$ and agent $B$ hold opinion $\omega_X^B$.
 The superscripts $A$ and $B$ identify the belief sources.
 
@@ -450,7 +441,7 @@ The belief constraint fusion operator, denoted by $\odot$, is defined as
 \omega_X^{A\&B} = \omega_X^A \odot \omega_X^B .
 \]
 
-For all $x \in \mathcal{R}(X)$, the fused opinion $\omega_X^{A\&B}$ is given by
+For all $x \in \mathcal{R}(\mathbb{X})$, the fused opinion $\omega_X^{A\&B}$ is given by
 \[
 b_X^{(A\&B)}(x) = \frac{\mathrm{Har}(x)}{1-\mathrm{Con}},
 \]
@@ -477,18 +468,11 @@ The harmony and conflict terms are defined as
 
 Constraint fusion is appropriate when opinions are interpreted as hard or soft constraints on the possible states of a variable, and when no compromise is acceptable in the presence of total conflict. In such cases, fusion is undefined if the constraints are mutually exclusive, making conflict explicitly visible rather than hidden. This operator is particularly suitable for preference aggregation and decision-making scenarios.
 
-
-
-
-
-
-
-
-
 \begin{definition}[Cumulative Fusion Operator~\cite{josang2016subjective}]
+\label{def:cumulative_fuse}
 Let $\omega_X^A$ and $\omega_X^B$ be opinions of sources $A$ and $B$ over the same variable $X$. The belief cumulative fusion operator, denoted by $\oplus$, is defined as
 \[
-\omega_X^{A\diamond B} = \omega_X^A \odot \omega_X^B .
+\omega_X^{A\diamond B} = \omega_X^A \oplus \omega_X^B .
 \]
 The cumulatively fused opinion $\omega_X^{(A\diamond B)}$ is defined as follows.
 
@@ -536,6 +520,7 @@ Cumulative fusion is commonly applied in sensor fusion and statistical evidence 
 
 
 \begin{definition}[Averaging Belief Fusion Operator~\cite{josang2016subjective}]
+\label{def:averaging_fuse}
 Let $\omega_X^A$ and $\omega_X^B$ be opinions over $X$.
 The belief averaging fusion operator, denoted by $\underline{\oplus} $, is defined as
 \[
@@ -578,6 +563,7 @@ where
 Averaging fusion is designed for situations where belief sources are dependent, such that combining additional opinions does not increase the total amount of evidence. This operator is idempotent and treats all opinions symmetrically, including vacuous ones. It is appropriate when opinions represent different interpretations of the same underlying observations, for example in surveys or jury deliberations.
 
 \begin{definition}[Weighted Belief Fusion Operator~\cite{josang2016subjective}]
+\label{def:weighted_fuse}
 Let $\omega_X^A$ and $\omega_X^B$ be opinions over $X$.
 The belief weighted fusion operator, denoted by $\hat{\oplus} $, is defined as
 \[
@@ -621,10 +607,11 @@ a_X^{(A\hat{\diamond} B)}(x)=\frac{a_X^A(x)+a_X^B(x)}{2}.
 \]
 
 \end{definition}
-Weighted fusion generalises averaging fusion by weighting opinions according to their confidence. More confident opinions exert greater influence on the fused result, while highly uncertain opinions contribute less. This operator is particularly relevant in expert systems, where sources may have unequal expertise or reliability, but where independence cannot be assumed.
+Weighted fusion extends simple averaging in Averaging fusion by assigning weights to opinions based on their confidence. More confident opinions have greater influence on the fused result, while highly uncertain opinions contribute less. This operator is particularly relevant in expert systems, where sources may have unequal expertise or reliability, but where independence cannot be assumed.
 
 
 \begin{definition}[Consensus \& Compromise Fusion~\cite{josang2016subjective}]
+\label{def:c_and_c_fuse}
 Let $\omega_X^A$ and $\omega_X^B$ be separate opinions about variable $X$.
 The CC-fused opinion is denoted by
 \[
@@ -644,14 +631,14 @@ dependent opinions provided by different sources about the same variable.
 See more in the original book~\cite{josang2016subjective}.
 \end{definition}
 
-Consensus \& compromise fusion explicitly separates shared belief from conflicting belief. Shared belief is preserved, while conflicting belief is transformed into uncertainty or vague belief, resulting in a compromise that reflects disagreement without artificially favouring one source. 
-This operator is especially well suited for fusing hyper-opinions and for situations where preserving epistemic caution in the presence of conflict is essential.
+Consensus \& compromise fusion explicitly separates shared belief from conflicting belief. Shared belief is preserved, while conflicting belief is transformed into uncertainty or vague belief, resulting in a compromise that reflects disagreement without artificially favoring one source. 
+This operator is especially well suited for fusing hyper-opinions and for situations where preserving epistemic uncertainty in the presence of conflict is essential.
 
 In summary, the availability of multiple fusion operators allows the analyst to align the fusion mechanism with the semantics of the application domain. This flexibility is essential for trust reasoning, where inappropriate aggregation of beliefs can lead to overconfidence or misplaced trust. In the next subsection, we introduce trust discounting operators, which explicitly model source reliability and enable trust propagation across networks of agents.
 
 
 \subsection{Trust Discounting Operators} \label{subsec:TD_operators}
-Trust discounting operators are a central component of Subjective Logic, enabling the propagation of trust through intermediary agents. They formalize the intuition that trust in a source should attenuate when information is relayed through other entities, thereby capturing the notion of trust transitivity. In practice, when fusing beliefs originating from multiple sources, those sources may differ in reliability, and some may be more trusted than others. Trust discounting provides a mechanism to account for such heterogeneity before combining their beliefs.
+Trust discounting operators are a central component of \ac{SL}, enabling the propagation of trust through intermediary agents. They formalize the intuition that trust in a source should attenuate when information is relayed through other entities, thereby capturing the notion of trust transitivity. In practice, when fusing beliefs originating from multiple sources, those sources may differ in reliability, and some may be more trusted than others. Trust discounting provides a mechanism to account for such heterogeneity before combining their beliefs.
 
 In his foundational work~\cite{josang2016subjective}, J{\o}sang introduces one trust discounting operator and its generalization when we have several entities: \emph{Two-Edge Path} discounting and \emph{Multi-Edge Path} discounting. \cref{table:TD_operators} summarizes that.
 
@@ -666,7 +653,7 @@ In his foundational work~\cite{josang2016subjective}, J{\o}sang introduces one t
 \begin{definition}[Two-Edge Path Trust Discounting]
 \label{def:two_edge_discounting}
 
-Let $\omega^A_B$ be a referral trust opinion held by agent $A$ about agent $B$, representing the degree to which $A$ trusts $B$ as an information source. Let $\omega^B_X$ be a \emph{functional trust} (or functional belief) opinion held by agent $B$ about variable $X$, representing $B$'s belief/trust about the state of $X$. The \emph{Two-Edge Path discounting operator}, denoted by $\otimes_{TE}$, models trust propagation across the two adjacent edges $A \rightarrow B$ and $B \rightarrow X$.
+Let $\omega^A_B$ be a \emph{referral} trust opinion held by agent $A$ about agent $B$, representing the degree to which $A$ trusts $B$ as an \emph{information source}. Let $\omega^B_X$ be a \emph{functional trust} (or functional belief) opinion held by agent $B$ about variable $X$, representing $B$'s belief/trust about the state of $X$. The \emph{Two-Edge Path discounting operator}, denoted by $\otimes_{TE}$, models trust propagation across the two adjacent edges $A \rightarrow B$ and $B \rightarrow X$.
 
 The resulting discounted opinion $\omega_X^{[A;B]}$, representing the opinion 
 of $A$ about $X$ via $B$, is defined as
@@ -691,10 +678,9 @@ In many real-world systems, trust is propagated across longer referral chains in
 \begin{definition}[Multi-Edge Path Trust Discounting]
 \label{def:multi_edge_discounting}
 
-Let $\omega^{A_i}_{A_{i+1}}$ denote referral trust opinions along a path of
+Let $(\omega^{A_i}_{A_{i+1}})_{1\leq i\leq n-1}$ denote referral trust opinions along a path of
 agents $A_1 \rightarrow A_2 \rightarrow \cdots \rightarrow A_n$, and let
-$\omega^{A_n}_X$ be the functional trust opinion held by agent $A_n$ about
-variable $X$. The \emph{Multi-Edge Path discounting operator}, denoted by
+$\omega^{A_n}_X$ be a functional trust/belief opinion held by agent $A_n$ about the state of a variable $X$. The \emph{Multi-Edge Path discounting operator}, denoted by
 $\otimes_{ME}$, models trust propagation across an arbitrary-length referral
 chain.
 
@@ -738,19 +724,19 @@ Multi-Edge Path & $\otimes_{ME}$ & $[\omega^{A_1}_{A_2}; \dots; \omega^{A_{n-1}}
 \label{table:TD_operators}
 \end{table}
 
-It is important to emphasize that the Two-Edge Path operator $\otimes_{TE}$ and the Multi-Edge Path operator $\otimes_{ME}$, both, require that the final edge in the path corresponds to a functional trust relationship. 
+It is important to emphasize that the Two-Edge Path operator $\otimes_{TE}$ and the Multi-Edge Path operator $\otimes_{ME}$, both, require that the final edge in the path corresponds to a functional trust/belief relationship. 
 
 % \paragraph{Limitations} 
-J{\o}sang et al.~\cite{josang2006exploring} further investigate alternative trust transitivity (trust discounting) operators. These include uncertainty-favouring transitivity, opposite-belief-favouring transitivity, and Base Rate Sensitive Transitivity, which corresponds to the Two-Edge Path Discounting. However, a common limitation of these operators is that trust discounting is applied uniformly across all edges of the trust path. None of the existing operators supports selective discounting restricted to referral edges. This limitation prevent to analyze some type of networks where we needs at some point to discount a referral trust opinion with another referral trust opinion. More details about that will be given in the following section, where we will see an example. 
+J{\o}sang et al.~\cite{josang2006exploring} further investigate alternative trust transitivity (trust discounting) operators. These include uncertainty-favouring transitivity, opposite-belief-favouring transitivity, and Base Rate Sensitive Transitivity, which corresponds to the Two-Edge Path Discounting. However, a common limitation of these operators is that none of them supports discounting restricted to referral edges. This limitation prevent to analyze some type of networks where we needs at some point to discount a referral trust opinion with another referral trust opinion. More details about that will be given in the following section, where we will see an example. 
 
 \subsection{Subjective Trust Networks} \label{subsec:SL_STN}
-\acfp{STN} provide a graph-based formalism for modeling and reasoning about trust relationships using Subjective Logic. In an \ac{STN}, entities such as agents, systems, or sensors are represented as nodes, while directed edges encode trust relationships expressed as subjective opinions.
+\acfp{STN} provide a graph-based formalism for modeling and reasoning on trust relationships using \ac{SL}. In an \ac{STN}, entities such as agents, systems, or sensors are represented as nodes, while directed edges encode trust relationships expressed as subjective opinions.
 
 Formally, a \ac{STN} is represented as a directed graph \(G = (V, E)\), where each node \(A \in V\) corresponds to an entity, and each directed edge $(A,B) \in E$ is labeled with a subjective opinion \(\omega^A_B\). Let \(X \in V\) denote the designated target node of the graph. Edges \((A,B)\) with \(B \neq X\) represent \emph{referral trust}, i.e., trust in another agent’s ability to provide reliable information. In contrast, edges of the form \((A,X)\) represent \emph{functional trust} (or \emph{functional belief}), expressing confidence in the correctness of information about \(X\) (or belief in possible results of \(X\)).
 
-To infer trust between nodes that are not directly connected, Subjective Logic relies on the trust discounting and belief fusion operators. Trust discounting is used to propagate trust along paths and belief fusion is used to combine multiple opinions about the same target. 
-\paragraph{Example:}\textbf{\ac{IMA}}\,\, \label{par:IMA_usecase}
-\ac{IMA} is a safety-critical application in \ac{C-ITS}, where vehicles and infrastructure components exchange information to improve road safety, traffic efficiency, and coordination. Consider the \acs{IMA} scenario illustrated in Figure~\ref{fig:IMA_intersection}. Vehicle $A$ approaches an intersection and communicates via \ac{V2V} communication with vehicles $B$ and $C$. \ac{V2V} communication enables vehicles to exchange information about their state and driving behaviour~\cite{dey2016vehicle}. Vehicles $B$ and $C$ are, in turn, able to communicate with vehicle $D$, which is also approaching the intersection.
+To infer trust between nodes that are not directly connected, \aclu{SL} relies on the trust discounting and belief fusion operators. Trust discounting is used to propagate trust along paths and belief fusion is used to combine multiple opinions about the same target. 
+\paragraph{Example:}\textbf{\acf{IMA}}\,\, \label{par:IMA_usecase}
+\acs{IMA} is a safety-critical application in \ac{C-ITS}, where vehicles and infrastructure components exchange information to improve road safety, traffic efficiency, and coordination. Consider the \acs{IMA} scenario illustrated in Figure~\ref{fig:IMA_intersection}. Vehicle $A$ approaches an intersection and communicates via \ac{V2V} communication with vehicles $B$ and $C$. \ac{V2V} communication enables vehicles to exchange information about their state and driving behaviour~\cite{dey2016vehicle}. Vehicles $B$ and $C$ are, in turn, able to communicate with vehicle $D$, which is also approaching the intersection.
 
 \begin{figure}[t]
     \centering
@@ -787,9 +773,9 @@ where $\oplus$ denotes an appropriate belief fusion operator selected based on t
 
 
 
-This example illustrates how \acp{STN} enable trust computation in distributed systems. Trust discounting captures the attenuation of trust across intermediaries, while belief fusion aggregates evidence from multiple sources. In such situations, existing trust discounting operators are not directly applicable, highlighting a limitation of current formulations. This observation suggests the need for more general trust discounting mechanisms capable of handling broader trust configurations.
+This example illustrates how \acp{STN} enable trust computation in distributed systems. Trust discounting captures the attenuation of trust across intermediaries, while belief fusion aggregates evidence from multiple sources. In such situations, existing trust discounting operators are not directly applicable, highlighting the limitation of existing trust discounting operators. This observation suggests the need for trust discounting mechanisms capable of discounting paths containing only referral edges.
 
-As a conclusion, \ac{SL} mechanisms are essential for enabling cooperative decision-making. This motivates the need for structurally sound \ac{SL} based trust reasoning mechanism  capable of operating reliably in complex and distributed environments. In practice, such trust reasoning in \acp{STN} relies on repeated applications of discounting and fusion operators along graph paths. However, not all graph structures allow computations using these operators alone. In particular, the correctness and consistency of trust inference are guaranteed when the underlying trust network satisfies the properties of a \ac{DSPG}~\cite{josang2016subjective}.
+As a conclusion, \ac{SL} mechanisms are essential for enabling cooperative decision-making. This motivates the need for structurally sound \ac{SL} based trust reasoning mechanism  capable of operating reliably in complex and distributed environments. In practice, such trust reasoning in \acp{STN} relies on repeated applications of discounting and fusion operators along graph paths. However, not all graph structures allow computations using these operators alone. In particular, the correctness and consistency of trust inference are guaranteed when the underlying trust network satisfies the properties of a \acf{DSPG}~\cite{josang2016subjective}.
 
 When an \ac{STN} is not a \ac{DSPG}, trust propagation may lead to ambiguous results, requiring graph transformation or restructuring before trust reasoning can be applied. Ensuring valid trust inference through structural constraints is therefore a central challenge in large-scale trust networks. We'll see more about \ac{DSPG} in the following section.
 
@@ -801,7 +787,7 @@ When an \ac{STN} is not a \ac{DSPG}, trust propagation may lead to ambiguous res
     \caption{Example of non DSPG \aclu{STN} for the IMA usecase}
     \label{fig:non_DSPG_IMA}
 \end{figure}
-In \ac{TNA-SL}, \acp{DSPG} constitute the canonical graph structure that guarantees sound and unambiguous trust computation using discounting and fusion operators. As shown in the previous subsection, trust inference in Subjective Trust Networks relies on repeated applications of these operators along graph paths. However, such operations are only well defined when applied to graphs that satisfy specific structural constraints. For example, if we add a new edge from \(B\) to \(C\) in the \ac{STN} for the \ac{IMA} usecase (see \cref{fig:non_DSPG_IMA}), the derivation of the functional trust using trust discounting and belief fusion operators is no longer straightforward. \acp{DSPG} provide exactly the constraints the graph needs to satisfy in order to be processable.
+In \acf{TNA-SL}, \aclu{DSPG} constitute the canonical graph structure that guarantees sound and unambiguous trust computation using discounting and fusion operators. As shown in the previous subsection, trust inference in \acp{STN} relies on repeated applications of these operators along graph paths. However, such operations are only well defined when applied to graphs that satisfy specific structural constraints. For example, if we add a new edge from \(B\) to \(C\) in the \ac{STN} for the \ac{IMA} usecase (see \cref{fig:non_DSPG_IMA}), the derivation of the functional trust using trust discounting and belief fusion operators is no longer straightforward. \acp{DSPG} provide exactly the constraints the graph needs to satisfy in order to be processable.
 
 In order to understand what is a \ac{DSPG}, we begin by introducing the notion of a \aclu{SP-graph}, which forms the basis for \acp{DSPG}.
 
@@ -814,40 +800,36 @@ A \acf{SP-graph} is a graph that can be recursively reduced to a single edge bet
 \end{enumerate}
 \end{definition}
 
-Figure~\ref{fig:spgraph} illustrates a step-by-step reduction of an SP-graph. The example proceeds through four reduction stages. Reduction~1 applies the series reduction four times; Reduction~2 applies the parallel reduction twice; Reduction~3 again applies series reduction twice; and Reduction~4 applies a final parallel reduction to obtain a single edge. The existence of such a reduction sequence proves that the original graph is an SP-graph.
+Figure~\ref{fig:spgraph} illustrates a step-by-step reduction of an \ac{SP-graph}. The example proceeds through four reduction stages. Reduction~1 applies the series reduction four times; Reduction~2 applies the parallel reduction twice; Reduction~3 again applies series reduction twice; and Reduction~4 applies a final parallel reduction to obtain a single edge. The existence of such a reduction sequence proves that the original graph is an \ac{SP-graph}.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\linewidth]{img/dspg/spgraphs.pdf}
-    \caption{Procedure for reducing an SP-graph into a single edge, adapted from~\cite{10.5555/3031657}}
+    \caption{Procedure for reducing an \ac{SP-graph} into a single edge, adapted from~\cite{10.5555/3031657}}
     \label{fig:spgraph}
 \end{figure}
 
-An SP-graph that is additionally directed and acyclic, and that contains a unique source and a unique sink, is referred to as a \acf{DSPG}.
+An \ac{SP-graph} that is additionally directed and acyclic, and that contains a unique source and a unique sink, is referred to as a \acf{DSPG}.
 
 \begin{definition}[\aclu{DSPG}]
-A \ac{DSPG} is a directed, acyclic SP-graph composed entirely of directed paths from a unique source node to a unique sink node.
+A \ac{DSPG} is a directed, acyclic \ac{SP-graph} composed entirely of directed paths from a unique source node to a unique sink node.
 \end{definition}
 
-These properties are essential in the context of trust reasoning. They ensure that trust propagation can be expressed exclusively through well-defined sequences of discounting (along series connections) and fusion (along parallel connections), without ambiguity or operator misuse.
-
-\paragraph{\ac{DSPG} Analysis in Subjective Trust Networks}
-In the context of \ac{STN}, \ac{DSPG} analysis refers to the process of computing the derived opinion of a source node about a target node using only Subjective Logic discounting and fusion operators. 
+These properties are essential in the context of trust reasoning with \ac{SL}. They ensure that trust propagation can be expressed exclusively through well-defined sequences of discounting (along series connections) and fusion (along parallel connections), without ambiguity or operator misuse. The process of computing the derived opinion of a source node on a target node using only \ac{SL} discounting and fusion operators is referred as \ac{DSPG} analysis
 
 To formally capture the structural constraints required for \ac{DSPG} analysis, J{\o}sang introduces the following concepts~\cite{10.5555/3031657}.
-
-\begin{definition}[\ac{PPS}]
+\begin{definition}[\aclu{PPS}]
 \label{def:pps}
-A \emph{\ac{PPS}} is a subgraph between two connected nodes $A$ and $B$ such that:
+A \emph{\acf{PPS}} is a subgraph between two connected nodes $A$ and $B$ such that:
 \begin{itemize}
     \item the out-degree of node $A$, denoted $outDegree(A)$, is at least~2, and
     \item the in-degree of node $B$, denoted $inDegree(B)$, is at least~2.
 \end{itemize}
 \end{definition}
 
-\begin{definition}[\ac{NL}]
+\begin{definition}[\aclu{NL}]
 \label{def:nl}
-The \ac{NL} of an edge in a \ac{DSPG} is defined as the number of \acp{PPS} to which the edge belongs.
+The \acf{NL} of an edge in a \ac{DSPG} $G$ is defined as the number of \acp{PPS} to which the edge belongs.
 \begin{equation}
 \mathrm{NL}_G(e) =
 \left|
@@ -888,9 +870,9 @@ In this example, the PPS list consists of $(A,C)$, $(C,G)$, and $(A,G)$, resulti
         \caption{PPS edges NL}
         \label{fig:ppsv}
 \end{figure}
-Based on these definitions, J{\o}sang proposes an algorithm for computing trust over \acp{DSPG} by iteratively reducing \acp{PPS} into single edges (\cref{fig:algsynth1}). At each reduction step, the Nesting Level is updated accordingly, ensuring that the order of discounting and fusion operations remains consistent with the graph structure.
+Based on these definitions, J{\o}sang proposes an algorithm for \acp{DSPG} analysis that iteratively reduces \acp{PPS} into single edges (\cref{fig:algsynth1}). At each reduction step, the \ac{NL} is updated accordingly, ensuring that the order of discounting and fusion operations remains consistent with the graph structure.
 
-In this dissertation, we revisit this procedure and introduce a refined reduction algorithm. We formally prove that, under the proposed construction, the \ac{NL} of the newly synthesized edge decreases deterministically by one at each reduction step. Consequently, the nesting level does not need to be recomputed from scratch after every transformation, leading to a more efficient and structurally consistent trust computation process.
+In this dissertation, we revisit this procedure and introduce a refined reduction algorithm. We formally prove that, under the proposed construction, the \ac{NL} of the newly synthesized edge decreases deterministically by one at each reduction step. Consequently, the \ac{NL} does not need to be recomputed from scratch after every transformation, leading to a more efficient and structurally consistent trust computation process.
 
 \begin{figure}
     \centering
@@ -917,13 +899,13 @@ In this dissertation, we revisit this procedure and introduce a refined reductio
 \paragraph{\ac{DSPG} Synthesis}
 
 When the \ac{STN} does not satisfy the \ac{DSPG} property, a \ac{DSPG} must be synthesized from the non-\ac{DSPG} before the analysis (\cref{fig:dspg_synth_analyse}). 
-The synthesis procedure consists of examining all paths from the source to the target and, for each path, determining whether its branches can be introduced into the graph without violating the structural constraints of the current graph. In particular, one must verify whether adding a branch between two existing nodes preserves the \ac{DSPG} property.
+The synthesis procedure consists of examining all paths from the source to the target and, for each path, determining whether its branches can be introduced into the graph without breaking the \ac{DSPG} property of the current graph. In particular, one must verify whether adding a branch between two existing nodes preserves the \ac{DSPG} property.
 
 To this end, J{\o}sang proposed the following criteria for safely adding a branch from node $A$ to node $B$ in a \ac{DSPG}.
 
 \begin{definition}[Original DSPG Synthesis Criteria]
 \label{def:dspg_original_criteria}
-To safely add a branch from node $A$ to node $B$ in a \ac{DSPG} without breaking th \ac{DSPG} of the graph, the following criteria should be fulfilled:
+To safely add a branch from node $A$ to node $B$ in a \ac{DSPG} without breaking the \ac{DSPG} property of the graph, the following criteria should be fulfilled:
 \begin{itemize}
     \item \textbf{Criterion 1}: The target node $B$ must be reachable from the source node $A$ in the current graph.
     \item \textbf{Criterion 2}: 
@@ -936,12 +918,12 @@ To safely add a branch from node $A$ to node $B$ in a \ac{DSPG} without breaking
     
 \end{definition}
 
-These conditions ensure that the addition of a branch does not introduce structural inconsistencies during the reduction process. However, they can be overly restrictive. In particular, requiring equality of nesting levels prevents the addition of edges from a \ac{PPS} source to one of its intermediate nodes, or from an intermediate node to its target, even in cases where such additions would not violate the \ac{DSPG} properties.
+These conditions ensure that the addition of a branch does not introduce structural inconsistencies during the reduction process. However, they can be overly restrictive. In particular, requiring equality of nesting levels prevents the addition of edges from a \ac{PPS} source to one of its intermediate nodes, or from an intermediate node to its target, even though such additions would not violate the \ac{DSPG} property.
 
 The \ac{NNL} is defined as follows.
-\begin{definition}[\aclu{NNL}]
+\begin{definition}[\acf{NNL}]
 \label{def:nnl}
-Let $v$ be a node in the graph. The nesting level of $v$, denoted by $\mathrm{NNL}(v)$, is defined as follows:
+Let $v$ be a node in the graph. The nesting level of $v$ in a DSPG $G$, denoted by $\mathrm{NNL}(v)$, is defined as follows:
 \[
 \mathrm{NNL}_G(v) = \left|
 \left\{
@@ -976,12 +958,11 @@ In particular, since the source and sink nodes of the entire graph are not inter
 \subsection{Neural Networks: Background and Notation}
 \label{sec:nn_background}
 
-Neural networks are a class of parametric models widely used for function approximation in \ac{ML}. They are composed of multiple layers of interconnected computational units, or neurons, which apply affine transformations followed by nonlinear activation functions. Through layered composition, neural networks can represent complex, high-dimensional mappings and have achieved state-of-the-art performance in a wide range of tasks, including image recognition, natural language processing, and decision-making in dynamical systems~\cite{Goodfellow-et-al-2016}.
+\acfp{NN} are a class of parametric models widely used for function approximation in \ac{ML}. They are composed of multiple layers of interconnected computational units (neurons) which apply affine transformations followed by nonlinear activation functions. Through layered composition, \acp{NN} can represent complex, high-dimensional mappings and have achieved state-of-the-art performance in a wide range of tasks, including image recognition, natural language processing, and decision-making in dynamical systems~\cite{Goodfellow-et-al-2016}.
 
-\paragraph{Network Architecture}
-In this work, we consider a feedforward neural network parameterized by
+In this work, we consider a \ac{SNN} parameterized by
 \[
-\Theta = (\mathbf{W}, \mathbf{b}, f(\cdot)),
+(\Theta , \mathbf{b}, f(\cdot)),
 \]
 where:
 \begin{itemize}
@@ -991,8 +972,8 @@ where:
 \end{itemize}
 Here, $n_l$ denotes the number of neurons in layer $l$, and the network is assumed to consist of $L$ layers.
 
-\paragraph{Feedforward Computation}
-Given an input vector $\mathbf{x} \in \mathbb{R}^{n_0}$, the network computes an output $\mathbf{y}' \in \mathbb{R}^{n_L}$ through a sequence of feedforward transformations:
+\marginpar{Feedforward Computation}
+Given an input vector $\mathbf{x} \in \mathbb{R}^{n_0}$ and a sequential \ac{NN}, the network computes an output $\mathbf{y}' \in \mathbb{R}^{n_L}$ through a sequence of feedforward transformations:
 \begin{align}
 \label{eq:nnfeed}
 \mathbf{y}' &= f_\Theta(\mathbf{x}) \\
@@ -1009,13 +990,13 @@ f^{(1)}\!\left(
 \right). \nonumber
 \end{align}
 
-This computation can be interpreted as the evaluation of a deterministic computational graph, where each neuron performs a fixed mathematical operation given its inputs and parameters.
+This \acp{NN} computation can be naturally interpreted as the evaluation of a deterministic computational graph. In this view, neurons correspond to nodes that perform local computations, while weighted connections correspond to edges that transmit intermediate activations between nodes. The classical sequential architecture described above forms a layered \aclu{DAG}, where information flows sequentially from the input layer to the output layer. However, modern architectures often relax this strictly sequential structure by introducing additional connections between non-adjacent layers. These so-called \emph{skip connections} allow information to bypass intermediate transformations and be propagated directly to deeper layers. Such connections have been shown to improve gradient propagation, alleviate the vanishing-gradient problem, and facilitate the training of very deep networks. Prominent examples include \acp{ResNet}~\cite{he2015deepresiduallearningimage}, where identity mappings are added across layers, and \acp{DenseNet}~\cite{huang2018denselyconnectedconvolutionalnetworks}, where each layer receives the outputs of all preceding layers as inputs. This type of \ac{NN} results in a more complex computational graph.
 
-\paragraph{Training}
+\marginpar{\ac{NN} Training}
 Let $\mathcal{D} = \{(\mathbf{x}_i, \mathbf{y}_i)\}_{i=1}^{N}$ denote a training dataset of input–output pairs. From a learning perspective, the dataset can be viewed as a structured body of empirical knowledge about the underlying input--output relationship. Training therefore consists of incorporating this knowledge into the network parameters $\Theta$, so that the learned model can generalize beyond the observed samples and perform inference on previously unseen inputs.
-Formally, training a neural network consists in optimizing the parameters $\Theta$ to minimize a loss function $\mathcal{L}$ over the dataset:
+Formally, training a \ac{NN} consists in optimizing the parameters $(\mathbf{W}, \mathbf{b})$ to minimize a loss function $\mathcal{L}$ over the dataset:
 \[
-\Theta^* = \arg\min_{\Theta} \sum_{i=1}^{N} \mathcal{L}\big(f_\Theta(\mathbf{x}_i), \mathbf{y}_i\big).
+(\mathbf{W}, \mathbf{b})^* = \arg\min_{\mathbf{W}, \mathbf{b}} \sum_{i=1}^{N} \mathcal{L}\big(f_\Theta(\mathbf{x}_i), \mathbf{y}_i\big).
 \]
 This optimization is typically performed using variants of gradient descent and backpropagation~\cite{rumelhart1986learning}. In backpropagation, the gradient of the loss function with respect to the network parameters indicates how much each parameter contributes to the output error. 
 Thus, for a parameter $\theta$, the update is given by:
@@ -1032,9 +1013,9 @@ The gradients are obtained recursively through the chain rule:
 \end{equation}
 where $\theta^{(l)}_{i,j}$ denotes the weight connecting neuron $j$ in layer $(l-1)$ to neuron $i$ in layer $l$, $\delta^{(l)}_i$ is the error term of neuron $i$ in layer $l$, and $x^{(l-1)}_j$ is the activation of neuron $j$ in the previous layer.
 
-\paragraph{Confidence Estimation}
+\marginpar{Confidence Estimation}
 
-Once trained, a feedforward neural network implements a \emph{deterministic mapping} from inputs to outputs.
+Once trained, a \ac{NN} implements a \emph{deterministic mapping} from inputs to outputs.
 Given an input \( x \), the network produces an output vector
 \[
 \mathbf{o}(x) = f_\Theta(x),
@@ -1049,22 +1030,22 @@ and the predicted class is typically chosen as
 \[
 \hat{y}(x) = \arg\max_k o_k(x),
 \]
-with the corresponding maximum value interpreted as the model’s \emph{confidence} in its decision. However, these confidence values primarily reflect \emph{relative activation strengths} induced by the learned parameters. Feedforward neural networks lack an intrinsic mechanism to represent model ignorance or distributional shift. 
+with the corresponding maximum value interpreted as the model’s \emph{confidence} in its decision. However, these confidence values primarily reflect \emph{relative activation strengths} induced by the learned parameters. \acp{NN} lack an intrinsic mechanism to represent model ignorance or distributional shift. 
 As a result, they may produce overconfident predictions for ambiguous inputs, noisy samples, or data drawn from regions outside the training distribution~\cite{bishop2006pattern,ovadia2019trustmodelsuncertaintyevaluating}.
 
-This observation highlights a fundamental limitation of confidence estimates derived from standard neural network outputs and motivates the need for additional mechanisms to quantify uncertainty and assess reliability beyond raw model confidence, which is the focus of the following section.
+This observation highlights a fundamental limitation of confidence estimates derived from standard \ac{NN} outputs and motivates the need for additional mechanisms to quantify uncertainty and assess reliability beyond raw model confidence, which is the focus of the following section.
 
 \subsection{Uncertainty and Trust Quantification in Neural Networks}
 \label{sec:uq_nn}
 
-Quantifying uncertainty in \acp{NN} has become a central research topic, particularly in safety-critical domains such as healthcare, autonomous driving, finance, and industrial automation. In these settings, incorrect but confident predictions can lead to severe consequences. Under distributional shift, predictive confidence can remain high even when model accuracy deteriorates. 
+Quantifying uncertainty in \acp{NN} has become a central research topic, particularly in safety-critical domains. In these settings, incorrect but confident predictions can lead to severe consequences. Under distributional shift, predictive confidence can remain high even when model accuracy deteriorates. 
 Large-scale empirical evaluations demonstrate that both softmax confidence and many uncertainty estimates degrade substantially under common corruptions, adversarial perturbations, and out-of-distribution inputs~\cite{ovadia2019trustmodelsuncertaintyevaluating}. 
 In medical AI, miscalibrated confidence has been associated with harmful decision errors in automated systems~\cite{begoli2019need,wolf2025medvlms}. These findings underscore a structural concern: a model that is confidently wrong may pose greater risks than one that explicitly signals uncertainty.
 
 
 \ac{UQ} seeks to address this limitation by explicitly modeling uncertainty associated with \ac{NN} predictions. Rather than producing point estimates alone, \ac{UQ} methods aim to characterize the full predictive distribution, enabling models to express confidence, ambiguity, and ignorance. Recent surveys provide comprehensive overviews of \ac{UQ} techniques in deep learning and emphasize their importance for robust and trustworthy AI systems~\cite{Gawlikowski2023,ABDAR2021243}.
 
-In the literature, uncertainty in neural networks is commonly categorized into \emph{aleatoric} and \emph{epistemic} uncertainty~\cite{kendall2017uncertainties,Gawlikowski2023}.
+In the literature, uncertainty in \acp{NN} is commonly categorized into \emph{aleatoric} and \emph{epistemic} uncertainty~\cite{kendall2017uncertainties,Gawlikowski2023}.
 
 \subsubsection{Aleatoric and Epistemic Uncertainty}
 \begin{figure}
@@ -1078,7 +1059,7 @@ Aleatoric uncertainty captures irreducible uncertainty inherent in the data-gene
 Epistemic uncertainty, by contrast, arises from limited knowledge about the model parameters or structure. It reflects uncertainty due to insufficient, biased, or unrepresentative training data, as well as uncertainty induced by model misspecification~\cite{neal1996bayesian}. Unlike aleatoric uncertainty, epistemic uncertainty can, in principle, be reduced by acquiring additional data or improving model expressiveness. \cref{fig:aleatoric_epistemic} provides an illustrative distinction between the two: aleatoric uncertainty manifests as noise around the underlying function, while epistemic uncertainty appears in regions where data are sparse or absent.
 
 The distinction between aleatoric and epistemic uncertainty is not only conceptual but has practical implications for reliability assessment. High aleatoric uncertainty indicates that the data itself is noisy or inherently ambiguous, meaning the uncertainty arises from irreducible variability in the data-generating process. In contrast, high epistemic uncertainty indicates that the model lacks knowledge, often because it is extrapolating beyond its training data, so its predictions should be treated with caution. Beyond this dichotomy, recent work highlights the importance of \emph{distributional uncertainty}, which can be viewed as a manifestation of epistemic uncertainty arising under dataset shift. It arises when test samples differ significantly from the training distribution, as in \ac{OOD} or domain-shift scenarios~\cite{hendrycks2018baselinedetectingmisclassifiedoutofdistribution,ovadia2019trustmodelsuncertaintyevaluating,Gawlikowski2023}.
-\subsubsection{Bayesian, Ensemble, and Sampling-Based Approaches}
+\subsubsection{Bayesian, Ensemble, and Sampling-Based Approaches for \acs{UQ}}
 
 Foundational approaches to \ac{UQ} are grounded in Bayesian inference. \acp{BNN} place probability distributions over network parameters and perform posterior inference to approximate the distribution given observed data~\cite{neal1996bayesian,blundell2015weightuncertaintyneuralnetworks}:
 \[
@@ -1088,10 +1069,10 @@ where the marginal likelihood is given by
 \[
 p(\mathcal{D}) = \int p(\mathcal{D} \mid \Theta)\, p(\Theta)\, d\Theta.
 \]
-Predictive uncertainty is then obtained by marginalizing predictions over plausible parameter configurations. However, the marginal likelihood involves integrating over the entire parameter space. For modern deep neural networks with millions of parameters and highly nonlinear architectures, this high-dimensional integral admits no closed-form solution and is computationally intractable in practice. Consequently, exact posterior inference cannot be performed for realistic deep models\cite{blundell2015weightuncertaintyneuralnetworks,kingma2022autoencodingvariationalbayes}. To address this limitation, several approximate posterior inference techniques have been proposed. Bayes by Backprop~\cite{blundell2015weightuncertaintyneuralnetworks} employs variational inference to learn approximate posterior distributions over network weights. \ac{MC dropout} provides a different approximation strategy: dropout is retained at test time, and multiple stochastic forward passes are used to approximate the posterior predictive distribution~\cite{gal2016dropoutbayesianapproximationrepresenting}. This procedure yields predictive uncertainty estimates with relatively low computational overhead and has been widely adopted due to its simplicity.
+Predictive uncertainty is then obtained by marginalizing predictions over plausible parameter configurations. However, the marginal likelihood $p(\mathcal{D})$ involves integrating over the entire parameter space. For modern deep \acp{NN} with millions of parameters and highly nonlinear architectures, this high-dimensional integral admits no closed-form solution and is computationally intractable in practice. Consequently, exact posterior inference cannot be performed for realistic deep models\cite{blundell2015weightuncertaintyneuralnetworks,kingma2022autoencodingvariationalbayes}. To address this limitation, several approximate posterior inference techniques have been proposed. Bayes by Backprop~\cite{blundell2015weightuncertaintyneuralnetworks} employs variational inference to learn approximate posterior distributions over network weights. \ac{MC dropout} provides a different approximation strategy: dropout is retained at test time, and multiple stochastic forward passes are used to approximate the posterior predictive distribution~\cite{gal2016dropoutbayesianapproximationrepresenting}. This procedure yields predictive uncertainty estimates with relatively low computational overhead and has been widely adopted due to its simplicity.
 
 More structured approaches introduce hierarchical stochastic formulations that model multiple sources of randomness explicitly. 
-For example, \ac{BNN+LV} place a distribution over network weights \(W\) and introduce latent input variables \(z\) to capture unobserved stochastic factors affecting the output~\cite{pmlr-v80-depeweg18a}. 
+For example, \ac{BNN+LV} place a distribution over network weights \(W\) (including the Bias parameter) and introduce latent input variables \(z\) to capture unobserved stochastic factors affecting the output~\cite{pmlr-v80-depeweg18a}. 
 The predictive distribution takes the form
 \[
 p(y^* \mid x^*) = \int p(y^* \mid W, x^*, z^*)\, p(z^*)\, q(W)\, dz^*\, dW,
@@ -1114,7 +1095,7 @@ In addition to \ac{BNN} and Deep ensemble, advanced deterministic methods explic
 
 \subsubsection{Calibration Error}
 
-Despite substantial progress in uncertainty quantification, accurately estimating and calibrating predictive confidence in \ac{NN} remains a persistent challenge. Even models equipped with Bayesian approximations or ensembles frequently exhibit systematic miscalibration, particularly under dataset shift, adversarial perturbations, or real-world deployment conditions~\cite{ovadia2019trustmodelsuncertaintyevaluating,begoli2019need,guo2017calibrationmodernneuralnetworks}. Calibration refers to the statistical agreement between predicted confidence scores and empirical outcome frequencies. A classifier is said to be perfectly calibrated if, among all predictions made with confidence $p$, the true label is correct approximately $p$ proportion of the time. For example, among all predictions assigned a confidence of $0.8$, roughly $80\%$ should be correct. Formally, let $\hat{p}(x)$ denote the predicted confidence for input $x$, and let $\mathbb{1}\{\hat{y}(x)=y\}$ denote the correctness indicator. Calibration requires that
+Despite substantial progress in \aclu{UQ}, accurately estimating and calibrating predictive confidence in \ac{NN} remains a persistent challenge. Even models equipped with Bayesian approximations or ensembles frequently exhibit systematic miscalibration, particularly under dataset shift, adversarial perturbations, or real-world deployment conditions~\cite{ovadia2019trustmodelsuncertaintyevaluating,begoli2019need,guo2017calibrationmodernneuralnetworks}. Calibration refers to the statistical agreement between predicted confidence scores and empirical outcome frequencies. A classifier is said to be perfectly calibrated if, among all predictions made with confidence $p$, the predicted label is correct approximately $p$ proportion of the time. For example, among all predictions assigned a confidence of $0.8$, roughly $80\%$ should be correct. Formally, let $\hat{p}(x)$ denote the predicted confidence for input $x$, and let $\mathbb{1}\{\hat{y}(x)=y\}$ denote the correctness indicator. Calibration requires that
 
 \[
 \mathbb{P}(\hat{y}(x)=y \mid \hat{p}(x)=p) = p.
@@ -1142,7 +1123,7 @@ In practice, calibration is evaluated using reliability diagrams and scalar metr
 
 \subsubsection{Uncertainty and Trust Propagation}
 
-Beyond estimating uncertainty at the output level, a growing body of work investigates how uncertainty propagates through neural network architectures and related computational graphs. A key motivation for uncertainty propagation arises from heteroscedastic uncertainty. As seen before, when uncertainty varies accross the input, it must be tracked throughout the computational graph rather than treated as a global scalar. The goal of these approaches is to account for the cumulative effect of input uncertainty, parameter uncertainty, and model structure on predictive reliability.
+Beyond estimating uncertainty at the output level, a growing body of work investigates how uncertainty propagates through \ac{NN} architectures and related computational graphs. A key motivation for uncertainty propagation arises from heteroscedastic uncertainty. As seen before, when uncertainty varies accross the input, it must be tracked throughout the computational graph rather than treated as a global property of the \ac{NN}. The goal of these approaches is to account for the cumulative effect of input uncertainty, parameter uncertainty, and model structure on predictive reliability.
 
 Several methods focus on propagating uncertainty through \acp{NN} using analytic approximations rather than Monte Carlo sampling. Instead of performing multiple stochastic forward passes to estimate predictive variability, these approaches represent intermediate activations as random variables with explicitly parameterized mean and covariance, and propagate these quantities deterministically through network layers. For example, let the input be modeled as a random vector
 \[
@@ -1159,63 +1140,57 @@ the output mean and covariance can be computed analytically as
 \]
 In this manner, uncertainty is propagated layer by layer through deterministic transformations of distribution parameters, avoiding repeated stochastic sampling.
 
-Monchot et~al.~\cite{pmlr-v202-monchot23a} extended uncertainty propagation to non-Gaussian input distributions using Gaussian Mixture Models and a split-and-merge strategy based on the Wasserstein distance, providing theoretical convergence guarantees at reduced computational cost. Earlier work by Astudillo and Net~\cite{astudillo2011propagation} demonstrated that propagating observation uncertainty through multi-layer perceptrons improves robustness in speech recognition systems, including hybrid MLP-HMM (Multilayer Perceptron - Hidden Markov Mode) architectures. While these approaches successfully propagate uncertainty through network layers, they primarily focus on statistical uncertainty and do not distinguish between uncertainty arising from data quality, evidence reliability, or trust in information sources.
+Monchot et~al.~\cite{pmlr-v202-monchot23a} extended uncertainty propagation to non-Gaussian input distributions using Gaussian Mixture Models and a split-and-merge strategy based on the Wasserstein distance, providing theoretical convergence guarantees at reduced computational cost. Earlier work by Astudillo and Net~\cite{astudillo2011propagation} demonstrated that propagating observation uncertainty through multi-layer perceptrons improves robustness in speech recognition systems, including hybrid MLP-HMM (Multilayer Perceptron - Hidden Markov Mode) architectures. 
 
 Outside \ac{NN} architectures, trust propagation has been extensively studied in networked systems. Ziegler and Lausen~\cite{ziegler2004spreading} proposed the Appleseed model for trust propagation in social networks based on spreading activation. Although not designed for \ac{NN} systems, this work highlights an important conceptual insight: trust is inherently relational, context-dependent, and shaped by network structure rather than being an intrinsic property of individual nodes.
 
-Taken together, existing uncertainty propagation approaches demonstrate the importance of modeling how uncertainty evolves through computational structures. However, they largely neglect the joint influence of input quality, training dataset reliability, and model parameters on prediction reliability. 
+Taken together, existing uncertainty propagation approaches demonstrate the importance of modeling how uncertainty evolves through computational structures. However, they largely neglect the joint influence of the reliability of the input, training dataset, and model parameters on the reliability of the prediction. 
 
 \subsubsection{Limitations of \ac{UQ} Methods with Respect to Trust}
 
-Despite substantial advances in \ac{UQ}, these approaches do not fully address the broader notion of trust in \acp{NN}. \ac{UQ} primarily captures how unsure a model is about its predictions, but it does not encode whether the evidence used for the quantification is reliable or consistent. In most frameworks, uncertainty is represented as a scalar or distributional attribute associated with parameters or outputs, without explicitly modeling the quality, provenance, or credibility of the information that gave rise to those predictions. As a consequence, a model may exhibit calibrated predictive uncertainty while being trained and evaluated on biased, corrupted, or adversarial data. Uncertainty measures mostly quantify dispersion or variability, but they do not distinguish between uncertainty due to intrinsic noise, lack of knowledge, or unreliable information sources.
+Despite substantial advances in \ac{UQ}, these approaches do not fully address the broader notion of trust in \acp{NN}. \ac{UQ} primarily captures how unsure a model is about its predictions, but it does not encode whether the evidence used for the quantification is reliable or consistent. In most frameworks, uncertainty is represented as a scalar or distributional attribute associated with parameters or outputs, without explicitly modeling the quality, provenance, or credibility of the information that gave rise to those predictions. As a consequence, a model may exhibit calibrated predictive uncertainty while being trained and evaluated on biased, corrupted, or adversarial data. Moreover, existing uncertainty propagation techniques describe how statistical variability flows through network layers, but they do not model relationships between trust in inputs, trust in parameters, trust in intermediate representations, and trust in outputs. They lack mechanisms to represent evidence strength or to reason about how trust should attenuate or accumulate along computational paths. This distinction is fundamental. Uncertainty quantification answers the question of \emph{how unsure} a model is assuming its knowledge is correct, whereas trust assessment addresses \emph{whether the model should be relied upon}. Trust is relational, context-dependent, and evidence-centric. It requires explicit representation, as well as operators for combining and propagating these quantities through structured systems.
 
-Moreover, existing uncertainty propagation techniques describe how statistical variability flows through network layers, but they do not model relationships between trust in inputs, trust in parameters, and trust in intermediate representations. They lack mechanisms to represent evidence strength or to reason about how trust should attenuate or accumulate along computational paths. This distinction is fundamental. Uncertainty quantification answers the question of \emph{how unsure} a model is assuming its knowledge is correct, whereas trust assessment addresses \emph{whether the model should be relied upon}. Trust is relational, context-dependent, and evidence-centric. It requires explicit representation, as well as operators for combining and propagating these quantities through structured systems.
-
-These limitations motivate the adoption of formal trust reasoning frameworks, such as \aclu{SL}, for systematically assessing the reliability of neural networks and their predictions.
+These limitations motivate the adoption of formal trust reasoning frameworks, such as \aclu{SL}, for assessing the reliability of \acp{NN} and their predictions.
 
 \subsection{Subjective Logic Approaches}
 
-\aclu{SL} provides a probabilistic framework for explicitly modeling belief, disbelief, and epistemic uncertainty, offering a structured and interpretable approach to trust reasoning under incomplete and conflicting evidence. Its explicit separation between belief mass, disbelief mass and uncertainty makes \ac{SL} particularly attractive for trust-sensitive neural network applications, where confidence estimates alone are insufficient to characterize reliability. In recent years, \ac{SL} has increasingly been adopted to represent predictive uncertainty, aggregate trust from multiple sources, and support structured reasoning about trust across different components and stages of \ac{NN} systems lifecycle.
+\aclu{SL} provides a probabilistic framework for explicitly modeling belief, disbelief, and uncertainty, offering a structured and interpretable approach to trust reasoning under incomplete and conflicting evidence. Its explicit separation between belief mass, disbelief mass and uncertainty makes \ac{SL} particularly attractive for trust-sensitive \ac{NN} applications, where confidence estimates alone are insufficient to characterize reliability. In recent years, \ac{SL} has increasingly been adopted to represent predictive uncertainty, aggregate trust from multiple sources, and support structured reasoning about trust across different components and stages of \ac{NN} systems pipeline.
 
-This section reviews existing work that applies Subjective Logic to trust modeling in \ac{NN}. The literature can be broadly grouped into two complementary strands:
+This section reviews existing work that applies \ac{SL} to trust modeling in \ac{NN}. The literature can be broadly grouped into two complementary strands:
 
 \begin{enumerate}[(i)]
-    \item opinion-producing neural networks based on evidential learning,
-    \item SL-based trust quantification and propagation within \ac{NN} or multi-view architectures.
+    \item opinion-producing \acp{NN},
+    \item SL-based trust quantification in \ac{NN} systems.
 \end{enumerate}
-
 
 \subsubsection{Opinion-Producing Neural Networks and Evidential Learning}
 
-The most prominent connection between Subjective Logic and neural networks arises from \ac{EDL}, which leverages the established correspondence between subjective opinions and Dirichlet distributions. In this framework, \acp{NN} output non-negative evidence values that parameterize a Dirichlet distribution, which can be directly mapped to an \ac{SL} multinomial opinion consisting of belief masses and an explicit uncertainty term~\cite{sensoy2018evidentialdeeplearningquantify}. Thus, the model jointly predicts class probabilities and produces an explicit uncertainty term derived from learned evidence strength, distinguishing confident predictions supported by strong evidence from uncertain predictions associated with weak evidence.
+The most prominent connection between \ac{SL} and \acp{NN} arises from \ac{EDL}, which leverages the established correspondence between subjective opinions and Dirichlet distributions. In this framework, \acp{NN} output non-negative evidence values that parameterize a Dirichlet distribution, which can be directly mapped to an \ac{SL} multinomial opinion consisting of belief masses and an explicit uncertainty term~\cite{sensoy2018evidentialdeeplearningquantify}. Thus, the model jointly predicts class probabilities and produces an explicit uncertainty term derived from learned evidence strength, distinguishing confident predictions supported by strong evidence from uncertain predictions associated with weak evidence.
 
 \ac{EDL} has been widely adopted in multi-view and multimodal learning settings, where uncertainty-aware fusion is essential. Representative examples include trusted multi-view evidential fusion for commonsense reasoning~\cite{yang-2024-trusted}, trusted multi-view learning for long-tailed classification~\cite{tang2025trustedmultiviewlearninglongtailed}, trusted open-world multi-view classification with dynamic opinion aggregation~\cite{10.1145/3746027.3755015} and more~\cite{gao2024comprehensivesurveyevidentialdeep}. In these works, each view produces a subjective opinion, and \ac{SL} fusion operators are used to aggregate evidence while accounting for view-specific uncertainty. This enables robust decision-making under heterogeneous, noisy, or partially unreliable inputs and provides interpretable uncertainty estimates that guide fusion weights.
 
-However, recent theoretical analyses have raised fundamental concerns regarding the uncertainty semantics of \ac{EDL}. In particular, Shen et al.~\cite{10.5555/3737916.3741340} demonstrate that many \ac{EDL} formulations learn spurious epistemic and aleatoric uncertainty: epistemic uncertainty does not vanish with increasing data, and aleatoric uncertainty becomes dependent on model hyperparameters rather than reflecting irreducible data noise. Their analysis shows that common \ac{EDL} objectives implicitly enforce convergence to a fixed target Dirichlet distribution, causing learned uncertainty to behave more like an energy-based out-of-distribution detector than a faithful uncertainty quantifier. 
+However, recent theoretical analyses have raised fundamental concerns regarding the uncertainty semantics of \ac{EDL}. In particular, Shen et al.~\cite{10.5555/3737916.3741340} demonstrate that many \ac{EDL} formulations produce unreliable uncertainty estimates: epistemic uncertainty does not vanish with increasing data, and aleatoric uncertainty becomes sensitive to model hyperparameters rather than reflecting irreducible data noise. The underlying cause is that common \ac{EDL} objectives implicitly enforce convergence toward a fixed target Dirichlet distribution for in-distribution inputs. As a result, the learned uncertainty functions primarily as a measure of distributional distance, behaving more like an energy-based out-of-distribution detector than a faithful decomposition of epistemic and aleatoric uncertainty. 
 
 Another work further exposes structural limitations of evidential training objectives. Pandey and Yu~\cite{pandey2023learnaccumulateevidencetraining} demonstrate that standard evidential losses suffer from a zero-evidence region problem: when the \ac{NN} outputs vacuous opinions (i.e., zero evidence for all classes), the loss gradients vanish, preventing the model from learning from such samples. As a result, evidential models may fail to update their beliefs even when supervision is available, effectively ignoring informative samples that fall into the vacuous region. Their analysis reveals that this phenomenon is intrinsic to common evidential activations and loss formulations, and they propose corrective regularization to mitigate the issue. This finding highlights a deeper misalignment between evidential parameterizations and gradient-based optimization, reinforcing the need for trust-aware frameworks that structurally align uncertainty semantics with training dynamics.
 
-While \ac{EDL} is effective for confidence-aware prediction and \ac{OOD} detection, it does not provide a foundation for trust assessment in the presence of biased, corrupted, or strategically manipulated data. Evidential approaches implicitly assume that training data and evidence sources are reliable, and they lack mechanisms to represent uncertainty or trust about data quality, annotation reliability, or evidence provenance. Consequently, low predictive uncertainty does not necessarily imply high trust. A model may produce confident opinions that are internally coherent yet grounded in unreliable or systematically biased evidence. This limitation motivates the need for frameworks that explicitly incorporate the reliability of the data used for learning into the trust assessment process.
+While \ac{EDL} is effective for confidence-aware prediction and \ac{OOD} detection, it does not provide a foundation for trust assessment in the presence of biased, corrupted, or strategically manipulated data. Evidential approaches implicitly assume that training data and evidence sources are reliable, and they lack mechanisms to represent uncertainty or trust about data quality, annotation reliability, or evidence provenance. Consequently, low predictive uncertainty does not necessarily imply high trust. A model may produce confident opinions that are internally coherent but grounded in unreliable or systematically biased evidence. This limitation motivates the need for frameworks that explicitly incorporate the reliability of the data used for learning into the trust assessment process.
 
-A closely related work into that direction is \ac{SLE}~\cite{SLencodings} which explicitly addresses uncertainty originating from the annotation process itself. Rather than interpreting neural evidence as epistemic uncertainty over model parameters, SLE constructs target Dirichlet distributions by encoding annotator judgments as subjective opinions, incorporating inter-annotator disagreement, annotator confidence, and annotator reliability through \ac{SL} fusion and trust discounting operators. In this formulation, uncertainty is not inferred solely from model outputs but is structurally embedded in the supervision signal. This highlights a fundamental distinction: while \ac{EDL} models predictive uncertainty derived from learned evidence, \ac{SLE} embeds uncertainty directly into the supervision signal by modeling annotator disagreement and reliability. The two approaches therefore introduce uncertainty at different stages of the learning pipeline, and address complementary aspects of the overall trust problem.
+A closely related work into that direction is \ac{SLE}~\cite{SLencodings} which explicitly addresses uncertainty originating from the annotation process itself. Rather than interpreting neural evidence as a measure of predictive confidence derived from model outputs, \ac{SLE} constructs target Dirichlet distributions by encoding annotator judgments as subjective opinions, incorporating inter-annotator disagreement, annotator confidence, and annotator reliability through \ac{SL} fusion and trust discounting operators. In this formulation, uncertainty is not inferred solely from model outputs but is structurally embedded in the training targets. This highlights a fundamental distinction: while \ac{EDL} models predictive uncertainty derived from learned evidence, \ac{SLE} embeds uncertainty directly into the training targets by modeling annotator disagreement and reliability. The two approaches therefore introduce uncertainty at different stages of the learning pipeline, and address complementary aspects of the overall trust problem.
 
-While \ac{SLE} provides a mechanism for modeling annotation-level uncertainty and reliability, its scope remains limited to the labels. Moreover, although \ac{SLE} encodes annotator disagreement and reliability into target Dirichlet distributions, it does not propagate trust representations through the internal computational structure of the \ac{NN}. Trust remains confined to the label space and is not explicitly coupled with parameter updates, intermediate activations, or inference-time trust assessment. Consequently, dataset-level trust and model-level reasoning remain only weakely connected.
+\ac{SLE} provides a mechanism for modeling annotation-level uncertainty and reliability, however, its scope remains limited to the labels. Moreover, although \ac{SLE} encodes annotator disagreement and reliability into target Dirichlet distributions, it does not propagate trust representations through the internal computational structure of the \ac{NN}. Trust remains confined to the label space and is not explicitly coupled with parameter updates, intermediate activations, or inference-time trust assessment. Consequently, dataset-level trust and model-level reasoning remain only weakly connected.
 
-\subsubsection{Quantification of Trust in \ac{NN}}
+\subsubsection{Quantification of Trust in \ac{NN} systems}
 
-Beyond opinion-producing outputs, several approaches employ \ac{SL} as an internal reasoning mechanism to quantify and propagate trust through neural or multi-component systems. In this line of work, trust is treated as a first-class quantity associated with inputs, datasets, or system components, rather than being inferred solely from final predictions.
+Beyond opinion-producing outputs, several approaches employ \ac{SL} as an internal reasoning mechanism to quantify and propagate trust through \ac{NN} or multi-component systems. These approaches treat trust as a first-class quantity rather than something inferred solely from final predictions, and can be organized into two levels: (i) data-level trust, concerned with the reliability and provenance of training data, and (ii) model-level trust, concerned with the trustworthiness of model components, performance metrics, and architectural decisions.
 
+At the data level, \ac{SL} has been used to explicitly quantify the reliability and uncertainty of training data. Existing work can be grouped into two complementary directions: (i) \ac{SL}-based trust quantification of the data, and (ii) \ac{SL}-based trust assessment based on data provenance.
 
-At the data level, Subjective Logic has been used to explicitly quantify the reliability and uncertainty of training data. Existing work can be grouped into two complementary directions: (i) \ac{SL}-based trust quantification within \ac{NN} architectures, and (ii) \ac{SL}-based trust assessment based on data provenance.
-
-In the first direction, trust is treated as a property of the data itself rather than of the model architecture. For example, Cheng et al.~\cite{pmlr-v199-cheng22a} compute the trustworthiness of individual data samples by analyzing gradients and saliency maps and converting them into positive and negative evidence. In the work, trust values are assigned to clean, adversarial, \ac{OOD}, and mislabeled samples. Their experimental results show that clean data receives higher trust scores, while adversarial and contaminated data receive lower trust values. Similarly, \ac{SLE}\cite{SLencodings} integrates annotation uncertainty into training targets using \ac{SL} fusion and discounting operators 
-
-In the second direction, \ac{SL} has been applied to assess the trustworthiness of data artifacts based on their provenance. Ceolin et al. combine user reputation and provenance-based stereotypes to estimate the trust of crowdsourced artifacts using evidential reasoning. Earlier work by Ceolin et al. also computes trust for event descriptions by analyzing their provenance traces and integration processes. In these approaches, trust depends on how data was produced, by whom, and through which process.
+In the first direction, work by Cheng et al.~\cite{pmlr-v199-cheng22a} treats trust as a property of individual data samples, quantifying it by converting gradients and saliency maps into positive and negative evidence. In the work, trust values are assigned to clean, adversarial, \ac{OOD}, and mislabeled samples. Their experimental results show that clean data receives higher trust scores, while adversarial and contaminated data receive lower trust values. Similarly, \ac{SLE}\cite{SLencodings} integrates annotation uncertainty into training targets using \ac{SL} fusion and discounting operators. In the second direction, \ac{SL} has been applied to assess the trustworthiness of data artifacts based on their provenance. Ceolin et al.~\cite{10.1145/2818382} combine user reputation and provenance-based stereotypes to estimate the trust of crowdsourced artifacts using evidential reasoning. Earlier work\cite{ceolin2010calculating} also computes trust for event descriptions by analyzing their provenance traces and integration processes. In these approaches, trust depends on how data was produced, by whom, and through which process.
 
 
-At the model level, Herd and Burton~\cite{10.1145/3605098.3635966} demonstrate that standard ML performance metrics systematically overestimate safety-relevant performance when treated as point estimates. They propose modeling metrics such as accuracy or recall as subjective opinions derived from binomial evidence, enabling uncertainty-aware safety arguments and trust propagation across assurance layers. This work highlights that trust must be reasoned about not only at prediction time, but also at evaluation and certification stages.
+At the model level, Herd and Burton~\cite{10.1145/3605098.3635966} demonstrate that standard \ac{ML} performance metrics systematically overestimate safety-relevant performance when treated as point estimates. They propose modeling metrics such as accuracy or recall as subjective opinions derived from binomial evidence, enabling uncertainty-aware safety arguments and trust propagation across assurance layers. This work highlights that trust must be reasoned about not only at prediction time, but also at evaluation and certification stages.
 
-In multi-view learning, \ac{SL} operators are frequently used to discount unreliable views and fuse consistent evidence. Dynamic opinion aggregation strategies adjust fusion weights based on uncertainty or conflict, enabling robust reasoning in open-world and long-tailed scenarios~\cite{ZUO2026129453,10.1145/3746027.3755015}. These approaches demonstrate the practical utility of \ac{SL} fusion semantics, particularly in environments where views differ in reliability or may contradict one another.
+In multi-view learning, \ac{SL} operators are frequently used to discount unreliable views and fuse consistent evidence. Dynamic opinion aggregation through belief-weighted fusion adjusts fusion weights based on uncertainty or conflict, enabling robust reasoning in open-world and long-tailed scenarios~\cite{ZUO2026129453,10.1145/3746027.3755015}. These approaches demonstrate the practical utility of \ac{SL} fusion semantics, particularly in environments where views differ in reliability or may contradict one another.
 
 
 
@@ -1263,6 +1238,7 @@ and the backward marginal opinion is defined as
     = T_{y' \parallel y} 
     = T_y \circledcirc T_{y'|y}.
 \end{equation}
+where $\circledcirc$ denotes the \ac{SL} deduction operator. 
 
 For a multi-layer \ac{NN}, the final opinion of the model is obtained 
 by averaging the opinions of all neurons in the output layer:
@@ -1282,7 +1258,7 @@ First, DeepTrust implicitly maps arithmetic operations in \acp{NN}
 to \ac{SL} fusion and multiplication operators (\cref{def:binomial_multiplication}). 
 Fusion combines independent opinions about the same proposition, whereas binomial multiplication represents logical conjunction between independent propositions. The semantic correspondence between real-valued addition/multiplication and belief-combination operators is not formally established. Moreover, both \ac{SL} operators belong to different algebraic domains. Consequently, the interpretation of trust propagation across layers remains unclear.
 
-Second, the backward propagation mechanism is defined locally at the neuron level through error counting and \ac{SL} deduction (\cref{def:inferential_ops}) with label opinions. However, in deep architectures, it is not specified how this formulation extends to hidden layers. The expression in \cref{eq:deeptrust_back} is specific to the output layer, as it relies explicitly on the availability of ground-truth labels. No corresponding conditional trust relationships are defined between intermediate layers, which are normally required for multi-layer inferential propagation.
+Second, the backward propagation mechanism is defined locally at the output neuron level through error counting and \ac{SL} deduction (\cref{def:inferential_ops}) with label opinions. However, in deep architectures, it is not specified how this formulation extends to hidden layers, which is a critical gap since the same mechanism is required to compute $T_w$ and $T_b$ at intermediate layers. Indeed, the expression in \cref{eq:deeptrust_back} is specific to the output layer, as it relies explicitly on the availability of ground-truth labels. No corresponding conditional trust relationships are defined between intermediate layers.
 
 Finally, the use of deduction is not fully consistent with the 
 requirements of subjective conditional reasoning. 
@@ -1295,29 +1271,33 @@ opinion $T_{y' \mid y}$ is used.
 The absence of the complementary conditional structure 
 $T_{y' \mid y=0}$ leaves the inferential semantics incomplete.
 
-\paragraph{Limitations and Lifecycle Gap.}
 
-The preceding discussion illustrates an important structural limitation in current trust-aware approaches for \acp{NN}. Existing methods typically focus on isolated stages of the AI pipeline. Some quantify uncertainty at prediction time, others assess dataset quality, provenance, or annotation reliability, and some attempt internal trust propagation within model architectures. However, these approaches remain largely stage-specific.
 
-In particular, no existing framework provides a unified and formally grounded mechanism to assess and propagate trust consistently across the entire AI lifecycle, from data collection and annotation, through preprocessing and model training, to evaluation, deployment, and inference-time operation. Trust is often treated either as a property of predictions, as a property of datasets, or as an internal model quantity,
+While conceptually grounded, this construction raises several points that merit further clarification. First, DeepTrust implicitly maps arithmetic operations in \acp{NN} to \ac{SL} fusion and multiplication operators (\cref{def:binomial_multiplication}). Fusion combines independent opinions about the same proposition, whereas binomial multiplication represents logical conjunction between independent propositions. However, the semantic correspondence between real-valued addition/multiplication and belief-combination operators is not explicitly formalized. Moreover, these operators belong to different algebraic domains. As a result, the precise semantics of trust propagation across layers remain difficult to interpret.
+
+Second, the backward propagation mechanism is defined locally at the output neuron level through error counting and \ac{SL} deduction (\cref{def:inferential_ops}) with labels opinions. While this formulation is well-defined for the output layer, its extension to hidden layers is not explicitly specified. In particular, the computation of $T_w$ and $T_b$ at intermediate layers would require analogous conditional relationships, which are not detailed in the framework. This suggests that additional assumptions or mechanisms may be needed to ensure consistent propagation across deep architectures.
+
+Finally, the use of deduction may not fully align with the standard requirements of subjective conditional reasoning. In general, deduction involves: (i) an opinion $T_y$ on the antecedent, (ii) a conditional opinion $T_{y' \mid y=1}$ (conditional opinion given $y$ is accurate), and (iii) a conditional opinion $T_{y' \mid y=0}$ (conditional opinion given $y$ is not accurate). However, in \cref{eq:deeptrust_back}, the formulation relies on a single conditional opinion $T_{y' \mid y}$. The absence of $T_{y' \mid y=0}$ may limit the completeness of the inferential interpretation.
+
+\paragraph{Limitations and Gap.}
+The preceding discussion illustrates an important structural limitation in current trust-aware approaches for \acp{NN}. Existing methods typically focus on isolated stages of the \ac{ML} pipeline. Some quantify uncertainty at prediction time, others assess dataset quality, provenance, or annotation reliability, and some attempt internal trust propagation within model architectures during training. However, these approaches remain largely stage-specific. In particular, no existing framework provides a unified and formally grounded mechanism to assess and propagate trust consistently across the entire \ac{ML} pipeline, from data collection and annotation, through preprocessing and model training, to evaluation, deployment, and inference-time operation. Trust is often treated either as a property of predictions, as a property of datasets, or as an internal model quantity,
 but rarely as a lifecycle-wide construct.
 
-This fragmentation creates a fundamental gap. Corruption or manipulation introduced at one stage, for example during data acquisition, labeling, or training, may propagate silently to downstream stages without being captured by localized trust or uncertainty measures. Standard performance metrics or model-internal trust estimates cannot guarantee robustness when earlier lifecycle stages are compromised.
+This fragmentation creates a fundamental gap. Corruption or manipulation introduced at one stage, for example during data acquisition, labeling, or training, may propagate silently to downstream stages without being captured by localized trust or uncertainty measures. Standard performance metrics or model-internal trust estimates cannot guarantee robustness when earlier pipeline stages are compromised.
 
-Consequently, trust in AI systems must be understood as a dynamic, multi-stage property that depends on the provenance, integrity, and interaction of data, model parameters, and operational context. This broader perspective naturally connects trust assessment with adversarial manipulation and deception across the AI lifecycle,
-which we examine next.
-
+Consequently, trust in \ac{ML} systems must be understood as a dynamic, multi-stage property that depends on the provenance, integrity, and interaction of data, model parameters, and operational context. This broader perspective naturally connects trust assessment with adversarial manipulation and deception across the \ac{ML} pipeline, which we examine next.
 
 
-\subsection{AI Attacks and Deception in the AI Lifecycle}
+
+\subsection{AI Attacks and Deception in the AI}
 \label{subsec:ai_attacks}
 
-Modern AI systems are exposed to a wide range of adversarial threats that target different stages of the AI lifecycle, from data acquisition to deployment and operation. Unlike traditional software, machine-learning systems derive their behavior from data, making them particularly vulnerable to attacks that exploit data quality, training dynamics, or model behavior rather than code-level vulnerabilities. Figure~\ref{fig:attacks} illustrates a representative AI development pipeline and highlights the broad attack surface spanning data collection, dataset preparation, model training, and inference-time operation.
+Modern \ac{AI} systems are exposed to a wide range of adversarial threats that target different stages of the \ac{ML} pipeline, from data acquisition to deployment and operation. Unlike traditional software, \ac{ML} systems derive their behavior from data, making them particularly vulnerable to attacks that exploit data quality, training dynamics, or model behavior rather than code-level vulnerabilities. Figure~\ref{fig:attacks} illustrates a representative \ac{AI} development pipeline and highlights the broad attack surface spanning data collection, dataset preparation, model training, and inference-time operation.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{img/patas/attacks.png}
-    \caption{Attack surface in the AI lifecycle pipeline, from data collection to model deployment.}
+    \caption{Attack surface in the \ac{AI} lifecycle pipeline, from data collection to model deployment.}
     \label{fig:attacks}
 \end{figure}
 
@@ -1328,55 +1308,43 @@ One of the most extensively studied threats is data poisoning~\cite{chen2017targ
 Beyond training-time manipulation, deployed models are vulnerable to inference-time attacks. Model stealing or extraction attacks~\cite{tramer2016stealingmachinelearningmodels,orekondy2018knockoffnetsstealingfunctionality} exploit repeated queries to reconstruct an approximation of the target model, threatening intellectual property and enabling subsequent adversarial attacks. Membership inference attacks\cite{shokri2017membershipinferenceattacksmachine,salem2018mlleaksmodeldataindependent} aim to determine whether specific data points were part of the training dataset, raising serious privacy concerns. These attacks exploit overly confident predictions or memorization effects and demonstrate that model outputs can leak sensitive information even in the absence of explicit access to training data.
 
 % \paragraph{AI Deception and Strategic Manipulation}
-More recently, beyond classical training- and inference-time attacks, attention has shifted toward a broader class of strategic threats often described as AI deception~\cite{hubinger2021riskslearnedoptimizationadvanced}. In this setting, adversarial agents deliberately manipulate inputs, interactions, or contextual information to induce misleading but plausible model outputs. Unlike classical adversarial examples, deceptive behaviors do not necessarily rely on imperceptible perturbations or gradient-based exploitation~\cite{goodfellow2015explainingharnessingadversarialexamples,szegedy2014intriguingpropertiesneuralnetworks}. Instead, they operate at the semantic and contextual level, leveraging ambiguity, biased information sources, or coordinated agents to influence decisions while preserving apparent predictive performance. AI deception exposes a structural limitation of confidence-based reliability measures: a system may remain accurate and well-calibrated while being systematically influenced by untrustworthy  or strategically manipulated information sources. Detecting such behaviors therefore requires explicit reasoning not only about predictive uncertainty, but also about the credibility of evidence sources and the propagation of trust throughout the system.
+More recently, beyond classical training- and inference-time attacks, attention has shifted toward a broader class of strategic threats often described as \ac{AI} deception~\cite{hubinger2021riskslearnedoptimizationadvanced}. In this setting, adversarial agents deliberately manipulate inputs, interactions, or contextual information to induce misleading but plausible model outputs. Unlike classical adversarial examples, deceptive behaviors do not necessarily rely on imperceptible perturbations or gradient-based exploitation~\cite{goodfellow2015explainingharnessingadversarialexamples,szegedy2014intriguingpropertiesneuralnetworks}. Instead, they operate at the semantic and contextual level, leveraging ambiguity, biased information sources, or coordinated agents to influence decisions while preserving apparent predictive performance. \ac{AI} deception exposes a structural limitation of confidence-based reliability measures: a system may remain accurate and well-calibrated while being systematically influenced by untrustworthy  or strategically manipulated information sources. Detecting such behaviors therefore requires explicit reasoning not only about predictive uncertainty, but also about the credibility of evidence sources and the propagation of trust throughout the system.
 
 % \paragraph{Trust as a Lifecycle-Wide Concern}
-Taken together, these attack classes illustrate that vulnerabilities in AI systems are not limited to a single stage of development. Trust can be compromised during data collection, labeling, training, evaluation, or deployment, and adversarial behavior may manifest long after a model has been trained. Consequently, the trustworthiness of a prediction cannot be viewed as a static property of a model alone, but must be understood as a dynamic property that depends on the provenance, quality, and interaction of data, model parameters, and operational context.
+Taken together, these attack classes illustrate that vulnerabilities in \ac{AI} systems are not limited to a single stage of development. Trust can be compromised during data collection, labeling, training, evaluation, or deployment, and adversarial behavior may manifest long after a model has been trained. Consequently, the trustworthiness of a prediction cannot be viewed as a static property of a model alone, but must be understood as a dynamic property that depends on the provenance, quality, and interaction of data, model parameters, and operational context.
 
-These observations show the need for trust-aware frameworks that assess and propagate trust across the AI lifecycle, rather than relying solely on predictive accuracy or uncertainty estimates. An examination of related work on training dataset quality and trustworthiness is provided in the following section.
+These observations show the need for trust-aware frameworks that assess and propagate trust across the \ac{AI} pipeline, rather than relying solely on predictive accuracy or uncertainty estimates. An examination of related work on training dataset quality and trustworthiness is provided in the following section.
 
 \subsection{Training Dataset Quality and Trustworthiness}
 \label{subsec:dataset_quality}
 
-The quality and reliability of training datasets play a central role in determining the trustworthiness of \ac{NN} models. Since modern learning systems derive their behavior primarily from data rather than explicit rules, deficiencies in dataset construction can directly translate into systematic model failures. In safety-critical and high-assurance settings, dataset quality must therefore be treated as a first-class concern rather than an implicit assumption.
-
-As we have seen previously, one of the most direct threats to model trustworthiness is data poisoning, in which adversaries inject malicious, mislabeled, or carefully crafted samples into the training data. Assessing dataset reliability therefore crucial and requires reasoning under uncertainty, especially when dataset construction processes are opaque, distributed, or partially adversarial. 
+The quality and reliability of training datasets play a central role in determining the trustworthiness of \ac{NN} models. Since modern learning systems derive their behavior primarily from data rather than explicit rules, deficiencies in dataset construction can directly translate into systematic model failures. In safety-critical and high-assurance settings, dataset quality must therefore be treated as a first-class concern rather than an implicit assumption. As we have seen previously, one of the most direct threats to model trustworthiness is data poisoning, in which adversaries inject malicious, mislabeled, or carefully crafted samples into the training data. Assessing dataset reliability is therefore crucial and requires reasoning under uncertainty, especially when dataset construction processes are opaque and distributed. 
 
 \paragraph{Ambiguity, Bias, and Epistemic Uncertainty in Datasets}
-Beyond explicit attacks, even well-intentioned datasets may suffer from structural ambiguity, statistical bias, and incomplete documentation. These issues introduce epistemic uncertainty that is rarely quantified 
-in dataset evaluation.
+Beyond explicit attacks, even well-intentioned datasets may suffer from structural ambiguity, statistical bias, and incomplete documentation. These issues introduce epistemic uncertainty that is rarely quantified in dataset evaluation.
 
-Meyer et al.~\cite{meyer2023multiplicity} formalize this phenomenon through the notion of \emph{dataset multiplicity}. Their key insight is that a single collected dataset does not uniquely represent an objective ground truth. Instead, multiple plausible alternative datasets could have been obtained under slightly different data collection, annotation, or debiasing decisions. For example, measurement inaccuracies, sampling bias, or socially embedded inequities may lead to multiple reasonable ''counterfactual'' versions of the same dataset. Different plausible datasets may induce different trained models and conflicting predictions for the same test instance. This reveals a deeper form of epistemic uncertainty: uncertainty not about model parameters, but about what the dataset itself truthfully represents.
+Meyer et al.~\cite{meyer2023multiplicity} formalize this through the notion of \emph{dataset multiplicity}, which captures the idea that a single collected dataset does not uniquely represent an objective ground truth. By modeling known or suspected inaccuracies, such as measurement errors, sampling bias, or socially embedded inequities, they construct the set of all plausible alternative datasets that could have resulted from slightly different collection decisions. They then assess the downstream consequence of this dataset-level uncertainty by testing whether model predictions remain stable across this set. A sample is \emph{$\varepsilon$-robust} if its prediction does not change beyond a tolerance $\varepsilon$; otherwise, the training data cannot be considered a trustworthy basis for that prediction. Their empirical results show that many real-world samples fail this criterion, with disparate effects across demographic groups.
 
-Traditional bias analysis methods, in contrast, typically assume that the dataset is fixed and factually correct. They focus on statistical imbalance or group-level disparities, such as demographic parity violations or unequal error rates. For example, dataset imbalance has been shown to affect performance disparities in face recognition systems~\cite{10.1145/3600211.3604691}. These approaches aim to rebalance data distributions or adjust learning objectives to mitigate observed disparities. However, they do not quantify uncertainty about whether the dataset accurately captures the population of interest in the first place.
+Traditional bias analysis methods, in contrast, typically assume that the dataset is fixed and factually correct. They focus on statistical imbalance or group-level disparities, such as demographic parity violations or unequal error rates. For example, dataset imbalance has been shown to affect performance disparities in face recognition systems~\cite{10.1145/3600211.3604691}. These approaches aim to rebalance data distributions or adjust learning objectives to mitigate observed disparities. However, they do not quantify the uncertainty about whether the global distribution has been adequately captured.
 
-The problem becomes even more pronounced in federated and decentralized learning environments. As discussed in recent surveys on fair federated learning~\cite{electronics13234664}, bias may arise from statistical heterogeneity across clients, uneven participation, or skewed local data distributions. In such settings, the global data distribution is only partially observable, and metadata may be incomplete or unavailable. Although mitigation strategies such as reweighting, fairness-aware aggregation, or regularization have been proposed, existing methods generally evaluate bias using point estimates of performance metrics. They rarely quantify confidence in the fairness assessment itself when evidence is fragmented, noisy, or partially hidden.
+In federated and decentralized learning environments, the inability to quantify representativeness becomes even more pronounced. Bias may arise from statistical heterogeneity across clients, uneven participation, or skewed local data distributions~\cite{electronics13234664}, and the global data distribution is only partially observable. Metadata may be incomplete or unavailable across clients, making it harder to even characterize the sources of distortion. As a result, confidence in the fairness assessment cannot be reliably established when evidence is fragmented, noisy, or partially hidden.
 
-These observations reveal a structural limitation in current bias mitigation frameworks. Most approaches measure disparities under the implicit assumption that the dataset is fixed and factually correct. They evaluate statistical imbalance or performance gaps but do not formally represent uncertainty about data provenance, annotation reliability, or population representativeness. As a result, a dataset may appear statistically balanced according to predefined fairness metrics while remaining unreliable. In particular, the absence of measured bias does not imply confidence in the dataset’s validity; it may instead reflect incomplete evidence or unobserved sources of distortion.
-
+Together, these cases reveal a structural limitation in current bias assessment frameworks. Existing approaches evaluate statistical imbalance or performance gaps but do not formally represent uncertainty about data provenance, annotation reliability, or population representativeness. As a result, a dataset may appear statistically balanced according to predefined fairness metrics while remaining unreliable. In particular, the absence of measured bias does not imply confidence in the dataset's validity; it may instead reflect incomplete evidence or unobserved sources of distortion.
 
 
 
 \paragraph{Dataset Evaluation Frameworks and Composite Trust Scores}
 
-To improve transparency and accountability in \ac{ML} pipelines, several structured dataset evaluation frameworks have been proposed. Datasheets for Datasets~\cite{gebru2018datasheets} advocate systematic documentation of dataset motivation, composition, collection procedures, intended use, and known limitations. The objective is to facilitate communication between dataset creators and dataset consumers, and to encourage reflection during dataset construction. As emphasized in the original proposal, the process is intentionally non-automated and designed to promote careful human judgment rather than numerical scoring.
+To improve transparency and accountability in \ac{ML} pipelines, several structured dataset evaluation frameworks have been proposed. Datasheets for Datasets~\cite{gebru2018datasheets} advocate systematic documentation of dataset motivation, composition, collection procedures, intended use, and known limitations. The objective is to facilitate communication between dataset creators and dataset consumers, and to encourage reflection during dataset construction. As emphasized in the original proposal, the process is intentionally non-automated and designed to promote careful human judgment rather than numerical scoring. More recent approaches attempt to operationalize trust through composite metrics. For example, METRIC~\cite{schwabe2024metric} and the FRIES Trust Score~\cite{10.1007/978-3-031-63787-2_15} aggregate multiple dimensions of trustworthiness, such as fairness, robustness, integrity, explainability, and safety, into a unified score. These approaches represent an important step toward formalizing trust as a measurable construct rather than a purely qualitative notion.
 
-More recent approaches attempt to operationalize trust through composite metrics. For example, METRIC and the FRIES Trust Score~\cite{10.1007/978-3-031-63787-2_15} aggregate multiple dimensions of trustworthiness, such as fairness, robustness, integrity, explainability, and safety, into a unified score. These approaches represent an important step toward formalizing trust as a measurable construct rather than a purely qualitative notion.
+Despite efforts, existing dataset evaluation frameworks share important limitations. First, documentation-based approaches such as Datasheets for Datasets primarily enhance transparency but do not provide a formal calculus for combining heterogeneous evidence or reasoning under incomplete information. They rely on narrative descriptions rather than structured trust representations. Second, composite trust scores typically aggregate deterministic expert ratings or point estimates of predefined criteria. While such scores summarize multiple dimensions into a single indicator, they do not explicitly represent uncertainty, disagreement among evaluators, or missing evidence.
 
-However, existing dataset evaluation frameworks share important limitations. First, documentation-based approaches such as Datasheets for Datasets primarily enhance transparency but do not provide a formal calculus for combining heterogeneous evidence or reasoning under incomplete information. They rely on narrative descriptions rather than structured trust representations.
-
-Second, composite trust scores typically aggregate deterministic expert ratings or point estimates of predefined criteria. While such scores summarize multiple dimensions into a single indicator, they do not explicitly represent uncertainty, disagreement among evaluators, or missing evidence.
-
-Crucially, these frameworks do not distinguish between two fundamentally different situations: (i) a dataset assessed as low quality with high confidence, and (ii) a dataset whose quality assessment is itself uncertain due to insufficient or conflicting evidence. 
-
-Consequently, although documentation standards and composite trust scores improve transparency and comparability, they do not provide a formal mechanism to represent confidence in the assessment itself, nor to propagate that confidence through subsequent stages of the AI lifecycle.
+Crucially, these frameworks do not distinguish between two fundamentally different situations: (i) a dataset assessed as low quality with high confidence, and (ii) a dataset whose quality assessment is itself uncertain due to insufficient or conflicting evidence. Consequently, although documentation standards and composite trust scores improve transparency and comparability, they do not provide a formal mechanism to represent confidence in the assessment itself.
 
 
 
 \paragraph{Annotation Noise and Trust in Labels}
-Annotation quality is a critical component of dataset trustworthiness, particularly in supervised learning. Inter-annotator agreement metrics such as Cohen’s Kappa are commonly used to summarize labeling consistency, but these metrics provide only coarse, global measures and obscure instance-level uncertainty.
-
-A substantial body of work on crowd annotation modeling addresses noisy labels by inferring latent ground truth. The seminal Dawid--Skene model~\cite{dawid1979maximum} estimates annotator-specific confusion matrices using expectation--maximization. Subsequent extensions such as GLAD~\cite{whitehill2009whose} incorporate annotator expertise and item difficulty, while MACE~\cite{hovy2013learning} focuses on identifying unreliable or adversarial annotators. Although effective for label denoising, these approaches ultimately collapse disagreement into point estimates of labels or annotator competence, discarding residual uncertainty.
+Annotation quality is a critical component of dataset trustworthiness, particularly in supervised learning. Inter-annotator agreement metrics such as Cohen’s Kappa are commonly used to summarize labeling consistency, but these metrics provide only coarse, global and obscure measures of confidence. A substantial body of work on crowd annotation modeling addresses noisy labels by inferring latent ground truth. The seminal Dawid--Skene model~\cite{dawid1979maximum} estimates annotator-specific confusion matrices using expectation--maximization. Subsequent extensions such as GLAD~\cite{whitehill2009whose} incorporate annotator expertise and item difficulty, while MACE~\cite{hovy2013learning} focuses on identifying unreliable or adversarial annotators. Although effective for label denoising, these approaches ultimately collapse disagreement into point estimates of labels or annotator competence, discarding residual uncertainty.
 
 \section{Synthesis and Gap Summary}
 \label{sec:gap_summary}
@@ -1403,24 +1371,24 @@ frameworks for representing uncertainty. The comparison is structured along four
 Probability Theory & \xmark & \xmark & \xmark & \xmark \\
 Bayesian Theory & \xmark & \xmark & \xmark & \xmark \\
 Second-Order Probability & \cmark & \xmark & \xmark & \xmark \\
-Dempster--Shafer Theory & \cmark & \cmark & \xmark & \xmark \\
-Subjective Logic & \cmark & \cmark & \cmark & \cmark \\
+\aclu{DST} & \cmark & \cmark & \xmark & \xmark \\
+\aclu{SL} & \cmark & \cmark & \cmark & \cmark \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Classical probability and Bayesian theory provide rigorous mathematical mechanisms for modeling uncertainty about events, but they do not explicitly distinguish between ignorance and variability. Second-order probability models attempt to address this limitation by representing uncertainty about probability estimates; however, they remain fundamentally centered on probability distributions. This reliance increases modeling and computational complexity and does not provide a natural mechanism for fusing heterogeneous sources of information, which is essential given the structural complexity of \ac{NN} and the diversity of information sources they integrate.
 
-\ac{DST} explicitly represents ignorance and conflict through belief masses assigned to sets of hypotheses. However, as discussed in \cref{sec:dst}, the original formulation does not natively model heterogeneous source credibility nor support formal trust transitivity across referral chains. \ac{SL} extends \ac{DST} by introducing subjective opinions and trust-discounting operators, thereby enabling explicit reasoning about source credibility and transitive trust. Nevertheless, existing applications of \ac{SL} remain largely confined to reputation systems or isolated uncertainty modeling scenarios and have not been fully integrated into neural network lifecycle modeling. Moreover, despite its expressive power, \ac{SL} exhibits structural and operational limitations. In particular, classical trust discounting operators are defined primarily for referral–functional trust configurations and cannot be directly applied when propagating trust across consecutive referral edges. Furthermore, existing \ac{DSPG} synthesis procedure relies on structural constraints that may be restrictive in practice. While these constraints preserve the consistency of the \ac{DSPG} analysis, they can lead to loss of information that might be relevant for the analysis. In addition, current \ac{DSPG} analysis algorithm requires recomputation of the \ac{NL} after each reduction step, introducing additional computational overhead and limiting scalability in large or dynamically evolving trust networks. 
+\ac{DST} explicitly represents ignorance and conflict through belief masses assigned to sets of hypotheses. However, as discussed in \cref{sec:dst}, the original formulation does not natively model heterogeneous source credibility nor support formal trust transitivity across referral chains. \ac{SL} extends \ac{DST} by introducing subjective opinions and trust-discounting operators, thereby enabling explicit reasoning about source credibility and transitive trust. Nevertheless, existing applications of \ac{SL} remain largely confined to reputation systems or isolated uncertainty modeling scenarios and have not been fully integrated into \ac{NN} lifecycle modeling. Moreover, despite its expressive power, \ac{SL} exhibits structural and operational limitations. In particular, classical trust discounting operators are defined primarily for referral–functional trust configurations and cannot be directly applied when propagating trust across consecutive referral edges. Furthermore, existing \ac{DSPG} synthesis procedure relies on structural constraints that may be restrictive in practice. While these constraints preserve the consistency of the \ac{DSPG} analysis, they can lead to loss of information that might be relevant for the analysis. In addition, current \ac{DSPG} analysis algorithm requires recomputation of the \acf{NL} after each reduction step, introducing additional computational overhead and limiting scalability in large trust networks. 
 % =========================================================
 \subsection*{Trust and Uncertainty Quantification in Neural Networks}
 
 We now examine approaches that quantify uncertainty or trust in \ac{NN} systems. Table~\ref{tab:nn_trust_methods} summarizes representative methods and their scope. The comparison categorizes existing approaches along five orthogonal dimensions:
 \begin{enumerate}
-    \item The column \emph{Uses SL} indicates whether the method explicitly relies on Subjective Logic as a formal calculus for representing beliefs and uncertainty.
+    \item The column \emph{Uses SL} indicates whether the method explicitly relies on \aclu{SL} as a formal calculus for representing beliefs and uncertainty.
     \item The \emph{Model-Level UQ/Trust} column captures methods that quantify uncertainty or trust arising from model parameters.
     \item The \emph{Input-Level UQ/Trust} column refers to approaches that propagate uncertainty or trust associated with inputs at inference time.
-    \item The \emph{Dataset-Level UQ/Trust} column denotes methods that explicitly consider the credibility, reliability, or trustworthiness of training data or heterogeneous data sources.
+    \item The \emph{Dataset-Level UQ/Trust} column denotes methods that explicitly consider the credibility, reliability, or trustworthiness of training data.
     \item Finally, the \emph{Trust Modeling} column indicates whether the method explicitly quantifies trust as a first-class construct, thereby enabling principled composition, discounting, and propagation across system components, or whether it only quantifies uncertainty or confidence without a formal trust representation.
 \end{enumerate}
    
@@ -1446,9 +1414,9 @@ Monchot et~al.~\cite{pmlr-v202-monchot23a} & \xmark & \xmark & \cmark & \xmark &
 Astudillo and Neto~\cite{astudillo2011propagation} 
 & \xmark & \xmark & \cmark & \xmark & \xmark \\
 
-Herd \& Burton~\cite{10.1145/3605098.3635966} & \cmark & \xmark & \xmark & \xmark & \cmark  \\
+Herd \& Burton~\cite{10.1145/3605098.3635966} & \cmark & \cmark & \xmark & \xmark & \cmark  \\
 
-SL Encodings~\cite{SLencodings} & \cmark & \xmark & \xmark & \cmark & \xmark \\% 
+\ac{SLE}~\cite{SLencodings} & \cmark & \xmark & \xmark & \cmark & \xmark \\% 
 \ac{EDL}~\cite{sensoy2018evidentialdeeplearningquantify} & \cmark & \cmark & \xmark & \xmark & \xmark  \\
 
 DeepTrust~\cite{10.3389/frai.2020.00054} & \cmark & \cmark & \xmark & \cmark & \cmark  \\
@@ -1458,38 +1426,31 @@ DeepTrust~\cite{10.3389/frai.2020.00054} & \cmark & \cmark & \xmark & \cmark & \
 \end{tabular}
 \end{table}
 
-Deep ensembles and \acp{BNN} provide mechanisms for modeling uncertainty at the \emph{model level}. Their uncertainty estimates reflect variability in parameters or predictions, but they do not explicitly represent trust as a first-class object that can be manipulated, combined, or propagated. In particular, these approaches do not address dataset credibility, source reliability, or structured trust relationships across the learning pipeline.
+Deep ensembles and \acfp{BNN} provide mechanisms for modeling uncertainty at the \emph{model level}. In BNNs, uncertainty is derived from posterior distributions over parameters, while in deep ensembles it reflects disagreement among independently trained models. In both cases, they do not explicitly represent trust as a first-class object that can be manipulated, combined, or propagated. In particular, these approaches do not address dataset credibility, source reliability, or structured trust relationships across the learning pipeline.
 
 Input-level uncertainty propagation methods, such as Monchot et al.~\cite{pmlr-v202-monchot23a} and Astudillo and Neto~\cite{astudillo2011propagation}, model the effect of noisy or uncertain observations at inference time. While these techniques quantify how input uncertainty affects predictive distributions, they remain confined to distributional propagation and do not incorporate a formal representation of trust, evidence, or source reliability.
 
-At the label level, works such as Subjective Logic Encodings (SLE)~\cite{SLencodings} introduce structured representations of annotation uncertainty. SLE embeds annotation uncertainty into supervision signals using structured subjective opinions. However, it remains limited to the label stage and does not model input-level trust or inference-time prediction trust.
+Regarding labeling, works such as \ac{SLE}~\cite{SLencodings} introduce structured representations of annotation uncertainty. \ac{SLE} embeds annotation uncertainty into training targets using structured subjective opinions. However, it remains limited to the labeling stage and does not model input-level trust or inference-time prediction trust.
 
-At the evaluation level, Herd and Burton~\cite{10.1145/3605098.3635966} model performance metrics such as accuracy and recall as subjective opinions derived from binomial evidence. Their framework supports uncertainty-aware safety arguments by representing confidence in evaluation metrics rather than treating them as deterministic point estimates. Nevertheless, this approach operates at the assessment stage and does not integrate dataset trustworthiness, model training dynamics, and inference-time prediction reliability into a unified propagation framework.
+Regarding model evaluation, Herd and Burton~\cite{10.1145/3605098.3635966} model performance metrics such as accuracy and recall as subjective opinions derived from binomial evidence. Their framework supports uncertainty-aware safety arguments by representing confidence in evaluation metrics rather than treating them as deterministic point estimates. Nevertheless, this approach operates at the assessment stage and does not integrate dataset trustworthiness, model training dynamics, and inference-time prediction reliability into a unified propagation framework.
 
-Recent works integrating \ac{SL} within neural architectures, including \ac{EDL}~\cite{sensoy2018evidentialdeeplearningquantify}, DeepTrust~\cite{10.3389/frai.2020.00054}, and related approaches, introduce richer uncertainty representations by mapping network outputs to Dirichlet or Beta distributions or by propagating opinions across layers. However, these models either remain confined to output-level predictive uncertainty or provide overall trust score for the \ac{NN}. They do not provide a lifecycle-consistent framework that jointly accounts for dataset trustworthiness, training dynamics, and inference-time trust propagation across abstraction levels.
+Recent works integrating \ac{SL} within \ac{NN}, including \ac{EDL}~\cite{sensoy2018evidentialdeeplearningquantify}, DeepTrust~\cite{10.3389/frai.2020.00054}, and related approaches, introduce richer uncertainty representations by mapping network outputs to Dirichlet or Beta distributions or by propagating opinions across layers. However, these models either remain confined to output-level predictive uncertainty or provide overall trust score for the \ac{NN}. They do not provide a lifecycle-consistent framework that jointly accounts for dataset trustworthiness, training dynamics, and inference-time trust propagation across abstraction levels.
 
-\subsection*{Identified Structural Gap}
-
+\subsection*{Identified Gap}
 The comparative analysis reveals a structural gap in the literature.
 Taken together, existing approaches fall into three broad categories:
-
 \begin{itemize}
-    \item Methods that provide mathematically rigorous uncertainty quantification (e.g., Bayesian or evidential models) but do not represent trust as an explicit, evidence-based construct nor model trust relationships between heterogeneous sources. Although Subjective Logic offers a principled calculus for trust reasoning, existing operator formulations exhibit structural limitations. In particular, classical trust discounting operators are primarily defined for referral–functional trust settings and cannot be directly applied to consecutive referral edges without semantic ambiguity. Moreover, existing DSPG synthesis and analysis procedures rely on structural constraints that may discard potentially informative relationships and require repeated recomputation steps, limiting scalability.; 
-
-    \item Methods that propagate input uncertainty through neural
-    networks, yet remain confined to distributional effects without
-    modeling source credibility, dataset trustworthiness, or lifecycle
-    trust dynamics;
-
-    \item Trust-scoring or system-level trust frameworks that compute aggregate indicators, but lack a principled calculus enabling formal trust representation, composition, discounting, and propagation within neural learning systems.
+    \item Methods~\cite{lakshminarayanan2017simplescalablepredictiveuncertainty,neal1996bayesian,sensoy2018evidentialdeeplearningquantify} that provide uncertainty quantification but do not represent trust as an explicit, evidence-based construct nor model trust relationships between heterogeneous sources; 
+    \item Methods~\cite{pmlr-v202-monchot23a,astudillo2011propagation} that propagate input uncertainty through \acp{NN}, but remain confined to distributional effects without modeling source credibility, dataset trustworthiness, or trust dynamics;
+    \item Trust-scoring frameworks~\cite{10.1145/3605098.3635966} that compute aggregate indicators as an evaluation after training, without propagating trust across the learning pipeline.
+    \item Methods~\cite{SLencodings,10.3389/frai.2020.00054} that incorporate data quality using \ac{SL} but remain confined to isolated stages, namely \ac{SLE} to annotation targets and DeepTrust to architecture-level trust propagation.
 \end{itemize}
 
 In particular, no unified framework for quantifying trust in \ac{NN} simultaneously provides:
-
 \begin{enumerate}
     \item Explicit representation of trust as structured beliefs with associated uncertainty;
     \item Quantification of dataset trustworthiness during training;
-    \item Consistent propagation of trust from dataset construction to training, from training to model-level reliability, and from model reliability to inference-time predictions conditioned on specific inputs.
+    \item Consistent propagation of trust from dataset construction to training, from training to model-level reliability, and from model reliability to inference-time predictions reliability, including input reliability at inference time.
 \end{enumerate}
 
 These considerations indicate that to be able to capture the dynamic and lifecycle-wide nature of trust in \ac{NN} systems, a comprehensive trust-aware framework requires (i) an explicit, evidence-based representation of trust that distinguishes belief, disbelief, and ignorance; (ii) a principled and semantically consistent trust calculus enabling composition, discounting, and transitive reasoning; and (iii) multi-level propagation mechanisms that ensure coherent trust propagation across dataset construction, model training, and inference-time decision-making.
