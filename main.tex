@@ -99,8 +99,8 @@ Neural Networks, Uncertainty Quantification, Trust Propagation, Trustworthy AI} 
 
 
 % \includeonly{Chapters/Introduction,ovvw}
-% \includeonly{Chapters/Introduction,Chapters/rw}
-\includeonly{Chapters/Introduction}
+% \includeonly{Chapters/Introduction,Chapters/rw,Chapters/publications}
+% \includeonly{Chapters/Introduction}
 
 \begin{document}
 \nocite{5gaa_trust4cav_2025,connect_d31_taf,10.1007/978-3-032-08887-1_4,10706345,ecmldatatrust,trust-aidatatrust,patas,11124121,fotos2025actions,snn}
@@ -180,26 +180,50 @@ Prof.\ Konrad Rieck
 %	DECLARATION PAGE
 %----------------------------------------------------------------------------------------
 
+% \begin{declaration}
+% \addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
+% \noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
+
+% \begin{itemize} 
+% \item This work was done wholly or mainly while in candidature for a research degree at this University.
+% \item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
+% \item Where I have consulted the published work of others, this is always clearly attributed.
+% \item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
+% \item I have acknowledged all main sources of help.
+% \item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
+% \end{itemize}
+ 
+% \noindent Signed:\\
+% \rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
+ 
+% \noindent Date:\\
+% \rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+% \end{declaration}
+
 \begin{declaration}
-\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
+\noindent I, \authorname, declare that this thesis titled:
 
-\begin{itemize} 
-\item This work was done wholly or mainly while in candidature for a research degree at this University.
-\item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
-\item Where I have consulted the published work of others, this is always clearly attributed.
-\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
-\item I have acknowledged all main sources of help.
-\item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
-\end{itemize}
- 
-\noindent Signed:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
- 
-\noindent Date:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+\begin{center}
+    {\bfseries \ttitle}
+\end{center}
+
+\noindent is the product of my own independent work and that I have used no sources 
+or materials other than those specified. The passages taken from other works, 
+either verbatim or paraphrased in the spirit of the original quote, are identified 
+in each individual case by indicating the source.
+
+\noindent I further declare that all my academic work was written in line with the principles 
+of proper academic research according to the official ``Satzung der Universität 
+Ulm zur Sicherung guter wissenschaftlicher Praxis'' (University Statute for the 
+Safeguarding of Proper Academic Practice).
+
+\vspace{3cm}
+
+Munich, \hfill \rule{5cm}{0.4pt}
+
+\hfill {\small \authorname, student number}
+
 \end{declaration}
-
 
 
 %	ACKNOWLEDGEMENTS
@@ -332,8 +356,10 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 % \include{ovvw}
 
 \include{Chapters/publications}
-% \addcontentsline{toc}{Publications}
+
+\addchaptertocentry{Bibliography}
 \printbibliography
+
 
 \appendix % Cue to tell LaTeX that the following "chapters" are Appendices
 
