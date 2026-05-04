@@ -1,7 +1,8 @@
 
 
-\chapter{General Trust Assessment Methodology  [31/03] }
+\chapter{General Trust Assessment Methodology }
 \label{chap:Trust_method}
+\todo[inline]{Make clear that aggregation is the generic word for fusion. in case we need to combine in a way that is not already represented by existing fusion operators}
 This chapter presents the General Trust Assessment Methodology, which serves as the conceptual foundation of this dissertation. The proposed methodology builds on prior work on trust evaluation in connected and autonomous systems, to which I have contributed through several initiatives. These include the evidence-based \ac{TAF} developed within the Horizon Europe CONNECT project~\cite{connect_d31_taf}, the 5GAA white paper on trust evaluation~\cite{5gaa_trust4cav_2025}, the trust assessment framework introduced at the International Conference on Information and Communications Security (ICICS)~\cite{fotos2025actions}, and subsequent work on trustworthy data assessment presented at the ECML Bias Workshop~\cite{ecmldatatrust}. In this chapter, these contributions are unified and generalized into a methodology for structuring trust assessment problems and deriving trust evaluations so that it can be instantiated across different \ac{ML} contexts.
 
 \section{Role of the General Trust Assessment Methodology}
@@ -23,8 +24,24 @@ Although these application domains differ in their technical implementations, th
 
 The methodology should therefore be understood as a generic trust reasoning engine. Subsequent chapters specialize this engine to particular trustworthiness properties and application domains, while preserving the same conceptual pipeline defined in this chapter.
 
+
+
+
+
 \section{Core Concepts and Notation}
 \label{sec:ch4_core_concepts}
+Before introducing the formal notation and assessment process, it is useful to clarify three foundational concepts that recur throughout this dissertation: \emph{evidence}, \emph{uncertainty}, and \emph{risk}. These terms are used with specific meanings within the trust assessment context and should not be conflated with their informal or domain-specific usages elsewhere in the literature.
+
+\paragraph{Evidence.}
+Evidence refers to any observable indicator that bears on whether a trust proposition is satisfied. Evidence is produced by trust sources (defined in the following section) and may take various forms, including binary outcomes (pass or fail), counts of successful and unsuccessful events, continuous measurements, or confidence scores. In this dissertation, evidence is mainly structured into two components: \emph{positive evidence} $r_x$, which supports the truth of the proposition, and \emph{negative evidence} $s_x$, which supports its negation. When evidence is not directly countable, for instance when it takes the form of a scalar measurement, an appropriate interpretation scheme must be devised to map raw observations into these structured components.
+
+\paragraph{Uncertainty.}
+Uncertainty, in the sense used throughout this dissertation, refers to \emph{evidential uncertainty}: the degree to which the available evidence is insufficient to determine whether a trust proposition holds. This corresponds to the $u$ component of the subjective binomial opinion in \ac{SL}, which is also referred to as the \emph{vacuity of evidence}. Evidential uncertainty usually decreases as evidence accumulates and can also be modulated by external factors. However, it can increase sometimes when the trustor sees the available evidence as conflicting. In all cases, uncertainty represents what the trustor \emph{does not yet know}, not what is inherently unknowable.
+
+\paragraph{Risk.}
+Risk, in the context of trust assessment, refers to the exposure of the trustor to an undesirable outcome resulting from relying on a trustee whose proposition may not hold. Risk is not directly represented as a separate quantity in the \ac{SL} formalism, but it is implicitly captured by a Trust Level: a high distrust component $d$ signals that available evidence actively contradicts the trust proposition, while a high uncertainty component $u$ signals that the evidence base is not enough to justify confidence. Both situations give rise to risk, even though the reasons differ. Distinguishing these two sources is one of the key advantages of the subjective opinion representation used in this dissertation, as it allows the trustor to reason about whether risk stems from known unreliability or from insufficient information.
+
+\paragraph{Terminology}
 The terminology follows the principles of the \ac{TAF}, which adopts \acf{SL} as the formal reasoning framework for representing and assessment trust. The notation introduced here is therefore consistent with \ac{SL} representations.
 
 % \subsection{Trustor, Trustee, and Trust Proposition}
@@ -51,13 +68,13 @@ Trust propositions may take different forms:
     of several simple propositions.
 \end{itemize}
 
-Composite trust propositions are typically expressed using logical operators such as conjunction, disjunction, and negation. For example, a composite proposition may take the form
+Composite trust propositions are typically expressed using logical operators such as conjunction, disjunction, and negation. For example, a composite trust proposition may take the form
 
 \[
 \mathcal{T} = \mathcal{T}_1 \wedge \mathcal{T}_2
 \]
 
-where each $T_i$ represents independent simple proposition.
+where each $T_i$ represents independent simple trust proposition.
 
 
 
@@ -78,6 +95,7 @@ evidence.
 In the methodology, trust assessment of \ac{ATO} relies on evidence collected from \emph{trust sources}.
 
 \begin{definition}[Trust Source]
+\label{def:trust_source}
 A trust source is any entity, mechanism, or process that provides evidence
 relevant to the evaluation of a trust proposition.
 \end{definition}
@@ -109,6 +127,8 @@ opinion:
 \]
 
 where $t$ denotes the trust mass (belief of the binomial opinion), $d$ denotes the distrust mass (disbelief of the binomial opinion), and $u$ represents uncertainty. This representation allows the trust assessment to capture not only whether the trustor should trust the proposition, but also the degree of confidence associated with that assessment.
+
+The distinction between \emph{trust} and \emph{trustworthiness} is worth clarifying at this point. Following the conceptual framework developed within the CONNECT project~\cite{connect_d21_taf}, trustworthiness is a property of the trustee: it describes the likelihood that the trustee will fulfill the trustor's expectations regarding a given property $P$ in a specific context. Trust, by contrast, is the attitude the trustor holds toward the trustee: when a trustor trusts an entity, it judges the likelihood of that entity meeting its expectations to be sufficiently high. Trust is therefore not a property but an assessment act, conditioned on available evidence. In this dissertation, the trust proposition $\mathcal{T}(E, P)$ concerns trustworthiness: it is a statement about a property of the trustee that the trustor seeks to evaluate. The \ac{ATL} $\omega = (t, d, u)$ represents trust: it is the subjective opinion formed by the trustor based on that evaluation. The methodology presented in this chapter is therefore a principled process for deriving trust as an evidence-based assessment of an underlying trustworthiness that may never be directly observable.
 
 For clarity, the main elements introduced in this section are summarized in \cref{tab:trust_notation}.
 
@@ -234,14 +254,14 @@ probabilistic transformation before being translated into evidence counts.
 
 
 \subsubsection{Trust Opinion Quantification Model}
-
+\label{sec:trust_quant_model}
 After evidence has been identified, structured and collected, the next step consists of quantifying the trust opinion associated with each trust source.
 
 In general, trust opinion quantification can be performed using different models, each reflecting specific assumptions about how uncertainty should be handled. In addition to the Baseline-Prior Quantification method motivated by \cref{eq:beta_mapping_forward}, we introduce two additional quantification models: Evidence-Weighted Quantification and Constant-Uncertainty Quantification.
 
 \begin{enumerate}
 
-    \item \textbf{Baseline-Prior Quantification.}  
+    \item \textbf{\ac{BPQ}.}  
     In this model, uncertainty decreases as the total number of positive and negative evidence increases.
     \begin{equation}
     \label{eq:baseline_quant}
@@ -252,7 +272,7 @@ In general, trust opinion quantification can be performed using different models
     \end{aligned}
     \end{equation}
     The default value for the non-informative prior weight \(W\) is 2. This model comes from the mapping between beta distribution and Binomial Opinion discussed in \cref{subsec:SL_opinions}.
-    \item \textbf{Evidence-Weighted Quantification.}  
+    \item \textbf{\ac{EWQ}.}  
     This method introduces a weight $w_x$ to account for uncertainty in addition to positive and negative evidence. It is particularly relevant when the evidence itself is associated with an uncertainty score. The belief, disbelief, and uncertainty are computed as:
 
     \begin{equation}
@@ -264,7 +284,7 @@ In general, trust opinion quantification can be performed using different models
     \end{aligned}
     \end{equation}
 
-    \item \textbf{Constant-Uncertainty Quantification.}  
+    \item \textbf{\ac{CUQ}.}  
     Unlike the previous models, this method maintains a fixed uncertainty level $U$, regardless of the number of evidence points. This is useful when uncertainty is determined by factors external to the number of positive and negative evidence.
 
     The belief and disbelief are scaled using a normalization factor $\gamma$:

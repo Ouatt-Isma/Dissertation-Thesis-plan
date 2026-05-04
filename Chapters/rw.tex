@@ -394,6 +394,8 @@ The operator $(\cdot)$ denotes binomial opinion multiplication.
 Fusion and trust discounting operators are introduced in the following subsections.
 
 \subsection{Belief Fusion Operators}
+\label{sec:fusion}
+\todo[inline]{Add operators characteristique and cite the paper about generalization}
 Belief fusion operators enable multiple subjective opinions about the same proposition to be combined into a single, aggregated opinion~(\cref{fig:sl_belief_fusion}). 
 \begin{figure}[t]
     \centering
@@ -955,6 +957,7 @@ In particular, since the source and sink nodes of the entire graph are not inter
 \end{definition}
 
 \section{Trust and Uncertainty in Neural Networks}
+\label{sec:trust_uq}
 \subsection{Neural Networks: Background and Notation}
 \label{sec:nn_background}
 
@@ -962,13 +965,13 @@ In particular, since the source and sink nodes of the entire graph are not inter
 
 In this work, we consider a \ac{SNN} parameterized by
 \[
-(\Theta , \mathbf{b}, f(\cdot)),
+\Theta = (\mathbf{W}, \mathbf{b}, \phi),
 \]
 where:
 \begin{itemize}
     \item $\mathbf{W} = \{\mathbf{W}^{(l)}\}$ is the set of weight matrices, with $\mathbf{W}^{(l)} \in \mathbb{R}^{n_l \times n_{l-1}}$ denoting the weights connecting layer $l-1$ to layer $l$,
     \item $\mathbf{b} = \{\mathbf{b}^{(l)}\}$ is the set of bias vectors, with $\mathbf{b}^{(l)} \in \mathbb{R}^{n_l}$,
-    \item $f(\cdot) = \{f^{(l)}(\cdot)\}$ is the set of activation functions, where $f^{(l)}(\cdot)$ denotes the activation applied at layer $l$.
+    \item $\phi = \{\phi^{(l)}(\cdot)\}$ is the set of activation functions, where $\phi^{(l)}(\cdot)$ denotes the activation applied at layer $l$.
 \end{itemize}
 Here, $n_l$ denotes the number of neurons in layer $l$, and the network is assumed to consist of $L$ layers.
 
@@ -977,11 +980,11 @@ Given an input vector $\mathbf{x} \in \mathbb{R}^{n_0}$ and a sequential \ac{NN}
 \begin{align}
 \label{eq:nnfeed}
 \mathbf{y}' &= f_\Theta(\mathbf{x}) \\
-\mathbf{y}' &= f^{(L)}\!\left(
+\mathbf{y}' &= \phi^{(L)}\!\left(
 \mathbf{W}^{(L)} 
-f^{(L-1)}\!\left(
+\phi^{(L-1)}\!\left(
 \cdots
-f^{(1)}\!\left(
+\phi^{(1)}\!\left(
 \mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)}
 \right)
 \cdots
@@ -1150,10 +1153,12 @@ Taken together, existing uncertainty propagation approaches demonstrate the impo
 
 Despite substantial advances in \ac{UQ}, these approaches do not fully address the broader notion of trust in \acp{NN}. \ac{UQ} primarily captures how unsure a model is about its predictions, but it does not encode whether the evidence used for the quantification is reliable or consistent. In most frameworks, uncertainty is represented as a scalar or distributional attribute associated with parameters or outputs, without explicitly modeling the quality, provenance, or credibility of the information that gave rise to those predictions. As a consequence, a model may exhibit calibrated predictive uncertainty while being trained and evaluated on biased, corrupted, or adversarial data. Moreover, existing uncertainty propagation techniques describe how statistical variability flows through network layers, but they do not model relationships between trust in inputs, trust in parameters, trust in intermediate representations, and trust in outputs. They lack mechanisms to represent evidence strength or to reason about how trust should attenuate or accumulate along computational paths. This distinction is fundamental. Uncertainty quantification answers the question of \emph{how unsure} a model is assuming its knowledge is correct, whereas trust assessment addresses \emph{whether the model should be relied upon}. Trust is relational, context-dependent, and evidence-centric. It requires explicit representation, as well as operators for combining and propagating these quantities through structured systems.
 
+Efforts have been made to go beyond standard UQ by proposing dedicated trust metrics. For example, Wong et al.~\cite{wong2021reallytrustyousimple} introduce a suite of metrics for assessing the overall trustworthiness of deep \acp{NN} based on their confidence behavior under correct and incorrect predictions, culminating in a scalar summary metric called NetTrustScore. While this represents a step toward interpretable trust quantification, it remains confined to model-level confidence analysis and does not address dataset trustworthiness, evidence provenance, or structured trust propagation across the whole pipeline. 
+
 These limitations motivate the adoption of formal trust reasoning frameworks, such as \aclu{SL}, for assessing the reliability of \acp{NN} and their predictions.
 
 \subsection{Subjective Logic Approaches}
-
+\label{sec:sl_approaches}
 \aclu{SL} provides a probabilistic framework for explicitly modeling belief, disbelief, and uncertainty, offering a structured and interpretable approach to trust reasoning under incomplete and conflicting evidence. Its explicit separation between belief mass, disbelief mass and uncertainty makes \ac{SL} particularly attractive for trust-sensitive \ac{NN} applications, where confidence estimates alone are insufficient to characterize reliability. In recent years, \ac{SL} has increasingly been adopted to represent predictive uncertainty, aggregate trust from multiple sources, and support structured reasoning about trust across different components and stages of \ac{NN} systems pipeline.
 
 This section reviews existing work that applies \ac{SL} to trust modeling in \ac{NN}. The literature can be broadly grouped into two complementary strands:
@@ -1188,11 +1193,9 @@ At the data level, \ac{SL} has been used to explicitly quantify the reliability 
 In the first direction, work by Cheng et al.~\cite{pmlr-v199-cheng22a} treats trust as a property of individual data samples, quantifying it by converting gradients and saliency maps into positive and negative evidence. In the work, trust values are assigned to clean, adversarial, \ac{OOD}, and mislabeled samples. Their experimental results show that clean data receives higher trust scores, while adversarial and contaminated data receive lower trust values. Similarly, \ac{SLE}\cite{SLencodings} integrates annotation uncertainty into training targets using \ac{SL} fusion and discounting operators. In the second direction, \ac{SL} has been applied to assess the trustworthiness of data artifacts based on their provenance. Ceolin et al.~\cite{10.1145/2818382} combine user reputation and provenance-based stereotypes to estimate the trust of crowdsourced artifacts using evidential reasoning. Earlier work\cite{ceolin2010calculating} also computes trust for event descriptions by analyzing their provenance traces and integration processes. In these approaches, trust depends on how data was produced, by whom, and through which process.
 
 
-At the model level, Herd and Burton~\cite{10.1145/3605098.3635966} demonstrate that standard \ac{ML} performance metrics systematically overestimate safety-relevant performance when treated as point estimates. They propose modeling metrics such as accuracy or recall as subjective opinions derived from binomial evidence, enabling uncertainty-aware safety arguments and trust propagation across assurance layers. This work highlights that trust must be reasoned about not only at prediction time, but also at evaluation and certification stages.
+At the model level, Herd and Burton~\cite{10.1145/3605098.3635966} demonstrate that standard \ac{ML} performance metrics systematically overestimate safety-relevant performance when treated as point estimates. They propose modeling metrics such as accuracy or recall as subjective opinions derived from binomial evidence, enabling uncertainty-aware safety arguments and trust propagation across assurance layers. This work highlights that trust must be reasoned about not only at prediction time, but also at evaluation and certification stages. 
 
 In multi-view learning, \ac{SL} operators are frequently used to discount unreliable views and fuse consistent evidence. Dynamic opinion aggregation through belief-weighted fusion adjusts fusion weights based on uncertainty or conflict, enabling robust reasoning in open-world and long-tailed scenarios~\cite{ZUO2026129453,10.1145/3746027.3755015}. These approaches demonstrate the practical utility of \ac{SL} fusion semantics, particularly in environments where views differ in reliability or may contradict one another.
-
-
 
 
 
@@ -1413,7 +1416,8 @@ Monchot et~al.~\cite{pmlr-v202-monchot23a} & \xmark & \xmark & \cmark & \xmark &
 
 Astudillo and Neto~\cite{astudillo2011propagation} 
 & \xmark & \xmark & \cmark & \xmark & \xmark \\
-
+NetTrustScore~\cite{wong2021reallytrustyousimple} & \xmark & \cmark & \xmark & \xmark & \cmark 
+\\
 Herd \& Burton~\cite{10.1145/3605098.3635966} & \cmark & \cmark & \xmark & \xmark & \cmark  \\
 
 \ac{SLE}~\cite{SLencodings} & \cmark & \xmark & \xmark & \cmark & \xmark \\% 
@@ -1432,7 +1436,7 @@ Input-level uncertainty propagation methods, such as Monchot et al.~\cite{pmlr-v
 
 Regarding labeling, works such as \ac{SLE}~\cite{SLencodings} introduce structured representations of annotation uncertainty. \ac{SLE} embeds annotation uncertainty into training targets using structured subjective opinions. However, it remains limited to the labeling stage and does not model input-level trust or inference-time prediction trust.
 
-Regarding model evaluation, Herd and Burton~\cite{10.1145/3605098.3635966} model performance metrics such as accuracy and recall as subjective opinions derived from binomial evidence. Their framework supports uncertainty-aware safety arguments by representing confidence in evaluation metrics rather than treating them as deterministic point estimates. Nevertheless, this approach operates at the assessment stage and does not integrate dataset trustworthiness, model training dynamics, and inference-time prediction reliability into a unified propagation framework.
+Regarding model evaluation, Herd and Burton~\cite{10.1145/3605098.3635966} model performance metrics such as accuracy and recall as subjective opinions derived from binomial evidence. Their framework supports uncertainty-aware safety arguments by representing confidence in evaluation metrics rather than treating them as deterministic point estimates. Similarly Wong et al.~\cite{wong2021reallytrustyousimple} propose a suite of metrics for assessing the overall trustworthiness of deep \acp{NN} based on their confidence behavior under correct and incorrect predictions, culminating in a scalar summary metric called NetTrustScore. Nevertheless, both approaches operate at the assessment stage and do not integrate dataset trustworthiness, model training dynamics, and inference-time prediction reliability into a unified propagation framework. Moreover, NetTrustScore reduces trustworthiness to a single scalar, which does not distinguish between uncertainty arising from lack of evidence and uncertainty arising from conflicting evidence.
 
 Recent works integrating \ac{SL} within \ac{NN}, including \ac{EDL}~\cite{sensoy2018evidentialdeeplearningquantify}, DeepTrust~\cite{10.3389/frai.2020.00054}, and related approaches, introduce richer uncertainty representations by mapping network outputs to Dirichlet or Beta distributions or by propagating opinions across layers. However, these models either remain confined to output-level predictive uncertainty or provide overall trust score for the \ac{NN}. They do not provide a lifecycle-consistent framework that jointly accounts for dataset trustworthiness, training dynamics, and inference-time trust propagation across abstraction levels.
 
