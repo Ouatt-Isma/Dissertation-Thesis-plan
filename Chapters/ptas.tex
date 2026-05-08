@@ -1,27 +1,24 @@
 \chapter{Trust Propagation in \aclu{NN}}
 \label{chap:patas}
-The previous \cref{chap:ovl} presented the overall architecture of \ac{PaTAS}, highlighting its two main components: (i) the assessment of trust in the data, and (ii) the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. While the trustworthiness of the data was addressed in the preceding chapter, this chapter focuses on the second component, namely the propagation of trust within \aclu{NN}. In particular, it details how trust, initially derived from the dataset, is integrated into the model parameters during training and subsequently propagated from the input to the output during inference. This chapter formalizes the mechanisms that enable consistent and interpretable trust propagation across the different stages of the learning process, providing the operational core of the \ac{PaTAS} framework.
+The previous \cref{chap:ovl} presented the overall architecture of \ac{PaTAS-TP}, highlighting its two main components: (i) the assessment of trust in the data, and (ii) the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. While the trustworthiness of the data was addressed in the preceding chapter, this chapter focuses on the second component, namely the propagation of trust within \aclu{NN}. In particular, it details how trust, initially derived from the dataset, is integrated into the model parameters during training and subsequently propagated from the input to the output during inference. This chapter formalizes the mechanisms that enable consistent and interpretable trust propagation across the different stages of the learning process, providing the operational core of the \ac{PaTAS-TP} framework.
 
-\todo[inline]{Estimated Nb Pages: 35}
-\todo[inline]{A white box approach}
-\todo[inline]{Main evidence from the dataset}
-\todo[inline]{Connect with DSPG as NN graph are not always sequential}
-\todo{Make sure to remove redundancy}
-\todo[inline]{Make sure that the link we previous chapter is clear}
-\todo[inline]{Add mdframed[backgroundcolor=gray!10, linewidth=0pt] to make clear the relationship with previous chapter TNA SL and Methodology}
+
+\begin{chapterlink}
+\textbf{Connection with the preceding chapters.} This chapter builds directly on two prior contributions of the thesis: the \aclu{TNA-SL} foundations introduced in \cref{chap:rw}, which define how the \ac{SL} operators are used to combine trust opinions over \aclp{DSPG}, and the dataset-trust quantification methodology developed in \cref{chap:dataset-trust}, which produces the feature-, instance-, and label-level trust opinions consumed here as inputs ($T(x)$, $T(y)$). The present chapter closes the loop by specifying how these dataset-derived opinions are transformed into \emph{parameter trust} during training and into \emph{output trust} during inference, thereby answering Research~Question~3.
+\end{chapterlink}
+
 \section{Introduction}
-
-The preceding chapter addressed the first component of \ac{PaTAS}: the quantification of trustworthiness in training datasets. It established that trust in a dataset can be assessed at multiple granularities, from global distributional properties to individual feature-level reliability, and provided formal tools for computing \ac{SL} opinions over data quality. However, quantifying dataset trustworthiness is only a prerequisite. The central challenge, as formulated in Research Question 3, is to propagate this trust through the learning and inference processes, such that the reliability of a prediction can be systematically traced back to the reliability of both the data and the parameters from which it originates.
+The preceding chapter addressed the first component of \ac{PaTAS-TP}: the quantification of trustworthiness in training datasets. It established that trust in a dataset can be assessed at multiple granularities, from global distributional properties to individual feature-level reliability, and provided formal tools for computing \ac{SL} opinions over data quality. However, quantifying dataset trustworthiness is only a prerequisite. The central challenge, as formulated in Research Question 3, is to propagate this trust through the learning and inference processes, such that the reliability of a prediction can be systematically traced back to the reliability of both the data and the parameters from which it originates.
 
 This challenge is not merely technical. As discussed in \cref{chap:rw}, the trustworthiness of a \aclu{NN} output cannot be treated as a static property of the model alone. During training, model parameters are updated through gradient-based optimization driven by labeled data. If this data is noisy, biased, or corrupted, the resulting parameter updates inherit these deficiencies, embedding unreliability directly into the learned model. During inference, inputs are transformed through successive layers parameterized by these learned weights; consequently, unreliability originating from either the input or the parameters may propagate and accumulate throughout the network, ultimately affecting the final prediction. Standard performance metrics such as accuracy fail to capture this phenomenon, as they conflate correctness with reliability. A model may achieve high accuracy on a poisoned or biased dataset while producing predictions that remain fundamentally untrustworthy.
 
 Existing approaches to trust and uncertainty propagation in \acp{NN}, reviewed in \cref{sec:trust_uq}, address aspects of this problem but leave important gaps. Uncertainty propagation methods, such as those of Monchot et al.~\cite{pmlr-v202-monchot23a} and Astudillo and Net~\cite{astudillo2011propagation}, model the transmission of statistical variability through network layers, but treat uncertainty primarily as a distributional property of the input. As such, they do not capture the joint influence of dataset reliability and parameter trustworthiness on the final prediction. The DeepTrust framework of Cheng et al.~\cite{10.3389/frai.2020.00054} is more closely related, as it propagates dataset-level trust opinions through a \ac{NN} to derive a global model trust estimate. However, as discussed in \cref{sec:sl_approaches}, its formulation presents several theoretical limitations. In particular, it conflates distinct algebraic domains by mapping neural arithmetic operations to incompatible \ac{SL} operators, and its trust propagation mechanism is defined only at the output layer, without a principled extension to hidden layers. As a result, the semantics of trust propagation in deep architectures remain underspecified.
 
-This chapter provides a formal and operational answer to Research Question 3 by introducing a principled framework for trust propagation in \acp{NN}. Building on the foundations of \ac{SL} presented in \cref{chap:rw} and the optimized trust inference mechanisms introduced in \cref{chap:tnasl}, we model trust as a transitive, structure-aware, and evidence-driven quantity that propagates through the network in parallel with standard neural computation. The proposed framework integrates two complementary sources of trust: (i) the reliability of input features at inference time, and (ii) the reliability of model parameters, which themselves are derived from the trustworthiness of the training dataset. Importantly, this propagation is performed without modifying the underlying \ac{NN}, thereby preserving compatibility with existing architectures.
+This chapter provides a formal and operational answer to Research Question 3 by introducing a principled framework for trust propagation in \acp{NN}. Building on the foundations of \ac{SL} presented in \cref{chap:rw} and the optimized trust inference mechanisms introduced in \cref{chap:tnasl}, we model trust as a transitive, structure-aware, and evidence-driven quantity that propagates through the network in parallel with standard neural computation. The proposed framework integrates two complementary sources of trust: (i) the reliability of input features at inference time, and (ii) the reliability of model parameters, which themselves are derived from the trustworthiness of the training dataset. Importantly, this propagation is performed without modifying the underlying \ac{NN}, thereby preserving compatibility with existing architectures. Methodologically, \ac{PaTAS-TP} is a \emph{white-box} framework: it exploits the internal structure of the \ac{NN}, namely its layer topology, parameters, and activation paths, to compute trust at each intermediate computation rather than treating the model as an opaque input--output mapping. This places \ac{PaTAS-TP} in direct contrast with the black-box calibration approach of \cref{chap:calibration}.
 
 More specifically, this chapter introduces the following contributions. First, we define a parallel trust computation mechanism based on Trust Nodes and Trust Functions, which mirror the structure of neural computations and enable consistent trust propagation using \ac{SL} operators such as fusion and discounting. Second, we propose a parameter-trust update mechanism that estimates the reliability of learned parameters during training by leveraging gradient information, input trust, and label trust, thereby aligning parameter trust with the learning dynamics. Third, we introduce the \ac{IPTA}, a context-aware mechanism that computes instance-specific trust scores by exploiting the activation paths involved in the prediction. Finally, we demonstrate through empirical evaluation that the proposed framework produces interpretable, consistent, and convergent trust estimates that reveal reliability gaps not captured by standard performance metrics.
 
-The remainder of this chapter is organized as follows. Section~\ref{sec:...} introduces the formal foundations of trust-aware neural computation and defines the parallel trust function. Section~\ref{sec:...} presents the propagation mechanism in the simple case of a perceptron, providing intuition for the general framework. Section~\ref{sec:...} extends this formulation to deep \acp{NN} through a layer-wise propagation model. Section~\ref{sec:...} details the parameter-trust update mechanism during training, while Section~\ref{sec:...} introduces the inference-time trust assessment via \ac{IPTA}. Section~\ref{sec:...} discusses theoretical properties of the framework, and Section~\ref{sec:...} concludes the chapter.
+The remainder of this chapter is organized as follows. \Cref{sec:trust_foundations} introduces the formal foundations of trust-aware neural computation and defines the parallel trust function. \Cref{sec:tp_arch_ovvw} presents the \ac{PaTAS-TP} architecture, decomposing it into four functional modules: Trust Feedforward, Output-Trust Aggregation, GenIPTA, and Parameter-Trust Update. \Cref{sec:perceptron} illustrates the core mechanisms through a simple perceptron example. \Cref{sec:dnn_trust} generalizes these mechanisms to deep \acp{NN} by introducing the Trust Function and layer-wise propagation, and discusses how \ac{DSPG} structure ensures the soundness of trust operators in non-sequential architectures. \Cref{sec:param_update} details the Parameter-Trust Update mechanism that refines trust in learned parameters during training. \Cref{sec:ptastheory} establishes theoretical properties of the framework, including convergence guarantees (\cref{sec:ptas_convergence}). \Cref{sec:patas-tp-evaluation} provides comprehensive experimental validation on three datasets of increasing complexity. Finally, \cref{sec:patas-discussion} discusses key findings and practical implications, and \cref{sec:patas-tp-conclusion} concludes the chapter.
 
 \section{Foundations of Trust Propagation in \aclu{NN}s}
 \label{sec:trust_foundations}
@@ -38,7 +35,7 @@ Rather than reintroducing the full formulation, we emphasize that this computati
 To enable trust-aware reasoning, we associate trust opinions with the key components of the \ac{NN}. Specifically, we consider:
 
 \begin{itemize}
-    \item \textbf{Input Trust:} A trust assessment $T(x)$ assigned to the input $x$, defined at feature-level granularity as introduced in \cref{chap:data}.
+    \item \textbf{Input Trust:} A trust assessment $T(x)$ assigned to the input $x$, defined at feature-level granularity as introduced in \cref{chap:dataset-trust}.
     
     \item \textbf{Parameter Trust:} A trust assessment $T(\theta)$ for each model parameter $\theta \in \Theta$, reflecting the reliability of learned parameters as a function of the training data and learning process.
     
@@ -76,10 +73,11 @@ The parallel trust function is constructed to satisfy three key principles:
 
 Conceptually, $Pf_\Theta$ defines a second computational graph operating over trust opinions rather than numerical values. While the \ac{NN} computes predictions, the parallel trust function computes their associated trustworthiness. Both processes share the same structural dependencies but operate in different domains.
 
-This formulation enables trust to be modeled as a \emph{transitive, structure-aware, and evidence-driven quantity} that propagates through the network. In the following section, we present the overall architecture of \ac{PaTAS}, which operationalizes this abstraction as a concrete system. 
+This formulation enables trust to be modeled as a \emph{transitive, structure-aware, and evidence-driven quantity} that propagates through the network. In the following section, we present the overall architecture of \ac{PaTAS-TP}, which operationalizes this abstraction as a concrete system. 
 
-\section{\ac{PaTAS}: Architecture Overview}
-To extend the formal foundations established in the preceding section, this section presents the architecture of \ac{PaTAS}, the concrete system through which the parallel trust function is created and operationalized. \ac{PaTAS} operates in parallel with the underlying \ac{NN} without modifying it, maintaining a mirrored structure of trust-bearing components that propagate trust assessments alongside the standard neural computation. As illustrated in \cref{fig:highptas}, this parallel structure is organized around a central abstraction called the Trust Nodes Network, and is decomposed into four functional modules: Trust Feedforward, Output-Trust Aggregation, GenIPTA, and Parameter-Trust Update. Each module corresponds to a distinct phase of the neural network lifecycle, namely training feedforward, training backpropagation, and inference.
+\section{\ac{PaTAS-TP}: Architecture Overview}
+\label{sec:tp_arch_ovvw}
+To extend the formal foundations established in the preceding section, this section presents the architecture of \ac{PaTAS-TP}, the concrete system through which the parallel trust function is created and operationalized. \ac{PaTAS-TP} operates in parallel with the underlying \ac{NN} without modifying it, maintaining a mirrored structure of trust-bearing components that propagate trust assessments alongside the standard neural computation. As illustrated in \cref{fig:highptas}, this parallel structure is organized around a central abstraction called the Trust Nodes Network, and is decomposed into four functional modules: Trust Feedforward, Output-Trust Aggregation, GenIPTA, and Parameter-Trust Update. Each module corresponds to a distinct phase of the neural network lifecycle, namely training feedforward, training backpropagation, and inference.
 
 
 \begin{figure}
@@ -94,13 +92,12 @@ To extend the formal foundations established in the preceding section, this sect
 \includegraphics[width=0.8\textwidth]{img/patas/operations.png}
 
 \caption{
-    Functional flow of \ac{PaTAS} integrated with a \ac{NN}, showing the interaction between the Trust Feedforward (TF), Parameter-Trust Update (B), and GenIPTA/Output-Trust Aggregation (I) modules across the training and inference phases.}
+    Functional flow of \ac{PaTAS-TP} integrated with a \ac{NN}, showing the interaction between the Trust Feedforward (TF), Parameter-Trust Update (B), and GenIPTA/Output-Trust Aggregation (I) modules across the training and inference phases. \todo[inline]{Improve figure with PaTAS-TP}}
     \label{fig:ptasoperation}
 \end{figure}
 
 
-\paragraph{\aclu{TNN}}
-The structural backbone of \ac{PaTAS} is the \emph{\acf{TNN}}, which mirrors the topology of the underlying \ac{NN} at the level of trust opinions rather than numerical activations.
+The backbone of \ac{PaTAS-TP} is the \emph{\acf{TNN}}, which mirrors the topology of the underlying \ac{NN} at the level of trust opinions rather than numerical activations.
 \begin{definition}[Trust Nodes Network]
 The Trust Nodes Network is a structured composition of Trust Nodes, where each Trust Node corresponds to a neuron in the underlying \ac{NN}. This network mirrors the architecture of the neural model and is responsible for propagating trust values across layers. The Trust Nodes Network computes trust assessments at each stage of inference by applying trust-specific reasoning operations aligned with the neural computation flow.
 \end{definition}
@@ -111,7 +108,7 @@ A \emph{Trust Node} is an abstract computational unit associated with a neuron i
 \end{definition}
 The parameters of the Trust Nodes are trust opinions rather than real-valued weights; they are initialized as vacuous opinions and refined during training by the Parameter-Trust Update module. The TNN therefore evolves in tandem with the \ac{NN}, accumulating evidence about parameter reliability as training progresses.
 
-With the \ac{TNN} and its constituent Trust Nodes defined, the four functional modules of \ac{PaTAS} can now be described in terms of how they update and use it across the different phases of the \ac{NN} lifecycle.
+With the \ac{TNN} and its constituent Trust Nodes defined, the four functional modules of \ac{PaTAS-TP} can now be described in terms of how they update and use it across the different phases of the \ac{NN} lifecycle.
 
 \paragraph{Trust Feedforward}
 The Trust Feedforward function propagates trust values through the Trust Nodes Network in alignment with the \ac{NN}’s inference flow. It mirrors the layer-wise computations of the original model, but operates entirely on trust values. At each layer, trust in the inputs and parameters is combined using the trust operations defined in the Trust Function (including discounting and fusion), capturing how evidence flows through the network. This process produces a trust opinion for each output neuron of the \ac{NN} while also storing intermediate trust scores, which are later used by the Parameter-Trust Update. More details about this process will be discussed in the following sections.
@@ -129,7 +126,7 @@ Contextual information is not limited to activation traces. Typically, all neuro
 \paragraph{Parameter-Trust Update}
 The Parameter-Trust Update, is responsible for refining the trust opinions stored in the \ac{TNN} parameters during training. More details about this process will be discussed in the following sections.
 
-The detailed functional flow of \ac{PaTAS} across feedforward, backpropagation, and inference is illustrated in \cref{fig:ptasoperation}. We can distinguish three different contexts:
+The detailed functional flow of \ac{PaTAS-TP} across feedforward, backpropagation, and inference is illustrated in \cref{fig:ptasoperation}. We can distinguish three different contexts:
 \begin{enumerate}
     \item \textbf{Feedforward (Training Phase):} The NN interface extracts trust scores from input features for all data being processed. These trust scores (TF.1) are passed to the \textit{Trust Feedforward} module, which propagates them through the \textit{Trust Nodes Network} in parallel with the neural computations. During training, Trust Feedforward also stores the trust scores of all intermediate computations in the NN, to be reused in backpropagation.    
     \item \textbf{Backpropagation (Training Phase):} Once the NN computes gradients, the trust scores of the labels (B.1) and the gradients are provided to the \textit{Parameter-Trust Update}. Gradients (B.2) indicate how dataset labels affect parameter updates, while label trust determines whether these updates should be considered reliable. The stored intermediate trust values are also incorporated in this process. Finally, the \textit{Parameter-Trust Update} module refines the trust values of the Trust Nodes Network parameters (B.3), aligning them with the evolving learning dynamics. 
@@ -137,7 +134,7 @@ The detailed functional flow of \ac{PaTAS} across feedforward, backpropagation, 
     During operation, contextual information such as the set of activated neurons is retrieved. This information is passed to \textit{GenIPTA} (I.1), which constructs an \textit{\ac{IPTA})} corresponding to the specific inference path (I.2). The \ac{IPTA} takes input trust scores (I.3), propagates them along the path, and produces trust scores for each NN output. These can then be passed to the \textit{Output-Trust Aggregation} (I.4) which will combine them into a single consolidated trust score representing the reliability of the prediction (I.5).
 \end{enumerate}
     
-With the architecture of \ac{PaTAS} established, the following section introduces the perceptron as a minimal working example, providing concrete intuition for the operators mechanisms that underpin the Trust Feedforward computation before their generalization to deep architectures in \cref{sec:dnn_trust}.
+With the architecture of \ac{PaTAS-TP} established, the following section introduces the perceptron as a minimal working example, providing concrete intuition for the operators mechanisms that underpin the Trust Feedforward computation before their generalization to deep architectures in \cref{sec:dnn_trust}.
 
 \section{Trust Feedforward in a Simple Model: The Perceptron Case}
 \label{sec:perceptron}
@@ -287,7 +284,12 @@ T^{(l)} = f_T^{(l)}\left(T^{(l-1)}, T^{(l)}_{\Theta}\right),
 \]
 where $T^{(l)}_{\Theta}$ denotes the trust associated with the parameters of layer $l$, and $f_T^{(l)}$ is the trust transformation corresponding to the neural operation at that layer.
 
-This formulation extends the parallel trust function introduced in Section~\ref{sec:trust_foundations} to a layer-wise decomposition, where trust is propagated sequentially through the network in a manner consistent with the forward computation.
+This formulation extends the parallel trust function introduced in \cref{sec:trust_foundations} to a layer-wise decomposition, where trust is propagated sequentially through the network in a manner consistent with the forward computation.
+
+\marginpar{Trust Graphs and DSPG Structure}
+A subtle but important point connects this layer-wise propagation to the structural assumptions of \ac{TNA-SL}. As already visible in the perceptron case (\cref{fig:nn1s}), trust does not flow along a single chain but through a graph: each neuron aggregates contributions from multiple predecessors, creating parallel paths that converge at shared sinks. When the resulting trust graph is a \ac{DSPG}, the \ac{SL} operators applied by the Trust Function, namely discounting along edges and fusion at convergence points, are guaranteed to be sound, as established in \cref{chap:rw}. Standard fully-connected and convolutional architectures yield bipartite layers whose induced trust graph is a \ac{DSPG} by construction, so \ac{PaTAS-TP} applies directly. However, modern architectures such as residual networks, U-Nets, and Transformer blocks introduce skip connections that might violate the DSPG property, since intermediate nodes acquire outgoing edges that bypass the local sink. In such cases, the \ac{DSPG} synthesis framework introduced in \cref{chap:tnasl} can be applied to the trust graph as a preprocessing step, yielding a structurally valid substrate for \ac{PaTAS-TP} propagation while preserving as much trust evidence as possible. This makes \ac{PaTAS-TP} compatible with arbitrary feedforward topologies, not only sequential ones.
+
+
 
 \marginpar{Trust Functions}
 
@@ -338,19 +340,19 @@ T_{x^{(l+1)}} = T_{\phi^{(l)}}(T_{z^{(l)}}),
 \label{fig:trustnode}
 \end{figure}
 
-In particular, the two fundamental operations identified in the perceptron case generalize as follows:
-\begin{itemize}
-    \item \textbf{Weighted Contributions (Discounting):} The influence of an input activation on a neuron is modulated by the trust in the corresponding weight. This is modeled using the trust discounting operator:
-    \[
-    T_{\text{contrib}} = T_{\theta} \otimes T_{\text{input}}.
-    \]
+% In particular, the two fundamental operations identified in the perceptron case generalize as follows:
+% \begin{itemize}
+%     \item \textbf{Weighted Contributions (Discounting):} The influence of an input activation on a neuron is modulated by the trust in the corresponding weight. This is modeled using the trust discounting operator:
+%     \[
+%     T_{\text{contrib}} = T_{\theta} \otimes T_{\text{input}}.
+%     \]
     
-    \item \textbf{Aggregation (Fusion):} Multiple contributions to a neuron are combined using a fusion operator:
-    \[
-    T_{\text{node}} = \bigoplus_i T_{\text{contrib}, i}.
-    \]
-\end{itemize}
-Activation functions can be interpreted as transformations that preserve or reshape trust without introducing new sources of evidence. In this work, we assume that activation functions do not alter the trust opinion directly, but only affect the structure of the propagation by activating or deactivating certain paths.
+%     \item \textbf{Aggregation (Fusion):} Multiple contributions to a neuron are combined using a fusion operator:
+%     \[
+%     T_{\text{node}} = \bigoplus_i T_{\text{contrib}, i}.
+%     \]
+% \end{itemize}
+% Activation functions can be interpreted as transformations that preserve or reshape trust without introducing new sources of evidence. In this work, we assume that activation functions do not alter the trust opinion directly, but only affect the structure of the propagation by activating or deactivating certain paths.
 
 \Cref{fig:trustnode} illustrates the structural correspondence between a standard neuron and its associated Trust Node. Subfigures~\ref{fig:neuron} and~\ref{fig:tns} show how the mirrored trust structure is derived from the original perceptron, while Subfigures~\ref{fig:neuronfunc} and~\ref{fig:tnf} contrast the numerical computation of the neuron with the trust-domain computation of the Trust Function, in which multiplication is replaced by discounting and summation by fusion.
 
@@ -419,9 +421,9 @@ The proposed formulation exhibits several important properties:
 This generalization demonstrates that trust propagation can be systematically integrated into deep \acp{NN} without altering their structure, by defining a parallel computation over trust opinions. In the next section, we focus on how parameter trust is learned during training, completing the link between dataset trust and model trustworthiness.
 
 \section{Parameter-Trust Update}\label{sec:param_update}
-The Parameter-Trust Update is the mechanism through which \ac{PaTAS} adapts the trust associated with model parameters during training. Its objective is to ensure that parameter trust reflects both the observed behavior of the model and the reliability of the training data.
+The Parameter-Trust Update is the mechanism through which \ac{PaTAS-TP} adapts the trust associated with model parameters during training. Its objective is to ensure that parameter trust reflects both the observed behavior of the model and the reliability of the training data.
 
-This design is inspired by the standard backpropagation algorithm used in \ac{NN} training, where gradients quantify how much each parameter contributes to the output error. By leveraging these gradients as evidence, \ac{PaTAS} updates parameter trust in a way that mirrors the learning dynamics of the underlying model.
+This design is inspired by the standard backpropagation algorithm used in \ac{NN} training, where gradients quantify how much each parameter contributes to the output error. By leveraging these gradients as evidence, \ac{PaTAS-TP} updates parameter trust in a way that mirrors the learning dynamics of the underlying model.
 
 To ground this design, we briefly recall the standard parameter update in \ac{NN} training. For a parameter $\theta$, gradient descent updates are given by:
 \begin{equation}
@@ -436,7 +438,7 @@ where $l_r$ is the learning rate, $\mathcal{L}$ is the loss function, and $\frac
 \end{equation}
 where $\theta^{(l)}_{i,j}$ denotes the weight connecting neuron $j$ in layer $(l-1)$ to neuron $i$ in layer $l$, $\delta^{(l)}_i$ is the error term of neuron $i$, and $x^{(l-1)}_j$ is the activation from the previous layer.
 
-In particular, \cref{eq:gd2} shows that gradients factor into an error term and an input activation, revealing that parameter updates depend jointly on gradient signals, input activations, and learning dynamics. \ac{PaTAS} mirrors this structure by incorporating gradient information, input feature trust, and label trust as analogous sources of evidence in the Parameter-Trust Update.
+In particular, \cref{eq:gd2} shows that gradients factor into an error term and an input activation, revealing that parameter updates depend jointly on gradient signals, input activations, and learning dynamics. \ac{PaTAS-TP} mirrors this structure by incorporating gradient information, input feature trust, and label trust as analogous sources of evidence in the Parameter-Trust Update.
 
 At a high level, the parameter-trust update process combines three sources of information: (i) gradient-based evidence derived from backpropagation, (ii) trust in the labels within the current training batch, and (iii) trust in the input features and intermediate computations recorded during feedforward. These elements are integrated to revise and refine the trust assigned to each parameter.
 
@@ -582,36 +584,36 @@ Here, $\odot$ is the binomial multiplication operator and $\oslash$ is defined a
 This formulation reflects the fact that both unreliable features and mislabeled data can strongly bias parameter updates. The use of min and max provides a conservative aggregation: trust cannot exceed the weakest evidence, and distrust must reflect the strongest warning. It ensures that trust in both input features and labels is explicitly propagated into the parameter trust.
 \end{enumerate}
 
-This process refines the trust in each parameter by incorporating both gradient-based behavioral evidence and auxiliary trust factors, allowing the \ac{PaTAS} to align parameter trust with the training dynamics of the \ac{NN}.
+This process refines the trust in each parameter by incorporating both gradient-based behavioral evidence and auxiliary trust factors, allowing the \ac{PaTAS-TP} to align parameter trust with the training dynamics of the \ac{NN}.
 
 \paragraph*{Computational Overhead.}
-The proposed \ac{PaTAS} operates in parallel with the primary \ac{NN} and mirrors its computational flow using subjective opinions. As a result, the total runtime without advanced optimization can be expressed as:
+The proposed \ac{PaTAS-TP} operates in parallel with the primary \ac{NN} and mirrors its computational flow using subjective opinions. As a result, the total runtime without advanced optimization can be expressed as:
 \[
-T_{\text{with \ac{PaTAS}}} = T_{\text{comm}} + \max(T_{\text{PaTAS}}, T_{\text{NN}}),
+T_{\text{with \ac{PaTAS-TP}}} = T_{\text{comm}} + \max(T_{\text{PaTAS-TP}}, T_{\text{NN}}),
 \]
-where \(T_{\text{comm}}\) denotes the communication overhead between the \ac{NN} and the \ac{PaTAS}. Each \ac{PaTAS} operation is performed over subjective opinions represented by multiple components (trust, distrust, uncertainty, and a fixed base rate), leading to a higher computational cost compared to standard scalar operations. In practice, this results in \(T_{\text{PaTAS}} \approx 3 \times T_{\text{NN}}\). Consequently, the overall runtime is dominated by the \ac{PaTAS} computation, yielding the approximation:
+where \(T_{\text{comm}}\) denotes the communication overhead between the \ac{NN} and the \ac{PaTAS-TP}. Each \ac{PaTAS-TP} operation is performed over subjective opinions represented by multiple components (trust, distrust, uncertainty, and a fixed base rate), leading to a higher computational cost compared to standard scalar operations. In practice, this results in \(T_{\text{PaTAS-TP}} \approx 3 \times T_{\text{NN}}\). Consequently, the overall runtime is dominated by the \ac{PaTAS-TP} computation, yielding the approximation:
 \[
-T_{\text{with \ac{PaTAS}}} \approx T_{\text{comm}} + 3T_{\text{NN}}.
+T_{\text{with \ac{PaTAS-TP}}} \approx T_{\text{comm}} + 3T_{\text{NN}}.
 \]
-Despite this overhead, the parallel design ensures that trust assessment does not interfere with the execution of the primary model, making the approach suitable for real-time monitoring scenarios where interpretability and reliability are critical. Moreover since the training does not need any value from \ac{PaTAS}, it can still continue while \ac{PaTAS} takes the time needed to complete its operations.
+Despite this overhead, the parallel design ensures that trust assessment does not interfere with the execution of the primary model, making the approach suitable for real-time monitoring scenarios where interpretability and reliability are critical. Moreover since the training does not need any value from \ac{PaTAS-TP}, it can still continue while \ac{PaTAS-TP} takes the time needed to complete its operations.
 
 
 
-\section{Theoretical Properties of \ac{PaTAS}}\label{sec:ptastheory}
-To ensure that \ac{PaTAS} provides reliable and interpretable trust assessments, we first establish several fundamental theoretical properties describing its stability and consistency.
-\subsection{Convergence of \ac{PaTAS}}
-% \todo[inline]{Discuss convergence of \ac{PaTAS} in case of convergence of input}
+\section{Theoretical Properties of \ac{PaTAS-TP}}\label{sec:ptastheory}
+To ensure that \ac{PaTAS-TP} provides reliable and interpretable trust assessments, we first establish several fundamental theoretical properties describing its stability and consistency.
+\subsection{Convergence of \ac{PaTAS-TP}}
+% \todo[inline]{Discuss convergence of \ac{PaTAS-TP} in case of convergence of input}
 \label{sec:ptas_convergence}
 
-The convergence of the \ac{PaTAS} is governed by the stability of its inputs and the structure of its recursive Parameter-Trust Update process. During training, \ac{PaTAS} updates the internal trust opinions associated with network parameters using trust opinions on the inputs, labels, hyperparameters, and gradient information. This update mechanism is outlined in \cref{alg:trustupdate}. As proved in Theorem~\ref{thm:convergence}, the \ac{PaTAS} converges under specific situation. This convergence relies on some specific characteristic of the operators used to feedforward and revise the trust in the parameters \(\theta\). 
+The convergence of the \ac{PaTAS-TP} is governed by the stability of its inputs and the structure of its recursive Parameter-Trust Update process. During training, \ac{PaTAS-TP} updates the internal trust opinions associated with network parameters using trust opinions on the inputs, labels, hyperparameters, and gradient information. This update mechanism is outlined in \cref{alg:trustupdate}. As proved in Theorem~\ref{thm:convergence}, the \ac{PaTAS-TP} converges under specific situation. This convergence relies on some specific characteristic of the operators used to feedforward and revise the trust in the parameters \(\theta\). 
 
-% Before delving into the specifics of \ac{PaTAS} convergence, we first present a key theorem that will serve as a foundational tool in establishing the convergence properties of \ac{PaTAS}.
+% Before delving into the specifics of \ac{PaTAS-TP} convergence, we first present a key theorem that will serve as a foundational tool in establishing the convergence properties of \ac{PaTAS-TP}.
 
 
-\begin{theorem}[Convergence of \ac{PaTAS} Creation]\label{thm:convergence}
+\begin{theorem}[Convergence of \ac{PaTAS-TP} Creation]\label{thm:convergence}
 \footnote{All proofs of the theorems in this section, as well as additional theoretical results, are provided in the \appp.}
 
-Let a \ac{NN} be trained until convergence, and let its associated \ac{PaTAS} operate with:
+Let a \ac{NN} be trained until convergence, and let its associated \ac{PaTAS-TP} operate with:
 
 \begin{itemize}
     \item a stable input trust assessment $T_x$,
@@ -620,11 +622,11 @@ Let a \ac{NN} be trained until convergence, and let its associated \ac{PaTAS} op
     % \item and converging back propagation gradients $g$.
 \end{itemize}
 
-Let $T_\theta^{(n)}$ denote the trust opinion at iteration $n$ for parameter $\theta$. If the revision of the trust in the weights is performed as specified in \cref{alg:trustupdate}, then the \ac{PaTAS} parameter will converge.
+Let $T_\theta^{(n)}$ denote the trust opinion at iteration $n$ for parameter $\theta$. If the revision of the trust in the weights is performed as specified in \cref{alg:trustupdate}, then the \ac{PaTAS-TP} parameter will converge.
 \end{theorem}
-\subsection{Symmetry and Invariance Properties of \ac{PaTAS}}\label{sec:ptassyminv}
+\subsection{Symmetry and Invariance Properties of \ac{PaTAS-TP}}\label{sec:ptassyminv}
 
-\begin{theorem}[\ac{PaTAS} Inference on Vacuous Input Yields Vacuous Output]\label{thm:infvac}
+\begin{theorem}[\ac{PaTAS-TP} Inference on Vacuous Input Yields Vacuous Output]\label{thm:infvac}
 Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over any variable, with arbitrary base rate \( a \in [0, 1] \). Then the following two properties hold:
 
 \begin{enumerate}
@@ -633,8 +635,8 @@ Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over
     \(
     \omega^{[A;B]}_X = \omega^A_B \otimes (0,0,1,a)= (0,0,1,a)
     \)
-    \item \emph{\ac{PaTAS} Feedforward on a Vacuous Input is Vacuous.} \\
-     Let \( T_x = (0,0,1,a)\) be the trust assessment of an input to \ac{PaTAS}. Then for any parameter trust configuration \( T_\theta \), the output trust assessment satisfies:
+    \item \emph{\ac{PaTAS-TP} Feedforward on a Vacuous Input is Vacuous.} \\
+     Let \( T_x = (0,0,1,a)\) be the trust assessment of an input to \ac{PaTAS-TP}. Then for any parameter trust configuration \( T_\theta \), the output trust assessment satisfies:
     \(
     T_y = \text{IPTA}(T_x) = (0,0,1,a).
     \)
@@ -643,8 +645,8 @@ Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over
 \begin{definition}[Symmetric Binomial Opinions]
 Let \(\omega=(b, d, u, a)\) be a binomial opinion. The opinion $\bar{\omega} = (d, b, u, a)$ is called the \emph{symmetric} of $\omega$. 
 \end{definition}
-\begin{theorem}[Symmetric Inference under \ac{PaTAS}]\label{thm:sym}
-Let $T_\theta$ be a \ac{PaTAS} feedforward function, and let $x = (b, d, u, a)$ be any binomial opinion with symmetric counterpart $\bar{x} = (d, b, u, a)$. Then the outputs $y = T_\theta(x)$ and $\bar{y} = T_\theta(\bar{x})$ are also symmetric, i.e.,
+\begin{theorem}[Symmetric Inference under \ac{PaTAS-TP}]\label{thm:sym}
+Let $T_\theta$ be a \ac{PaTAS-TP} feedforward function, and let $x = (b, d, u, a)$ be any binomial opinion with symmetric counterpart $\bar{x} = (d, b, u, a)$. Then the outputs $y = T_\theta(x)$ and $\bar{y} = T_\theta(\bar{x})$ are also symmetric, i.e.,
 \(
 y = (b', d', u', a), \quad \bar{y} = (d', b', u', a).
 \)
@@ -663,18 +665,18 @@ Moreover, for the fully trusted input $x = (1, 0, 0)$, the output satisfies $d_y
 These symmetry and invariance properties serve as fundamental consistency checks, ensuring predictable behavior under neutral, vacuous, or balanced evidence, while also simplifying evaluation by reducing the number of distinct trust scenarios that need to be considered.
 
 
-\section{Evaluation and Results}\label{sec:evaluation}
+\section{Evaluation and Results}\label{sec:patas-tp-evaluation}
 
-The goal of our evaluation is to validate the \ac{PaTAS} both theoretically and empirically. Specifically, we aim to demonstrate that \ac{PaTAS} produces interpretable trust estimates that (i) converge during training under specific conditions, (ii) respect symmetry and invariance properties, and (iii) are able to provide interpretable assessments under realistic conditions such as noisy features, corrupted labels, or adversarial perturbations.  
+The goal of our evaluation is to validate the \ac{PaTAS-TP} both theoretically and empirically. Specifically, we aim to demonstrate that \ac{PaTAS-TP} produces interpretable trust estimates that (i) converge during training under specific conditions, (ii) respect symmetry and invariance properties, and (iii) are able to provide interpretable assessments under realistic conditions such as noisy features, corrupted labels, or adversarial perturbations.  
 
-Our evaluation approach combines controlled synthetic degradations with real-world datasets. We systematically vary the trustworthiness of inputs ranging from fully trusted, fully uncertain, to fully distrusted, and observe how the created \ac{PaTAS} propagates these trust assessments through the network. For each scenario, we track three complementary metrics: trust mass (belief), uncertainty mass, and distrust mass (disbelief). We also compare these values against standard model accuracy (after training) to understand how input trust affects output reliability.  
+Our evaluation approach combines controlled synthetic degradations with real-world datasets. We systematically vary the trustworthiness of inputs ranging from fully trusted, fully uncertain, to fully distrusted, and observe how the created \ac{PaTAS-TP} propagates these trust assessments through the network. For each scenario, we track three complementary metrics: trust mass (belief), uncertainty mass, and distrust mass (disbelief). We also compare these values against standard model accuracy (after training) to understand how input trust affects output reliability.  
 
 We conduct three experiments of increasing complexity based on three different datasets:  
 \begin{enumerate}
   \item \emph{Breast Cancer Classification}, to assess behavior on a small, tabular medical dataset.  
-  \item \emph{MNIST Digit Classification}, to evaluate \ac{PaTAS} across multiple neural architectures under controlled uncertainty.
+  \item \emph{MNIST Digit Classification}, to evaluate \ac{PaTAS-TP} across multiple neural architectures under controlled uncertainty.
   % and randomized trust assignments.  
-  \item \emph{Poisoned MNIST}, to evaluate \ac{PaTAS} and \ac{IPTA} in the presence of adversarial corruption and data poisoning.  
+  \item \emph{Poisoned MNIST}, to evaluate \ac{PaTAS-TP} and \ac{IPTA} in the presence of adversarial corruption and data poisoning.  
 \end{enumerate}
 
 \vspace{-1em}
@@ -683,7 +685,7 @@ We conduct three experiments of increasing complexity based on three different d
 We use the \href{https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic}{Breast Cancer Wisconsin (Diagnostic) Dataset}~\cite{breastcancer-wisconsin}, containing 569 samples with 30 numeric features (e.g., radius, area, symmetry) derived from breast mass fine needle aspirates. The \ac{NN} classifies the tumors into benign or malignant categories.
 The \ac{NN} architecture consists of 30 input neurons, 16 hidden neurons, and 2 output neurons, with ReLU activation in the hidden layer and Softmax in the output. The model is trained for 15 epochs with a batch size of 64 and a learning rate of 0.2, achieving 98\% accuracy when the data are not modified.
 
-For the evaluation, we degrade the training data in controlled ways and assign corresponding Subjective Logic trust assessments. We consider three extreme trust profiles (fully trusted \((1,0,0)\), fully distrusted \((0,1,0)\), and fully uncertain \((0,0,1)\)) for both input features and label. These are combined (for inputs and label assessment) to form nine combinations. These dogmatic and vacuous opinions serve as canonical boundary cases in Subjective Logic: they express maximal trust, maximal distrust, and maximal uncertainty, respectively. We additionally include two intermediate scenarios, introduced below, to illustrate how \ac{PaTAS} behaves under partial trust and partial distrust.
+For the evaluation, we degrade the training data in controlled ways and assign corresponding Subjective Logic trust assessments. We consider three extreme trust profiles (fully trusted \((1,0,0)\), fully distrusted \((0,1,0)\), and fully uncertain \((0,0,1)\)) for both input features and label. These are combined (for inputs and label assessment) to form nine combinations. These dogmatic and vacuous opinions serve as canonical boundary cases in Subjective Logic: they express maximal trust, maximal distrust, and maximal uncertainty, respectively. We additionally include two intermediate scenarios, introduced below, to illustrate how \ac{PaTAS-TP} behaves under partial trust and partial distrust.
 
 In practice, feature and label trust degradation may arise from poor-quality imaging, human annotation errors, or flaws in the preprocessing pipeline. 
 In all experiments, we simulate degradations using controlled perturbation functions. 
@@ -715,7 +717,7 @@ x' \sim U(\min(\text{features}, \max(\text{features}),
 Label degradation is modeled analogously: uncertainty is introduced via random label noise, while full distrust is represented by a complete replacement of the labels.
 
 Finally, to complement the boundary cases, we evaluate two intermediate trust scenarios: 
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[\roman*.]
     \item the same scenario for a fully uncertain input features and fully uncertain labels, but where the assessment is set to \((0.25, 0.25, 0.5)\), reflecting partial distrust and trust, instead of a fully uncertain opinion (0,0,1) and,
     \item a mild degradation, where features are perturbed with probability 0.15 and the trust assessment is set to \((0.25, 0, 0.75)\).
     
@@ -723,7 +725,7 @@ Finally, to complement the boundary cases, we evaluate two intermediate trust sc
 
 \subsubsection{Experiment 2 - MNIST}\label{exp:2}
 
-In this experiment, we evaluate the \ac{PaTAS} framework on the MNIST dataset~\cite{lecun1998mnist}, which consists of 60,000 training images and 10,000 test images, each representing a digit from 0 to 9. Each image has 784 features (28x28 pixels). The \ac{NN} classifies these images into one of the 10 digit classes.
+In this experiment, we evaluate the \ac{PaTAS-TP} framework on the MNIST dataset~\cite{lecun1998mnist}, which consists of 60,000 training images and 10,000 test images, each representing a digit from 0 to 9. Each image has 784 features (28x28 pixels). The \ac{NN} classifies these images into one of the 10 digit classes.
 
 We test four \ac{NN} architectures:
 \begin{itemize}
@@ -732,14 +734,14 @@ We test four \ac{NN} architectures:
     \item Architecture 3: 64 hidden neurons (784-64-10).
     \item Architecture 4: 128 hidden neurons (784-128-10).
 \end{itemize}
-Although these architectures are not state-of-the-art for MNIST, they are sufficient to evaluate the behavior of \ac{PaTAS} across different model sizes and demonstrate how trust propagates through the network. Each model uses the ReLU activation function for the hidden layer and Softmax for the output. Models are trained for 20 epochs with a batch size of 128 and a learning rate of 0.05, achieving test accuracies of 99\%.
+Although these architectures are not state-of-the-art for MNIST, they are sufficient to evaluate the behavior of \ac{PaTAS-TP} across different model sizes and demonstrate how trust propagates through the network. Each model uses the ReLU activation function for the hidden layer and Softmax for the output. Models are trained for 20 epochs with a batch size of 128 and a learning rate of 0.05, achieving test accuracies of 99\%.
 We evaluate using fully uncertain Training data trust assessment functions for both input features and labels, corresponding to the case where we have no knowledge about the dataset.  Additionally, to contrast with the uncertain case, we perform a supplementary evaluation using a fully trusted assessment on Architecture 1 (the smallest model with 16 hidden neurons).
 
 \subsubsection{Experiment 3 - Poisoned MNIST}\label{exp:3}
-In this experiment, we evaluate the \ac{PaTAS} framework on a poisoned version of the MNIST dataset, where one third of the training images are corrupted: labels of digits 6 and 9 are flipped, and at the same time a visible patch of fixed size is added at the top-left corner of the corresponding images. 
+In this experiment, we evaluate the \ac{PaTAS-TP} framework on a poisoned version of the MNIST dataset, where one third of the training images are corrupted: labels of digits 6 and 9 are flipped, and at the same time a visible patch of fixed size is added at the top-left corner of the corresponding images. 
 This combination follows common practices in data poisoning and backdoor attack scenarios~\cite{chen2017targetedbackdoorattacksdeep}. 
 The remaining two thirds of the data remain clean. 
-This setup allows us to examine how \ac{PaTAS} responds to the simultaneous presence of corrupted labels and adversarial triggers that can undermine both model performance and trust.
+This setup allows us to examine how \ac{PaTAS-TP} responds to the simultaneous presence of corrupted labels and adversarial triggers that can undermine both model performance and trust.
 
 We use Architecture 4 from the previous experiment, consisting of an input layer with 784 neurons, a hidden layer with 128 neurons, and an output layer with 10 neurons (784-128-10).
 
@@ -749,10 +751,10 @@ For the poisoned dataset, trust is assigned as follows:
     \item Labels for patched images of digits 6 and 9 are distrusted, while others are trusted.
 \end{itemize}
 
-This setup helps the \ac{PaTAS} framework focus on potentially corrupted areas, while trusting the unaffected parts of the data.
+This setup helps the \ac{PaTAS-TP} framework focus on potentially corrupted areas, while trusting the unaffected parts of the data.
 
 \paragraph*{Implementation Details for All Experiments}
-During inference, multiplication operations in the feedforward phase are implemented using SL trust discounting, while addition operations employ a generalized SL averaging fusion operator to support summations over multiple inputs (see \cref{def:trustfunc}). Trust revision uses the same averaging fusion. The \ac{PaTAS} framework and \ac{NN} were implemented in Python 3.13 using NumPy. Two main modules were developed: \texttt{PrimaryNN}, which handles network structure, training, and inference, and \texttt{PaTAS}, which implements trust assessment and propagation functions defined in the operational flow (\cref{fig:ptasoperation}). These modules interact to dynamically evaluate and update trust during feedforward and backpropagation. The full implementation, including all modules, dependencies, and experiment scripts, is available as \appp, with detailed instructions for reproducing all experiments.
+During inference, multiplication operations in the feedforward phase are implemented using SL trust discounting, while addition operations employ a generalized SL averaging fusion operator to support summations over multiple inputs (see \cref{def:trustfunc}). Trust revision uses the same averaging fusion. The \ac{PaTAS-TP} framework and \ac{NN} were implemented in Python 3.13 using NumPy. Two main modules were developed: \texttt{PrimaryNN}, which handles network structure, training, and inference, and \texttt{PaTAS-TP}, which implements trust assessment and propagation functions defined in the operational flow (\cref{fig:ptasoperation}). These modules interact to dynamically evaluate and update trust during feedforward and backpropagation. The full implementation, including all modules, dependencies, and experiment scripts, is available as \appp, with detailed instructions for reproducing all experiments.
 
 \vspace{-1em}
 \subsection{Results and Analysis}
@@ -786,7 +788,7 @@ For each of these three input types, we track and plot the evolution of three ke
 
 As a result, for each evaluation, 9 distinct plots are generated, corresponding to the 3 input types (fully trusted, fully uncertain, and fully distrusted) and each of the three key metrics (trust, uncertainty, and distrust)\footnote{The base rate is set to 0.5 and remains constant across all experiments.}.
 
-All the results are depicted in Figures in the \appp and summarized in \cref{tab:cancer_results,tab:mnist,tab:mnistpois,tab:mnistpoisipta}. They confirm several theoretical properties of \ac{PaTAS} proven in \cref{sec:ptastheory}:
+All the results are depicted in Figures in the \appp and summarized in \cref{tab:cancer_results,tab:mnist,tab:mnistpois,tab:mnistpoisipta}. They confirm several theoretical properties of \ac{PaTAS-TP} proven in \cref{sec:ptastheory}:
 
 \begin{table*}[ht]
 \begin{tabular}{cccccc}
@@ -870,17 +872,17 @@ Two findings are worth emphasizing. First, \emph{label trust matters more than f
 
 
 \subsubsection*{Experiment 2 -- MNIST Dataset}
-In this experiment, \ac{PaTAS} produces ten output trust opinions, one for each class. However they are almost the same so we record only the aggregated trust mass in the table. As shown in \cref{tab:mnist}, when features and labels are noisy, accuracy improves as model size increases. Test accuracy is consistently greater than training accuracy across all architectures, suggesting training noise makes the model underestimate its learning progress. While trust increases with model size, the gains become progressively smaller (0.281 $\to$ 0.291 $\to$ 0.295 $\to$ 0.298). This contrasts clearly with the fully trusted evaluation on the smallest architecture, which achieves a trust mass of 0.869, far exceeding any uncertain-data configuration regardless of model size. This highlights that \emph{training a smaller architecture on trusted data is significantly more beneficial for trust than training a larger architecture on uncertain data}. Moreover, we can see that larger architectures yield more stable trust assessments, likely due 
+In this experiment, \ac{PaTAS-TP} produces ten output trust opinions, one for each class. However they are almost the same so we record only the aggregated trust mass in the table. As shown in \cref{tab:mnist}, when features and labels are noisy, accuracy improves as model size increases. Test accuracy is consistently greater than training accuracy across all architectures, suggesting training noise makes the model underestimate its learning progress. While trust increases with model size, the gains become progressively smaller (0.281 $\to$ 0.291 $\to$ 0.295 $\to$ 0.298). This contrasts clearly with the fully trusted evaluation on the smallest architecture, which achieves a trust mass of 0.869, far exceeding any uncertain-data configuration regardless of model size. This highlights that \emph{training a smaller architecture on trusted data is significantly more beneficial for trust than training a larger architecture on uncertain data}. Moreover, we can see that larger architectures yield more stable trust assessments, likely due 
 to smaller average gradient magnitudes.
 
 
 \subsubsection*{Experiment 3 – Poisoned MNIST Dataset}
-As in the previous experiment, \ac{PaTAS} has ten output trust opinions. These values are informative because the reliability of the inference path vary across labels, especially when some are patched and others are not. In \cref{tab:mnistpois}, we report the trust mass associated with label 3 (a clean class) and label 6 (a poisoned class; see \cref{exp:3}). Alongside overall train and test accuracy, we also report accuracy on clean test samples of digits 3 and 6, as well as accuracy on poisoned versions of those test samples.
+As in the previous experiment, \ac{PaTAS-TP} has ten output trust opinions. These values are informative because the reliability of the inference path vary across labels, especially when some are patched and others are not. In \cref{tab:mnistpois}, we report the trust mass associated with label 3 (a clean class) and label 6 (a poisoned class; see \cref{exp:3}). Alongside overall train and test accuracy, we also report accuracy on clean test samples of digits 3 and 6, as well as accuracy on poisoned versions of those test samples.
 
-The results suggest that \ac{PaTAS} is able to reflect differences in reliability between the clean and poisoned classes, even under moderate corruption. Across all patch sizes, the trust mass assigned to label 3 consistently remains higher than that assigned to label 6, confirming that \ac{PaTAS} reliably distinguishes clean from poisoned inference paths. As shown in \cref{tab:mnistpois}, both trust values decrease as the patch size grows, since larger patches affect a greater number of neurons along the inference path, thereby reducing the overall reliability of the parameters associated with those paths and progressively affecting even the neurons involved in predicting clean classes. This degradation becomes extreme at $27 \times 27$, where the patch dominates nearly the entire input, causing a collapse of trust assessment for all labels (0.035 and 0.028 for labels 3 and 6 respectively). For smaller patches ($1 \times 1$, $4 \times 4$, 
+The results suggest that \ac{PaTAS-TP} is able to reflect differences in reliability between the clean and poisoned classes, even under moderate corruption. Across all patch sizes, the trust mass assigned to label 3 consistently remains higher than that assigned to label 6, confirming that \ac{PaTAS-TP} reliably distinguishes clean from poisoned inference paths. As shown in \cref{tab:mnistpois}, both trust values decrease as the patch size grows, since larger patches affect a greater number of neurons along the inference path, thereby reducing the overall reliability of the parameters associated with those paths and progressively affecting even the neurons involved in predicting clean classes. This degradation becomes extreme at $27 \times 27$, where the patch dominates nearly the entire input, causing a collapse of trust assessment for all labels (0.035 and 0.028 for labels 3 and 6 respectively). For smaller patches ($1 \times 1$, $4 \times 4$, 
 and $10 \times 10$), a clear and interpretable separation between clean and poisoned trust scores is maintained.
 
-To evaluate the \ac{IPTA}, \Cref{tab:mnistpoisipta} reports both accuracy and the corresponding trust opinions for clean digits (3 and 6) and patched digit 6 datasets. The trust opinion is obtained by feedforwarding a fully trusted opinion through the \ac{IPTA} derived from clean digit 3, clean digit 6, and patched digit 6 images. Clean samples maintain high accuracy with balanced trust and uncertainty masses, with a slightly better trust--uncertainty balance for digit 3 ($0.878$ trust mass for 3 vs $0.866$ trust mass for 6). In contrast, patched samples show a drastic accuracy drop, lower trust ($0.749$), and higher uncertainty, alarming for untrustworthy predictions. Furthermore, when we explicitly distrust the patch pixels while trusting the remaining pixels before feedforwarding through the \ac{IPTA}, the resulting trust opinion becomes $(0.55, 0.2, 0.25)$. These results show that \ac{PaTAS} provides interpretable warnings about poisoned outputs.
+To evaluate the \ac{IPTA}, \Cref{tab:mnistpoisipta} reports both accuracy and the corresponding trust opinions for clean digits (3 and 6) and patched digit 6 datasets. The trust opinion is obtained by feedforwarding a fully trusted opinion through the \ac{IPTA} derived from clean digit 3, clean digit 6, and patched digit 6 images. Clean samples maintain high accuracy with balanced trust and uncertainty masses, with a slightly better trust--uncertainty balance for digit 3 ($0.878$ trust mass for 3 vs $0.866$ trust mass for 6). In contrast, patched samples show a drastic accuracy drop, lower trust ($0.749$), and higher uncertainty, alarming for untrustworthy predictions. Furthermore, when we explicitly distrust the patch pixels while trusting the remaining pixels before feedforwarding through the \ac{IPTA}, the resulting trust opinion becomes $(0.55, 0.2, 0.25)$. These results show that \ac{PaTAS-TP} provides interpretable warnings about poisoned outputs.
 
 \begin{table*}[ht]
 \centering
@@ -924,7 +926,8 @@ Clean 6  & 96.66 & 0.866 & 0.0 & 0.134\\
 \label{tab:mnistpoisipta}
 \end{table}
 
-\section{Discussion of \ac{PaTAS} Findings}
+\section{Discussion of \ac{PaTAS-TP} Findings}
+\label{sec:patas-discussion}
 \begin{table}[h!]
 \centering
 \begin{tabular}{cccc}
@@ -948,27 +951,27 @@ Clean 6  & 96.66 & 0.866 & 0.0 & 0.134\\
 \label{tab:asympt}
 \end{table}
 
-\ac{PaTAS} is a framework for evaluating the runtime trustworthiness of \ac{NN} outputs. Beyond dynamic inference assessment, it can also estimate a static trust opinion of the network itself. The core principle is that a trustworthy model should preserve trust: a fully trusted input producing a highly trusted output indicates that the model does not erode trust during inference. Accordingly, the overall model trustworthiness can be defined as the trust score of the \ac{PaTAS} feedforward function (\(PaTAS_{FF}\)) under a fully trusted input:
+\ac{PaTAS-TP} is a framework for evaluating the runtime trustworthiness of \ac{NN} outputs. Beyond dynamic inference assessment, it can also estimate a static trust opinion of the network itself. The core principle is that a trustworthy model should preserve trust: a fully trusted input producing a highly trusted output indicates that the model does not erode trust during inference. Accordingly, the overall model trustworthiness can be defined as the trust score of the \ac{PaTAS-TP} feedforward function (\(PaTAS_{FF}\)) under a fully trusted input:
 \[
-T(\text{NN}) = \ac{PaTAS}_{FF}((1, 0, 0)),
+T(\text{NN}) = \ac{PaTAS-TP}_{FF}((1, 0, 0)),
 \]
-which quantifies how well trust is maintained throughout the network. Using this definition, we compared the \ac{IPTA} for benign and adversarial inputs in Experiment~\ref{exp:3}, where the adversarial case used a \(4\times4\) patch injection. Results show a degradation in trust for adversarial samples: benign inputs achieved \(t=0.878, d=0, u=0.122\), while patched inputs dropped to \(t=0.749, d=0, u=0.251\). These observations demonstrate the sensitivity of \ac{PaTAS} to local perturbations, offering a quantitative indicator of reduced reliability.
+which quantifies how well trust is maintained throughout the network. Using this definition, we compared the \ac{IPTA} for benign and adversarial inputs in Experiment~\ref{exp:3}, where the adversarial case used a \(4\times4\) patch injection. Results show a degradation in trust for adversarial samples: benign inputs achieved \(t=0.878, d=0, u=0.122\), while patched inputs dropped to \(t=0.749, d=0, u=0.251\). These observations demonstrate the sensitivity of \ac{PaTAS-TP} to local perturbations, offering a quantitative indicator of reduced reliability.
 
 Although trust mass and accuracy are often correlated, our results reveal meaningful divergences. In the breast cancer task (\cref{tab:cancer_results}), assigning a mixed trust profile \((0.25, 0, 0.75)\) to all features and labels yields a final trust mass of \(0.34\), higher than the fully uncertain-features/fully trusted label case (\(0.32\)), yet the latter achieves better test accuracy (80\% vs. 96\%). Thus, higher trust mass does not always imply superior predictive performance. 
 
-This difference reflect that \ac{PaTAS} evaluates the reliability of the inference path, not just predictive accuracy. The digit “6” was a poisoned class during training, so the parameters involved in predicting “6” are less trusted than those for “3,” even though the test samples are clean. 
+This difference reflect that \ac{PaTAS-TP} evaluates the reliability of the inference path, not just predictive accuracy. The digit “6” was a poisoned class during training, so the parameters involved in predicting “6” are less trusted than those for “3,” even though the test samples are clean. 
 
-Interpretation of trust values, like accuracy, depends on the application. In high-stakes settings, a resulting trust score of \((0.4, 0, 0.6)\) may be inadequate, whereas in less critical domains it may suffice. \ac{PaTAS} enables such contextual interpretation by providing a unified, interpretable metric that can be tracked over time, compared across models, or evaluated under varying conditions. Overall, \ac{PaTAS} can complement traditional metrics, for example, by signaling fragility even when accuracy appears high or by identifying stability where accuracy slightly decreases. This duality underscores its relevance in safety-critical contexts where accuracy alone can be misleading.
+Interpretation of trust values, like accuracy, depends on the application. In high-stakes settings, a resulting trust score of \((0.4, 0, 0.6)\) may be inadequate, whereas in less critical domains it may suffice. \ac{PaTAS-TP} enables such contextual interpretation by providing a unified, interpretable metric that can be tracked over time, compared across models, or evaluated under varying conditions. Overall, \ac{PaTAS-TP} can complement traditional metrics, for example, by signaling fragility even when accuracy appears high or by identifying stability where accuracy slightly decreases. This duality underscores its relevance in safety-critical contexts where accuracy alone can be misleading.
 
-In practice, precise dataset trustworthiness estimates may be unavailable, especially for large training datasets where the provenance of individual samples is difficult to establish. \ac{PaTAS} can still operate in such cases by initializing dataset trust to a fully uncertain (vacuous) opinion. While this limits the use of prior trust evidence during training, it preserves the ability to propagate trust assessments at inference time. For a specific query, the circumstances under which the input features were collected are often easier to assess, making input-level trust more practical to obtain than dataset-level trust. \ac{PaTAS} can therefore support meaningful trust evaluation even when explicit dataset provenance is missing. Likewise, if trust in a particular input cannot be assessed, a fully uncertain opinion may be used as a fallback.
+In practice, precise dataset trustworthiness estimates may be unavailable, especially for large training datasets where the provenance of individual samples is difficult to establish. \ac{PaTAS-TP} can still operate in such cases by initializing dataset trust to a fully uncertain (vacuous) opinion. While this limits the use of prior trust evidence during training, it preserves the ability to propagate trust assessments at inference time. For a specific query, the circumstances under which the input features were collected are often easier to assess, making input-level trust more practical to obtain than dataset-level trust. \ac{PaTAS-TP} can therefore support meaningful trust evaluation even when explicit dataset provenance is missing. Likewise, if trust in a particular input cannot be assessed, a fully uncertain opinion may be used as a fallback.
 
-A key factor affecting \ac{PaTAS} behavior is the parameter \(\epsilon\), which controls the threshold used to classify gradients as positive or negative evidence during training. As shown in \cref{tab:cancer_results}, if \(\epsilon\) is too small, \ac{PaTAS} may misinterpret gradients as large even when the model performs well. Consequently, trusted labels may reduce parameter trust, resembling the case \(g \to +\infty\) in ~\cref{tab:asympt}. Proper calibration of \(\epsilon\) is therefore crucial, and can be tuned per layer or gradually reduced as training converges to increase sensitivity to smaller gradients. One practical approach is to tie \(\epsilon\) to the learning rate, so that as the learning rate decays, \(\epsilon\) decreases accordingly, naturally tracking the expected gradient scale throughout training.
+A key factor affecting \ac{PaTAS-TP} behavior is the parameter \(\epsilon\), which controls the threshold used to classify gradients as positive or negative evidence during training. As shown in \cref{tab:cancer_results}, if \(\epsilon\) is too small, \ac{PaTAS-TP} may misinterpret gradients as large even when the model performs well. Consequently, trusted labels may reduce parameter trust, resembling the case \(g \to +\infty\) in ~\cref{tab:asympt}. Proper calibration of \(\epsilon\) is therefore crucial, and can be tuned per layer or gradually reduced as training converges to increase sensitivity to smaller gradients. One practical approach is to tie \(\epsilon\) to the learning rate, so that as the learning rate decays, \(\epsilon\) decreases accordingly, naturally tracking the expected gradient scale throughout training.
 
 Finally, trust quantification for \(T_{\theta_i \mid y_\text{batch}}\) in the Trust Update Algorithm~\ref{alg:trustupdate} relies on a simple gradient-counting procedure. Although computationally efficient, it fixes the uncertainty component of the resulting binomial opinion based on the number of input neurons to \(i\). This fixed-uncertainty formulation may not be optimal in all cases, suggesting the need for adaptive quantification schemes. Similarly, \(T_{\theta_i \mid \overline{y_\text{batch}}}\) is set to a fully vacuous opinion \((0, 0, 1)\), which, while consistent with the absence of evidence, may not fully leverage prior knowledge when available.
 
 
 \section{Summary \& Conclusions}
-
+\label{sec:patas-tp-conclusion}
 
 
 

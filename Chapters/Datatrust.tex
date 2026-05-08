@@ -34,9 +34,8 @@ Second, \emph{properties live at different levels of the data}. Some properties 
 
 Third, \emph{evidence about trustworthiness is rarely complete}. Training datasets are typically constructed through multi-stage lifecycles in which documentation, metadata, and direct observations are partial, sometimes contradictory, and often unavailable for historical pipelines. The framework must therefore distinguish \emph{low support} from \emph{no support}, which is exactly what \aclu{SL} offers and what scalar quality scores cannot.
 
-Building on these observations, the chapter introduces a top-level framework for assessing the trustworthiness of AI training datasets. The framework is a direct specialization of the General Trust Assessment Methodology of \cref{chap:Trust_method} to the dataset setting, and provides the conceptual and formal foundation on which several specific contributions of this thesis build: the assessment of sampling and representation bias~\cite{ecmldatatrust}, the assessment of labeling accuracy from annotator disagreement~\cite{trust-aidatatrust}, and the multi-stage analysis illustrated on \ac{COMPAS} dataset. These works are presented in \cref{sec:dataset-trust:applications} as \emph{applications} of the framework rather than as separate methodologies.
-
-The remainder of the chapter is organized as follows. \cref{sec:dataset-trust:uncertainty} reviews the sources of uncertainty that arise at different stages of the dataset lifecycle and motivates the use of an evidence-based formalism. \cref{sec:dataset-trust:framework} introduces the four design principles of the framework, organizes them into a four-axis design space, and re-states the three phases of the General Methodology in dataset-specific language. \cref{sec:dataset-trust:formal} provides the formal definitions, the metric-to-evidence mapping, the three quantification schemes used in this thesis, and the aggregation rules across granularities and lifecycle stages. \cref{sec:dataset-trust:applications} demonstrates the framework on three applications spanning different cells of the design space. \cref{sec:dataset-trust:summary} concludes.
+Building on these observations, the chapter introduces a top-level framework for assessing the trustworthiness of AI training datasets. The framework is a direct specialization of the General Trust Assessment Methodology of \cref{chap:Trust_method} to the dataset setting, and provides the conceptual and formal foundation on which several specific contributions of this thesis build: the assessment of sampling and representation bias~\cite{ecmldatatrust}, the assessment of labeling accuracy from annotator disagreement~\cite{trust-aidatatrust}, and the multi-stage analysis illustrated on \ac{COMPAS} dataset. 
+The remainder of the chapter is organized as follows. \cref{sec:dataset-trust:uncertainty} reviews the sources of uncertainty that arise at different stages of the dataset lifecycle and motivates the use of an evidence-based formalism. \cref{sec:dataset-trust:framework} introduces the three design principles of the framework, organizes them into a three-axis design space, and re-states the three phases of the General Methodology in dataset-specific language. \cref{sec:dataset-trust:applications:compas} provides the metric-to-evidence mapping application on the COMPAS Dataset. \cref{sec:dataset-trust:applications:gtsrb,sec:dataset-trust:applications:cifar10h} demonstrate the framework on two others applications spanning different cells of the design space. \cref{sec:dataset-trust:summary} concludes.
 
 % --------------------------------------------------------------
 \section{Sources of Uncertainty in Training Datasets Assessment}
@@ -106,10 +105,10 @@ The framework is built on the following design principles.
   \item \textbf{Multi-granular evaluation.} Some properties are meaningful only at the level of the dataset as a whole (e.g., class balance), others at the level of individual entries (e.g., label correctness), and others at the level of features (e.g., sensor reliability or presence of sensitive attributes). The framework supports trust sources operating at any of these three granularities and provides aggregation rules between them.
 \end{enumerate}
 
-\subsection{The Four-Axis Design Space}
+\subsection{The Three-Axis Design Space}
 \label{sec:dataset-trust:framework:design-space}
 
-A trust assessment of a training dataset is fully specified by four choices, which together form the design space of the framework. These four choices are formalized as the tuple $(\propP, \propS, \propG, \propQ)$:
+A trust assessment of a training dataset is fully specified by three choices, which together form the design space of the framework. These three choices are formalized as the tuple $(\propP, \propS, \propG)$:
 
 \begin{itemize}
   \item $\propP$ --- the \textbf{property} being assessed (e.g., accuracy,
@@ -124,27 +123,28 @@ A trust assessment of a training dataset is fully specified by four choices, whi
         \\
         ($\propG \in \{\textsc{dataset}, \textsc{entry},
         \textsc{feature}\}$);
-  \item $\propQ$ --- the \textbf{quantification scheme} mapping evidence to a
-        subjective opinion 
-        \\
-        ($\propQ \in \{\textsc{\acs{BPQ}}, \textsc{\acs{EWQ}},
-        \textsc{\acs{CUQ}}\}$, defined in
-        \cref{sec:dataset-trust:formal:quantification}).
+  % \item $\propQ$ --- the \textbf{quantification scheme} mapping evidence to a
+  %       subjective opinion 
+  %       \\
+  %       ($\propQ \in \{\textsc{\acs{BPQ}}, \textsc{\acs{EWQ}},
+  %       \textsc{\acs{CUQ}}\}$, defined in
+  %       \cref{sec:dataset-trust:formal:quantification}).
 \end{itemize}
 
-Selecting $(\propP, \propS, \propG, \propQ)$ instantiates a specific assessment problem. The same property may be meaningful at multiple granularities or at multiple stages, in which case the assessment is composite and the corresponding propositions are combined using logical operators as in \cref{chap:Trust_method}. Two consequences are worth highlighting.
+Selecting $(\propP, \propS, \propG)$ instantiates a specific assessment problem. The same property may be meaningful at multiple granularities or at multiple stages.
+
 \paragraph{Decomposition is principled, not ad hoc.}
 Composite properties such as ``the dataset is reliable for training'' are decomposed by traversing the axes in a fixed order: first along $\propS$ (lifecycle), then within each stage along $\propG$ (granularity). For example, ``$\dataset$ is reliable for training'' first splits into the four stage-level propositions of \cref{eq:dataset-trust:lifecycle-decomposition}, and then each stage-level proposition splits along the granularities at which evidence is available: ``the sampling stage is reliable'' becomes a dataset-level sub-proposition about the class distribution and a feature-level sub-proposition about feature coverage; ``the annotation stage is reliable'' becomes an entry-level sub-proposition about per-item label correctness and a dataset-level sub-proposition about systematic group-level label bias. Each trust opinion in the expression is then associated with a single trust source (\cref{tab:dataset-trust:catalogue}) and quantified with one of the schemes of \cref{sec:dataset-trust:formal:quantification}. This fixed traversal order is the structural counterpart, in the dataset setting, of the generic expression-generation phase of \cref{chap:Trust_method}.
 
 \paragraph{The same scheme covers training data and inference-time inputs.} When a property is intrinsically per-entry or per-feature ($\propG \in \{\textsc{entry}, \textsc{feature}\}$), the same evidence-collection and quantification machinery applies whether the entry comes from the training set or from a single input presented at inference time. This is what links the present chapter to the Trust Propagation Module of \ac{PaTAS}.
 
 \begin{mdframed}[backgroundcolor=gray!10, linewidth=0pt]
-\textbf{Relation to \cref{chap:Trust_method}.} The General Trust Assessment Methodology (\cref{chap:Trust_method}) is property-agnostic and entity-agnostic. The four axes $(\propP, \propS, \propG, \propQ)$ make the \emph{entity} (a dataset or a stage of its lifecycle) and the \emph{evidence structure} explicit while reusing the methodology's three phases (expression generation, \ac{ATO} quantification, expression evaluation) without modification.
+\textbf{Relation to \cref{chap:Trust_method}.} The General Trust Assessment Methodology (\cref{chap:Trust_method}) is property-agnostic and entity-agnostic. The three axes $(\propP, \propS, \propG)$ make the \emph{entity} (a dataset or a stage of its lifecycle) and the \emph{evidence structure} explicit while reusing the methodology's three phases (expression generation, \ac{ATO} quantification, expression evaluation) without modification.
 \end{mdframed}
 
 \subsection{Specializing the General Methodology to Datasets}
 \label{sec:dataset-trust:framework:specialisation}
-The four-axis design space $(\propP, \propS, \propG, \propQ)$  lets us re-state the three phases of the General Trust Assessment Methodology in dataset-specific language.
+The three-axis design space $(\propP, \propS, \propG)$  lets us re-state the three phases of the General Trust Assessment Methodology in dataset-specific language.
 
 \paragraph{Phase~I --- Expression generation.} 
 The trust proposition is formulated for a property $\propP$. If $\propP$ is composite (e.g., ``the dataset is reliable for training''), it is decomposed lifecycle-first:
@@ -172,8 +172,7 @@ T_{\text{sampling}}
   \oplus T_{\text{LTCI}} \oplus \dots,
 \label{eq:dataset-trust:metric-aggregation}
 \end{equation}
-and analogously for every other stage. The full catalog of metrics is
-given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source metrics considered in this thesis, organized by lifecycle stage, risk category, and typical granularity ($\dGran$ for dataset, $\eGran$ for entry, $\fGran$ for feature). This table is the practical entry point for instantiating the framework: each metric corresponds to a leaf proposition in Eq.~\eqref{eq:dataset-trust:lifecycle-decomposition} and provides quality scores that the formalism of \cref{sec:dataset-trust:formal} converts into subjective opinions. \Cref{fig:trust_expression_tree_dataset} shows an example of the resulting tree.
+and analogously for every other stage. The full catalog of metrics is given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source metrics considered in this thesis, organized by lifecycle stage, risk category, and typical granularity ($\dGran$ for dataset, $\eGran$ for entry, $\fGran$ for feature). This table is the practical entry point for instantiating the framework: each metric corresponds to a trust sources for a trust proposition in Eq.~\eqref{eq:dataset-trust:lifecycle-decomposition}. \Cref{fig:trust_expression_tree_dataset} shows an example of the final resulting tree including the trust sources.
 
 \begin{figure}[t]
 \centering
@@ -218,7 +217,7 @@ given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source me
 \label{fig:trust_expression_tree_dataset}
 \end{figure}
 
-\Cref{tab:dataset-trust:catalogue} fixes the \emph{structure} of the assessment: which propositions sit in the tree, which trust source attaches to each leaf, and at which granularity. What remains is the \emph{quantification} of each leaf: how the evidence counts $(r_m, s_m)$ produced by a trust source become a subjective opinion. The framework provides three quantification schemes (\acs{BPQ}, \acs{EWQ}, \acs{CUQ}) introduced in \cref{sec:trust_quant_model}; the analyst picks one per leaf according to the nature of the evidence the trust source produces.
+\Cref{tab:dataset-trust:catalogue} fixes the \emph{structure} of the assessment: which propositions sit in the tree, which trust source attaches to each leaf, and at which granularity. What remains is the \emph{quantification} of each leaf: (1) how to count the evidence from a trust source and (2) how the evidence counts produced by a trust source become a subjective opinion. For (1), in \cref{sec:dataset-trust:applications:compas,sec:dataset-trust:applications:gtsrb,sec:dataset-trust:applications:cifar10h} we will see how we can count the evidence from a trust source. Regarding (2) we recall the three quantification schemes (\acs{BPQ}, \acs{EWQ}, \acs{CUQ}) introduced in \cref{sec:trust_quant_model}; the analyst picks one per leaf according to the nature of the evidence the trust source produces.
 \begin{enumerate}
 
     \item \textbf{\acf{BPQ},}  
@@ -256,8 +255,7 @@ given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source me
 
 \end{enumerate}
 
-The three schemes target different evidence regimes. \ac{BPQ} is the default choice when the metric returns a single observed value with no indication of how confident that value is; the prior weight $W$ governs how quickly residual uncertainty shrinks as evidence accumulates. \ac{EWQ} is appropriate when each piece of evidence comes with its own uncertainty weight. \ac{CUQ} is used when domain policy or trust-source metadata fixes the uncertainty externally; the scheme then distributes the remaining mass between trust mass and distrust mass proportionally to evidence. The three schemes are exercised in
-\cref{sec:dataset-trust:applications} on different applications.
+The three schemes target different evidence regimes. \ac{BPQ} is the default choice when the metric returns a single observed value with no indication of how confident that value is; the prior weight $W$ governs how quickly residual uncertainty shrinks as evidence accumulates. \ac{EWQ} is appropriate when each piece of evidence comes with its own uncertainty weight. \ac{CUQ} is used when domain policy or trust-source metadata fixes the uncertainty externally; the scheme then distributes the remaining mass between trust mass and distrust mass proportionally to evidence. 
 
 \paragraph{Phase~III --- Expression evaluation.} 
 Here we just evaluate the final expression.
@@ -331,7 +329,7 @@ This tree corresponds to the maximal decomposition: the property $\propP$ = reli
       &                        & Sensitive Attribute Amplification (SAA) & $\fGran$ \\
     \bottomrule
   \end{tabular}
-  \caption{Trust-source metrics grouped by lifecycle stage, risk category, and typical granularity ($\dGran$ = dataset, $\eGran$ = entry, $\fGran$ = feature). Granularity tags identify the level. \todo[inline]{Add citation for the metrics}}
+  \caption{Trust-source metrics grouped by lifecycle stage, risk category, and typical granularity ($\dGran$ = dataset, $\eGran$ = entry, $\fGran$ = feature). Granularity tags identify the level. \cite{10.1145/3457607,Suresh_2021,gebru2018datasheets,Pushkarna2022DataCP}}
   \label{tab:dataset-trust:catalogue}
 \end{table}
 
@@ -386,6 +384,198 @@ all measurements of a given column), bypassing the entry level.
 
 The following sections demonstrate the framework on three applications. Each application explicitly identifies the cell of the design space it occupies, the quantification scheme it uses, and the publication in which it was originally presented. The applications are presented in the following order: sampling first, annotation next, then a multi-stage assessment.
 
+\section{Multi-stage Assessment: COMPAS}
+\label{sec:dataset-trust:applications:compas}
+\begin{mdframed}[backgroundcolor=blue!4, linewidth=0pt]
+\textbf{Position in the design space.}
+
+$\propP$ = overall reliability for use as training data;\
+
+$\propS = \{\textsc{sampling}, \textsc{collection}, \textsc{annotation},
+        \textsc{processing}\}$;\
+        
+$\propG$ = dataset;\ 
+% $\propQ$ = BPQ.
+\textbf{Reference:} original to this dissertation.
+\end{mdframed}
+
+This section presents a generic application of the framework introduced in \cref{sec:dataset-trust:framework}. We define dataset reliability as a trust proposition supported by heterogeneous evidence extracted from multiple stages of the dataset lifecycle, and we formalize the operations that turn metric values into subjective opinions and combine opinions across stages. We recall that as final expression we get the expression depicted in \cref{fig:trust_expression_tree_dataset}. We now focus on understanding how we can quantify the trust opinions from trust sources (Trust opinions at the leaves).
+
+
+This first application demonstrates the framework's ability to compose stage-level assessments into a dataset-level opinion. COMPAS exercises three of the four lifecycle stages simultaneously. \cref{tab:dataset-trust:compas} reports the trust-source metrics, normalized quality scores, evidence counts, and resulting \ac{BPQ} stage-level opinions.
+
+\subsection{Trust Opinion from Trust Sources metric}
+\label{sec:dataset-trust:formal:evidence}
+Each lifecycle-stage proposition is supported by a set of trust sources. A trust source corresponds to a diagnostic signal, metric, or assessment that provides evidence for or against reliability at a given stage. Trust sources may be quantitative or qualitative, deterministic or probabilistic, and may not be uniformly available across datasets.
+
+Trust-source metric values $m$ are first mapped into normalized quality scores
+\[
+q_m \in [0,1],
+\]
+where values close to one indicate strong support for reliability and values close to zero indicate evidence against reliability. This normalization ensures comparability across heterogeneous metrics.
+
+For metrics where lower values indicate better quality (e.g., error rates), we apply
+\begin{equation}
+q_m = \max\!\left(0,\, 1 - \frac{m}{\tau_m}\right),
+\label{eq:dataset-trust:q-low}
+\end{equation}
+where $\tau_m > 0$ is a domain-specific tolerance threshold. The formula is a linear ramp: $q_m = 1$ when the observed value is zero (no error), $q_m = 0$ when $m$ reaches the tolerance $\tau_m$, and the score decreases linearly between these two endpoints. Observed values beyond $\tau_m$ are clamped at zero rather than producing negative quality, since further degradation no longer informs the opinion in any useful way. The choice of $\tau_m$ is therefore the operational definition of \emph{``what bad value is too bad''} for this particular metric.
+
+For metrics where higher values indicate better quality, we apply
+\begin{equation}
+q_m = \max\!\left(0,\, \min\!\left(1,\,
+        \frac{m - A_m}{L_m - A_m}\right)\right),
+\label{eq:dataset-trust:q-high}
+\end{equation}
+where $A_m$ and $L_m$ denote unacceptable and acceptable bounds, respectively. The interpretation mirrors the previous case but with two thresholds rather than one: at $m = A_m$, the metric is unacceptable and contributes no positive support ($q_m = 0$); at $m = L_m$, the metric reaches the acceptable level and contributes full positive support ($q_m = 1$); between $A_m$ and $L_m$, the score ramps linearly, so partial achievement yields partial support. Values below $A_m$ or above $L_m$ are clamped to the corresponding endpoint. The two-threshold form is needed because, for higher-is-better metrics, the ``good'' region has both a floor (below which there is no support at all) and a saturation point (above which additional improvement does not add support).
+
+\marginpar{From Evidence to Subjective Opinions}
+\label{sec:dataset-trust:formal:quantification}
+
+To derive trust opinions values $(t, d, u)$, normalized metric scores are converted into positive and negative evidence counts:
+\begin{equation}
+r_m = K_m \, q_m, \qquad s_m = K_m \, (1 - q_m),
+\label{eq:dataset-trust:evidence-counts}
+\end{equation}
+where $K_m$ is an evidence-strength parameter that fixes the total amount of evidence the metric is assumed to provide, $r_m + s_m = K_m$. Larger values of $K_m$ correspond to trust sources the analyst takes more seriously; smaller values correspond to weaker or less authoritative sources. Under \ac{BPQ} with prior weight $W$, the residual uncertainty contributed by this single metric is $u = W / (W + K_m)$, so $K_m$ is also a parameter that controls the value of the uncertainty.
+In a multi-metric assessment within a stage, the per-metric trust opinions are aggregated to obtain the stage-level opinion. 
+
+\subsection{Stage quantification on COMPAS}
+
+ \paragraph{Sampling stage.}
+The sampling-stage proposition is \emph{``the sampling stage of the \ac{COMPAS} dataset is reliable.''} Five trust sources contribute evidence: distribution gap (DG), minority coverage rate (MCR), long-tail coverage index (LTCI), data freshness index (DFI), and missing-at-source audit (MSA). We walk through this stage in detail to illustrate the full pipeline; the other three stages are reported in \cref{tab:dataset-trust:compas} and discussed below.
+
+\subparagraph{Step~1: Normalizing the metrics.}
+The observed metric values are
+\[
+\text{DG} = 0.432,\quad \text{MCR} = 3.597,\quad
+\text{LTCI} = 0.657,\quad \text{DFI} = 0.100,\quad
+\text{MSA} = 0.000,
+\]
+where DFI is computed using the dataset's own most recent record as the reference \emph{``now.''} In practice, freshness should be measured relative to the time at which the dataset is consumed rather than the latest record it contains; the present convention is conservative for illustration purposes only. We use the following thresholds:
+\[
+\tau_{\text{DG}} = 0.30,\quad
+A_{\text{MCR}}  = 0.50,\ L_{\text{MCR}}  = 1.00,\quad
+A_{\text{LTCI}} = 0.30,\ L_{\text{LTCI}} = 1.00,
+\]
+\[
+A_{\text{DFI}}  = 0.00,\ L_{\text{DFI}}  = 1.00,\quad
+\tau_{\text{MSA}} = 0.10.
+\]
+Applying
+Eqs.~\eqref{eq:dataset-trust:q-low}--\eqref{eq:dataset-trust:q-high}
+yields quality scores
+\[
+q_{\text{DG}}   = 0.000,\quad
+q_{\text{MCR}}  = 1.000,\quad
+q_{\text{LTCI}} = 0.510,\quad
+q_{\text{DFI}}  = 0.100,\quad
+q_{\text{MSA}}  = 1.000.
+\]
+
+\subparagraph{Step~2: Converting to evidence.}
+With evidence-strength $K_m = 2$ for every metric,
+$r_m = 2 q_m$ and $s_m = 2(1 - q_m)$ give
+\[
+\begin{aligned}
+& r_{\text{DG}}   = 0.00,\ s_{\text{DG}}   = 2.00, \quad
+  r_{\text{MCR}}  = 2.00,\ s_{\text{MCR}}  = 0.00, \\
+& r_{\text{LTCI}} = 1.02,\ s_{\text{LTCI}} = 0.98, \quad
+  r_{\text{DFI}}  = 0.20,\ s_{\text{DFI}}  = 1.80, \\
+& r_{\text{MSA}}  = 2.00,\ s_{\text{MSA}}  = 0.00,
+\end{aligned}
+\]
+
+\subparagraph{Step~3: Applying \ac{BPQ}.}
+We apply \ac{BPQ} for each metric with prior
+weight~$W=2$, Eq.~\eqref{eq:baseline_quant} yields
+
+\begin{aligned}
+ \omega_{\text{DG}}   &= (0, 0.5, 0.5), \quad&
+  \omega__{\text{MCR}}  &= (0.5, 0, 0.5),\\
+\omega__{\text{LTCI}} &= (0.255, 0.245, 0.5), \quad&
+  \omega__{\text{DFI}}  &= (0.05, 0.45, 0.5), \\
+\omega__{\text{MSA}}  &= (0.5, 0, 0.5),
+\end{aligned}
+\]
+Fusing all using cumulative fusion gives: 
+\[
+\omega_{\text{sampling}} = (0.435, 0.398, 0.167)
+\]
+\subparagraph{Interpretation.}
+The opinion $(0.435,\ 0.398,\ 0.167)$ has trust mass and distrust mass close to each other and a relatively low residual uncertainty: the evidence base is large enough for the opinion to commit, but the evidence itself is genuinely mixed. Three trust sources contribute positive evidence: the minority coverage rate ($q_{\text{MCR}} = 1.00$), the long-tail coverage index ($q_{\text{LTCI}} = 0.51$), and the missing-at-source audit ($q_{\text{MSA}} = 1.00$). Two contribute negative evidence: the distribution-gap metric ($q_{\text{DG}} = 0.00$) and the data freshness index ($q_{\text{DFI}} = 0.10$). Rather than collapsing these into a single ``the sampling is good'' or ``the sampling is bad'' verdict, the framework reports both: the dataset has acceptable group coverage and structural completeness, but exhibits a distribution gap with respect to the target population and is stale. The two signals are surfaced separately rather than averaged away.
+
+
+All the other stages use the same principle and the hyperparameters values are recorded in \cref{tab:dataset-trust:compas}.
+
+
+\begin{table}[t]
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.1}
+  \begin{tabular}{@{}llrrl@{}}
+    \toprule
+    \textbf{Stage} & \textbf{Metric} & \textbf{Raw} & \textbf{$q$} & \textbf{Direction / Hyperparameter} \\
+    \midrule
+    \multirow{5}{*}{Sampling}
+      & DG                                  & 0.432  & 0.000 & lower\_is\_better \{$\tau{=}0.3$\} \\
+      & MCR(African-American)           & 3.597 & 1.000 & higher\_is\_better \{$A{=}0.5$, $L{=}1.0$\} \\
+      & LTCI(c\_charge\_desc)               & 0.657  & 0.510 & higher\_is\_better \{$A{=}0.3$, $L{=}1.0$\}\\
+      & DFI(c\_jail\_in)                    & 0.100 & 0.000 & higher\_is\_better \{$A{=}0$, $L{=}1.0$\} \\
+      & MSA(essential\_cols)                & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.1$\} \\
+    \cmidrule(lr){2-5}
+      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.435,\ 0.398,\ 0.167)$\quad \{$W{=}2$\}} \\
+    \midrule
+    \multirow{5}{*}{Collection}
+      & ORR(decile\_score)                  & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.05$\} \\
+      & MDD(by\_race)                       & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.2$\} \\
+      & PIID                                & 0.075  & 0.000 & lower\_is\_better \{$\tau{=}0.001$\} \\
+      & SALS(race$\,|\,$features)           & 0.570  & 0.186 & lower\_is\_better \{$\tau{=}0.7$\} \\
+      & RRS(qid$=$sex,race,age\_cat)        & 0.191  & 0.619 & lower\_is\_better \{$\tau{=}0.5$\} \\
+    \cmidrule(lr){2-5}
+      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.467,\ 0.366,\ 0.167)$\quad \{$W{=}2$\}} \\
+    \midrule
+    Annotation
+      & GLBI(two\_year\_recid$\,|\,$race)   & 0.036  & 0.821 & lower\_is\_better \{$\tau{=}0.2$\} \\
+    \cmidrule(lr){2-5}
+      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.411,\ 0.089,\ 0.500)$\quad \{$W{=}2$\}} \\
+    \midrule
+    \multirow{2}{*}{Processing}
+      & DIOR                                & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.1$\}  \\
+      & FLCA                                 & 0.291   & 0.516 & higher\_is\_better \{$\tau{=}0.6$\}  \\
+    \cmidrule(lr){2-5}
+      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.505,\ 0.161,\ 0.333)$\quad \{$W{=}2$\}} \\
+    \bottomrule
+  \end{tabular}
+  \caption{BPQ metrics and stage-level results for COMPAS. Each stage is
+    quantified independently using
+    Eqs.~\eqref{eq:dataset-trust:q-low}--\eqref{eq:dataset-trust:q-high}; the
+    dataset-level opinion is obtained by cross-stage conjunction
+    (\cref{fig:trust_expression_tree_dataset}).}
+  \label{tab:dataset-trust:compas}
+\end{table}
+
+\paragraph{Collection stage.}
+The collection stage produces a more balanced assessment, with trust mass $t = 0.467$, distrust mass $d = 0.366$, and uncertainty $u = 0.167$. Measurement-integrity metrics such as the out-of-range rate ($q = 1.000$) and missing-data disparity ($q = 1.000$) contribute positive evidence. However, privacy-related trust sources introduce substantial negative evidence, including \ac{PII} density ($q = 0.00$) and sensitive-attribute leakage ($q = 0.186$). The resulting opinion reflects a trade-off between accurate measurement and privacy exposure rather than a clear reliability conclusion.
+
+\paragraph{Annotation stage.}
+Annotation reliability is assessed using a single trust source, the group-label bias index, which yields the lowest stage-level trust mass in the assessment: $(t, d, u) = (0.411, 0.089, 0.500)$. The low trust mass should not be read as ``the annotation is unreliable'': distrust mass is correspondingly low, and the dominant mass is uncertainty. The framework is reporting that with only one trust source available, it does not have enough evidence to commit to a confident assessment in either direction. This is qualitatively different from the sampling-stage opinion, which has comparable trust mass but arrived at it through balanced positive and negative evidence rather than absent evidence.
+
+\paragraph{Processing stage.}
+The processing stage yields the strongest reliability signal, with trust mass $t = 0.505$, distrust mass $d = 0.161$, and uncertainty $u = 0.333$. The absence of duplicate rows provides strong positive evidence ($q = 1.00$), while feature--label correlation audits ($q = 0.516$) also introduces positive evidence. The resulting opinion indicates comparatively reliable processing, although residual uncertainty remains due to the limited number of processing-stage diagnostics.
+
+\paragraph{Cross-stage rollup.}
+The four stage-level opinions are combined into a dataset-level reliability opinion using the cross-stage conjunction \cref{fig:trust_expression_tree_dataset}:
+\[
+\omega_{\propR}
+= \omega_{\text{sampling}} \cdot
+  \omega_{\text{collection}} \cdot
+  \omega_{\text{annotation}} \cdot
+  \omega_{\text{processing}}.
+\]
+Conjunction is the appropriate operator here because reliability requires every stage to be reliable: a strong assessment at one stage cannot compensate for a weak assessment at another. The aggregated opinion preserves three pieces of information that a scalar quality score would have collapsed: \emph{which} stage carries the strongest negative signal (the collection stage, where privacy exposure introduces substantial distrust mass), \emph{which} stage merely lacks evidence (the annotation stage, with $u_{\text{annotation}} = 0.50$ driven by a single trust source), and how the four stages compare quantitatively. An auditor reading the rollup together with \cref{tab:dataset-trust:compas} can therefore distinguish two qualitatively different actions: collecting more representative or privacy-aware data (to attack the collection-stage and sampling-stage distrusts mass) versus collecting additional annotation-stage diagnostics (to reduce the annotation-stage uncertainty).
+
+
 \section{Sampling Stage, Dataset Level: Balancing Bias on \acs{GTSRB}}
 \label{sec:dataset-trust:applications:gtsrb}
 
@@ -395,11 +585,11 @@ The following sections demonstrate the framework on three applications. Each app
 $\propP$ = representation bias (class balance);
 
 $\propS$ = sampling;\quad $\propG$ = dataset;
-$\propQ \in \{\textsc{\ac{BPQ}}, \textsc{\ac{CUQ}}\}$.
+% $\propQ \in \{\textsc{\ac{BPQ}}, \textsc{\ac{CUQ}}\}$.
 \textbf{Reference:}~\cite{ecmldatatrust}.
 \end{mdframed}
 
-The first application instantiates the framework on the \ac{GTSRB} to assess freedom from class-imbalance bias. Class balance is a \emph{dataset-level} property: it is meaningful only when the entire class distribution is observed. The application illustrates two complementary trust sources for the same proposition, one suited to centralized settings and one suited to federated settings, and exercises two of the three quantification schemes of \cref{sec:dataset-trust:formal:quantification}.
+The second application instantiates the framework on the \ac{GTSRB} to assess freedom from class-imbalance bias. Class balance is a \emph{dataset-level} property: it is meaningful only when the entire class distribution is observed. The application illustrates two complementary trust sources for the same proposition, one suited to centralized settings and one suited to federated settings, and exercises two of the three quantification schemes of \cref{sec:dataset-trust:formal:quantification}.
 
 \paragraph{Trust proposition.}
 \emph{``The dataset $\dataset$ is not biased with respect to class balance.''} We treat this as a simple trust proposition: the property is intrinsically dataset-level and is not decomposed further along the granularity axis. The expression tree is therefore a single leaf, and the application focuses on how the leaf is quantified.
@@ -652,11 +842,11 @@ This application populates the sampling row of \cref{tab:dataset-trust:catalogue
 $\propP$ = labeling bias;
 $\propS$ = annotation;\quad
 $\propG$ = entry;
-$\propQ \in \{\textsc{\ac{BPQ}}\}$.
+% $\propQ \in \{\textsc{\ac{BPQ}}\}$.
 \textbf{Reference:}~\cite{trust-aidatatrust}.
 \end{mdframed}
 
-The second application addresses labeling bias on CIFAR-10H, in which each CIFAR-10 test image is annotated by 50 crowdworkers. Unlike sampling bias, labeling bias is intrinsically \emph{per-entry}: for each image final label we have each a trust proposition that can be assessed the annotations as evidence. The application illustrates how the framework operates at the entry granularity and how the same machinery extends to assessing the reliability of the annotators themselves, which connects directly to the trust-discount operator of \cref{chap:tnasl}.
+The third application addresses labeling bias on CIFAR-10H, in which each CIFAR-10 test image is annotated by 50 crowdworkers. Unlike sampling bias, labeling bias is intrinsically \emph{per-entry}: for each image final label we have each a trust proposition that can be assessed the annotations as evidence. The application illustrates how the framework operates at the entry granularity and how the same machinery extends to assessing the reliability of the annotators themselves, which connects directly to the trust-discount operator of \cref{chap:tnasl}.
 
 \paragraph{Trust proposition.}
 For each image $x$, the proposition is \emph{``the decision label $y^\prime$ for $x$ is accurate.''} The decision label is fixed in advance, typically by majority vote. Each instance is assessed independently, producing a per-entry opinion $\omega_{y^\prime} = (b_{y^\prime}, d_{y^\prime}, u_{y^\prime})$. The set of per-entry opinions can be aggregated into a dataset-level summary using the cross-granularity rule of \cref{sec:dataset-trust:formal:granularity}.
@@ -773,196 +963,6 @@ The per-entry opinions provide actionable signals that scalar agreement metrics 
 \paragraph{Position in the framework.}
 This application populates the \textbf{annotation row} of \cref{tab:dataset-trust:catalogue} for the entry-level granularity. It exercises the \ac{BPQ} and discusses how the \ac{EWQ}) can be used \cref{sec:dataset-trust:formal:quantification}. It also illustrates the cross-granularity composition rule of \cref{sec:dataset-trust:formal:granularity}, and connects to the trust-discount operator via the annotator-level extension. Together with the \ac{GTSRB} application, it covers the two canonical cases of dataset-level assessment: direct global evidence (\ac{GTSRB}) and entry-level evidence (CIFAR-10H).
 
-\section{Multi-stage Assessment: COMPAS}
-\label{sec:dataset-trust:applications:compas}
-\begin{mdframed}[backgroundcolor=blue!4, linewidth=0pt]
-\textbf{Position in the design space.}
-
-$\propP$ = overall reliability for use as training data;\
-
-$\propS = \{\textsc{sampling}, \textsc{collection}, \textsc{annotation},
-        \textsc{processing}\}$;\
-        
-$\propG$ = dataset;\ 
-$\propQ$ = BPQ.
-\textbf{Reference:} original to this dissertation.
-\end{mdframed}
-
-This section presents a generic application of the framework introduced in \cref{sec:dataset-trust:framework}. We define dataset reliability as a trust proposition supported by heterogeneous evidence extracted from multiple stages of the dataset lifecycle, and we formalize the operations that turn metric values into subjective opinions and combine opinions across stages. We recall that as final expression we get the expression depicted in \cref{fig:trust_expression_tree_dataset}. We now focus on understanding how we can quantify the trust opinions from trust sources (Trust opinions at the leaves).
-
-
-This third application demonstrates the framework's ability to compose stage-level assessments into a dataset-level opinion. COMPAS exercises three of the four lifecycle stages simultaneously. \cref{tab:dataset-trust:compas} reports the trust-source metrics, normalized quality scores, evidence counts, and resulting \ac{BPQ} stage-level opinions.
-
-\subsection{Trust Opinion from Trust Sources metric}
-\label{sec:dataset-trust:formal:evidence}
-Each lifecycle-stage proposition is supported by a set of trust sources. A trust source corresponds to a diagnostic signal, metric, or assessment that provides evidence for or against reliability at a given stage. Trust sources may be quantitative or qualitative, deterministic or probabilistic, and may not be uniformly available across datasets.
-
-Trust-source metric values $m$ are first mapped into normalized quality scores
-\begin{equation}
-q_m \in [0,1],
-\end{equation}
-where values close to one indicate strong support for reliability and values close to zero indicate evidence against reliability. This normalization ensures comparability across heterogeneous metrics.
-
-For metrics where lower values indicate better quality (e.g., error rates), we apply
-\begin{equation}
-q_m = \max\!\left(0,\, 1 - \frac{m}{\tau_m}\right),
-\label{eq:dataset-trust:q-low}
-\end{equation}
-where $\tau_m > 0$ is a domain-specific tolerance threshold. The formula is a linear ramp: $q_m = 1$ when the observed value is zero (no error), $q_m = 0$ when $m$ reaches the tolerance $\tau_m$, and the score decreases linearly between these two endpoints. Observed values beyond $\tau_m$ are clamped at zero rather than producing negative quality, since further degradation no longer informs the opinion in any useful way. The choice of $\tau_m$ is therefore the operational definition of \emph{``what bad value is too bad''} for this particular metric.
-
-For metrics where higher values indicate better quality, we apply
-\begin{equation}
-q_m = \max\!\left(0,\, \min\!\left(1,\,
-        \frac{m - A_m}{L_m - A_m}\right)\right),
-\label{eq:dataset-trust:q-high}
-\end{equation}
-where $A_m$ and $L_m$ denote unacceptable and acceptable bounds, respectively. The interpretation mirrors the previous case but with two thresholds rather than one: at $m = A_m$, the metric is unacceptable and contributes no positive support ($q_m = 0$); at $m = L_m$, the metric reaches the acceptable level and contributes full positive support ($q_m = 1$); between $A_m$ and $L_m$, the score ramps linearly, so partial achievement yields partial support. Values below $A_m$ or above $L_m$ are clamped to the corresponding endpoint. The two-threshold form is needed because, for higher-is-better metrics, the ``good'' region has both a floor (below which there is no support at all) and a saturation point (above which additional improvement does not add support).
-
-\marginpar{From Evidence to Subjective Opinions}
-\label{sec:dataset-trust:formal:quantification}
-
-To derive trust opinions values $(t, d, u)$, normalized metric scores are converted into positive and negative evidence counts:
-\begin{equation}
-r_m = K_m \, q_m, \qquad s_m = K_m \, (1 - q_m),
-\label{eq:dataset-trust:evidence-counts}
-\end{equation}
-where $K_m$ is an evidence-strength parameter that fixes the total amount of evidence the metric is assumed to provide, $r_m + s_m = K_m$. Larger values of $K_m$ correspond to trust sources the analyst takes more seriously; smaller values correspond to weaker or less authoritative sources. Under \ac{BPQ} with prior weight $W$, the residual uncertainty contributed by this single metric is $u = W / (W + K_m)$, so $K_m$ is also a parameter that controls the value of the uncertainty.
-In a multi-metric assessment within a stage, the per-metric trust opinions are aggregated to obtain the stage-level opinion. 
-
-\subsection{Stage quantification on COMPAS}
-
- \paragraph{Sampling stage.}
-The sampling-stage proposition is \emph{``the sampling stage of the \ac{COMPAS} dataset is reliable.''} Five trust sources contribute evidence: distribution gap (DG), minority coverage rate (MCR), long-tail coverage index (LTCI), data freshness index (DFI), and missing-at-source audit (MSA). We walk through this stage in detail to illustrate the full pipeline; the other three stages are reported in \cref{tab:dataset-trust:compas} and discussed below.
-
-\subparagraph{Step~1: Normalizing the metrics.}
-The observed metric values are
-\[
-\text{DG} = 0.432,\quad \text{MCR} = 3.597,\quad
-\text{LTCI} = 0.657,\quad \text{DFI} = 0.100,\quad
-\text{MSA} = 0.000,
-\]
-where DFI is computed using the dataset's own most recent record as the reference \emph{``now.''} In practice, freshness should be measured relative to the time at which the dataset is consumed rather than the latest record it contains; the present convention is conservative for illustration purposes only. We use the following thresholds:
-\[
-\tau_{\text{DG}} = 0.30,\quad
-A_{\text{MCR}}  = 0.50,\ L_{\text{MCR}}  = 1.00,\quad
-A_{\text{LTCI}} = 0.30,\ L_{\text{LTCI}} = 1.00,
-\]
-\[
-A_{\text{DFI}}  = 0.00,\ L_{\text{DFI}}  = 1.00,\quad
-\tau_{\text{MSA}} = 0.10.
-\]
-Applying
-Eqs.~\eqref{eq:dataset-trust:q-low}--\eqref{eq:dataset-trust:q-high}
-yields quality scores
-\[
-q_{\text{DG}}   = 0.000,\quad
-q_{\text{MCR}}  = 1.000,\quad
-q_{\text{LTCI}} = 0.510,\quad
-q_{\text{DFI}}  = 0.100,\quad
-q_{\text{MSA}}  = 1.000.
-\]
-
-\subparagraph{Step~2: Converting to evidence.}
-With evidence-strength $K_m = 2$ for every metric,
-$r_m = 2 q_m$ and $s_m = 2(1 - q_m)$ give
-\[
-\begin{aligned}
-& r_{\text{DG}}   = 0.00,\ s_{\text{DG}}   = 2.00, \quad
-  r_{\text{MCR}}  = 2.00,\ s_{\text{MCR}}  = 0.00, \\
-& r_{\text{LTCI}} = 1.02,\ s_{\text{LTCI}} = 0.98, \quad
-  r_{\text{DFI}}  = 0.20,\ s_{\text{DFI}}  = 1.80, \\
-& r_{\text{MSA}}  = 2.00,\ s_{\text{MSA}}  = 0.00,
-\end{aligned}
-\]
-
-\subparagraph{Step~3: Applying \ac{BPQ}.}
-We apply \ac{BPQ} for each metric with prior
-weight~$W=2$, Eq.~\eqref{eq:baseline_quant} yields
-
-\begin{aligned}
- \omega_{\text{DG}}   &= (0, 0.5, 0.5), \quad&
-  \omega__{\text{MCR}}  &= (0.5, 0, 0.5),\\
-\omega__{\text{LTCI}} &= (0.255, 0.245, 0.5), \quad&
-  \omega__{\text{DFI}}  &= (0.05, 0.45, 0.5), \\
-\omega__{\text{MSA}}  &= (0.5, 0, 0.5),
-\end{aligned}
-\]
-Fusing all using cumulative fusion gives: 
-\[
-\omega_{\text{sampling}} = (0.435, 0.398, 0.167)
-\]
-\subparagraph{Interpretation.}
-The opinion $(0.435,\ 0.398,\ 0.167)$ has trust mass and distrust mass close to each other and a relatively low residual uncertainty: the evidence base is large enough for the opinion to commit, but the evidence itself is genuinely mixed. Three trust sources contribute positive evidence: the minority coverage rate ($q_{\text{MCR}} = 1.00$), the long-tail coverage index ($q_{\text{LTCI}} = 0.51$), and the missing-at-source audit ($q_{\text{MSA}} = 1.00$). Two contribute negative evidence: the distribution-gap metric ($q_{\text{DG}} = 0.00$) and the data freshness index ($q_{\text{DFI}} = 0.10$). Rather than collapsing these into a single ``the sampling is good'' or ``the sampling is bad'' verdict, the framework reports both: the dataset has acceptable group coverage and structural completeness, but exhibits a distribution gap with respect to the target population and is stale. The two signals are surfaced separately rather than averaged away.
-
-
-All the other stages use the same principle and the hyperparameters values are recorded in \cref{tab:dataset-trust:compas}.
-
-
-\begin{table}[t]
-  \centering
-  \small
-  \renewcommand{\arraystretch}{1.1}
-  \begin{tabular}{@{}llrrl@{}}
-    \toprule
-    \textbf{Stage} & \textbf{Metric} & \textbf{Raw} & \textbf{$q$} & \textbf{Direction / Hyperparameter} \\
-    \midrule
-    \multirow{5}{*}{Sampling}
-      & DG                                  & 0.432  & 0.000 & lower\_is\_better \{$\tau{=}0.3$\} \\
-      & MCR(African-American)           & 3.597 & 1.000 & higher\_is\_better \{$A{=}0.5$, $L{=}1.0$\} \\
-      & LTCI(c\_charge\_desc)               & 0.657  & 0.510 & higher\_is\_better \{$A{=}0.3$, $L{=}1.0$\}\\
-      & DFI(c\_jail\_in)                    & 0.100 & 0.000 & higher\_is\_better \{$A{=}0$, $L{=}1.0$\} \\
-      & MSA(essential\_cols)                & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.1$\} \\
-    \cmidrule(lr){2-5}
-      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.435,\ 0.398,\ 0.167)$\quad \{$W{=}2$\}} \\
-    \midrule
-    \multirow{5}{*}{Collection}
-      & ORR(decile\_score)                  & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.05$\} \\
-      & MDD(by\_race)                       & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.2$\} \\
-      & PIID                                & 0.075  & 0.000 & lower\_is\_better \{$\tau{=}0.001$\} \\
-      & SALS(race$\,|\,$features)           & 0.570  & 0.186 & lower\_is\_better \{$\tau{=}0.7$\} \\
-      & RRS(qid$=$sex,race,age\_cat)        & 0.191  & 0.619 & lower\_is\_better \{$\tau{=}0.5$\} \\
-    \cmidrule(lr){2-5}
-      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.467,\ 0.366,\ 0.167)$\quad \{$W{=}2$\}} \\
-    \midrule
-    Annotation
-      & GLBI(two\_year\_recid$\,|\,$race)   & 0.036  & 0.821 & lower\_is\_better \{$\tau{=}0.2$\} \\
-    \cmidrule(lr){2-5}
-      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.411,\ 0.089,\ 0.500)$\quad \{$W{=}2$\}} \\
-    \midrule
-    \multirow{2}{*}{Processing}
-      & DIOR                                & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.1$\}  \\
-      & FLCA                                 & 0.291   & 0.516 & higher\_is\_better \{$\tau{=}0.6$\}  \\
-    \cmidrule(lr){2-5}
-      & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.505,\ 0.161,\ 0.333)$\quad \{$W{=}2$\}} \\
-    \bottomrule
-  \end{tabular}
-  \caption{BPQ metrics and stage-level results for COMPAS. Each stage is
-    quantified independently using
-    Eqs.~\eqref{eq:dataset-trust:q-low}--\eqref{eq:dataset-trust:bpq}; the
-    dataset-level opinion is obtained by cross-stage conjunction
-    (\cref{fig:trust_expression_tree_dataset}).}
-  \label{tab:dataset-trust:compas}
-\end{table}
-
-\paragraph{Collection stage.}
-The collection stage produces a more balanced assessment, with trust mass $t = 0.467$, distrust mass $d = 0.366$, and uncertainty $u = 0.167$. Measurement-integrity metrics such as the out-of-range rate ($q = 1.000$) and missing-data disparity ($q = 1.000$) contribute positive evidence. However, privacy-related trust sources introduce substantial negative evidence, including \ac{PII} density ($q = 0.00$) and sensitive-attribute leakage ($q = 0.186$). The resulting opinion reflects a trade-off between accurate measurement and privacy exposure rather than a clear reliability conclusion.
-
-\paragraph{Annotation stage.}
-Annotation reliability is assessed using a single trust source, the group-label bias index, which yields the lowest stage-level trust mass in the assessment: $(t, d, u) = (0.411, 0.089, 0.500)$. The low trust mass should not be read as ``the annotation is unreliable'': distrust mass is correspondingly low, and the dominant mass is uncertainty. The framework is reporting that with only one trust source available, it does not have enough evidence to commit to a confident assessment in either direction. This is qualitatively different from the sampling-stage opinion, which has comparable trust mass but arrived at it through balanced positive and negative evidence rather than absent evidence.
-
-\paragraph{Processing stage.}
-The processing stage yields the strongest reliability signal, with trust mass $t = 0.505$, distrust mass $d = 0.161$, and uncertainty $u = 0.333$. The absence of duplicate rows provides strong positive evidence ($q = 1.00$), while feature--label correlation audits ($q = 0.516$) also introduces positive evidence. The resulting opinion indicates comparatively reliable processing, although residual uncertainty remains due to the limited number of processing-stage diagnostics.
-
-\paragraph{Cross-stage rollup.}
-The four stage-level opinions are combined into a dataset-level reliability opinion using the cross-stage conjunction \cref{fig:trust_expression_tree_dataset}:
-\[
-\omega_{\propR}
-= \omega_{\text{sampling}} \cdot
-  \omega_{\text{collection}} \cdot
-  \omega_{\text{annotation}} \cdot
-  \omega_{\text{processing}}.
-\]
-Conjunction is the appropriate operator here because reliability requires every stage to be reliable: a strong assessment at one stage cannot compensate for a weak assessment at another. The aggregated opinion preserves three pieces of information that a scalar quality score would have collapsed: \emph{which} stage carries the strongest negative signal (the collection stage, where privacy exposure introduces substantial distrust mass), \emph{which} stage merely lacks evidence (the annotation stage, with $u_{\text{annotation}} = 0.50$ driven by a single trust source), and how the four stages compare quantitatively. An auditor reading the rollup together with \cref{tab:dataset-trust:compas} can therefore distinguish two qualitatively different actions: collecting more representative or privacy-aware data (to attack the collection-stage and sampling-stage distrusts mass) versus collecting additional annotation-stage diagnostics (to reduce the annotation-stage uncertainty).
 
 \paragraph{Cross-application Discussion}
 \label{sec:dataset-trust:applications:summary}
@@ -980,101 +980,66 @@ Conjunction is the appropriate operator here because reliability requires every 
     Property $\propP$        & sampling bias            & labeling bias            & overall reliability \\
     Stage(s) $\propS$        & sampling                 & annotation               & all four \\
     Granularity $\propG$     & dataset                  & entry      & dataset \\
-    Quantification $\propQ$  & \acs{BPQ}, \acs{CUQ}                 & \acs{BPQ}, \acs{EWQ}                 & \acs{BPQ} \\
-    Pattern                  & A                        & B                        & D over A \& B \\
+    Quantification & \acs{BPQ}, \acs{CUQ}                 & \acs{BPQ}, \acs{EWQ}                 & \acs{BPQ} \\
     \midrule
     Reference                & \cite{ecmldatatrust} & \cite{trust-aidatatrust} & this dissertation \\
     \bottomrule
   \end{tabular}
-  \caption{Position of each application in the four-axis design space of
-    \cref{sec:dataset-trust:framework:design-space}.}
+  \caption{Position of each application in the three-axis design space of
+    \cref{sec:dataset-trust:framework:design-space} and the quantification scheme.}
   \label{tab:dataset-trust:applications-summary}
 \end{table}
 
-The three applications jointly cover three of the four lifecycle stages, all three granularities, and all three quantification schemes --- providing empirical evidence that the four-axis design space of \cref{sec:dataset-trust:framework:design-space} is both \emph{sufficient} (each axis is exercised) and \emph{meaningful} (each axis discriminates between applications).
+% \section{Summary and Conclusions}
+% \label{sec:dataset-trust:summary}
 
-\section{Summary and Conclusions}
-\label{sec:dataset-trust:summary}
+% This chapter introduced a top-level framework for assessing the trustworthiness of \ac{AI} training datasets, specializing the General Trust Assessment Methodology of \cref{chap:Trust_method} to the dataset setting. The chapter's central claim is that dataset trustworthiness is best treated not as a single quality score but as a structured assessment fully specified by four choices: the property being assessed, the lifecycle stage at which evidence is collected, and the granularity at which the property is meaningful. This three-axis design space $(\propP, \propS, \propG)$ is the conceptual contribution of the chapter. It serves throughout the rest of the dissertation as the vocabulary for positioning specific contributions and as the bridge between the abstract methodology of \cref{chap:Trust_method} and the implementation-level mechanisms of \ac{PaTAS}.
 
-This chapter introduced a top-level framework for assessing the trustworthiness of \ac{AI} training datasets, specializing the General Trust Assessment Methodology of \cref{chap:Trust_method} to the dataset setting. The chapter's central claim is that dataset trustworthiness is best treated not as a single quality score but as a structured assessment fully specified by four choices: the property being assessed, the lifecycle stage at which evidence is collected, the granularity at which the property is meaningful, and the quantification scheme used to map evidence into subjective opinions. This four-axis design space $(\propP, \propS, \propG, \propQ)$ is the conceptual contribution of the chapter. It serves throughout the rest of the dissertation as the vocabulary for positioning specific contributions and as the bridge between the abstract methodology of \cref{chap:Trust_method} and the implementation-level mechanisms of \ac{PaTAS}.
+% % \paragraph{What the chapter delivers.}
+% The framework is supported by three concrete artifacts. First, the
+% framework allows to define the dataset reliability proposition by means of the lifecycle decomposition into sampling, collection, annotation, and processing, the normalization of heterogeneous metrics into quality scores via tolerance and acceptability thresholds, and the three quantification schemes (\ac{BPQ}, \ac{EWQ}, \ac{CUQ}) introduced in \cref{chap:Trust_method} but specialized here for dataset evidence.
+% Second, the trust-source catalog (\cref{tab:dataset-trust:catalogue})
+% provides a practical entry point: a curated set of metrics for each
+% lifecycle stage, tagged with the granularity at which each metric
+% naturally produces its opinion. Third, the cross-granularity
+% composition rules of \cref{sec:dataset-trust:formal:granularity} make
+% explicit how feature-level, entry-level, and dataset-level evidence
+% can be combined, lifting evidence at one granularity to opinions at
+% another.
 
-% \paragraph{What the chapter delivers.}
-The framework is supported by three concrete artifacts. First, the
-framework allows to define the dataset reliability proposition by means of the lifecycle decomposition into sampling, collection, annotation, and processing, the normalization of heterogeneous metrics into quality scores via tolerance and acceptability thresholds, and the three quantification schemes (\ac{BPQ}, \ac{EWQ}, \ac{CUQ}) introduced in \cref{chap:Trust_method} but specialized here for dataset evidence.
-Second, the trust-source catalogue (\cref{tab:dataset-trust:catalogue})
-provides a practical entry point: a curated set of metrics for each
-lifecycle stage, tagged with the granularity at which each metric
-naturally produces its opinion. Third, the cross-granularity
-composition rules of \cref{sec:dataset-trust:formal:granularity} make
-explicit how feature-level, entry-level, and dataset-level evidence
-can be combined, lifting evidence at one granularity to opinions at
-another.
+% % \paragraph{Three applications.}
+% Three applications instantiate the framework.  The \ac{COMPAS} application exercises the multi-stage composite assessment over all four lifecycle stages, showing how stage-level opinions can be quantified and combined into a dataset-level opinion. The Balancing Bias application on \ac{GTSRB}~\cite{ecmldatatrust} exercises the sampling-stage, dataset-level pattern with both \ac{CUQ} (the centralized, sample-complexity-driven Method~1) and \ac{BPQ} (the federated, entropy-driven Method~2), illustrating that the same trust source can lead to different quantification depending on what is observable and how we process it. The Labeling Bias application on CIFAR-10H~\cite{trust-aidatatrust} exercises the annotation-stage, entry-level pattern with \ac{BPQ}, a discussion of \ac{EWQ} as an extension when annotation-level confidence is available, and an annotator-level construction that connects to the trust-discounting operator.
 
-% \paragraph{Three applications.}
-Three applications instantiate the framework on disjoint cells of the
-design space. The Balancing Bias application on
-\ac{GTSRB}~\cite{ecmldatatrust} exercises the sampling-stage,
-dataset-level pattern with both \ac{CUQ} (the centralized,
-sample-complexity-driven Method~1) and \ac{BPQ} (the federated,
-entropy-driven Method~2), illustrating that the same proposition can
-admit complementary trust sources depending on what is observable.
-The Labeling Bias application on CIFAR-10H~\cite{trust-aidatatrust}
-exercises the annotation-stage, entry-level pattern with \ac{BPQ}, a
-discussion of \ac{EWQ} as an extension when annotation-level
-confidence is available, and an annotator-level construction that
-connects directly to the trust-discount operator of
-\cref{chap:tnasl}. The \ac{COMPAS} application exercises the
-multi-stage composite assessment over all four lifecycle stages,
-showing how stage-level opinions can be combined into a dataset-level
-opinion that preserves residual uncertainty rather than averaging it
-away. Together, the three applications cover all four lifecycle
-stages, all three granularities, and all three quantification
-schemes, demonstrating empirically that the design space is both
-sufficient (each axis is exercised) and meaningful (each axis
-discriminates between applications).
+% % \paragraph{Why this matters.}
+% The framework provides decision-supporting summaries that scalar quality metrics cannot. By construction, a dataset-level opinion $(t, d, u)$ encodes three qualitatively different signals simultaneously: evidence supporting the property, evidence against the property, and the residual uncertainty arising from missing or contradictory evidence. The \ac{COMPAS} rollup makes the practical benefit explicit: an auditor can distinguish unreliability driven by contradictory evidence from low confidence driven by absent evidence, two situations that call for qualitatively different remediation actions and that a single scalar score would conflate. The framework therefore turns dataset reliability assessment into a diagnostic instrument rather than a pass/fail check.
 
-% \paragraph{Why this matters.}
-The framework provides decision-supporting summaries that scalar
-quality metrics cannot. By construction, a dataset-level opinion
-$(t, d, u)$ encodes three qualitatively different signals
-simultaneously: evidence supporting the property, evidence against
-the property, and the residual uncertainty arising from missing or
-contradictory evidence. The \ac{COMPAS} rollup makes the practical
-benefit explicit: an auditor can distinguish unreliability driven by
-contradictory evidence from low confidence driven by absent
-evidence, two situations that call for qualitatively different
-remediation actions and that a single scalar score would conflate.
-The framework therefore turns dataset reliability assessment into a
-diagnostic instrument rather than a pass/fail check.
+% % \paragraph{Limitations and open directions.}
+% Three limitations frame the work for future investigation. First, the trust-source catalog is necessarily non-exhaustive. Metrics encoding properties not yet covered (e.g., distributional robustness, fairness under intersectional protected groups, provenance of synthetic data) can be added incrementally; the framework's structural design is unchanged by such extensions. Second, the choice of quantification hyperparameters namely the tolerance $\tau_m$, the acceptability bounds $(A_m, L_m)$, the evidence-strength $K_m$, and the prior weight $W$, is left to the analyst. The framework does not currently provide a calibration procedure for these values, although patterns observed in the applications (e.g., the $\eta$-stability zone in the \ac{GTSRB} application) suggest that some degree of automatic calibration is feasible. Third, the multi-stage \ac{COMPAS} assessment treats the four lifecycle stages as exchangeable in the cross-stage conjunction. In practice, weakness at certain stages may matter more than weakness at others depending on the downstream task, which would call for a weighted or priority-aware variant of the conjunction. The current framework could be extended based on \ac{SL} discounting operators.
 
-% \paragraph{Limitations and open directions.}
-Three limitations frame the work for future investigation.
-First, the trust-source catalog is necessarily non-exhaustive.
-Metrics encoding properties not yet covered (e.g., distributional
-robustness, fairness under intersectional protected groups,
-provenance of synthetic data) can be added incrementally; the
-framework's structural design is unchanged by such extensions.
-
-Second, the choice of quantification hyperparameters --- the
-tolerance $\tau_m$, the acceptability bounds $(A_m, L_m)$, the
-evidence-strength $K_m$, and the prior weight $W$ --- is left to the
-analyst. The framework does not currently provide a calibration
-procedure for these values, although patterns observed in the
-applications (e.g., the $\eta$-stability zone in the \ac{GTSRB}
-application) suggest that some degree of automatic calibration is
-within reach.
-
-Third, the multi-stage \ac{COMPAS} assessment treats the four
-lifecycle stages as exchangeable in the cross-stage conjunction.
-In practice, weakness at certain stages may matter more than weakness
-at others depending on the downstream task, which would call for a
-weighted or priority-aware variant of the conjunction. The current
-framework supports this as a direct extension via \ac{SL} discounting
-operators but does not exercise it in the applications presented.
-
+% % \paragraph{Bridge to the next chapter.}
 % \paragraph{Bridge to the next chapter.}
-The feature-level opinion is the input expected by the Trust Propagation Module of \ac{PaTAS} (\cref{chap:patas}). \cref{chap:patas} takes this opinion together with the per-feature and per-entry opinions for inference-time inputs, and propagates them through the parameters and activations of a neural network to produce trust opinions on the network's
-outputs. Where the present chapter has been concerned with
-quantifying trust at the input boundary of an \ac{AI} system, the
-next chapter is concerned with carrying that trust through the
-system itself.
+% The output of the framework presented in this chapter, a structured trust opinion at the dataset, entry, or feature granularity, is the input expected by the Trust Propagation Module of \ac{PaTAS} (\cref{chap:patas}).
+
+% \ac{PaTAS} consumes \emph{per-feature} trust opinions natively. When
+% the framework produces a coarser-granularity opinion (entry-level or dataset-level), the same opinion can be replicated across all features of the corresponding scope; this is the \emph{downward replication} described in \cref{sec:dataset-trust:formal:granularity}. The per-feature opinions of the training set are then used by \ac{PaTAS} to derive trust in the learnt parameters of the neural network, so that data trust is carried into the model.
+
+% The same machinery applies at inference time. The trust source used to produce per-feature opinions for the training dataset can equally be applied to a single input vector, producing per-feature opinions for that input. \ac{PaTAS} then propagates those input-level opinions through the parameters and activations of the network to produce a trust opinion on the network's output. A complete worked instance of this pipeline, from training-set feature opinions through model parameter trust to inference-time output opinions, is provided in the use-case study of \cref{chap:usecase}, where \ac{PaTAS} is evaluated end-to-end.
+
+% \marginpar{The trust sources does not always carry across.}
+% The framework of this chapter and the propagation mechanism of \cref{chap:patas} share the trust representation and the trust \emph{property} but not necessary the same trust sources. Consider \emph{accuracy}: the proposition ``the dataset is accurate'' is a statement about how faithfully the recorded values reflect the underlying ground truth at the dataset level (e.g., it is supported by sensor-consistency or cross-device-drift evidence). The proposition ``this input is accurate'' is a statement about a single observation at inference time, supported by entirely different evidence (e.g., a confidence score from the sensor that produced it, an out-of-range check, a provenance check). The two propositions are about the same property, but the trust source and the evidence are different. The analyst is free to use the same trust sources for both the dataset assessment and the input assessment, as long as they are about the same proposition.
+
+\section{Summary and Conclusions} \label{sec:dataset-trust:summary}
+
+This chapter introduced a framework for assessing the trustworthiness of \ac{AI} training datasets by specializing the general methodology of \cref{chap:Trust_method}. Its central claim is that dataset trustworthiness should be treated not as a single score, but as a structured assessment defined by three dimensions: the property assessed, the lifecycle stage where evidence is collected, and the granularity at which it applies. 
+
+The framework is supported by three main artifacts. First, it formalizes dataset reliability through lifecycle decomposition (sampling, collection, annotation, processing), normalization of metrics via thresholds, and adapted quantification schemes (\ac{BPQ}, \ac{EWQ}, \ac{CUQ}). Second, the trust-source catalog provides a practical set of metrics aligned with lifecycle stages and granularity levels. Third, cross-granularity composition rules define how evidence can be aggregated across feature-, entry-, and dataset-levels.
+
+Three applications illustrate the framework. The \ac{COMPAS} case demonstrates multi-stage assessment and aggregation into a dataset-level opinion. The balancing bias study on \ac{GTSRB} shows how the same trust source leads to different quantifications depending on observability and processing (\ac{CUQ} vs. \ac{BPQ}). The labeling bias study on CIFAR-10H highlights annotation-stage, entry-level assessment, with extensions toward annotator-level trust.
+
+The framework provides richer decision support than scalar metrics. A dataset-level opinion $(t, d, u)$ distinguishes supporting evidence, contradicting evidence, and uncertainty. This enables auditors to differentiate between lack of evidence and conflicting evidence, two situations requiring different actions, making the framework a diagnostic tool rather than a pass/fail measure.
+
+Three limitations remain. First, the trust-source catalog is not exhaustive and can be extended. Second, hyperparameters (e.g., $\tau_m$, $(A_m, L_m)$, $K_m$, $W$) require manual tuning, though partial calibration appears feasible as illustrated with $\eta$ in the \ac{GTSRB} application. Third, lifecycle stages are treated uniformly, whereas task-dependent weighting may be needed, potentially via discounting operators.
+
+The framework outputs structured trust opinions at various granularities, which serve as input to the Trust Propagation Module of \ac{PaTAS}, which operates on per-feature trust opinions. Coarser-grained opinions can be replicated at the feature level, enabling propagation into model parameters. The same approach applies at inference time: input-level trust can be replicated as per feature opinions and then propagated to produce output trust. A complete pipeline is demonstrated in \cref{chap:usecase}.
+
+Finally, while dataset-level and input-level assessments share the same trust property, they may rely on different trust sources. For example, dataset-level accuracy and input-level accuracy refer to the same property but are supported by different types of evidence. The analyst remains free to select appropriate trust sources as long as they are consistent with the underlying proposition.

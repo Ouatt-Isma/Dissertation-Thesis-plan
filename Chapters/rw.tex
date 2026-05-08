@@ -395,7 +395,7 @@ Fusion and trust discounting operators are introduced in the following subsectio
 
 \subsection{Belief Fusion Operators}
 \label{sec:fusion}
-\todo[inline]{Add operators characteristique and cite the paper about generalization}
+\todo[inline]{Add operators characteristic and cite the paper about generalization}
 Belief fusion operators enable multiple subjective opinions about the same proposition to be combined into a single, aggregated opinion~(\cref{fig:sl_belief_fusion}). 
 \begin{figure}[t]
     \centering
@@ -427,10 +427,29 @@ J{\o}sang~\cite{josang2016subjective} proposes a structured decision procedure f
     \item and how conflicts between belief sources should be resolved.
 \end{itemize}
 
-We now review the principal belief fusion operators defined in
-\aclu{SL}. For each operator, we provide its formal definition
-together with a brief discussion of the assumptions under which it is
-semantically appropriate.
+We now review the principal belief fusion operators defined in \aclu{SL}. For each operator, we provide its formal definition together with a brief discussion of the assumptions under which it is semantically appropriate. Table~\ref{tab:fusion_properties} summarizes the algebraic properties of each operator.
+
+\begin{table}[t]
+\centering
+\caption{Algebraic properties of the principal \aclu{SL} fusion operators.
+$\checkmark$ = holds, $\times$ = does not hold, $\sim$ = semi (partially holds).}
+\label{tab:fusion_properties}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccccl}
+\toprule
+\textbf{Operator} & \textbf{Comm.} & \textbf{Idemp.} & \textbf{Assoc.} & \textbf{Neutral Element} \\
+\midrule
+\acs{BCF}  ($\odot$)         & $\checkmark$ & $\times$ & $\checkmark^{*}$ & Vacuous opinion \\
+\acs{CBF} ($\oplus$)       & $\checkmark$ & $\times$ & $\checkmark$     & --- \\
+\acs{ABF}  ($\underline{\oplus}$) & $\checkmark$ & $\checkmark$ & $\times$ & None \\
+\acs{WBF}  ($\hat{\oplus}$)  & $\checkmark$ & $\checkmark$ & $\sim$          & Vacuous opinion \\
+\acs{CCF}  ($\circledast$)   & $\checkmark$ & $\checkmark$ & $\sim$          & Vacuous opinion \\
+\bottomrule
+\end{tabular}
+\\[4pt]
+\footnotesize $^{*}$ Associativity holds only when base rates are equal across all sources.
+\end{table}
 
 \begin{definition}[Constraint Fusion Operator~\cite{josang2016subjective} inspired by the Dempster’s Rule of Combination]
 \label{def:constraint_fuse}
@@ -636,9 +655,10 @@ See more in the original book~\cite{josang2016subjective}.
 Consensus \& compromise fusion explicitly separates shared belief from conflicting belief. Shared belief is preserved, while conflicting belief is transformed into uncertainty or vague belief, resulting in a compromise that reflects disagreement without artificially favoring one source. 
 This operator is especially well suited for fusing hyper-opinions and for situations where preserving epistemic uncertainty in the presence of conflict is essential.
 
-In summary, the availability of multiple fusion operators allows the analyst to align the fusion mechanism with the semantics of the application domain. This flexibility is essential for trust reasoning, where inappropriate aggregation of beliefs can lead to overconfidence or misplaced trust. In the next subsection, we introduce trust discounting operators, which explicitly model source reliability and enable trust propagation across networks of agents.
+In summary, the availability of multiple fusion operators allows the analyst to align the fusion mechanism with the semantics of the application domain. This flexibility is essential for trust reasoning, where inappropriate aggregation of beliefs can lead to overconfidence or misplaced trust. Notably, all the operators presented above are defined for two sources; their generalization to an arbitrary number of sources and the resulting algebraic properties are studied in~\cite{vanderheijden2018multisourcefusionoperationssubjective}. In the next subsection, we introduce trust discounting operators, which explicitly model source reliability and enable trust propagation across networks of agents.
 
 
+%% Chapter Related work 
 \subsection{Trust Discounting Operators} \label{subsec:TD_operators}
 Trust discounting operators are a central component of \ac{SL}, enabling the propagation of trust through intermediary agents. They formalize the intuition that trust in a source should attenuate when information is relayed through other entities, thereby capturing the notion of trust transitivity. In practice, when fusing beliefs originating from multiple sources, those sources may differ in reliability, and some may be more trusted than others. Trust discounting provides a mechanism to account for such heterogeneity before combining their beliefs.
 
