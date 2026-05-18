@@ -1,8 +1,7 @@
 \chapter{\acf{PaTAS}}
-
-\section{Introduction}
-
 \label{chap:ovl}
+
+
 The previous chapters established the conceptual and methodological foundations for trust assessment in general and particularly in \ac{ML} systems. In particular, \cref{chap:Trust_method} introduced a general evidence-based methodology for trust evaluation, while \cref{chap:tnasl} improved the graph-based reasoning mechanisms required to compute trust expressions. Building on these foundations, this chapter introduces the \emph{\acf{PaTAS}}, a system architecture designed to operationalize the proposed methodology in \ac{ML} pipelines. \ac{PaTAS} provides a scalable and modular framework for performing trust assessment throughout both training and inference, starting from the training dataset. The system enables the evaluation of \ac{NN} outputs in parallel with their inference by allowing different trust sources and reasoning components to be processed independently, without impacting the standard \ac{NN} inference process. This design allows efficient evaluation of trust in complex \ac{NN} systems where multiple evidence streams must be combined. The concepts presented in this chapter build upon previous publication. In particular, the architecture and core reasoning principles are derived from the work presented in~\cite{patas}, currently under review at the \emph{IEEE Transactions on Dependable and Secure Computing}.
 
 \section{Introduction}

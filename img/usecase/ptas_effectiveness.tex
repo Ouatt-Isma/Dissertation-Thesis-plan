@@ -1,0 +1,21 @@
+\begin{table}[ht]
+\centering
+\caption{Mean \ac{PaTAS} opinion masses $(b, d, u)$ in the \ac{NN}'s predicted class, split by correct ($c$) vs.\ wrong ($w$) NN predictions. $\Delta = \text{correct} - \text{wrong}$; positive $\Delta b$ and negative $\Delta d$/$\Delta u$ indicate discriminability.}
+\label{tab:ptas-effectiveness}
+\begin{tabular}{lccccccccccc}
+\toprule
+Noise & $N_c$ & $N_w$ & $\bar{b}_c$ & $\bar{b}_w$ & $\Delta b$ & $\bar{d}_c$ & $\bar{d}_w$ & $\Delta d$ & $\bar{u}_c$ & $\bar{u}_w$ & $\Delta u$ \\
+\hline
+Feature noise \\
+0.00 & 15692 & 2833 & 0.81 & 0.53 & +0.28 & 0.00 & -0.00 & +0.00 & 0.19 & 0.47 & -0.28 \\
+0.10 & 15608 & 2917 & 0.43 & 0.15 & +0.28 & 0.05 & 0.02 & +0.03 & 0.52 & 0.83 & -0.31 \\
+0.30 & 15407 & 3118 & 0.18 & 0.04 & +0.13 & 0.08 & 0.02 & +0.06 & 0.75 & 0.94 & -0.19\\
+0.50 & 15265 & 3260 & 0.07 & 0.02 & +0.05 & 0.07 & 0.02 & +0.05 & 0.86 & 0.96 & -0.11 \\
+\hline 
+Combined noise \\
+(0.10, 0.05) & 15527 & 2998 & 0.42 & 0.20 & +0.23 & 0.05 & 0.02 & +0.03 & 0.53 & 0.78 & -0.25 \\
+(0.30, 0.15) & 15333 & 3192 & 0.17 & 0.14 & +0.03 & 0.07 & 0.06 & +0.01 & 0.76 & 0.81 & -0.05 \\
+(0.50, 0.30) & 15061 & 3464 & 0.07 & 0.06 & +0.01 & 0.07 & 0.06 & +0.01 & 0.87 & 0.87 & -0.01 \\
+\bottomrule
+\end{tabular}
+\end{table}

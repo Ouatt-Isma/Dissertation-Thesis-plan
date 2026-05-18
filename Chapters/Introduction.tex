@@ -151,7 +151,7 @@ The second contribution introduces a framework that operationalizes trust assess
 \textbf{C2 -- Parallel Trust Assessment System Overview (\cref{chap:ovl}).}  
 This thesis proposes the \acf{PaTAS}, a framework that operates alongside \ac{NN} to assess trust without modifying their internal computations. \ac{PaTAS} provides a unified architecture that connects dataset trustworthiness, parameter reliability, and inference-time trust into a single coherent pipeline. It is structured around two main components: (i) a \emph{trust quantification layer}, which models trust in data and labels, and (ii) a \emph{trust propagation layer}, which mirrors \ac{NN} computations to propagate trust from dataset to model parameters during training and from inputs to outputs during inference.
 
-\textbf{C2.1 -- Trustworthiness of Training Datasets (\cref{chap:data})~\cite{ecmldatatrust,trust-aidatatrust}.}  
+\textbf{C2.1 -- Trustworthiness of Training Datasets (\cref{chap:dataset-trust})~\cite{10.1007/978-3-032-19096-3_17,trust-aidatatrust}.}  
 At the trust quantification layer, a formal approach is developed to model sources of evidence and to quantify trustworthiness of training dataset using \aclu{SL}. 
 This contribution enables the assessment of dataset-level properties such as bias and accuracy under uncertainty, including cases with incomplete or conflicting evidence. It directly addresses \textbf{RQ2} by providing a principled and interpretable framework for dataset trust quantification.
 
@@ -196,7 +196,7 @@ This dissertation is organized into several chapters that progressively develop 
 
 
 
-\cref{chap:data} instantiates the general methodology at the level of training data by addressing dataset trustworthiness. It focuses on the quantification of trust in datasets through properties such as labeling reliability and bias. Using \ac{SL}, the chapter treats datasets as structured sources of evidence and proposes methods to quantify their reliability, uncertainty, and potential biases
+\cref{chap:dataset-trust} instantiates the general methodology at the level of training data by addressing dataset trustworthiness. It focuses on the quantification of trust in datasets through properties such as labeling reliability and bias. Using \ac{SL}, the chapter treats datasets as structured sources of evidence and proposes methods to quantify their reliability, uncertainty, and potential biases
 within an evidence-based framework. This chapter demonstrates how the proposed methodology can be applied to assess the reliability of data, which constitutes the foundation of any \ac{ML} system.
 
 \cref{chap:patas} introduces the technical realization of the trust propagation layer within the \ac{PaTAS}. Building upon the dataset trustworthiness assessment, it integrates these inputs into the trust evaluation process and enables end-to-end computation of trust across the learning and inference stages. This chapter demonstrates how the different components of the framework interact in practice and how trust can be consistently propagated throughout the system.

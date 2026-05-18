@@ -1,0 +1,39 @@
+
+
+\begin{table}[ht]
+\centering
+\caption{Training latency (mean $\pm$ std over 3 trials, 5 epochs) for plain NN vs PaTAS-augmented NN training. Overhead / epoch = per-epoch wall-clock difference.}
+\label{tab:latency-training}
+\begin{tabular}{lcccccc}
+\toprule
+Condition & NN tot(s) & PaTAS tot(s) & NN/ep(s) & PaTAS/ep(s) & Overhead/ep(ms) & Ratio($\times$) \\
+\midrule
+clean & 284.6$\pm$66.8 & 348.9$\pm$45.3 & 56.91 & 69.79 & 12874 & 1.23 \\
+feature & 269.7$\pm$2.4 & 380.4$\pm$80.8 & 53.93 & 76.08 & 22144 & 1.41 \\
+combined & 240.2$\pm$19.5 & 275.0$\pm$40.9 & 48.05 & 54.99 & 6944 & 1.14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{table}[ht]
+\centering
+\caption{Inference latency (median over 200 repetitions) for plain NN forward pass vs PaTAS \texttt{apply\_feedforward}. Overhead ratio = PaTAS / NN.}
+\label{tab:latency-inference}
+\begin{tabular}{lccc}
+\toprule
+Batch size & NN latency (ms) & PaTAS latency (ms) & Overhead ratio ($\times$) \\
+\midrule
+1 & 0.009 & 0.015 & 1.66 \\
+8 & 0.012 & 0.02 & 1.794 \\
+32 & 0.017 & 0.035 & 2.044 \\
+64 & 0.027 & 0.058 & 2.156 \\
+128 & 0.239 & 0.557 & 2.330 \\
+256 & 0.287 & 0.742 & 2.585 \\
+512 & 0.352 & 1.460 & 4.15 \\
+1024 & 0.589 & 3.054 & 5.189 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
