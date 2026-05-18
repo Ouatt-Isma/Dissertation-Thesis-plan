@@ -1,0 +1,27 @@
+\begin{table}[ht]
+\centering
+\caption{calibration-trust opinions for trained NNs across noise conditions. Opinions averaged over 5 independent runs. High belief $b$ indicates a well-calibrated, trustworthy model; high uncertainty $u$ indicates insufficient evidence.}
+\label{tab:calibration-trust}
+\begin{tabular}{lcccc}
+\toprule
+Condition & Belief $b$ (mean$\pm$std) & Disbelief $d$ (mean$\pm$std) & Uncertainty $u$ (mean$\pm$std)\\
+\hline
+Feature noise \\
+0.00 & 0.93$\pm$0.00 & 0.07$\pm$0.00 & 0.01$\pm$0.00 \\
+0.10 & 0.93$\pm$0.01 & 0.08$\pm$0.01 & 0.01$\pm$0.01 \\
+0.30 & 0.87$\pm$0.01 & 0.13$\pm$0.01 & 0.01$\pm$0.00 \\
+0.50 & 0.83$\pm$0.01 & 0.17$\pm$0.01 & 0.01$\pm$0.00 \\
+\hline 
+Label noise  \\
+0.00 & 0.93$\pm$0.00 & 0.07$\pm$0.00 & 0.01$\pm$0.00 \\
+0.05 & 0.90$\pm$0.01 & 0.10$\pm$0.01 & 0.01$\pm$0.00 \\
+0.15 & 0.80$\pm$0.01 & 0.20$\pm$0.01 & 0.01$\pm$0.00 \\
+0.30 & 0.68$\pm$0.02 & 0.32$\pm$0.01 & 0.01$\pm$0.00\\
+\hline
+Combined noise \\
+(0.10,0.05) & 0.89$\pm$0.01 & 0.11$\pm$0.01 & 0.01$\pm$0.00 \\
+(0.30,0.15) & 0.77$\pm$0.01 & 0.23$\pm$0.01 & 0.01$\pm$0.00  \\
+(0.50,0.30) & 0.66$\pm$0.01 & 0.34$\pm$0.01 & 0.01$\pm$0.00 \\
+\bottomrule
+\end{tabular}
+\end{table}

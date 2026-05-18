@@ -5,7 +5,7 @@
 \chapter{Definition and Assessment of AI Training Datasets Trustworthiness}
 \label{chap:data}
 The previous chapter presented the overall architecture of \ac{PaTAS}, highlighting its two main components: (i) the Trust Assessment Module focusing on the assessment of the
-trustworthiness of the training dataset and the input of the \ac{NN}, and (ii) the Trust Propagation Module focusing on the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. This chapter focuses on the first component, namely the trust assessment module. The underlying ideas were initially explored in paper presented at the Bias Workshop at ECML~\cite{ecmldatatrust} and further discussed in the position paper~\cite{trust-aidatatrust}. In this dissertation, these contributions are unified and extended to provide a comprehensive and formal framework for assessing the trustworthiness of training datasets and input data of a \ac{NN}.
+trustworthiness of the training dataset and the input of the \ac{NN}, and (ii) the Trust Propagation Module focusing on the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. This chapter focuses on the first component, namely the trust assessment module. The underlying ideas were initially explored in paper presented at the Bias Workshop at ECML~\cite{10.1007/978-3-032-19096-3_17} and further discussed in the position paper~\cite{trust-aidatatrust}. In this dissertation, these contributions are unified and extended to provide a comprehensive and formal framework for assessing the trustworthiness of training datasets and input data of a \ac{NN}.
 
 
 

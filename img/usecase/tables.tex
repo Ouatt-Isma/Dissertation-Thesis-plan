@@ -1,0 +1,34 @@
+\begin{table}[ht]
+\centering
+\caption{Selective prediction: \ac{PaTAS} belief-over-uncertainty filter ($b > u$). Coverage is the fraction of test samples where \ac{PaTAS} belief exceeds uncetainty in the \ac{NN}'s predicted class (net positive subjective evidence). Values are mean $\pm$ std over 5 independent runs.}
+\label{tab:threshold-b-gt-d}
+\begin{tabular}{lccc}
+\toprule
+Noise condition & Coverage (\%) & Accuracy on covered (\%) & Overall accuracy (\%) \\
+\hline
+\multicolumn{4}{l}{\textit{Feature noise ($T_x$ calibrated to $\sigma_{rel}$)}} \\
+$\sigma_{rel}=0.10$ & 49.6 $\pm$ 16.5 & 89.38 $\pm$ 1.26 & 84.33 \\
+\hline
+\multicolumn{4}{l}{\textit{Combined noise ($T_x$ calibrated to $\sigma_{rel}$)}} \\
+$\sigma=0.10,\,p=0.05$ & 32.7 $\pm$ 0.2 & 89.40 $\pm$ 2.23 & 84.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{table}[ht]
+\centering
+\caption{Selective prediction: NN softmax score threshold $\tau = 0.5$. Coverage is the fraction of test samples where the NN softmax probability in the predicted class exceeds $0.5$. Values are mean $\pm$ std over 5 independent runs.}
+\label{tab:threshold-nn-0-50}
+\begin{tabular}{lccc}
+\toprule
+Noise condition & Coverage (\%) & Accuracy on covered (\%) & Overall accuracy (\%) \\
+\midrule
+\multicolumn{4}{l}{\textit{Feature noise ($T_x$ calibrated to $\sigma_{rel}$)}} \\
+$\sigma_{rel}=0.10$ & 97.9 $\pm$ 0.2 & 85.15 $\pm$ 0.09 & 84.36 \\
+\midrule 
+\multicolumn{4}{l}{\textit{Combined noise ($T_x$ calibrated to $\sigma_{rel}$)}} \\
+$\sigma=0.10,\,p=0.05$ & 95.4 $\pm$ 0.3 & 85.73 $\pm$ 0.17 & 84.01 \\
+\bottomrule
+\end{tabular}
+\end{table}

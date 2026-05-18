@@ -1,5 +1,6 @@
 \chapter{Trust Propagation in \aclu{NN}}
 \label{chap:patas}
+\todo[inline]{Add that we provided a simulator and add link}
 The previous \cref{chap:ovl} presented the overall architecture of \ac{PaTAS-TP}, highlighting its two main components: (i) the assessment of trust in the data, and (ii) the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. While the trustworthiness of the data was addressed in the preceding chapter, this chapter focuses on the second component, namely the propagation of trust within \aclu{NN}. In particular, it details how trust, initially derived from the dataset, is integrated into the model parameters during training and subsequently propagated from the input to the output during inference. This chapter formalizes the mechanisms that enable consistent and interpretable trust propagation across the different stages of the learning process, providing the operational core of the \ac{PaTAS-TP} framework.
 
 
@@ -40,7 +41,7 @@ To enable trust-aware reasoning, we associate trust opinions with the key compon
     \item \textbf{Parameter Trust:} A trust assessment $T(\theta)$ for each model parameter $\theta \in \Theta$, reflecting the reliability of learned parameters as a function of the training data and learning process.
     
     \item \textbf{Output Trust:} A trust assessment $T(y')$ associated with the model output $y' = f_\Theta(x)$.
-    \item \textbf{Label Trust}: A trust assessment $T(y)$  assigned to the label $y$ associated with a training sample $(x,y) \in \mathcal{D}$, reflecting the reliability of the annotation process. Label trust is defined at the instance level, as established in \cref{chap:data}, and serves as a conditioning factor in the calculation of trust in the learnable parameters during training.
+    \item \textbf{Label Trust}: A trust assessment $T(y)$  assigned to the label $y$ associated with a training sample $(x,y) \in \mathcal{D}$, reflecting the reliability of the annotation process. Label trust is defined at the instance level, as established in \cref{chap:dataset-trust}, and serves as a conditioning factor in the calculation of trust in the learnable parameters during training.
 \end{itemize}
 
 Trust in values are represented using \ac{SL} binomial opinions:
