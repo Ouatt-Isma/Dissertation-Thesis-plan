@@ -1,9 +1,240 @@
-\chapter{Conclusion \& Future Work}
+% =====================================================================
+% Chapter 10 — Conclusion & Future Work
+% Drafted for: Trust Assessment and Propagation in Machine Learning
+%              Pipelines based on Subjective Logic
+% =====================================================================
+
+\chapter{Conclusion and Future Work}
 \label{chap:conclusion}
-\todo[inline]{Estimated Nb Pages: 6}
-\section{Summary: Synthesis of contributions}
-% \section{Conceptual unification}
-\section{Perspectives: outlook, future work and limitations}
-% \section{Research Agenda}
-\todo[inline]{How this can help for explainability, privacy, robustness and AI Trustworthiness in General}
-\todo[inline]{Make clear for generative AI as in the intro}
+\todo{Discussion on where exactly the problem comes from, explain the issues. as a future works}
+This thesis began from a deceptively simple observation. When a
+Neural Network produces a prediction, the user is rarely in a position
+to verify it directly, and yet decisions of growing consequence are
+being made on the basis of such predictions. The technical question
+that follows from this observation is whether trust in a model output
+can be made into a quantitative, auditable property of the system
+rather than an implicit attitude of its user. The work presented in
+the preceding chapters approached this question by treating trust as a
+first-class object in the Machine Learning pipeline, represented
+through Subjective Logic, and propagated alongside the standard
+computations of training and inference.
+
+This closing chapter looks back at what was built, examines what was
+demonstrated, and turns to what remains open.
+
+% ---------------------------------------------------------------------
+\section{Synthesis of Contributions}
+\label{sec:conclusion-synthesis}
+
+The four contributions introduced in \cref{chap:intro} were developed across \cref{chap:Trust_method} through~\ref{chap:usecase}, each addressing a distinct facet of the overall problem. Taken together, they form a single coherent framework rather than a set of independent results, and it is worth restating how they connect.
+
+The first contribution (C1) established the theoretical foundations on which everything else rests. The General Trust Assessment Methodology of \cref{chap:Trust_method} decomposed trust evaluation into three explicit phases: expression generation, atomic-opinion quantification, and expression evaluation. The optimized Trust Network Analysis of Chapter~\ref{chap:tnasl} made that methodology computationally viable on the graph structures that arise in modern Machine Learning. The introduction of Parallel Non-intersecting Path Subnetworks (PNPS) refined the classical Parallel Path Subnetwork construct and yielded three concrete improvements: synthesis criteria that retain on the order of nine to eleven percentage points more structural information than Jøsang's original formulation, an analysis algorithm whose nesting-level updates run in constant time and deliver an empirical speed-up of roughly $2.2\times$ on identical inputs, and a new Referral-Edge Path operator that closes a long-standing gap in the discounting semantics of referral-only chains. These improvements were not pursued for their own sake. They were the prerequisite for applying Subjective Logic to graphs as large and as deeply nested as Neural Networks, where the cumulative cost of repeated nesting-level recomputation and the cumulative loss from over-restrictive synthesis criteria would otherwise have rendered the framework impractical.
+
+The second contribution (C2) used those foundations to construct the Parallel Trust Assessment System. PaTAS is organized around the observation that trust in a Neural Network output is conditioned on a chain of transitive dependencies: dataset trust conditions parameter trust, which together with input trust conditions prediction trust. The trust assessment module developed in Chapter~\ref{chap:dataset-trust} addressed the first link in this chain. By organizing dataset properties along three axes (the property being assessed, the lifecycle stage at which evidence is collected, and the granularity at which the property lives) and by offering three complementary quantification schemes (baseline-prior, evidence-weighted, and constant-uncertainty), the framework produces structured opinions that distinguish supporting evidence, contradicting evidence, and missing evidence. The COMPAS, GTSRB, and CIFAR-10H applications each occupied a different cell of the design space and exercised a different quantification scheme, which made it possible to argue for the framework's generality without relying on a single example.
+
+The trust propagation module developed in Chapter~\ref{chap:patas}
+addressed the second and third links. Building on the perceptron case
+as a minimal working example, the chapter generalized the construction
+to deep architectures by associating a trust opinion with every
+intermediate activation and by mirroring each neural computation
+(the multiplication of inputs by parameters, the summation of
+contributions, the nonlinearity) with the corresponding Subjective
+Logic operator. The result was a parallel computation graph that
+operates alongside the network without modifying it. This
+non-intrusive design was a deliberate choice: it preserves the
+predictive behavior of the underlying model, it imposes no
+architectural constraint, and it makes the trust signal a property
+that can be added to an existing system rather than designed into a
+new one.
+
+The third contribution (C3), developed in
+Chapter~\ref{chap:bb}, recognized that the propagation-based
+view of C2 assumes access to the model's internal structure, and that
+many deployment settings do not afford such access. The calibration-based
+formulation provided a complementary path: a single binomial opinion
+on the model as a whole, derived from observable input-output behavior
+through the alignment of predicted confidence with empirical accuracy.
+The two views are not redundant. They answer different questions,
+operate at different granularities, and apply in different
+observability regimes, and the use case of
+Chapter~\ref{chap:usecase} demonstrated that they remain
+mutually consistent under controlled corruption of the data.
+
+The fourth contribution (C4) brought the framework to bear on a
+real-world classification task. The 5G network energy management use
+case was deliberately chosen for its tabular, modestly-sized,
+operationally meaningful character: it is the kind of problem where a
+practitioner might plausibly want to know not only what the model
+predicts but how much that prediction should be trusted. The
+empirical results validated three claims that, in their absence, would
+have left the rest of the thesis purely theoretical. 
+
+ First, \ac{PaTAS} opinions discriminate between correct and incorrect 
+predictions: under feature noise at $\sigma_{\text{rel}} = 0.10$, the 
+belief-over-uncertainty filter retained roughly half of the test samples 
+and achieved 89.4\% accuracy on that subset. Against a permissive softmax 
+threshold ($\tau = 0.5$), which retained nearly all samples and improved 
+accuracy by less than one percentage point, the advantage is substantial. 
+Against a softmax threshold calibrated to the same coverage ($\tau = 0.8$, 
+retaining 50.7\% of samples), the two filters perform nearly identically 
+under moderate noise (89.38\% vs.\ 89.27\%). The \ac{PaTAS} signal 
+reveals its specific value under higher combined noise: at 
+$(\sigma, p) = (0.10, 0.30)$, the \ac{PaTAS} filter achieves 93.6\% 
+accuracy on 23.5\% of samples versus 91.3\% on 26.1\% for the 
+matched softmax filter. The trust signal therefore adds the most 
+discriminative power precisely when data quality degrades sufficiently 
+that standard confidence scores can no longer reliably identify 
+correct predictions. Second, calibration trust correctly diagnosed the asymmetry
+between feature and label corruption: belief declined modestly under
+input perturbation and substantially under label flipping, which is
+the qualitative behavior one would expect from a faithful trust
+signal. Third, the per-prediction and model-level views moved
+consistently as the data quality degraded, which is what is required
+for the two assessments to be jointly meaningful.
+
+% ---------------------------------------------------------------------
+\section{What the Framework Does and Does Not Do}
+\label{sec:conclusion-scope}
+
+It is worth pausing to be explicit about the scope of what was built,
+since precision here matters more in a closing chapter than in any
+other part of the document.
+
+The framework targets predictive Machine Learning systems, and within
+that, primarily classification and regression problems where the
+notions of \emph{dataset}, \emph{feature}, and \emph{labeled training
+instance} are clearly defined. This is the setting in which dataset
+trustworthiness can be decomposed into properties such as balance,
+labeling reliability, or sampling adequacy; in which input-level trust
+can be assigned at the feature granularity; and in which the
+trust-propagation operators of \cref{chap:patas} mirror
+neural computations in a way that preserves the algebra of
+Subjective Logic. Generative AI systems, including large language
+models and diffusion models, fall outside this scope. They do not
+expose a fixed input-feature space at inference time, their training
+data is rarely labeled in the supervised sense, and the per-token or
+per-pixel granularity at which an output is generated has no obvious
+analogue to the per-output trust opinion that PaTAS produces. The
+methodological building blocks of this thesis (evidence-based
+opinions, fusion, discounting, and the underlying Subjective Logic
+calculus) remain applicable to such systems in principle, but
+their concrete instantiation would require new trust sources and a
+re-examination of what dataset trustworthiness means in the
+self-supervised and post-training-aligned regimes. This is a
+direction, not a contribution of this thesis.
+
+The framework is also not a replacement for accuracy. The use case
+made this explicit through its coverage-accuracy trade-off: a more
+selective filter improves accuracy on what it retains at the cost of
+what it rejects. The right operating point depends on the
+deployment context. In high-stakes settings where the cost of an
+incorrect action far exceeds the cost of abstention, the precision of
+the PaTAS filter is preferable. In settings where coverage is
+operationally required, the two signals can be combined. The
+framework provides the diagnostic; the choice of how to use it
+remains a policy decision.
+
+Finally, the propagation mechanism is not free. The latency
+measurements of Section~\ref{sec:usecase-cost} placed the inference
+overhead in the range of $1.14\times$ to $1.41\times$ relative to
+the underlying network, depending on configuration. This cost is
+modest in absolute terms for the architectures considered, but it
+grows with depth and width, and the framework should not be used in
+contexts where every microsecond matters. It should be used where the
+value of an interpretable, per-prediction trust signal justifies
+the additional compute.
+
+% ---------------------------------------------------------------------
+\section{Limitations and Directions for Future Work}
+\label{sec:conclusion-future}
+
+The most natural extensions of this work fall along four axes, each
+of which builds on a specific limitation of what was developed here.
+
+\paragraph{From classification to generative and sequential models.}
+The most visible scope restriction is the focus on predictive AI. The
+Subjective Logic calculus does not depend on this restriction, and
+the opening paragraphs of \cref{chap:intro} hinted at
+the broader applicability of the approach. A natural next step is to
+investigate what trust sources are meaningful for self-supervised
+training corpora, how trust opinions might be defined over generated
+sequences rather than fixed-dimensional outputs, and whether the
+propagation mechanism can be lifted from feed-forward classification
+networks to transformer-based architectures. The structural
+optimization of \cref{chap:tnasl} is likely to remain
+useful in this regime, since attention layers produce graph
+structures that are even less DSPG-friendly than residual networks;
+the dataset-level methodology of Chapter~\ref{chap:dataset-trust}
+will need substantial rethinking.
+
+\paragraph{Toward explainability and accountability.}
+The trust signals produced by PaTAS carry information that is finer
+than a scalar prediction confidence. When a prediction is flagged as
+untrusted, the framework's intermediate state contains the
+contribution of each input feature, each layer, and the parameter
+trust associated with each computation. This information was used in
+this thesis to produce a single output opinion, but it can be
+inspected directly. A future direction is to use this intermediate
+state for explanation: identifying which inputs or which parameters
+are responsible for an untrustworthy prediction, attributing
+calibration failures to specific subsets of the training data,
+and supporting auditability requirements that emerging regulatory
+frameworks now make explicit.
+
+\paragraph{Robustness, adversarial settings, and privacy.}
+The empirical evaluation considered stochastic noise applied to
+features and labels. Adversarial perturbations behave differently:
+they are designed to move predictions across decision boundaries with
+minimal perceptual change to the input, and a trust framework based
+on input-feature evidence may or may not detect them. The conjecture
+worth testing is that PaTAS, by reasoning explicitly about
+input-level evidence rather than about output-level confidence, is
+better positioned to flag adversarially perturbed inputs as
+untrusted; whether this conjecture survives empirical contact is an
+open question. A related direction concerns privacy: the federated
+quantification of Chapter~\ref{chap:dataset-trust} was already
+designed to keep local class distributions private, and the entropy-based
+summarization that supported this design generalizes naturally
+to other dataset properties. A more systematic study of how the
+framework composes with differential privacy mechanisms, secure
+aggregation protocols, and federated learning more broadly is a
+direction with immediate practical relevance.
+
+\paragraph{Standardization and operational deployment.}
+Two of the contributions of this thesis were already disseminated
+through technical reports and white papers (the CONNECT Trust
+Assessment Framework deliverable and the 5GAA white paper on
+trustworthiness in cooperative and automated vehicles), both of which
+indicate operational interest in the underlying methodology. A
+remaining piece of work concerns the trust-source catalog of
+Chapter~\ref{chap:dataset-trust}, which was presented as extensible
+but for which no formal extension protocol was specified. Promoting
+the catalog from a curated list to a defined contract (what
+evidence a new trust source must produce, what quantification scheme
+it is compatible with, what granularity tag it carries, and how it
+composes with the existing fusion rules) would let practitioners
+extend the framework to their own settings without requiring a
+working knowledge of the underlying calculus. This is the kind of
+work that turns a research framework into a tool.
+
+% ---------------------------------------------------------------------
+\section{Closing Remarks}
+\label{sec:conclusion-closing}
+
+Trust in Machine Learning is, in the end, a question about evidence:
+what we have, what we are missing, and what to do when the two are
+not the same. The thesis that closes here is built on the conviction
+that this question can be answered with the same kind of rigor that
+the field already brings to accuracy. Subjective Logic provided the
+calculus; Neural Networks provided the substrate; and the framework
+developed across the preceding chapters was an attempt to put the two
+together in a way that is operationally meaningful rather than
+merely formally elegant. Whether the attempt succeeded is a matter
+for the reader and for time. What it produced (a methodology for
+trust assessment, an optimized inference engine for the graphs that
+methodology requires, a system architecture that brings it into the
+Machine Learning pipeline, and an end-to-end demonstration that the
+resulting trust signals carry real diagnostic value) is offered here
+as a contribution to a conversation that the field has only recently
+begun to take seriously, and that will, in all likelihood, occupy it
+for some time to come.

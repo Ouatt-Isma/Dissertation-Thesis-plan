@@ -48,7 +48,7 @@ colback=white,
 colframe=black,
 boxrule=0.8pt,
 arc=3mm,
-title={Research Question~\stepcounter{rq}
+title={\ac{RQ}\stepcounter{rq}
 \therq: #1}
 }
 %----------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ Neural Networks, Uncertainty Quantification, Trust Propagation, Trustworthy AI} 
 % \includeonly{Chapters/Introduction,Chapters/rw,Chapters/publications}
 % \includeonly{Chapters/Datatrust}
 % \includeonly{Chapters/patasovl,Chapters/Datatrust,Chapters/ptas}
-\includeonly{Chapters/usecase}
+% \includeonly{Chapters/usecase}
 
 \begin{document}
 \nocite{5gaa_trust4cav_2025,connect_d31_taf,10.1007/978-3-032-08887-1_4,10706345,10.1007/978-3-032-19096-3_17,trust-aidatatrust,patas,11124121,fotos2025actions,snn}
@@ -275,7 +275,6 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
 
-
 \chapter*{List of Acronyms}
 \addcontentsline{toc}{chapter}{List of Acronyms}
 \input{acronyms}
@@ -298,6 +297,8 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 \input{symbols}
 
+% \chapter*{List of Definition}
+% \listoftheorems[ignoreall,show={definition}]
 %----------------------------------------------------------------------------------------
 %	DEDICATION
 %----------------------------------------------------------------------------------------

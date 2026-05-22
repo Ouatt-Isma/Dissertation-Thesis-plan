@@ -1,8 +1,6 @@
 \chapter{Use Case: \acs{PaTAS} Applied to 5G Network Energy Management}
 \label{chap:usecase}
-\todo{rework c4, improve it}
-\todo{split figure}
-\todo{ackn that this is not the best model given the temporal nature of the problem an LSTM might be better}
+\todo{which fusion Operator did we use and why}
 \noindent
 The previous chapters introduced the theoretical foundations and system architecture required to perform trust assessment in \ac{NN} systems. In particular, \cref{chap:ovl,chap:dataset-trust,chap:patas} introduced the \ac{PaTAS} architecture for parallel trust assessment through the whole \ac{NN} system pipeline. This chapter demonstrates how these contributions apply in practice through a concrete use case in 5G network energy management. The objective is not to introduce new theoretical contributions, but rather to illustrate how the proposed methodology can be applied to assess trustworthiness within a realistic \ac{ML} scenario. By instantiating the full trust assessment pipeline, from trust proposition definition to evidence collection, opinion quantification, and reasoning, we show how the framework can support practical decision-making regarding the trustworthiness of \ac{ML} systems.
 
@@ -119,7 +117,7 @@ We compare two configurations, summarized in \Cref{tab:configs}.
 \hline
 nn & None (baseline NN) & None & 5 \\
 \hline
-ptas-percal & Per-sample $\sigma_i$ calibration & flip probability $p$ & 5 \\
+ptas-percal & Per-sample $\sigma_i$ & flip probability $p$ & 5 \\
 \hline
 \end{tabular}
 \end{table}
@@ -340,7 +338,7 @@ The \ac{NN} exhibits graceful degradation: accuracy decreases steadily but does 
 \subsection{Trust Opinion Mapping and Propagation Behavior}
 \label{sec:trust_mapping_results}
 
-Before evaluating the discriminative power of \ac{PaTAS} opinions, we verify that the calibration functions of \Cref{sec:trust_quantification} produce the expected mapping at the input layer. \Cref{fig:trust_mapping} visualizes the mapping for both noise sources, and \Cref{tab:trust-mapping} reports the numerical values used in our experiments.
+Before evaluating the discriminative power of \ac{PaTAS} opinions, we verify that the trust quantification functions of \Cref{sec:trust_quantification} produce the expected mapping at the input layer. \Cref{fig:trust_mapping} visualizes the mapping for both noise sources, and \Cref{tab:trust-mapping} reports the numerical values used in our experiments.
 
 \begin{figure}[h]
 \centering
@@ -351,7 +349,7 @@ Before evaluating the discriminative power of \ac{PaTAS} opinions, we verify tha
 
 \input{img/usecase/trust_mapping}
 
-The figure confirms the qualitatively distinct profiles designed into the two calibration functions. Feature noise produces increasing uncertainty, reaching $u = 0.40$ at $\sigma_{\text{rel}} = 0.5$ with correspondingly reduced belief and modest disbelief. Label noise produces a clean partition between belief and disbelief with zero residual uncertainty, consistent with the deterministic nature of the flip-rate model.
+The figure confirms the qualitatively distinct profiles designed into the two trust quantification functions. Feature noise produces increasing uncertainty, reaching $u = 0.40$ at $\sigma_{\text{rel}} = 0.5$ with correspondingly reduced belief and modest disbelief. Label noise produces a clean partition between belief and disbelief with zero residual uncertainty, consistent with the deterministic nature of the flip-rate model.
 
 \paragraph{Propagation to the output layer.}
 These input opinions are then propagated through the trained network for parameter trust quantification described in \Cref{sec:trust_propagation}. The benefit of this propagation is that the output opinion on each predicted class reflects both the quality of the input and the accumulated evidence about parameter reliability acquired during training. Because \ac{PaTAS} leaves the \ac{NN}'s predictions unchanged, the relevant evaluation question is not the magnitude of the output opinion in isolation, but whether it is informative about whether the prediction is correct. The following subsections answer this question directly.
@@ -411,22 +409,57 @@ A direct application of the discriminative capacity demonstrated above is select
 \begin{itemize}
     \item \textbf{\ac{PaTAS} filter} ($b > u$): retain samples where belief exceeds uncertainty in the predicted class, indicating that positive evidence for the prediction outweighs residual epistemic doubt.
     \item \textbf{Softmax filter} ($\text{softmax} > 0.5$): retain samples where the \ac{NN} softmax probability in the predicted class exceeds 0.5, the standard high-confidence threshold.
+    \item \textbf{Softmax filter at matched coverage} ($\tau = 0.8$): to provide a fair comparison at approximately the same coverage as the \ac{PaTAS} filter, we also evaluate a softmax threshold of 0.8, which retains a similar fraction of samples. This isolates the contribution of the trust signal structure from the trivial effect of rejecting more samples.
 \end{itemize}
 
-\Cref{tab:threshold-b-gt-d,tab:threshold-nn-0-50} compare the two filters across noise conditions.
+\Cref{tab:selective-prediction-merged} compare the free filters across noise conditions.
 
-\input{img/usecase/tables}
+% \input{img/usecase/tables}
+\begin{table}[ht]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Selective prediction comparison: \ac{PaTAS} belief-over-uncertainty filter ($b > u$) versus NN softmax score thresholds ($\tau = 0.5$ and $\tau = 0.8$). Coverage is the fraction of test samples retained by each filter; accuracy on covered is the accuracy over those retained samples. Values are mean $\pm$ std over 5 independent runs.}
+\label{tab:selective-prediction-merged}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{2}{c}{PaTAS ($b > u$)} & \multicolumn{2}{c}{NN softmax $\tau = 0.5$} & \multicolumn{2}{c}{NN softmax $\tau = 0.8$} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Noise condition & Cov.\ (\%) & Acc.\ (\%) & Cov.\ (\%) & Acc.\ (\%) & Cov.\ (\%) & Acc.\ (\%) \\
+\midrule
+\multicolumn{7}{l}{\textit{Feature noise}} \\
+$\sigma_{rel}=0.10$ & 49.6 $\pm$ 16.5 & 89.38 $\pm$ 1.26 & 97.9 $\pm$ 0.2 & 85.15 $\pm$ 0.09 & 50.7 $\pm$ 0.4 & 89.27 $\pm$ 0.12 \\
+\midrule
+\multicolumn{7}{l}{\textit{Combined noise}} \\
+$\sigma=0.10,\,p=0.05$ & 32.7 $\pm$ 0.2 & 89.40 $\pm$ 2.23 & 95.4 $\pm$ 0.3 & 85.73 $\pm$ 0.17 & 35.3 $\pm$ 0.6 & 89.40 $\pm$ 1.27 \\
+$\sigma=0.10,\,p=0.3$  & 23.5 $\pm$ 1.1 & 93.58 $\pm$ 3.50 & 76.4 $\pm$ 1.2 & 86.23 $\pm$ 0.49 & 26.1 $\pm$ 4.3 & 91.32 $\pm$ 1.85 \\
+\midrule
+\multicolumn{7}{l}{\textit{Overall (unfiltered) accuracy}} \\
+$\sigma_{rel}=0.10$        & \multicolumn{6}{c}{84.36} \\
+$\sigma=0.10,\,p=0.05$     & \multicolumn{6}{c}{84.01} \\
+$\sigma=0.10,\,p=0.3$      & \multicolumn{6}{c}{82.30} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-The \ac{PaTAS} filter is more selective and more accurate than the softmax filter across all evaluated conditions:
+\Cref{tab:selective-prediction-merged} reveals a nuanced picture depending 
+on the comparison baseline.
 
+Against the permissive softmax filter ($\tau = 0.5$), \ac{PaTAS} is clearly 
+superior: at $\sigma_{\text{rel}} = 0.10$, \ac{PaTAS} achieves 89.4\% accuracy 
+on 49.6\% of samples, compared to 85.2\% on 97.9\% for softmax. The gap 
+reflects the fundamental difference between the two signals: softmax at $\tau 
+= 0.5$ retains almost all samples and provides little filtering benefit, while 
+\ac{PaTAS} is inherently more selective.
+
+The more revealing comparison is against the softmax filter at matched coverage 
+($\tau = 0.8$, retaining approximately the same fraction of samples as 
+\ac{PaTAS}). Here the results are more nuanced:
 \begin{itemize}
-    \item At $\sigma_{\text{rel}} = 0.10$, the \ac{PaTAS} filter retains 49.6\% of samples and achieves 89.4\% accuracy on that subset, a gain of 5.0 percentage points over the overall accuracy of 84.4\%. The softmax filter retains 97.9\% of samples but improves accuracy by only 0.8 percentage points (from 84.4\% to 85.2\%).
-    \item Under combined noise at $(\sigma, p) = (0.10, 0.05)$, the \ac{PaTAS} filter achieves 89.4\% accuracy on 32.7\% coverage, while softmax achieves 85.7\% on 95.4\% coverage.
-    \item The accuracy advantage of \ac{PaTAS} over softmax narrows as noise increases, consistent with the decreasing discriminative gap observed in \Cref{sec:patas_discriminator}.
+    \item Under low to moderate noise ($\sigma_{\text{rel}} = 0.10$ and $(\sigma, p) = (0.10, 0.05)$), \ac{PaTAS} and the matched softmax filter achieve near-identical accuracy on retained samples (89.38\% vs.\ 89.27\% and 89.40\% vs.\ 89.40\%). At these noise levels, the softmax confidence score alone is sufficient to identify the most reliable predictions, and the richer trust signal of \ac{PaTAS} provides no additional discriminative power.
+    \item Under higher combined noise ($(\sigma, p) = (0.10, 0.30)$), \ac{PaTAS} opens a meaningful gap: 93.58\% versus 91.32\% for the matched softmax filter, at comparable coverage (23.5\% vs.\ 26.1\%). This 2.3 percentage-point advantage at higher noise is consistent with the discriminative analysis of \Cref{sec:patas_discriminator}: as noise increases, the explicit noise-provenance information encoded in the \ac{PaTAS} trust opinion becomes more valuable than the softmax score,  which carries no knowledge of the underlying data quality.
 \end{itemize}
-
-The higher selectivity of the \ac{PaTAS} filter comes at the cost of coverage: at $\sigma_{\text{rel}} = 0.10$, half the samples are rejected. This trade-off is inherent to any threshold-based filter and depends on the deployment context. In high-stakes settings where incorrect predictions carry a high cost, the \ac{PaTAS} filter's precision is preferable. In settings where coverage matters, the two signals can be combined: samples passing the \ac{PaTAS} filter receive the trust-based accuracy guarantee, while remaining samples can be handled by a fallback strategy or flagged for human review.
-
+The higher selectivity of the \ac{PaTAS} filter at lower coverage is inherent to the $b > u$ criterion: trust belief must actively exceed uncertainty, which naturally becomes harder to satisfy as input noise grows. In high-stakes settings where incorrect predictions carry a high cost, this selectivity is preferable. In settings requiring higher coverage, the softmax filter at an appropriate threshold provides competitive accuracy, and the two signals can be combined: samples passing the \ac{PaTAS} filter receive the trust-based guarantee, while remaining samples can be scored by softmax or flagged for human review.
 
 \subsection{Summary of Robustness Findings}
 \label{sec:robustness_summary}
@@ -436,26 +469,26 @@ Three conclusions follow from the empirical results:
 \begin{enumerate}
     \item \ac{PaTAS} belief discriminates between correct and wrong predictions across all evaluated noise conditions. The discriminative gap $\Delta b$ ranges from $+0.28$ at low feature noise to $+0.05$ at high noise, with graceful degradation as data quality deteriorates.
     \item The nature of discrimination is consistent with the trust calibration design: feature noise produces uncertainty-driven separation ($\Delta u$ is the dominant signal), while combined noise produces a mixed signal with both uncertainty and belief components contributing.
-    \item Used as a selective prediction filter, \ac{PaTAS} improves accuracy by 5.0 to 5.6 percentage points on retained samples, compared to 0.8 to 1.7 for softmax thresholding. The advantage derives from two complementary properties. First, the three-component opinion $(b, d, u)$ distinguishes vacuous predictions (high $u$, low $b$) from genuinely confident ones in a way that a single softmax probability cannot. Second, and more fundamentally, the trust opinion encodes explicit knowledge of data quality: the noise level $\sigma_i$ of each training sample is mapped to a calibrated opinion via $\text{feature\_noise\_to\_trust}(\sigma_i)$, and this quality signal propagates through the Trust Nodes Network alongside the standard forward pass. The output opinion therefore reflects not only the network's learned confidence but also how reliable the data used to form that confidence actually was. Softmax probabilities have no access to this provenance information and treat all predictions as equally grounded in the training data.
+    \item Used as a selective prediction filter, \ac{PaTAS} provides a competitive advantage that depends on the noise regime. Against an unmatched softmax baseline ($\tau = 0.5$), \ac{PaTAS} achieves 5.0 to 5.6 percentage-point accuracy gains because of its greater selectivity alone. Against a softmax filter at matched coverage ($\tau = 0.8$), \ac{PaTAS} is approximately equivalent under low to moderate noise, but opens a 2.3 percentage-point gap under higher combined noise ($(\sigma, p) = (0.10, 0.30)$: 93.6\% vs.\ 91.3\%). The trust signal therefore adds value precisely when it is most needed: when data quality degrades sufficiently that standard softmax confidence can no longer reliably identify correct predictions. The advantage derives from the explicit noise-provenance information encoded in the trust opinion, which softmax probabilities do not carry.
 \end{enumerate}
 
 \section{Calibration Quantification using Subjective Logic}
 \label{sec:calibration_quantification}
+The previous section evaluated \ac{PaTAS} as a per-prediction confidence signal, showing that its trust opinions discriminate between correct and wrong predictions and can be used to improve accuracy through selective filtering. We now turn to a complementary question: \emph{can we produce a single trust opinion that characterizes the trustworthiness of an entire trained model?} This is the calibration-trust problem, addressed using \acf{BPQ} with cumulative fusion across probability clusters, as developed in \cref{chap:bb}.
 
-The previous section evaluated PaTAS as a per-prediction confidence signal. We now turn to a complementary question: \emph{can we produce a single trust opinion that characterizes the trustworthiness of an entire trained model?} This is the calibration-trust problem, which we addressed in our earlier work using \acf{BPQ} with cumulative fusion across probability clusters (\cref{chap:bb}).
-
-Unlike PaTAS, calibration quantification operates post-hoc on the predictions of an already-trained NN. The two methods are complementary: PaTAS provides per-sample trust during inference; calibration quantification provides a global trust opinion on the model itself. Evaluating both under the same noise conditions allows us to capture different aspects of trustworthiness.
+Unlike \ac{PaTAS}, calibration quantification operates post-hoc on the predictions of an already-trained \ac{NN}. The two methods are complementary: \ac{PaTAS} provides per-sample trust during inference; calibration quantification provides a global trust opinion on the model itself. Evaluating both under the same noise conditions allows us to verify that subjective logic captures different aspects of trustworthiness at different granularities in a consistent manner.
 
 
 \subsection{Methodology Recap}
 \label{sec:calibration_methodology}
 
-The calibration-trust algorithm (\cref{alg:1} in \cref{chap:bb}) computes a single binomial opinion $(b, d, u)$ on the trained NN as follows:
+The calibration-trust algorithm (\cref{alg:1} in \cref{chap:bb}) computes a single binomial opinion $(b, d, u)$ on the trained \ac{NN} as follows:
+
 \begin{enumerate}
     \item \textbf{Clustering predictions.} The predicted probabilities for each class are partitioned into $M = 10$ bins over $[0, 1]$.
-    \item \textbf{Per-cluster evidence.} For each bin $i$ with representative probability $\text{RP}_i$, positive evidence is the number of correct classifications $t_i$, and negative evidence is $|t_i - n_i \cdot \text{RP}_i|$, measuring the deviation between predicted and observed accuracy.
-    \item \textbf{Per-cluster opinion.} A binomial opinion is computed via BPQ with uncertainty weight $W = 2$.
-    \item \textbf{Cumulative fusion.} Cluster opinions are fused per class, then across classes, yielding a single calibration-trust opinion for the NN.
+    \item \textbf{Per-cluster evidence.} For each bin $i$ containing $n_i$ samples with representative probability $\text{RP}_i$, positive evidence is the observed number of correct classifications $t_i$, and negative evidence is $|t_i - n_i \cdot \text{RP}_i|$, the absolute deviation between the observed correct count and the $n_i \cdot \text{RP}_i$ correct predictions expected from a perfectly calibrated model. A well-calibrated bin contributes little negative evidence; a miscalibrated bin where predicted confidence diverges from empirical accuracy contributes proportionally more.
+    \item \textbf{Per-cluster opinion.} A binomial opinion is computed via \ac{BPQ} with uncertainty weight $W = 2$.
+    \item \textbf{Cumulative fusion.} Cluster opinions are fused per class, then across classes, yielding a single calibration-trust opinion for the \ac{NN}.
 \end{enumerate}
 
 This procedure quantifies how well the model's predicted probabilities align with its actual accuracy: a perfectly calibrated model receives an opinion approaching $(1, 0, 0)$, while a miscalibrated model shows elevated disbelief.
@@ -463,11 +496,11 @@ This procedure quantifies how well the model's predicted probabilities align wit
 
 \subsection{Calibration Trust Across Noise Conditions}
 \label{sec:calibration_results}
+
 We compute calibration trust for the same trained networks evaluated in \Cref{sec:noise_robustness}, under feature noise, label noise, and combined noise. \Cref{fig:calibration_trust} visualizes the resulting opinion masses, and \Cref{tab:calibration-trust} reports the numerical values.
 
 \begin{figure}[h]
 \centering
-% \includegraphics[width=\textwidth]{img/usecase/calibration_trust.pdf}
 \begin{subfigure}{0.49\textwidth}
     \includegraphics[width=\textwidth]{img/usecase/calibration_trust_cropped_1.pdf}
 \end{subfigure}
@@ -477,167 +510,161 @@ We compute calibration trust for the same trained networks evaluated in \Cref{se
 \begin{subfigure}{0.49\textwidth}
     \includegraphics[width=\textwidth]{img/usecase/calibration_trust_cropped_3.pdf}
 \end{subfigure}
-\caption{Calibration trust of trained NNs across noise conditions, computed via BPQ with cumulative fusion ($M = 10$ bins, $W = 2$). Top: opinion masses as a function of noise magnitude. Bottom: numerical values per condition. Left: feature noise. Center: label noise. Right: combined noise. Mean $\pm$ standard deviation over 5 independent runs.}
+\caption{Calibration trust of trained \acp{NN} across noise conditions, computed via \ac{BPQ} with cumulative fusion ($M = 10$ bins, $W = 2$). Opinion masses as a function of noise magnitude (top) and numerical values per condition (bottom). Left: feature noise. Center: label noise. Right: combined noise. Mean $\pm$ standard deviation over 5 independent runs.}
 \label{fig:calibration_trust}
 \end{figure}
 
 \input{img/usecase/calibration_trust}
 
 \paragraph{Feature noise has limited impact on calibration.}
-As $\sigma_{\text{rel}}$ increases from $0$ to $0.5$, belief decreases only modestly from $0.927$ to $0.833$, while disbelief rises from $0.073$ to $0.167$. The model remains well-calibrated despite degraded inputs, indicating that its confidence values continue to track empirical accuracy even when the underlying data is noisier. This is consistent with the graceful accuracy degradation seen in \Cref{sec:baseline_nn}. \todo{Add also that noise adding is a differential privacy\cite{} way to avoid overconfidence. so noise is not so bad}
+As $\sigma_{\text{rel}}$ increases from $0$ to $0.5$, belief decreases only modestly from $0.927$ to $0.833$, while disbelief rises from $0.073$ to $0.167$. The model remains well-calibrated despite degraded inputs, indicating that its confidence values continue to track empirical accuracy even when the underlying data is noisier. This is consistent with the graceful accuracy degradation observed in \Cref{sec:baseline_nn}. The limited impact of feature noise on calibration also has a principled interpretation: additive Gaussian noise on features acts analogously to stochastic input perturbations used in differential-privacy-aware training~\cite{Abadi_2016}, which are known to reduce overconfidence by preventing the model from memorizing exact training samples. Feature noise therefore does not break the alignment between predicted confidence and empirical accuracy; if anything, moderate noise can regularize overconfident predictions, which explains why calibration trust degrades slowly even as classification accuracy declines.
 
 \paragraph{Label noise causes substantial miscalibration.}
-Label flipping has a much stronger effect: at $p = 0.30$, belief drops to $0.680$ and disbelief rises to $0.320$. When training labels are systematically wrong, the model learns to be confident in incorrect predictions, breaking the alignment between predicted probabilities and true accuracy. Calibration trust correctly identifies this as the more severe form of corruption.
+Label flipping has a much stronger effect: at $p = 0.30$, belief drops to $0.680$ and disbelief rises to $0.320$. When a systematic fraction of training labels are incorrect, the model learns to assign high confidence to wrong predictions, directly breaking the alignment between predicted probabilities and true accuracy that calibration trust measures. Calibration trust correctly identifies label noise as the more severe form of corruption, which is consistent with the intuition that label errors corrupt the supervision signal itself, whereas feature noise degrades only the input representation.
 
 \paragraph{Combined noise compounds the effect.}
-Under combined corruption, calibration trust degrades faster than under either source alone. At $(\sigma, p) = (0.50, 0.30)$, belief falls to $0.660$, the lowest across all conditions. The dominant driver is label noise, with feature noise contributing additively but secondarily.
+Under combined corruption, calibration trust degrades faster than under either source alone. At $(\sigma, p) = (0.50, 0.30)$, belief falls to $0.660$, the lowest across all conditions. The dominant driver is label noise, with feature noise contributing additively but secondarily, consistent with the asymmetry observed in the two preceding paragraphs.
 
 \paragraph{Uncertainty remains negligible.}
-Across all conditions, uncertainty $u$ stays near $10^{-4}$. With a large test set (over 18{,}000 samples distributed across $M = 10$ bins and 3 classes), the evidence weight $W = 2$ becomes negligible relative to the cumulative evidence, driving $u \to 0$. The opinion collapses toward a Beta distribution with well-determined belief and disbelief, leaving little residual uncertainty.
+Across all conditions, uncertainty $u$ stays near $10^{-4}$. With a large test set distributed across $M = 10$ bins and 3 classes, the evidence weight $W = 2$ becomes negligible relative to the cumulative evidence, driving $u \to 0$. The calibration-trust opinion therefore carries almost no residual vacuity: any ambiguity about the model's calibration has been resolved by the volume of predictions observed, and the remaining mass is cleanly partitioned between belief (the model is well-calibrated) and disbelief (it is not).
 
 
 \subsection{Comparison: Per-Prediction Trust vs.\ Calibration Trust}
 \label{sec:patas_vs_calibration}
 
-PaTAS opinions and calibration-trust opinions answer different questions about the same trained network. \Cref{tab:trust_comparison} summarizes the distinction.
+\ac{PaTAS} opinions and calibration-trust opinions answer different questions about the same trained network. \Cref{tab:trust_comparison} summarizes the key distinctions.
 
 \begin{table}[h]
 \centering
-\caption{Per-prediction trust (PaTAS) versus global calibration trust.}
+\caption{Per-prediction trust (\ac{PaTAS}) versus global calibration trust.}
 \label{tab:trust_comparison}
 \begin{tabular}{lll}
 \toprule
-Aspect & PaTAS (per-prediction) & Calibration trust (global) \\
+Aspect & \ac{PaTAS} (per-prediction) & Calibration trust (global) \\
 \midrule
-Granularity & One opinion per sample & One opinion per model \\
-Computation & Forward through \ac{TNN} & Post-hoc on predictions \\
-Dominant component & Uncertainty (feature noise) & Dis/belief (miscalibration) \\
-Use case & Selective prediction & Model auditing \\
-% Signal at high noise & Degrades to vacuous & Degrades to high disbelief \\
+Granularity       & One opinion per sample      & One opinion per model \\
+When computed     & During inference            & Post-hoc on held-out predictions \\
+Dominant component & Uncertainty (feature noise) & Disbelief (label noise / miscalibration) \\
+What degrades it  & Input quality               & Label quality \\
+Use case          & Selective prediction        & Model auditing \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The two methods complement each other. PaTAS opinions express \emph{uncertainty about a specific prediction} given the input quality: a high-uncertainty PaTAS opinion suggests the input itself is unreliable. Calibration-trust opinions express \emph{belief/disbelief in the model's confidence calibration} given its observed accuracy: a high-disbelief or low belief calibration opinion suggests the model is miscalibrated and its confidence values cannot be trusted. Used together, the two trust assessments provide a comprehensive picture: PaTAS identifies which predictions to trust at inference time; calibration trust assesses whether to trust the model as a whole in terms of score predicted.
+The two assessments complement each other along two axes.
 
+\textbf{Granularity.} \ac{PaTAS} opinions vary per sample: two inputs processed by the same model receive different trust opinions depending on their individual noise levels. Calibration trust produces a single opinion for the entire model, summarizing how reliably its confidence scores correspond to its empirical accuracy across the test set. The two granularities serve different decision-making needs: per-prediction trust supports runtime filtering, while model-level trust supports deployment decisions and periodic auditing.
+
+\textbf{Sensitivity.} The two methods are sensitive to different sources of degradation. \ac{PaTAS} is most informative under feature noise, where per-sample uncertainty grows with $\sigma_i$ and the discriminative gap between correct and wrong predictions is sharpest. Calibration trust is most sensitive to label noise, which corrupts the supervision signal and breaks the confidence-accuracy alignment that calibration measures. This complementary sensitivity means that the two assessments together provide a more complete diagnostic than either alone: a model that passes the calibration-trust check but generates high-uncertainty \ac{PaTAS} opinions may be globally well-calibrated but operating on unreliable inputs; conversely, a model with low calibration trust but reasonable per-prediction \ac{PaTAS} opinions may be systematically overconfident at the model level despite producing locally interpretable predictions.
 
 \section{Discussion}
 \label{sec:discussion}
-
-
-\subsection{What PaTAS Adds Beyond Softmax Confidence}
+\subsection{What \ac{PaTAS} Adds Beyond Softmax Confidence}
 \label{sec:discussion_softmax}
 
-Softmax probabilities collapse confidence into a single number, while PaTAS produces a three-component opinion $(b, d, u)$. This distinction is meaningful for several reasons:
+Softmax probabilities collapse confidence into a single scalar, while \ac{PaTAS} produces a three-component opinion $(b, d, u)$. This distinction is meaningful in three respects:
 
 \begin{itemize}
-    \item \textbf{Uncertainty separation.} PaTAS distinguishes between low confidence due to insufficient evidence (high $u$, low $d$) and low confidence due to conflicting evidence (low $u$, high $d$). Softmax conflates these into a single low-probability output.
-    \item \textbf{Traceable origins.} Because PaTAS opinions are constructed by propagating input opinions through the network, uncertainty in a prediction can be traced back to specific noisy inputs or unreliable parameters.
-    \item \textbf{Operational interpretation.} The components $(b, d, u)$ map to distinct decisions: high $u$ suggests collecting more data; high $d$ suggests auditing the labeling process.
+    \item \textbf{Uncertainty separation.} \ac{PaTAS} distinguishes between low confidence due to insufficient evidence (high $u$, low $d$) and low confidence due to actively conflicting evidence (low $u$, high $d$). Softmax conflates these into a single low-probability output, losing the information needed to decide whether to collect more data or to audit the labeling process.
+    \item \textbf{Traceable origins.} Because \ac{PaTAS} opinions are constructed by propagating calibrated input opinions through the Trust Nodes Network, uncertainty in a prediction can be traced back to specific noisy inputs or unreliable parameters. Softmax provides no such provenance.
+    \item \textbf{Noise-aware grounding.} The trust opinion encodes explicit knowledge of data quality: the noise level $\sigma_i$ of each training sample is mapped to a calibrated opinion via $\text{feature\_noise\_to\_trust}(\sigma_i)$ and propagated all the way to the output. Softmax probabilities have no access to this provenance information and treat all predictions as equally grounded in the training data.
 \end{itemize}
-
+These properties explain the empirical pattern observed in \Cref{sec:selective_prediction}: against a permissive softmax baseline, \ac{PaTAS} achieves 5.0 to 5.6 percentage-point accuracy gains simply through greater selectivity. More importantly, against a softmax filter at matched coverage, \ac{PaTAS} provides equivalent performance under low noise but a meaningful advantage under higher combined noise (93.6\% vs.\ 91.3\%), where the noise-provenance signal becomes critical.
 
 \subsection{Computational Cost}
 \label{sec:computational_cost}
 
-We measured the latency overhead of running PaTAS alongside the standard neural network, both at inference and during training. The results are summarized in \Cref{fig:patas_latency}, with detailed numbers in \Cref{tab:latency-inference,tab:latency-training}.
+We measured the latency overhead of running \ac{PaTAS} alongside the standard \ac{NN}, both at inference and during training. The results are summarized in \Cref{fig:patas_latency}, with detailed numbers in \Cref{tab:latency-inference,tab:latency-training}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{img/usecase/latency_plot.pdf}
-\caption{PaTAS latency overhead. Left column: inference latency as a function of batch size; the upper plot shows absolute median latency (200 repetitions), the lower plot shows the PaTAS-to-NN overhead ratio. Right column: training wall-clock across noise conditions (mean $\pm$ std over 3 trials, 5 epochs each); the upper plot shows total time, the lower plot shows the per-epoch PaTAS overhead in milliseconds.}
+\caption{\ac{PaTAS} latency overhead. Left column: inference latency as a function of batch size; upper plot shows absolute median latency (200 repetitions), lower plot shows the \ac{PaTAS}-to-\ac{NN} overhead ratio. Right column: training wall-clock across noise conditions (mean $\pm$ std over 3 trials, 5 epochs each); upper plot shows total time, lower plot shows the per-epoch \ac{PaTAS} overhead in milliseconds.}
 \label{fig:patas_latency}
 \end{figure}
 
 \input{img/usecase/latencies}
 
-
 \paragraph{Inference latency.}
-At small batch sizes ($\leq 64$), PaTAS adds an absolute overhead of well under 0.1\,ms, with the relative overhead ratio between 1.7$\times$ and 2.2$\times$. At these sizes, both the NN forward pass and the trust feedforward through the Trust Nodes Network are dominated by per-call constants rather than by the size of the batch. As batch size grows, the overhead ratio increases more steeply: 2.6$\times$ at batch 256, 4.1$\times$ at batch 512, and 5.2$\times$ at batch 1024. In absolute terms, PaTAS adds roughly 2.5\,ms per inference at batch size 1024 (3.05\,ms total versus 0.59\,ms for the NN alone). This scaling reflects the fact that the trust discounting operator applied at each Trust Node performs more work per sample than a standard matrix multiplication: each sample carries a $(b, d, u)$ triple that must be discounted by the weight opinion at every neuron, accumulated, and combined across inputs.
-
+At small batch sizes ($\leq 64$), \ac{PaTAS} adds an absolute overhead of well under 0.1\,ms, with a relative overhead ratio between $1.7\times$ and $2.2\times$. At these sizes, both the \ac{NN} forward pass and the trust feedforward through the \ac{TNN} are dominated by per-call constants rather than batch size. As batch size grows, the ratio increases more steeply: $2.6\times$ at batch 256, $4.1\times$ at batch 512, and $5.2\times$ at batch 1024. In absolute terms, \ac{PaTAS} adds roughly 2.5\,ms at batch size 1024 (3.05\,ms total versus 0.59\,ms for the \ac{NN} alone). This scaling reflects the nature of the trust discounting operator: each sample carries a $(b, d, u)$ triple that must be discounted by the weight opinion at every neuron, accumulated, and combined across inputs, which is more expensive per sample than a standard matrix multiplication.
 
 \paragraph{Training overhead.}
-Training overhead is more moderate than the inference overhead suggests, because the trust update step runs in parallel with the NN's backward pass over the TCP socket rather than blocking it. Over 5 epochs and 3 trials, total training time increased by 1.14$\times$ to 1.41$\times$ depending on the noise condition: 1.23$\times$ on clean data (285\,s $\to$ 349\,s), 1.41$\times$ under feature noise (270\,s $\to$ 380\,s), and 1.14$\times$ under combined noise (240\,s $\to$ 275\,s). The per-epoch overhead ranges from 6.9\,s to 22.1\,s. The variability across conditions (especially the high standard deviation on the clean and feature settings) reflects the TCP-based client-server architecture: trust message exchange is sensitive to scheduling, socket buffering, and process contention, all of which contribute additional jitter.
-
+Training overhead is more moderate than the inference overhead suggests, because the trust update step runs in parallel with the \ac{NN}'s backward pass over the \ac{TCP} socket rather than blocking it. Over 5 epochs and 3 trials, total training time increased by $1.14\times$ to $1.41\times$ depending on the noise condition: $1.23\times$ on clean data (285\,s $\to$ 349\,s), $1.41\times$ under feature noise (270\,s $\to$ 380\,s), and $1.14\times$ under combined noise (240\,s $\to$ 275\,s), with a per-epoch overhead ranging from 6.9\,s to 22.1\,s. The variability across conditions reflects the \ac{TCP}-based client-server architecture: trust message exchange is sensitive to scheduling, socket buffering, and process contention.
 
 \paragraph{Implications for deployment.}
-Three implications follow:
-
 \begin{itemize}
-    \item \textbf{Inference cost is acceptable for moderate batch sizes.} At batch sizes typical of streaming inference ($\leq 64$), the absolute overhead is sub-millisecond, well within typical service-level budgets. PaTAS is therefore practical for per-sample or small-batch deployment, which is the regime in which its per-prediction trust signal is most useful.
-    \item \textbf{Large-batch inference incurs proportionally higher cost.} The 5.2$\times$ overhead at batch 1024 suggests that batched offline scoring with PaTAS should be reserved for cases where the trust signal is genuinely needed (for instance, periodic audits or selective prediction over a large dataset).
-    \item \textbf{Training cost is dominated by the NN itself.} The 1.14--1.41$\times$ training overhead is modest given that PaTAS maintains an entire parallel Trust Nodes Network and exchanges opinions every batch. For most settings, a one-time training cost of this magnitude is acceptable, particularly given that PaTAS-augmented training produces an interpretable trust signal at no additional inference cost beyond the values reported above.
+    \item \textbf{Inference cost is acceptable for moderate batch sizes.} At batch sizes typical of streaming inference ($\leq 64$), the absolute overhead is sub-millisecond, well within typical service-level budgets. \ac{PaTAS} is therefore practical for per-sample or small-batch deployment, which is the regime where its per-prediction trust signal is most useful.
+    \item \textbf{Large-batch inference incurs proportionally higher cost.} The $5.2\times$ overhead at batch 1024 suggests that batched offline scoring with \ac{PaTAS} should be reserved for settings where the trust signal is genuinely needed, such as periodic audits or selective prediction over a large dataset.
+    \item \textbf{Training cost is dominated by the \ac{NN} itself.} The $1.14$--$1.41\times$ training overhead is modest given that \ac{PaTAS} maintains an entire parallel \ac{TNN} and exchanges opinions every batch. This is a one-time cost, and production deployments could reduce it further by replacing the socket transport with shared-memory or in-process integration.
 \end{itemize}
 
-These measurements were taken on a single machine running both processes over a local TCP socket; production deployments could reduce overhead further by replacing the socket transport with shared-memory or in-process integration, at the cost of tighter coupling between the NN and PaTAS code.
 
 \subsection{Limitations}
 \label{sec:limitations}
 
 \begin{itemize}
-    \item \textbf{Network depth}: We use a shallow 2-layer MLP. Trust propagation in deeper architectures may exhibit different dynamics, particularly because trust discounting compounds across layers.
-   
-    \item \textbf{Network depth.} We use a shallow 2-layer MLP. Trust propagation in deeper architectures may exhibit different dynamics, particularly because trust discounting compounds across layers.
-    \item \textbf{Calibration assumptions.} The trust calibration functions ($\text{feature\_noise\_to\_trust}$ and $\text{label\_noise\_to\_trust}$) are designed for the specific noise model used in our experiments. Real-world noise may not follow these distributions, and calibration should be adapted to the application domain.
-    \item \textbf{Single dataset.} Our evaluation focuses on a single domain (5G network energy). Generalization to other modalities (images, text) and tasks (regression, sequence prediction) remains future work.
+    \item \textbf{Network depth.} We use a shallow 2-layer \ac{MLP}. Trust propagation in deeper architectures may exhibit different dynamics, as trust discounting compounds across layers and residual connections introduce non-sequential trust paths that require the \ac{DSPG} synthesis of \cref{chap:patas} to handle correctly.
+    \item \textbf{Assumptions.} The trust quantification functions ($\text{feature\_noise\_to\_trust}$ and $\text{label\_noise\_to\_trust}$) are designed for the specific noise models used in our experiments. Real-world noise may not follow Gaussian or flip-rate distributions, and the trust quantification functions should be adapted to the application domain before deployment.
+    \item \textbf{Model architecture and temporal structure.} The 5G energy dataset has an inherent temporal structure: energy consumption at a base station at time $t$ is influenced by its recent history of load and energy-saving mode activations. A 2-layer \ac{MLP} treats each hourly sample as independent, discarding this sequential dependency. Architectures better suited to temporal data, such as \acp{LSTM} or Transformer-based sequence models, would likely achieve higher classification accuracy on this task. The choice of \ac{MLP} was deliberate for the purpose of this use case: it provides a controlled, interpretable baseline that isolates the contribution of trust reasoning from architectural effects. However, the accuracy figures reported in \Cref{sec:baseline_nn} should be interpreted accordingly and are not claimed to represent the best achievable performance on this dataset.
 \end{itemize}
 
 
 \subsection{Connection to the Broader Thesis}
 \label{sec:discussion_thesis}
 
-This use case demonstrates the practical applicability of the PaTAS framework introduced in earlier chapters:
+This use case demonstrates the practical applicability of the contributions introduced in earlier chapters:
 
 \begin{itemize}
-    \item The trust quantification methodology of \cref{chap:dataset-trust} is operationalized through the calibration functions for feature and label noise.
-    \item The Trust Propagation Module of the Parallel Trust Assessment System architecture (\cref{chap:patas}) is realized end-to-end through the TCP-socket-based client-server interaction.
-    \item The calibration-trust framework of \cref{chap:bb} provides a complementary global trust assessment that confirms the per-prediction findings.
+    \item The trust quantification methodology of \cref{chap:dataset-trust} is operationalized through the trust quantification functions for feature and label noise, showing how dataset-level trust assessment translates into concrete per-sample opinions.
+    \item The Trust Propagation Module of \cref{chap:patas} is realized end-to-end through the \ac{TCP}-socket client-server interaction, validating the architectural design on a real dataset with controlled noise.
+    \item The calibration-trust framework of \cref{chap:bb} provides a complementary global trust assessment that is consistent with the per-prediction findings: both methods identify label noise as the more damaging corruption source, and both degrade gracefully under feature noise.
 \end{itemize}
 
-Together, these elements show that subjective logic can be deployed in production-style machine learning pipelines as a complement to standard probabilistic reasoning, providing interpretable, decomposable trust assessments that support downstream decision-making.
+Taken together, the three contributions form a coherent pipeline: dataset trustworthiness is quantified, propagated through training and inference, and audited post-hoc at the model level. The use case shows that this pipeline can be deployed alongside an existing \ac{NN} without modifying its predictions, providing an interpretable and decomposable trust layer that supports downstream decision-making in a way that standard probabilistic outputs cannot.
 
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-This chapter applied the Parallel Trust Assessment System to a real-world use case in 5G network energy classification. We addressed four research questions.
+This chapter applied the \acf{PaTAS} to a real-world use case in 5G network energy classification, demonstrating the end-to-end operation of the trust assessment pipeline on a dataset with heterogeneous hardware, automated labeling, and controlled data quality variation. We addressed four research questions.
 
 
 \subsubsection*{Question 1: Trust Opinion Assignment}
 
 \emph{How should trust opinions be assigned to real-world data?}
 
-We introduced two calibration functions that map noise characteristics to subjective opinions: $\text{feature\_noise\_to\_trust}(\sigma_{\text{rel}})$ for measurement noise (uncertainty-dominant) and $\text{label\_noise\_to\_trust}(p)$ for label-flipping errors (disbelief-dominant). These functions reflect the semantic distinction between random measurement variability and systematic labeling errors.
+We introduced two trust quantification functions that map noise characteristics to subjective opinions: $\text{feature\_noise\_to\_trust}(\sigma_{\text{rel}})$ for measurement noise (uncertainty-dominant, grounded in the noise-to-information ratio) and $\text{label\_noise\_to\_trust}(p)$ for label-flipping errors (disbelief-dominant, reflecting the deterministic nature of flip-rate corruption). The two functions embed qualitatively different semantics into the opinion structure: feature noise increases vacuity without implying deception, while label noise encodes a known proportion of incorrect supervision with no residual epistemic gap.
 
 
 \subsubsection*{Question 2: Trust Propagation Dynamics}
 
 \emph{How do trust opinions propagate through the network during training?}
 
-Trust opinions on inputs and labels propagate through the network via the discounting and deduction operators of Subjective Logic. The forward-propagated opinion in the NN's predicted class provides a confidence signal that can be compared to softmax confidence. Crucially, trust propagation does not affect the neural network's learning trajectory: PaTAS operates as a parallel reasoning system, leaving the NN's gradients and predictions intact.
+Input and label trust opinions propagate through the network via the discounting and fusion operators of \ac{SL}, accumulating evidence about parameter reliability across mini-batches. The forward-propagated opinion on the \ac{NN}'s predicted class provides a confidence signal grounded in both input quality and learned parameter trust. Crucially, this reasoning occurs in a parallel \ac{TNN} that does not affect the \ac{NN}'s gradients or predictions, preserving the original learning dynamics.
 
 
-\subsubsection*{Question 3: Robustness as a Confidence Signal}
+\subsubsection*{Question 3: \ac{PaTAS} as a Confidence Signal Under Data Quality Variation}
 
-\emph{Does the trust signal produced by PaTAS reliably indicate prediction correctness under data corruption?}
+\emph{Does the trust signal produced by \ac{PaTAS} reliably indicate prediction correctness under data quality variation?}
 
-Yes. PaTAS belief discriminates between correct and incorrect NN predictions, with a discriminative gap of $\Delta b = +0.28$ at low noise levels. Used as a selective prediction filter, PaTAS achieves 89.4\% accuracy on retained samples versus 84.3\% overall, substantially outperforming softmax thresholding (85.2\% on retained). The advantage holds across feature noise, label noise, and combined corruption, degrading gracefully as noise increases beyond the network's representational capacity.
+Yes. \ac{PaTAS} belief discriminates between correct and incorrect \ac{NN} predictions across all evaluated conditions. The discriminative gap reaches $\Delta b = +0.28$ under low feature noise and degrades gracefully to $\Delta b = +0.05$ at the highest noise level, reflecting that \ac{PaTAS} correctly signals reduced reliability when input quality collapses. Used as a selective prediction filter, \ac{PaTAS} achieves 89.4\% accuracy on retained samples versus 84.4\% overall. Against a permissive softmax baseline ($\tau = 0.5$), the gain is 4.2 percentage points. Against a softmax filter at matched coverage ($\tau = 0.8$), \ac{PaTAS} performs equivalently under low noise (89.38\% vs.\ 89.27\%) but opens a 2.3 percentage-point gap under higher combined noise, where the explicit noise-provenance information in the trust signal becomes the decisive factor.
 
 
 \subsubsection*{Question 4: Per-Prediction Trust versus Global Calibration Trust}
 
-\emph{How does PaTAS-based per-prediction trust relate to a global calibration-trust assessment of the same model?}
+\emph{How does \ac{PaTAS}-based per-prediction trust relate to a global calibration-trust assessment of the same model?}
 
-The two assessments answer complementary questions and produce consistent signals. PaTAS opinions vary per sample and are dominated by uncertainty under feature noise, allowing fine-grained selective prediction. Calibration trust produces a single per-model opinion dominated by disbelief, with strong sensitivity to label noise (belief drops from 0.93 to 0.68 as $p$ rises to 0.30) and mild sensitivity to feature noise. The fact that both methods, despite operating at different granularities and through different computational paths, produce coherent and interpretable trust signals supports the broader claim that subjective logic offers a unified framework for trust quantification in neural network systems.
+The two assessments answer complementary questions and produce consistent signals. \ac{PaTAS} opinions vary per sample and are dominated by uncertainty under feature noise, enabling fine-grained selective prediction. Calibration trust produces a single per-model opinion with strong sensitivity to label noise (belief drops from 0.93 to 0.68 as $p$ rises to 0.30) and mild sensitivity to feature noise (belief decreases from 0.93 to 0.83 as $\sigma_{\text{rel}}$ rises to 0.5), consistent with the known regularizing effect of additive noise on model calibration. The coherence between the two methods, despite operating at different granularities and through different computational paths, supports the broader claim of \cref{chap:patas} that \ac{SL} offers a unified framework for trust quantification across the \ac{NN} pipeline.
 
 
 \subsection*{Contributions of This Chapter}
 
-This use case validates the framework on three dimensions:
+This use case validates the \ac{PaTAS} framework on three dimensions:
+
 \begin{enumerate}
-    \item \textbf{Methodological:} It demonstrates how trust quantification, propagation, and aggregation operate as a coherent pipeline on real-world data.
-    \item \textbf{Empirical:} It provides quantitative evidence that PaTAS opinions are discriminative and useful as a confidence signal, and that global calibration trust is sensitive to the underlying data quality.
-    \item \textbf{Practical:} It shows that PaTAS can be deployed alongside an existing neural network without modifying training, offering an interpretable trust assessment layer.
+    \item \textbf{Methodological.} It demonstrates that the trust quantification, propagation, and calibration-trust components developed in \cref{chap:dataset-trust,chap:patas,chap:bb} compose into a coherent end-to-end pipeline on real data, with each component playing its intended role.
+    \item \textbf{Empirical.} It provides quantitative evidence that \ac{PaTAS} opinions are discriminative: the $b > u$ filter achieves 5.0 to 5.6 percentage-point accuracy gains over the unfiltered baseline. Against a softmax filter at matched coverage, \ac{PaTAS} is approximately equivalent under low noise but provides a 2.3 percentage-point advantage under higher combined noise, demonstrating that the noise-provenance signal adds value precisely when data quality degrades most. Global calibration trust further confirms that label noise is the dominant driver of model-level miscalibration, while feature noise degrades accuracy without breaking confidence calibration.
+    \item \textbf{Practical.} It shows that \ac{PaTAS} can be deployed alongside an existing \ac{NN} without modifying its training or predictions, with a training overhead of $1.14$--$1.41\times$ and sub-millisecond inference overhead at batch sizes up to 64.
 \end{enumerate}
 
-Together with the theoretical foundations established in earlier chapters, this evaluation completes the picture of trust assessment for neural network systems: from definition and quantification, through propagation and aggregation, to empirical validation in a production-relevant setting.
+Together with the theoretical foundations established in earlier chapters, this evaluation completes the picture of trust assessment for \ac{NN} systems: from definition and quantification (\cref{chap:dataset-trust}), through propagation and aggregation (\cref{chap:patas}), to empirical validation in a production-relevant setting. The results demonstrate that trust reasoning, when grounded in \ac{SL} and calibrated to the actual data quality of the deployment domain, produces signals that are both interpretable and actionable.
