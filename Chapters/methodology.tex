@@ -8,18 +8,16 @@ This chapter presents the General Trust Assessment Methodology, which serves as 
 \label{sec:ch4_role} 
 In line with a zero-trust perspective~\cite{rose2020zero}, trust should not be granted a priori or statically assigned, but instead derived through a well defined assessment. The \acf{TAF} operationalizes this principle through a structured reasoning process involving the generation of expressions, the collection of evidence, and the evaluation of these expressions.
 
-The objective of this chapter is to abstract and generalize this evidence-based reasoning process so that it can be instantiated across different \ac{AI} contexts. While the technical mechanisms used to compute trust may vary across systems, the underlying reasoning process remains largely invariant. The methodology introduced here therefore provides a unified framework for structuring trust assessment problems and deriving trust evaluations from observable evidence.
+The objective of this chapter is to abstract and generalize this evidence-based reasoning process so that it can be instantiated across different \ac{ML} contexts. While the technical mechanisms used to compute trust may vary across systems, the underlying reasoning process remains largely invariant. The methodology introduced here therefore provides a unified framework for structuring trust assessment problems and deriving trust evaluations from observable evidence.
 
 In the remainder of this dissertation, this general methodology will be instantiated in several distinct settings:
-
 \begin{itemize}
-    
-    \item the evaluation of training dataset trustworthiness (\cref{chap:dataset-trust}),
-    \item the propagation of trust through neural network architectures using the PaTAS framework (\cref{chap:patas}),
-    \item the trust assessment of \aclu{NN} prediction calibration (\cref{chap:bb}).
+    \item the evaluation of training dataset trustworthiness within \ac{PaTAS} (\cref{chap:dataset-trust}),
+    \item the propagation of trust through \aclu{NN} architectures within the PaTAS framework (\cref{chap:patas}),
+    \item the trust assessment of \ac{NN} prediction calibration (\cref{chap:bb}).
 \end{itemize}
 
-Although these application domains differ in their technical implementations, they share a common conceptual structure. In each case, a \emph{trustor} seeks to determine whether a specific trust proposition holds for a given entity or process, based on available evidence and within a particular contextual setting. The methodology presented in this chapter formalizes this common reasoning structure. In particular, it defines the sequence of steps required to construct a trust assessment and provides guidance on how each step can be operationalized in practice.
+Although these application domains differ in their technical implementations, they share a common conceptual structure. In each case, a \emph{trustor} seeks to determine whether a specific trust proposition about a given entity or process holds, based on available evidence and within a particular contextual setting. The methodology presented in this chapter formalizes this common reasoning structure. In particular, it defines the sequence of steps required to construct a trust assessment and provides guidance on how each step can be operationalized in practice.
 
 The methodology should therefore be understood as a generic trust reasoning engine. Subsequent chapters specialize this engine to particular trustworthiness properties and application domains, while preserving the same conceptual pipeline defined in this chapter.
 
@@ -41,24 +39,20 @@ Uncertainty, in the sense used throughout this dissertation, refers to \emph{evi
 Risk, in the context of trust assessment, refers to the exposure of the trustor to an undesirable outcome resulting from relying on a trustee whose proposition may not hold. Risk is not directly represented as a separate quantity in the \ac{SL} formalism, but it is implicitly captured by a Trust Level: a high distrust component $d$ signals that available evidence actively contradicts the trust proposition, while a high uncertainty component $u$ signals that the evidence base is not enough to justify confidence. Both situations give rise to risk, even though the reasons differ. Distinguishing these two sources is one of the key advantages of the subjective opinion representation used in this dissertation, as it allows the trustor to reason about whether risk stems from known unreliability or from insufficient information.
 
 \paragraph{Terminology}
-The terminology follows the principles of the \ac{TAF}, which adopts \acf{SL} as the formal reasoning framework for representing and assessment trust. The notation introduced here is therefore consistent with \ac{SL} representations.
-
-% \subsection{Trustor, Trustee, and Trust Proposition}
-
 Trust assessment is inherently relational. A trust evaluation is always performed from the perspective of a \emph{trustor} with respect to a well-defined \emph{trust proposition} encoding a specific \emph{trustee}.
 
 \begin{definition}[Trust Proposition]
 A trust proposition is a declarative statement about a property of a trustee
 that can be evaluated as satisfied or not satisfied based on available
-evidence.
-\end{definition}
-
-Formally, let $E$ denotes the trustee and $P$ a
+evidence. Formally, let $E$ denotes the trustee and $P$ a
 trustworthiness property of interest, such as accuracy, integrity, representativeness, or calibration. The trust proposition is denoted by
 \[
 \mathcal{T}(E, P)
 \]
-and represents the statement: ``Entity $E$ satisfies property $P$''
+and represents the statement: ``Entity $E$ satisfies property $P$''.
+
+
+\end{definition}
 
 Trust propositions may take different forms:
 \begin{itemize}
@@ -73,7 +67,7 @@ Composite trust propositions are typically expressed using logical operators suc
 \mathcal{T} = \mathcal{T}_1 \wedge \mathcal{T}_2
 \]
 
-where each $T_i$ represents independent simple trust proposition.
+where $T_1$ and $T_2$ represent independent simple trust propositions.
 
 
 
@@ -87,9 +81,7 @@ where each $T_i$ represents independent simple trust proposition.
 
 
 \begin{definition}[\aclu{ATO}]
-An \acf{ATO} is a trust opinion associated with a simple trust proposition for which the trustor can directly observe or collect evidence about the trustee. In this case, the trustor maintains a direct evidential relationship
-with the trustee and can therefore quantify trust based on observable
-evidence.
+An \acf{ATO} is a trust opinion associated with a simple trust proposition for which the trustor can directly observe or collect evidence. In this case, the trustor maintains a direct evidential relationship with the trustee and can therefore assess the trust proposition based on observable evidence.
 \end{definition}
 In the methodology, trust assessment of \ac{ATO} relies on evidence collected from \emph{trust sources}.
 
@@ -98,9 +90,7 @@ In the methodology, trust assessment of \ac{ATO} relies on evidence collected fr
 A trust source is any entity, mechanism, or process that provides evidence
 relevant to the evaluation of a trust proposition.
 \end{definition}
-
 Trust sources may include:
-
 \begin{itemize}
     \item direct observations performed by the trustor,
     \item measurements from sensors or monitoring systems,
@@ -113,19 +103,14 @@ Trust sources may include:
 
 The outcome of the overall process of the methodology is referred to as the \emph{\acf{ATL}}.
 \begin{definition}[\aclu{ATL}]
-The \ac{ATL} is the quantified trust opinion assigned by the trustor to a
-trust proposition based on the available evidence and the selected evaluation
-formalism.
+The \ac{ATL} is the quantified trust opinion assigned by the trustor to a trust proposition based on the available evidence and the selected evaluation formalism. The \ac{ATL} is represented using a subjective binomial opinion:
+\[
+\omega = (t, d, u) = (b, d, u) 
+\]
+where $t$ ($b$) denotes the trust mass (belief of the binomial opinion), $d$ denotes the distrust mass (disbelief of the binomial opinion), and $u$ represents uncertainty. 
 \end{definition}
 
-In this dissertation, the \ac{ATL} is represented using a subjective binomial
-opinion:
 
-\[
-\omega = (t, d, u)
-\]
-
-where $t$ denotes the trust mass (belief of the binomial opinion), $d$ denotes the distrust mass (disbelief of the binomial opinion), and $u$ represents uncertainty. This representation allows the trust assessment to capture not only whether the trustor should trust the proposition, but also the degree of confidence associated with that assessment.
 
 The distinction between \emph{trust} and \emph{trustworthiness} is worth clarifying at this point. Following the conceptual framework developed within the CONNECT project~\cite{connect_d21_taf}, trustworthiness is a property of the trustee: it describes the likelihood that the trustee will fulfill the trustor's expectations regarding a given property $P$ in a specific context. Trust, by contrast, is the attitude the trustor holds toward the trustee: when a trustor trusts an entity, it judges the likelihood of that entity meeting its expectations to be sufficiently high. Trust is therefore not a property but an assessment act, conditioned on available evidence. In this dissertation, the trust proposition $\mathcal{T}(E, P)$ concerns trustworthiness: it is a statement about a property of the trustee that the trustor seeks to evaluate. The \ac{ATL} $\omega = (t, d, u)$ represents trust: it is the subjective opinion formed by the trustor based on that evaluation. The methodology presented in this chapter is therefore a principled process for deriving trust as an evidence-based assessment of an underlying trustworthiness that may never be directly observable.
 
@@ -159,12 +144,12 @@ Having introduced the core concepts and notation, we now present the
 general trust assessment process. This process follows the \ac{TAF} methodology and consists of three sequential phases:
 
 \begin{enumerate}
-    \item Expression Generation that sometimes necessitate a \ac{STN}. The expression consists in operations between \acp{ATO}.
-    \item \acp{ATO} Quantification
+    \item Expression Generation that sometimes necessitate a \aclu{STN}. The expression consists in operations between \acp{ATO}.
+    \item \acp{ATO} Quantification:
     \begin{enumerate}
-        \item Identify trust sources and Collect Evidence for each proposition
+        \item Identify trust sources and Collect Evidence for each Trust proposition.
         \item Quantify the trust opinion for each trust source using the most appropriate quantification method.
-        \item Derive the \ac{ATO}
+        \item Derive the \ac{ATO}.
     \end{enumerate}
     \item Expression Evaluation
 \end{enumerate}
@@ -176,7 +161,7 @@ Each phase is described in detail below.
 
 The purpose of this phase is to formally construct an expression that captures the relationships required to evaluate a given trust proposition.
 
-Let $\mathcal{T}$ denote a trust proposition. In some cases, $\mathcal{T}$ is not directly measurable. Instead, it must be decomposed into a set of simple propositions that correspond to individually assessable properties:
+Let $\mathcal{T}$ denote a trust proposition. In some cases, $\mathcal{T}$ must be decomposed into a set of simple trust propositions that correspond to individually assessable properties:
 \[
 \mathcal{T} = f(\mathcal{T}_1, \mathcal{T}_2, \dots, \mathcal{T}_n)
 \]
@@ -205,9 +190,9 @@ This decomposition is critical but inherently subjective, as it depends on the j
 
 Once the proposition $\mathcal{T}$ has been decomposed, a \ac{STN} is constructed in order to evaluate each of the resulting simple propositions. The objective is to express the trust in $\mathcal{T}_i$ as a combination of atomic trust opinion using well-defined \ac{SL} operators such as trust discounting and belief fusion. The resulting expression defines how evidence and intermediate opinions will later be propagated and combined.
 
-Within the \ac{TAF}, the construction of these expressions is performed by the \emph{\acf{TLEE}}. The \ac{TLEE} analyzes a \ac{STN} with a simple trust proposition as the target and derives an expression composed of \acp{ATO} and \ac{SL} operators. This analysis process is referred to as \emph{\acf{TNA-SL}}. We discuss this approach in more detail in the next chapter (\cref{chap:tnasl}), where we also present improvements motivated by the limitations identified in the related work (\cref{chap:rw}). The resulting expression serves as the computational blueprint for the subsequent phases of the trust assessment process.
+Within the \ac{TAF}, the construction of these expressions is performed by the \emph{\acf{TLEE}}. The \ac{TLEE} analyzes a \ac{STN} with a simple trust proposition as the target and derives an expression composed of \acp{ATO} and \ac{SL} operators. This analysis process is referred to as \emph{\acf{TNA-SL}}. We discuss this approach in more detail in the next chapter (\cref{chap:tnasl}). The resulting expression serves as the computational blueprint for the subsequent phases of the trust assessment process.
 
-At the end of Phase I, the assessment is represented as a structured expression whose evaluation will produce the final \ac{ATL}.
+At the end of Phase I, the assessment is represented as a structured expression whose evaluation will produce the final \ac{ATL}. An example of an expression resulting from a simple trust proposition is illustrated in \cref{fig:trust_expression_treet}.
 
 
 \subsection{Phase II: \aclu{ATO} Quantification}
@@ -223,13 +208,12 @@ This phase consists of the following steps:
     \item Derive the \ac{ATO} by combining the trust opinions provided by the different trust sources.
 \end{enumerate}
 
-The first step establishes the evidential basis of the atomic trust assessment,
-while the remaining steps transform collected evidence into a subjective
+The first step establishes the evidential basis of the atomic trust assessment, while the remaining steps transform collected evidence into a subjective
 trust opinion.
 
 \subsubsection{Identification of Trust Sources and Evidence Collection}
 
-When quantifying the \ac{ATO} associated with a proposition $T_i$, relevant trust sources must first be identified. Trust sources may include, for example, a monitoring component, a sensor error measurement module, a misbehavior detection mechanism, a verification module, a certification authority, or historical performance records. These sources typically provide direct evidence corresponding to observations made by the
+When quantifying the \ac{ATO} associated with a trust proposition, relevant trust sources must first be identified. Trust sources may include, for example, a monitoring component, a sensor error measurement module, a misbehavior detection mechanism, a verification module, a certification authority, or historical performance records. These sources typically provide direct evidence corresponding to observations made by the
 trustor.
 
 Evidence collected from trust sources may take different forms:
@@ -239,7 +223,6 @@ Evidence collected from trust sources may take different forms:
     \item Continuous measurements,
     \item Confidence scores.
 \end{itemize}
-
 These evidence are then mapped into a structured representation consisting of:
 \begin{itemize}
     \item positive evidence $r_x$,
@@ -338,7 +321,7 @@ edge from parent/.style={draw}
     };
 
 \end{tikzpicture}
-\caption{Binary tree representation of the trust expression for the \ac{IMA} usecase}
+\caption{Binary tree representation of the trust expression for the \ac{IMA} usecase. \acp{ATO} are $\omega^A_B$, $\omega^B_D$, $\omega^A_C$, $\omega^C_D$, $\omega^D_{v_D}$.}
 \label{fig:trust_expression_tree}
 \end{figure}
 
@@ -349,7 +332,7 @@ In summary, the trust assessment process can be performed in three phases:
 \begin{enumerate}
     \item Generate an expression by decomposing the trust proposition into simple propositions and using \ac{TNA-SL} on \acp{STN} for each simple proposition.
     \item Quantify the \acp{ATO} in the expression by identifying relevant trust sources, collecting evidence, and applying an appropriate trust opinion quantification model.    
-    \item Evaluate the expression using \ac{SL} operators such as fusion and trust discounting in order to derive the \ac{ATL}.
+    \item Evaluate the expression using \ac{SL} operators in order to derive the \ac{ATL}.
 \end{enumerate}
 
-This structured pipeline ensures that trust assessment remains transparent, reproducible, and adaptable across domains. In subsequent chapters, this generic process will be instantiated for dataset trustworthiness, \ac{NN} trust propagation, and \ac{NN} calibration assessment.
+This structured pipeline ensures that trust assessment remains transparent, reproducible, and adaptable across domains. In subsequent chapters, this generic process will be instantiated for dataset trustworthiness, trust propagation in \ac{NN}, and \ac{NN} calibration assessment.

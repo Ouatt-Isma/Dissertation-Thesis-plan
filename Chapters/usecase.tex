@@ -407,7 +407,7 @@ Under combined noise, the discriminative gap at low corruption levels ($(\sigma,
 A direct application of the discriminative capacity demonstrated above is selective prediction: rejecting predictions where the trust signal indicates low reliability, thereby improving accuracy on the retained subset. We evaluate two filters:
 
 \begin{itemize}
-    \item \textbf{\ac{PaTAS} filter} ($b > u$): retain samples where belief exceeds uncertainty in the predicted class, indicating that positive evidence for the prediction outweighs residual epistemic doubt.
+    \item \textbf{\ac{PaTAS} filter} ($b > d$ and $b > d$ and $b > u$): retain samples where belief exceeds disbelief uncertainty in the predicted class, indicating that positive evidence for the prediction outweighs negative evidence and residual epistemic doubt.
     \item \textbf{Softmax filter} ($\text{softmax} > 0.5$): retain samples where the \ac{NN} softmax probability in the predicted class exceeds 0.5, the standard high-confidence threshold.
     \item \textbf{Softmax filter at matched coverage} ($\tau = 0.8$): to provide a fair comparison at approximately the same coverage as the \ac{PaTAS} filter, we also evaluate a softmax threshold of 0.8, which retains a similar fraction of samples. This isolates the contribution of the trust signal structure from the trivial effect of rejecting more samples.
 \end{itemize}
@@ -419,11 +419,11 @@ A direct application of the discriminative capacity demonstrated above is select
 \centering
 \small
 \setlength{\tabcolsep}{4pt}
-\caption{Selective prediction comparison: \ac{PaTAS} belief-over-uncertainty filter ($b > u$) versus NN softmax score thresholds ($\tau = 0.5$ and $\tau = 0.8$). Coverage is the fraction of test samples retained by each filter; accuracy on covered is the accuracy over those retained samples. Values are mean $\pm$ std over 5 independent runs.}
+\caption{Selective prediction comparison: \ac{PaTAS} belief over disbelief and uncertainty ($b > d$ and $b > u$) versus NN softmax score thresholds ($\tau = 0.5$ and $\tau = 0.8$). Coverage is the fraction of test samples retained by each filter; accuracy on covered is the accuracy over those retained samples. Values are mean $\pm$ std over 5 independent runs.}
 \label{tab:selective-prediction-merged}
 \begin{tabular}{lcccccc}
 \toprule
- & \multicolumn{2}{c}{PaTAS ($b > u$)} & \multicolumn{2}{c}{NN softmax $\tau = 0.5$} & \multicolumn{2}{c}{NN softmax $\tau = 0.8$} \\
+ & \multicolumn{2}{c}{PaTAS ($b > d$ and $b > u$)} & \multicolumn{2}{c}{NN softmax $\tau = 0.5$} & \multicolumn{2}{c}{NN softmax $\tau = 0.8$} \\
 \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
 Noise condition & Cov.\ (\%) & Acc.\ (\%) & Cov.\ (\%) & Acc.\ (\%) & Cov.\ (\%) & Acc.\ (\%) \\
 \midrule
@@ -459,7 +459,7 @@ The more revealing comparison is against the softmax filter at matched coverage
     \item Under low to moderate noise ($\sigma_{\text{rel}} = 0.10$ and $(\sigma, p) = (0.10, 0.05)$), \ac{PaTAS} and the matched softmax filter achieve near-identical accuracy on retained samples (89.38\% vs.\ 89.27\% and 89.40\% vs.\ 89.40\%). At these noise levels, the softmax confidence score alone is sufficient to identify the most reliable predictions, and the richer trust signal of \ac{PaTAS} provides no additional discriminative power.
     \item Under higher combined noise ($(\sigma, p) = (0.10, 0.30)$), \ac{PaTAS} opens a meaningful gap: 93.58\% versus 91.32\% for the matched softmax filter, at comparable coverage (23.5\% vs.\ 26.1\%). This 2.3 percentage-point advantage at higher noise is consistent with the discriminative analysis of \Cref{sec:patas_discriminator}: as noise increases, the explicit noise-provenance information encoded in the \ac{PaTAS} trust opinion becomes more valuable than the softmax score,  which carries no knowledge of the underlying data quality.
 \end{itemize}
-The higher selectivity of the \ac{PaTAS} filter at lower coverage is inherent to the $b > u$ criterion: trust belief must actively exceed uncertainty, which naturally becomes harder to satisfy as input noise grows. In high-stakes settings where incorrect predictions carry a high cost, this selectivity is preferable. In settings requiring higher coverage, the softmax filter at an appropriate threshold provides competitive accuracy, and the two signals can be combined: samples passing the \ac{PaTAS} filter receive the trust-based guarantee, while remaining samples can be scored by softmax or flagged for human review.
+The higher selectivity of the \ac{PaTAS} filter at lower coverage is inherent to the $b > d$ and $b > u$ criterion: trust belief must actively exceed disbelief and uncertainty, which naturally becomes harder to satisfy as input noise grows. In high-stakes settings where incorrect predictions carry a high cost, this selectivity is preferable. In settings requiring higher coverage, the softmax filter at an appropriate threshold provides competitive accuracy, and the two signals can be combined: samples passing the \ac{PaTAS} filter receive the trust-based guarantee, while remaining samples can be scored by softmax or flagged for human review.
 
 \subsection{Summary of Robustness Findings}
 \label{sec:robustness_summary}
@@ -663,7 +663,7 @@ This use case validates the \ac{PaTAS} framework on three dimensions:
 
 \begin{enumerate}
     \item \textbf{Methodological.} It demonstrates that the trust quantification, propagation, and calibration-trust components developed in \cref{chap:dataset-trust,chap:patas,chap:bb} compose into a coherent end-to-end pipeline on real data, with each component playing its intended role.
-    \item \textbf{Empirical.} It provides quantitative evidence that \ac{PaTAS} opinions are discriminative: the $b > u$ filter achieves 5.0 to 5.6 percentage-point accuracy gains over the unfiltered baseline. Against a softmax filter at matched coverage, \ac{PaTAS} is approximately equivalent under low noise but provides a 2.3 percentage-point advantage under higher combined noise, demonstrating that the noise-provenance signal adds value precisely when data quality degrades most. Global calibration trust further confirms that label noise is the dominant driver of model-level miscalibration, while feature noise degrades accuracy without breaking confidence calibration.
+    \item \textbf{Empirical.} It provides quantitative evidence that \ac{PaTAS} opinions are discriminative: the $b > d$ and $b > u$ filter achieves 5.0 to 5.6 percentage-point accuracy gains over the unfiltered baseline. Against a softmax filter at matched coverage, \ac{PaTAS} is approximately equivalent under low noise but provides a 2.3 percentage-point advantage under higher combined noise, demonstrating that the noise-provenance signal adds value precisely when data quality degrades most. Global calibration trust further confirms that label noise is the dominant driver of model-level miscalibration, while feature noise degrades accuracy without breaking confidence calibration.
     \item \textbf{Practical.} It shows that \ac{PaTAS} can be deployed alongside an existing \ac{NN} without modifying its training or predictions, with a training overhead of $1.14$--$1.41\times$ and sub-millisecond inference overhead at batch sizes up to 64.
 \end{enumerate}
 
