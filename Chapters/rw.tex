@@ -425,7 +425,7 @@ results. Consequently, scenario with different characteristics might need differ
     \label{fig:sl_fusion_selection}
 \end{figure}
 
-J{\o}sang~\cite{josang2016subjective} proposes a structured decision procedure for selecting the most appropriate fusion operator based on a sequence of semantic questions about the fusion situation. This procedure, illustrated in Figure~\ref{fig:sl_fusion_selection}, considers, among others, the following aspects:
+J{\o}sang~\cite{josang2016subjective} proposes a structured decision procedure for selecting the most appropriate fusion operator based on a sequence of semantic questions about the fusion situation. This procedure, illustrated in \cref{fig:sl_fusion_selection}, considers, among others, the following aspects:
 \begin{itemize}
     \item whether totally conflicting opinions should result in an undefined outcome or a compromise,
     \item whether repeated identical opinions should increase confidence (non-idempotence) or preserve it (idempotence),
@@ -433,7 +433,7 @@ J{\o}sang~\cite{josang2016subjective} proposes a structured decision procedure f
     \item and how conflicts between belief sources should be resolved.
 \end{itemize}
 
-We now review the principal belief fusion operators defined in \aclu{SL}. For each operator, we provide its formal definition together with a brief discussion of the assumptions under which it is semantically appropriate. Table~\ref{tab:fusion_properties} summarizes the algebraic properties of each operator.
+We now review the principal belief fusion operators defined in \aclu{SL}. For each operator, we provide its formal definition together with a brief discussion of the assumptions under which it is semantically appropriate. \cref{tab:fusion_properties} summarizes the algebraic properties of each operator.
 
 \begin{table}[t]
 \centering
@@ -695,12 +695,12 @@ of $A$ about $X$ via $B$, is defined as
         \end{cases}
 \end{equation}
 where $P^A_B$ denotes the projected probability of the referral trust opinion 
-$\omega^A_B$ (cf. Eq.~\ref{eq:projected_prob}).
+$\omega^A_B$ (cf. \cref{eq:projected_prob}).
 
 \end{definition}
-The Two-Edge Path discounting operator is illustrated in Figure~\ref{fig:tdis}.
+The Two-Edge Path discounting operator is illustrated in \cref{fig:tdis}.
 
-In many real-world systems, trust is propagated across longer referral chains involving multiple intermediate agents. The Multi-Edge Path discounting operator generalizes Two-Edge Path discounting to arbitrary-length trust paths, as illustrated in Figure~\ref{fig:tdism}. 
+In many real-world systems, trust is propagated across longer referral chains involving multiple intermediate agents. The Multi-Edge Path discounting operator generalizes Two-Edge Path discounting to arbitrary-length trust paths, as illustrated in \cref{fig:tdism}. 
 
 \begin{definition}[Multi-Edge Path Trust Discounting]
 \label{def:multi_edge_discounting}
@@ -762,7 +762,7 @@ Formally, a \ac{STN} is represented as a directed graph \(G = (V, E)\), where ea
 
 To infer trust or belief from the source of \(G\) to its sink, \aclu{SL} relies on the trust discounting and belief fusion operators. Trust discounting is used to propagate trust along paths and belief fusion is used to combine multiple opinions about the same target. 
 \paragraph{Example:}\textbf{\acf{IMA}}\,\, \label{par:IMA_usecase}
-\acs{IMA} is a safety-critical application in \ac{C-ITS}, where vehicles and infrastructure components exchange information to improve road safety, traffic efficiency, and coordination. Consider the \acs{IMA} scenario illustrated in Figure~\ref{fig:IMA_intersection}. Vehicle $A$ approaches an intersection and communicates via \ac{V2V} communication with vehicles $B$ and $C$. \ac{V2V} communication enables vehicles to exchange information about their state and driving behaviour~\cite{dey2016vehicle}. Vehicles $B$ and $C$ are, in turn, able to communicate with vehicle $D$, which is also approaching the intersection.
+\acs{IMA} is a safety-critical application in \ac{C-ITS}, where vehicles and infrastructure components exchange information to improve road safety, traffic efficiency, and coordination. Consider the \acs{IMA} scenario illustrated in \cref{fig:IMA_intersection}. Vehicle $A$ approaches an intersection and communicates via \ac{V2V} communication with vehicles $B$ and $C$. \ac{V2V} communication enables vehicles to exchange information about their state and driving behaviour~\cite{dey2016vehicle}. Vehicles $B$ and $C$ are, in turn, able to communicate with vehicle $D$, which is also approaching the intersection.
 
 \begin{figure}[t]
     \centering
@@ -826,7 +826,7 @@ A \acf{SP-graph} is a graph that can be recursively reduced to a single edge bet
 \end{enumerate}
 \end{definition}
 
-Figure~\ref{fig:spgraph} illustrates a step-by-step reduction of an \ac{SP-graph}. The example proceeds through four reduction stages. Reduction~1 applies the series reduction four times; Reduction~2 applies the parallel reduction twice; Reduction~3 again applies series reduction twice; and Reduction~4 applies a final parallel reduction to obtain a single edge. The existence of such a reduction sequence proves that the original graph is an \ac{SP-graph}.
+\cref{fig:spgraph} illustrates a step-by-step reduction of an \ac{SP-graph}. The example proceeds through four reduction stages. Reduction~1 applies the series reduction four times; Reduction~2 applies the parallel reduction twice; Reduction~3 again applies series reduction twice; and Reduction~4 applies a final parallel reduction to obtain a single edge. The existence of such a reduction sequence proves that the original graph is an \ac{SP-graph}.
 
 \begin{figure}[t]
     \centering
@@ -869,7 +869,7 @@ e \in P
 where \(\mathcal{P}_G\) denotes the set of \acp{PPS} in \(G\).
 \end{definition}
 
-Figure~\ref{fig:ppsv} illustrates an example of a \ac{DSPG} and its \ac{PPS} structure. 
+\cref{fig:ppsv} illustrates an example of a \ac{DSPG} and its \ac{PPS} structure. 
 In this example, the PPS list consists of $(A,C)$, $(C,G)$, and $(A,G)$, resulting in an edge nesting level of~2 for all the edges.
 
 
@@ -1301,7 +1301,7 @@ Consequently, trust in \ac{NN} systems must be understood as a dynamic, multi-st
 \subsection{AI Attacks and Deception in the AI}
 \label{subsec:ai_attacks}
 
-Modern \ac{AI} systems are exposed to a wide range of adversarial threats that target different stages of the \ac{ML} pipeline, from data acquisition to deployment and operation. Unlike traditional software, \ac{ML} systems derive their behavior from data, making them particularly vulnerable to attacks that exploit data quality, training dynamics, or model behavior rather than code-level vulnerabilities. Figure~\ref{fig:attacks} illustrates a representative \ac{AI} development pipeline and highlights the broad attack surface spanning data collection, dataset preparation, model training, and inference-time operation.
+Modern \ac{AI} systems are exposed to a wide range of adversarial threats that target different stages of the \ac{ML} pipeline, from data acquisition to deployment and operation. Unlike traditional software, \ac{ML} systems derive their behavior from data, making them particularly vulnerable to attacks that exploit data quality, training dynamics, or model behavior rather than code-level vulnerabilities. \cref{fig:attacks} illustrates a representative \ac{AI} development pipeline and highlights the broad attack surface spanning data collection, dataset preparation, model training, and inference-time operation.
 
 \begin{figure}[t]
     \centering
@@ -1365,7 +1365,7 @@ structural limitations that motivate the contributions of this dissertation.
 % =========================================================
 \subsection*{Foundations for Modeling Uncertainty}
 
-Table~\ref{tab:uncertainty_theories} compares the principal theoretical
+\cref{tab:uncertainty_theories} compares the principal theoretical
 frameworks for representing uncertainty. The comparison is structured along four core dimensions: the representation of ignorance, the ability to fuse heterogeneous information sources, the modeling of source credibility, and the support for trust transitivity.
 \begin{table}[h]
 \centering
@@ -1392,7 +1392,7 @@ Classical probability and Bayesian theory provide rigorous mathematical mechanis
 % =========================================================
 \subsection*{Trust and Uncertainty Quantification in Neural Networks}
 
-We now examine approaches that quantify uncertainty or trust in \ac{NN} systems. Table~\ref{tab:nn_trust_methods} summarizes representative methods and their scope. The comparison categorizes existing approaches along five orthogonal dimensions:
+We now examine approaches that quantify uncertainty or trust in \ac{NN} systems. \cref{tab:nn_trust_methods} summarizes representative methods and their scope. The comparison categorizes existing approaches along five orthogonal dimensions:
 \begin{enumerate}
     \item The column \emph{Uses SL} indicates whether the method explicitly relies on \aclu{SL} as a formal calculus for representing beliefs and uncertainty.
     \item The \emph{Model-Level UQ/Trust} column captures methods that quantify uncertainty or trust arising from model parameters.

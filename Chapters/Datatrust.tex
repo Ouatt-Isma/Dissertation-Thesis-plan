@@ -172,7 +172,7 @@ T_{\text{sampling}}
   \oplus T_{\text{LTCI}} \oplus \dots,
 \label{eq:dataset-trust:metric-aggregation}
 \end{equation}
-and analogously for every other stage. The full catalog of metrics is given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source metrics considered in this thesis, organized by lifecycle stage, risk category, and typical granularity ($\dGran$ for dataset, $\eGran$ for entry, $\fGran$ for feature). This table is the practical entry point for instantiating the framework: each metric corresponds to a trust sources for a trust proposition in Eq.~\eqref{eq:dataset-trust:lifecycle-decomposition}. \Cref{fig:trust_expression_tree_dataset} shows an example of the final resulting tree including the trust sources.
+and analogously for every other stage. The full catalog of metrics is given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source metrics considered in this thesis, organized by lifecycle stage, risk category, and typical granularity ($\dGran$ for dataset, $\eGran$ for entry, $\fGran$ for feature). This table is the practical entry point for instantiating the framework: each metric corresponds to a trust sources for a trust proposition in \cref{eq:dataset-trust:lifecycle-decomposition}. \Cref{fig:trust_expression_tree_dataset} shows an example of the final resulting tree including the trust sources.
 
 \begin{figure}[t]
 \centering
@@ -462,9 +462,7 @@ A_{\text{LTCI}} = 0.30,\ L_{\text{LTCI}} = 1.00,
 A_{\text{DFI}}  = 0.00,\ L_{\text{DFI}}  = 1.00,\quad
 \tau_{\text{MSA}} = 0.10.
 \]
-Applying
-Eqs.~\eqref{eq:dataset-trust:q-low}--\eqref{eq:dataset-trust:q-high}
-yields quality scores
+Applying \cref{eq:dataset-trust:q-low}--\cref{eq:dataset-trust:q-high} yields quality scores
 \[
 q_{\text{DG}}   = 0.000,\quad
 q_{\text{MCR}}  = 1.000,\quad
@@ -488,7 +486,7 @@ $r_m = 2 q_m$ and $s_m = 2(1 - q_m)$ give
 
 \subparagraph{Step~3: Applying \ac{BPQ}.}
 We apply \ac{BPQ} for each metric with prior
-weight~$W=2$, Eq.~\eqref{eq:baseline_quant} yields
+weight~$W=2$, \cref{eq:baseline_quant} yields
 
 \begin{aligned}
  \omega_{\text{DG}}   &= (0, 0.5, 0.5), \quad&
@@ -547,11 +545,7 @@ All the other stages use the same principle and the hyperparameters values are r
       & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.505,\ 0.161,\ 0.333)$\quad \{$W{=}2$\}} \\
     \bottomrule
   \end{tabular}
-  \caption{BPQ metrics and stage-level results for COMPAS. Each stage is
-    quantified independently using
-    Eqs.~\eqref{eq:dataset-trust:q-low}--\eqref{eq:dataset-trust:q-high}; the
-    dataset-level opinion is obtained by cross-stage conjunction
-    (\cref{fig:trust_expression_tree_dataset}).}
+  \caption{BPQ metrics and stage-level results for COMPAS. Each stage is quantified independently using \cref{eq:dataset-trust:q-low}--\cref{eq:dataset-trust:q-high}; the dataset-level opinion is obtained by cross-stage conjunction (\cref{fig:trust_expression_tree_dataset}).}
   \label{tab:dataset-trust:compas}
 \end{table}
 
@@ -632,7 +626,7 @@ P(\mathrm{Class}_k) \in
   \left[\frac{1}{K} - \eta_1,\ \frac{1}{K} + \eta_2\right].
 \label{eq:gtsrb:tolerance-zone}
 \end{equation}
-The parameters $\eta_1, \eta_2$ control the width of the tolerance zone and play the same role as the tolerance $\tau_m$ of Eq.~\eqref{eq:dataset-trust:q-low}. We set $\eta = \eta_1 = \eta_2$ for the experiments reported below; the impact of $\eta$ is studied explicitly later in the section.
+The parameters $\eta_1, \eta_2$ control the width of the tolerance zone and play the same role as the tolerance $\tau_m$ of \cref{eq:dataset-trust:q-low}. We set $\eta = \eta_1 = \eta_2$ for the experiments reported below; the impact of $\eta$ is studied explicitly later in the section.
 
 Positive evidence is the area under the density curve $f$ of the class-probabilities distribution that falls within the tolerance zone, and negative evidence is the complementary area:
 \begin{equation}
@@ -659,7 +653,7 @@ U = \min\!\left(
 \end{equation}
 where $N$ is the actual dataset size and $[m_1, m_2]$ is the desired range of uncertainty (set to $[0,1]$ in our experiments). The intuition is direct: when $N$ is large relative to $N_s$, the dataset is sufficient for the model and the uncertainty in the assessment shrinks toward zero; when $N$ is small relative to $N_s$, the assessment cannot be made with confidence regardless of how balanced the observed distribution is, and the uncertainty is large.
 
-Once $U$ is fixed by Eq.~\eqref{eq:gtsrb:uncertainty}, trust mass and distrust mass follow from the \ac{CUQ} formula ($\gamma = (1-U)/(r+s)$, $b = \gamma r$, $d = \gamma s$).
+Once $U$ is fixed by \cref{eq:gtsrb:uncertainty}, trust mass and distrust mass follow from the \ac{CUQ} formula ($\gamma = (1-U)/(r+s)$, $b = \gamma r$, $d = \gamma s$).
 
 \subsection{Trust source --- Method 2: entropy-based quantification}
 \label{sec:dataset-trust:applications:gtsrb:method2}
@@ -700,7 +694,7 @@ We define two scenarios:
 \paragraph{Scenario~1: original vs.\ augmented dataset.}
 \Cref{fig:gtsrb:distscenario1} compares the class distribution and the class-probabilities distribution of the original and augmented datasets. SMOTE flattens the class distribution and concentrates the probability density around $1/K$. The downstream effect on the model is modest in aggregate accuracy ($95.17\%$ vs.\ $95.10\%$) but visible in the per-group accuracy gap, which drops from $5.24\%$ to $3.88\%$ (\cref{tab:gtsrb:acc1}).
 
-The Method-1 trust opinions reflect the same pattern but make it quantitative: the original dataset is assessed as $(t, d, u) = (0.50,\ 0.11,\ 0.39)$ and the augmented dataset as $(0.64,\ 0,\ 0.36)$. Trust mass rises by $0.14$, distrust mass drops to zero, and the residual uncertainty stays roughly constant because the dataset size is unchanged and the \ac{CUQ} uncertainty (Eq.~\eqref{eq:gtsrb:uncertainty}) depends only on $N$.
+The Method-1 trust opinions reflect the same pattern but make it quantitative: the original dataset is assessed as $(t, d, u) = (0.50,\ 0.11,\ 0.39)$ and the augmented dataset as $(0.64,\ 0,\ 0.36)$. Trust mass rises by $0.14$, distrust mass drops to zero, and the residual uncertainty stays roughly constant because the dataset size is unchanged and the \ac{CUQ} uncertainty (\cref{eq:gtsrb:uncertainty}) depends only on $N$.
 
 \begin{figure}[t]
     \centering
@@ -751,7 +745,7 @@ Trust opinion $(b,d,u)$  & $(0.50, 0.11, 0.39)$   & $(0.64, 0.00, 0.36)$ \\
 \paragraph{Scenario~2: collaborative dataset with $M$ contributors.}
 We progressively increase the number of imbalanced contributors out of $M$ and observe both the downstream accuracy and the trust opinion produced by each method. Downstream accuracy (\cref{fig:gtsrb:accplot}) shows the expected pattern: warning-sign accuracy collapses from $82\%$ to $0\%$ as the number of imbalanced contributors grows, while accuracy on other signs degrades more gradually.
 
-The trust opinions (\cref{fig:gtsrb:op}) tell a more nuanced story. \emph{Method 1}, applied to the concatenation of all sub-datasets, shows trust mass decreasing slowly until roughly 60 imbalanced contributors out of 100, after which it drops sharply. Its uncertainty stays roughly constant at $\approx 0.4$ because the total dataset size $N$ does not change as contributors become imbalanced (only the distribution does), and Eq.~\eqref{eq:gtsrb:uncertainty} depends only on $N$. \emph{Method 2} produces a smoother, near-linear decrease of trust mass and a symmetric increase of distrust mass, since each contributor produces a binary piece of evidence and the aggregated opinion converges deterministically as more imbalanced contributors are added.
+The trust opinions (\cref{fig:gtsrb:op}) tell a more nuanced story. \emph{Method 1}, applied to the concatenation of all sub-datasets, shows trust mass decreasing slowly until roughly 60 imbalanced contributors out of 100, after which it drops sharply. Its uncertainty stays roughly constant at $\approx 0.4$ because the total dataset size $N$ does not change as contributors become imbalanced (only the distribution does), and \cref{eq:gtsrb:uncertainty} depends only on $N$. \emph{Method 2} produces a smoother, near-linear decrease of trust mass and a symmetric increase of distrust mass, since each contributor produces a binary piece of evidence and the aggregated opinion converges deterministically as more imbalanced contributors are added.
 
 When the same experiments are repeated with $M = 10$ contributors, Method~1 shows essentially the same trust mass/distrust mass curves (because $N$ remains the dominant factor), while Method~2 exhibits a higher residual uncertainty ($u \approx 0.2$) reflecting the smaller number of evidence sources $r + s = M$ in the BPQ formula.
 
@@ -808,8 +802,7 @@ The tolerance $\eta$ controls how strictly Method~1 interprets balance. Too smal
     the expected probability $1/K \approx 0.02326$. The shaded region
     ($0.0185 \leq \eta \leq 0.0235$) is the stability zone in which the
     opinion is insensitive to small changes of $\eta$. Uncertainty is
-    constant because Method~1 fixes it externally via
-    Eq.~\eqref{eq:gtsrb:uncertainty}.}
+    constant because Method~1 fixes it externally via \cref{eq:gtsrb:uncertainty}.}
   \label{fig:gtsrb:eta_effect}
 \end{figure}
 
@@ -902,7 +895,7 @@ The trust source produces evidence counts $(r_x, s_x)$ that grow with the number
 
 
 \paragraph{Worked example.}
-Consider an instance $x$ annotated by $50$ crowdworkers, of whom $46$ agree with the decision label and $4$ disagree, with $\delta = 0$ and $W = 2$. Eq.~\eqref{eq:cifar10h:evidence} gives $r_x = 46$, $s_x = 4$, and \ac{BPQ} yields
+Consider an instance $x$ annotated by $50$ crowdworkers, of whom $46$ agree with the decision label and $4$ disagree, with $\delta = 0$ and $W = 2$. \cref{eq:cifar10h:evidence} gives $r_x = 46$, $s_x = 4$, and \ac{BPQ} yields
 \begin{equation}
 b_x = \tfrac{46}{52} \approx 0.885,\quad
 d_x = \tfrac{4}{52} \approx 0.077,\quad
@@ -915,7 +908,7 @@ The same machinery applies to a different entity: the annotators themselves inst
 
 This construction implicitly assumes that more than half of the participants are honest: the decision label $y^\prime$ is taken as the reference against which each annotator is judged, so the resulting reliability opinion is only meaningful if the procedure that produced $y^\prime$ is itself reliable. If $y^\prime$ is set by majority vote, the assumption is that the majority of annotators on each item is correct on most items. In settings where these assumptions fail (e.g., adversarial annotators colluding to flip the majority on targeted items), $\omega_j$ would conflate genuine reliability with mere conformity to a corrupted reference.
 
-This per-annotator opinion is the input expected by the trust-discount operator. In a stricter assessment, each annotator's contribution to per-entry evidence in Eq.~\eqref{eq:cifar10h:evidence} can be weighted by $\omega_j$ before aggregation: high-reliability annotators contribute fully, low-reliability annotators contribute less. 
+This per-annotator opinion is the input expected by the trust-discount operator. In a stricter assessment, each annotator's contribution to per-entry evidence in \cref{eq:cifar10h:evidence} can be weighted by $\omega_j$ before aggregation: high-reliability annotators contribute fully, low-reliability annotators contribute less. 
 
 \subsection{Experimental evaluation}
 \label{sec:dataset-trust:applications:cifar10h:eval}

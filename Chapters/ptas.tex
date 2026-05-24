@@ -1,5 +1,6 @@
 \chapter{Trust Propagation in \aclu{NN}}
 \label{chap:patas}
+\todo{If not done at the begining of dataset, tp-patas and calibration chapter at a small box to show the instantiation of the methodology. Also when explaining trust node maybe say that this is the corresponding expression to assess and the evaluation is when we compute the value}
 The previous \cref{chap:ovl} presented the overall architecture of \ac{PaTAS-TP}, highlighting its two main components: (i) the assessment of trust in the data, and (ii) the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. While the trustworthiness of the data was addressed in the preceding chapter, this chapter focuses on the second component, namely the propagation of trust within \aclu{NN}. In particular, it details how trust, initially derived from the dataset, is integrated into the model parameters during training and subsequently propagated from the input to the output during inference. This chapter formalizes the mechanisms that enable consistent and interpretable trust propagation across the different stages of the learning process, providing the operational core of the \ac{PaTAS-TP} framework.
 
 An interactive simulator demonstrating the trust propagation mechanisms described in this chapter is available at \url{https://ouatt-isma.github.io/patas_simulator}.
@@ -22,7 +23,7 @@ The remainder of this chapter is organized as follows. \Cref{sec:trust_foundatio
 
 \section{Foundations of Trust Propagation in \aclu{NN}s}
 \label{sec:trust_foundations}
-This section introduces the formal foundations required to model and propagate trust in \acp{NN}. Building on the \ac{NN} formalism introduced in Chapter~\ref{chap:rw}, we focus here on the additional structures needed to represent and propagate trust alongside the standard \ac{NN} computation, namely feedforward and backpropagation.
+This section introduces the formal foundations required to model and propagate trust in \acp{NN}. Building on the \ac{NN} formalism introduced in \cref{chap:rw}, we focus here on the additional structures needed to represent and propagate trust alongside the standard \ac{NN} computation, namely feedforward and backpropagation.
 
 \subsection{Trust Representation in \aclu{NN}}
 As established previously, a \aclu{SNN} $f_\Theta$ with parameters $\Theta = (W, b, \phi)$ defines a structured computational graph that maps an input $x$ to an output $y'$ through a sequence of layer-wise transformations:
@@ -354,7 +355,7 @@ T_{x^{(l+1)}} = T_{\phi^{(l)}}(T_{z^{(l)}}),
 % \end{itemize}
 % Activation functions can be interpreted as transformations that preserve or reshape trust without introducing new sources of evidence. In this work, we assume that activation functions do not alter the trust opinion directly, but only affect the structure of the propagation by activating or deactivating certain paths.
 
-\Cref{fig:trustnode} illustrates the structural correspondence between a standard neuron and its associated Trust Node. Subfigures~\ref{fig:neuron} and~\ref{fig:tns} show how the mirrored trust structure is derived from the original perceptron, while Subfigures~\ref{fig:neuronfunc} and~\ref{fig:tnf} contrast the numerical computation of the neuron with the trust-domain computation of the Trust Function, in which multiplication is replaced by discounting and summation by fusion.
+\Cref{fig:trustnode} illustrates the structural correspondence between a standard neuron and its associated Trust Node. \cref{fig:neuron,fig:tns} show how the mirrored trust structure is derived from the original perceptron, while \cref{fig:neuronfunc,fig:tnf} contrast the numerical computation of the neuron with the trust-domain computation of the Trust Function, in which multiplication is replaced by discounting and summation by fusion.
 
 
 
@@ -605,7 +606,7 @@ To ensure that \ac{PaTAS-TP} provides reliable and interpretable trust assessmen
 % \todo[inline]{Discuss convergence of \ac{PaTAS-TP} in case of convergence of input}
 \label{sec:ptas_convergence}
 
-The convergence of the \ac{PaTAS-TP} is governed by the stability of its inputs and the structure of its recursive Parameter-Trust Update process. During training, \ac{PaTAS-TP} updates the internal trust opinions associated with network parameters using trust opinions on the inputs, labels, hyperparameters, and gradient information. This update mechanism is outlined in \cref{alg:trustupdate}. As proved in Theorem~\ref{thm:convergence}, the \ac{PaTAS-TP} converges under specific situation. This convergence relies on some specific characteristic of the operators used to feedforward and revise the trust in the parameters \(\theta\). 
+The convergence of the \ac{PaTAS-TP} is governed by the stability of its inputs and the structure of its recursive Parameter-Trust Update process. During training, \ac{PaTAS-TP} updates the internal trust opinions associated with network parameters using trust opinions on the inputs, labels, hyperparameters, and gradient information. This update mechanism is outlined in \cref{alg:trustupdate}. As proved in \cref{thm:convergence}, the \ac{PaTAS-TP} converges under specific situation. This convergence relies on some specific characteristic of the operators used to feedforward and revise the trust in the parameters \(\theta\). 
 
 % Before delving into the specifics of \ac{PaTAS-TP} convergence, we first present a key theorem that will serve as a foundational tool in establishing the convergence properties of \ac{PaTAS-TP}.
 
@@ -967,7 +968,7 @@ In practice, precise dataset trustworthiness estimates may be unavailable, espec
 
 A key factor affecting \ac{PaTAS-TP} behavior is the parameter \(\epsilon\), which controls the threshold used to classify gradients as positive or negative evidence during training. As shown in \cref{tab:cancer_results}, if \(\epsilon\) is too small, \ac{PaTAS-TP} may misinterpret gradients as large even when the model performs well. Consequently, trusted labels may reduce parameter trust, resembling the case \(g \to +\infty\) in ~\cref{tab:asympt}. Proper calibration of \(\epsilon\) is therefore crucial, and can be tuned per layer or gradually reduced as training converges to increase sensitivity to smaller gradients. One practical approach is to tie \(\epsilon\) to the learning rate, so that as the learning rate decays, \(\epsilon\) decreases accordingly, naturally tracking the expected gradient scale throughout training.
 
-Finally, trust quantification for \(T_{\theta_i \mid y_\text{batch}}\) in the Trust Update Algorithm~\ref{alg:trustupdate} relies on a simple gradient-counting procedure. Although computationally efficient, it fixes the uncertainty component of the resulting binomial opinion based on the number of input neurons to \(i\). This fixed-uncertainty formulation may not be optimal in all cases, suggesting the need for adaptive quantification schemes. Similarly, \(T_{\theta_i \mid \overline{y_\text{batch}}}\) is set to a fully vacuous opinion \((0, 0, 1)\), which, while consistent with the absence of evidence, may not fully leverage prior knowledge when available.
+Finally, trust quantification for \(T_{\theta_i \mid y_\text{batch}}\) in the Trust Update Algorithm (\cref{alg:trustupdate}) relies on a simple gradient-counting procedure. Although computationally efficient, it fixes the uncertainty component of the resulting binomial opinion based on the number of input neurons to \(i\). This fixed-uncertainty formulation may not be optimal in all cases, suggesting the need for adaptive quantification schemes. Similarly, \(T_{\theta_i \mid \overline{y_\text{batch}}}\) is set to a fully vacuous opinion \((0, 0, 1)\), which, while consistent with the absence of evidence, may not fully leverage prior knowledge when available.
 
 
 \section{Summary \& Conclusions}
