@@ -625,18 +625,18 @@ Let $A \rightarrow B$ be a candidate branch.
 \end{theorem}
 
 \begin{proof}
-This proof is based on the logical structure outlined in Lemma~\ref{lemma}
+This proof is based on the logical structure outlined in \cref{lemma}
 
-For \ref{thm:firstpart}: We know that if $A$ is an intermediate node of a PNPS $p$ then $B$ is an intermediate node of $p$ and if $B$ is an intermediate node of a PNPS $p$ then $A$ is an intermediate node of $p$ implies that the \ac{DSPG} property not broken. What we need to show in this proof is that adding an edge from the source to an intermediate node or from an intermediate node to the sink inside a PNPS $p$ with maximum \ac{NL} does not affect the \ac{DSPG} property of the graph. We are doing the proof for the maximum NL because it is the same as doing the proof for any PNPS since what we want to know is whether we can still reduce a PNPS to a single edge using the \ac{DSPG} analysis algorithm depicted in Figure~\ref{fig:algsynth2}. During the reduction process, the reduction will be done for this \ac{PNPS} when the \ac{PNPS} will be the most nested (the PNPS with maximum \ac{NL}).
+For \ref{thm:firstpart}: We know that if $A$ is an intermediate node of a PNPS $p$ then $B$ is an intermediate node of $p$ and if $B$ is an intermediate node of a PNPS $p$ then $A$ is an intermediate node of $p$ implies that the \ac{DSPG} property not broken. What we need to show in this proof is that adding an edge from the source to an intermediate node or from an intermediate node to the sink inside a PNPS $p$ with maximum \ac{NL} does not affect the \ac{DSPG} property of the graph. We are doing the proof for the maximum NL because it is the same as doing the proof for any PNPS since what we want to know is whether we can still reduce a PNPS to a single edge using the \ac{DSPG} analysis algorithm depicted in \cref{fig:algsynth2}. During the reduction process, the reduction will be done for this \ac{PNPS} when the \ac{PNPS} will be the most nested (the PNPS with maximum \ac{NL}).
     \begin{itemize}
         \item add an edge from the source $A$ to an intermediate node $C$:
-        Assuming that the current PNPS has max NL, adding this branch does not break the \ac{DSPG} property because after adding this branch the max NL will be increased by one. Then the new PNPS with maximum NL will be the new one created  $[A,C]$. This new PNPS will be like Figure~\ref{fig:pr} because it is clear that there is only one path from $A$ to $C$ otherwise $A$ and $C$ would have been the source and sink of a PNPS with NL greater than NL of $p$.
+        Assuming that the current PNPS has max NL, adding this branch does not break the \ac{DSPG} property because after adding this branch the max NL will be increased by one. Then the new PNPS with maximum NL will be the new one created  $[A,C]$. This new PNPS will be like \cref{fig:pr} because it is clear that there is only one path from $A$ to $C$ otherwise $A$ and $C$ would have been the source and sink of a PNPS with NL greater than NL of $p$.
     
         \item add an edge from an intermediate node $C$ to the target $B$: Same logic as before. We can just reverse the graph and use the same proof.
     \end{itemize}
 
     
-For \ref{thm:secondpart}: $A$ to $B$ does not break DPSG property. Assuming that the first criterion of criteria defined in \cref{cor:pnps-criteria} is fulfilled, then \cref{prop:dspg} implies that $A$ to $B$ fulfilled Criterion 2 of the optimized Criteria for \ac{DSPG} Synthesis.
+For \ref{thm:secondpart}: $A$ to $B$ does not break \ac{DSPG} property. Assuming that the first criterion of criteria defined in \cref{cor:pnps-criteria} is fulfilled, then \cref{prop:dspg} implies that $A$ to $B$ fulfilled Criterion 2 of the optimized Criteria for \ac{DSPG} Synthesis.
 \end{proof}
 % \paragraph{Nesting-Level Formulation}
 
@@ -693,7 +693,7 @@ This maps a node of the graph to its highest nested  \ac{PNPS}. This mapping all
 
 % \subsection{Algorithm Description}
 
-Algorithm~\ref{alg:dspg-synth} presents the synthesis procedure.
+\cref{alg:dspg-synth} presents the synthesis procedure.
 \begin{algorithm}[H]
 \caption{Optimized \ac{DSPG} Synthesis}
 \label{alg:dspg-synth}
@@ -1098,7 +1098,7 @@ To show the consistency between our newly proposed Referral-Edge Path discountin
 \end{figure}
 
 \paragraph{Method 1---Trust Discounting with Multi-Edge Path}
-In this method we use the Multi-Edge Trust Discounting operator~(Eq.~\ref{equ:tdm} and ~\cref{fig:tdism}) to compute $\omega_X^A$ through the transitive path $ABCX$. This computation is done by firstly calculating $P_C^A$ of the referral path $ABC$ which is set to $P^A_B P^B_C$. Then multiply $P_C^A$ by the belief and disbelief of the functional trust $\omega^C_X$ as follows:
+In this method we use the Multi-Edge Trust Discounting operator~(\cref{equ:tdm} and ~\cref{fig:tdism}) to compute $\omega_X^A$ through the transitive path $ABCX$. This computation is done by firstly calculating $P_C^A$ of the referral path $ABC$ which is set to $P^A_B P^B_C$. Then multiply $P_C^A$ by the belief and disbelief of the functional trust $\omega^C_X$ as follows:
 \begin{equation}
     \label{equ:td3m}
     \omega_X^{[A;B;C]}:
@@ -1159,8 +1159,7 @@ In \cref{sec:optimized_criteria} we formally proved the correctness and optimal 
 
 \paragraph{Experimental Setup}
 
-We consider the trust graph illustrated in Figure~\ref{fig:ex}. 
-Using our optimized synthesis criteria, the final derived opinion $\omega_A^E$ is expressed as:
+We consider the trust graph illustrated in \cref{fig:ex}. Using our optimized synthesis criteria, the final derived opinion $\omega_A^E$ is expressed as:
 
 \begin{equation}
 \omega_A^E =
@@ -1204,7 +1203,7 @@ We set
 \]
 and analyze how the final uncertainty of $\omega_A^E$ evolves as $u$ increases from $0$ to $1$.
 
-Figure~\ref{fig:uncertainty_curves} presents the resulting uncertainty curves under two different fusion operators: Cumulative Fusion and Averaging Fusion.
+\cref{fig:uncertainty_curves} presents the resulting uncertainty curves under two different fusion operators: Cumulative Fusion and Averaging Fusion.
 
 
 
@@ -1230,7 +1229,7 @@ When cumulative fusion is used, including the additional edge $\omega_E^B$ consi
 \paragraph{Averaging Fusion.}
 With averaging fusion, the effect depends on the uncertainty level of $\omega_E^B$. When $u(\omega_E^B)$ is small, retaining the edge reduces the final uncertainty. As $u(\omega_E^B)$ approaches $1$, the contribution of $\omega_E^B$ becomes increasingly harmful to the overall uncertainty, eventually resulting in greater uncertainty than when the edge is removed. This illustrates that averaging fusion uncertainty is more sensitive to low-quality inputs. However, eliminating valid edges still discards potentially informative trust paths.
 
-These results confirm the practical relevance of the optimized \ac{DSPG} synthesis criteria. Although minimizing uncertainty alone is not a sufficient objective, preserving valid trust edges ensures that all meaningful trust evidence is retained. The optimized criteria therefore improve inference robustness by preventing premature information loss while maintaining \ac{DPSG} correctness.
+These results confirm the practical relevance of the optimized \ac{DSPG} synthesis criteria. Although minimizing uncertainty alone is not a sufficient objective, preserving valid trust edges ensures that all meaningful trust evidence is retained. The optimized criteria therefore improve inference robustness by preventing premature information loss while maintaining \ac{DSPG} correctness.
 
 
 \subsection{Evaluation of \acs{DSPG} Synthesis and Analysis Computational Time}

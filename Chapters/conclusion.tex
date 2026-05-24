@@ -26,13 +26,13 @@ demonstrated, and turns to what remains open.
 \section{Synthesis of Contributions}
 \label{sec:conclusion-synthesis}
 
-The four contributions introduced in \cref{chap:intro} were developed across \cref{chap:Trust_method} through~\ref{chap:usecase}, each addressing a distinct facet of the overall problem. Taken together, they form a single coherent framework rather than a set of independent results, and it is worth restating how they connect.
+The four contributions introduced in \cref{chap:intro} were developed across \cref{chap:Trust_method} through \cref{chap:usecase}, each addressing a distinct facet of the overall problem. Taken together, they form a single coherent framework rather than a set of independent results, and it is worth restating how they connect.
 
-The first contribution (C1) established the theoretical foundations on which everything else rests. The General Trust Assessment Methodology of \cref{chap:Trust_method} decomposed trust evaluation into three explicit phases: expression generation, atomic-opinion quantification, and expression evaluation. The optimized Trust Network Analysis of Chapter~\ref{chap:tnasl} made that methodology computationally viable on the graph structures that arise in modern Machine Learning. The introduction of Parallel Non-intersecting Path Subnetworks (PNPS) refined the classical Parallel Path Subnetwork construct and yielded three concrete improvements: synthesis criteria that retain on the order of nine to eleven percentage points more structural information than Jøsang's original formulation, an analysis algorithm whose nesting-level updates run in constant time and deliver an empirical speed-up of roughly $2.2\times$ on identical inputs, and a new Referral-Edge Path operator that closes a long-standing gap in the discounting semantics of referral-only chains. These improvements were not pursued for their own sake. They were the prerequisite for applying Subjective Logic to graphs as large and as deeply nested as Neural Networks, where the cumulative cost of repeated nesting-level recomputation and the cumulative loss from over-restrictive synthesis criteria would otherwise have rendered the framework impractical.
+The first contribution (C1) established the theoretical foundations on which everything else rests. The General Trust Assessment Methodology of \cref{chap:Trust_method} decomposed trust evaluation into three explicit phases: expression generation, atomic-opinion quantification, and expression evaluation. The optimized Trust Network Analysis of \cref{chap:tnasl} made that methodology computationally viable on the graph structures that arise in modern Machine Learning. The introduction of Parallel Non-intersecting Path Subnetworks (PNPS) refined the classical Parallel Path Subnetwork construct and yielded three concrete improvements: synthesis criteria that retain on the order of nine to eleven percentage points more structural information than Jøsang's original formulation, an analysis algorithm whose nesting-level updates run in constant time and deliver an empirical speed-up of roughly $2.2\times$ on identical inputs, and a new Referral-Edge Path operator that closes a long-standing gap in the discounting semantics of referral-only chains. These improvements were not pursued for their own sake. They were the prerequisite for applying Subjective Logic to graphs as large and as deeply nested as Neural Networks, where the cumulative cost of repeated nesting-level recomputation and the cumulative loss from over-restrictive synthesis criteria would otherwise have rendered the framework impractical.
 
-The second contribution (C2) used those foundations to construct the Parallel Trust Assessment System. PaTAS is organized around the observation that trust in a Neural Network output is conditioned on a chain of transitive dependencies: dataset trust conditions parameter trust, which together with input trust conditions prediction trust. The trust assessment module developed in Chapter~\ref{chap:dataset-trust} addressed the first link in this chain. By organizing dataset properties along three axes (the property being assessed, the lifecycle stage at which evidence is collected, and the granularity at which the property lives) and by offering three complementary quantification schemes (baseline-prior, evidence-weighted, and constant-uncertainty), the framework produces structured opinions that distinguish supporting evidence, contradicting evidence, and missing evidence. The COMPAS, GTSRB, and CIFAR-10H applications each occupied a different cell of the design space and exercised a different quantification scheme, which made it possible to argue for the framework's generality without relying on a single example.
+The second contribution (C2) used those foundations to construct the Parallel Trust Assessment System. PaTAS is organized around the observation that trust in a Neural Network output is conditioned on a chain of transitive dependencies: dataset trust conditions parameter trust, which together with input trust conditions prediction trust. The trust assessment module developed in \cref{chap:dataset-trust} addressed the first link in this chain. By organizing dataset properties along three axes (the property being assessed, the lifecycle stage at which evidence is collected, and the granularity at which the property lives) and by offering three complementary quantification schemes (baseline-prior, evidence-weighted, and constant-uncertainty), the framework produces structured opinions that distinguish supporting evidence, contradicting evidence, and missing evidence. The COMPAS, GTSRB, and CIFAR-10H applications each occupied a different cell of the design space and exercised a different quantification scheme, which made it possible to argue for the framework's generality without relying on a single example.
 
-The trust propagation module developed in Chapter~\ref{chap:patas}
+The trust propagation module developed in \cref{chap:patas}
 addressed the second and third links. Building on the perceptron case
 as a minimal working example, the chapter generalized the construction
 to deep architectures by associating a trust opinion with every
@@ -48,7 +48,7 @@ that can be added to an existing system rather than designed into a
 new one.
 
 The third contribution (C3), developed in
-Chapter~\ref{chap:bb}, recognized that the propagation-based
+\cref{chap:bb}, recognized that the propagation-based
 view of C2 assumes access to the model's internal structure, and that
 many deployment settings do not afford such access. The calibration-based
 formulation provided a complementary path: a single binomial opinion
@@ -57,7 +57,7 @@ through the alignment of predicted confidence with empirical accuracy.
 The two views are not redundant. They answer different questions,
 operate at different granularities, and apply in different
 observability regimes, and the use case of
-Chapter~\ref{chap:usecase} demonstrated that they remain
+\cref{chap:usecase} demonstrated that they remain
 mutually consistent under controlled corruption of the data.
 
 The fourth contribution (C4) brought the framework to bear on a
@@ -134,8 +134,7 @@ operationally required, the two signals can be combined. The
 framework provides the diagnostic; the choice of how to use it
 remains a policy decision.
 
-Finally, the propagation mechanism is not free. The latency
-measurements of Section~\ref{sec:usecase-cost} placed the inference
+Finally, the propagation mechanism is not free. The latency measurements of \cref{fig:patas_latency} placed the inference
 overhead in the range of $1.14\times$ to $1.41\times$ relative to
 the underlying network, depending on configuration. This cost is
 modest in absolute terms for the architectures considered, but it
@@ -164,7 +163,7 @@ networks to transformer-based architectures. The structural
 optimization of \cref{chap:tnasl} is likely to remain
 useful in this regime, since attention layers produce graph
 structures that are even less DSPG-friendly than residual networks;
-the dataset-level methodology of Chapter~\ref{chap:dataset-trust}
+the dataset-level methodology of \cref{chap:dataset-trust}
 will need substantial rethinking.
 
 \paragraph{Toward explainability and accountability.}
@@ -192,7 +191,7 @@ input-level evidence rather than about output-level confidence, is
 better positioned to flag adversarially perturbed inputs as
 untrusted; whether this conjecture survives empirical contact is an
 open question. A related direction concerns privacy: the federated
-quantification of Chapter~\ref{chap:dataset-trust} was already
+quantification of \cref{chap:dataset-trust} was already
 designed to keep local class distributions private, and the entropy-based
 summarization that supported this design generalizes naturally
 to other dataset properties. A more systematic study of how the
@@ -207,7 +206,7 @@ Assessment Framework deliverable and the 5GAA white paper on
 trustworthiness in cooperative and automated vehicles), both of which
 indicate operational interest in the underlying methodology. A
 remaining piece of work concerns the trust-source catalog of
-Chapter~\ref{chap:dataset-trust}, which was presented as extensible
+\cref{chap:dataset-trust}, which was presented as extensible
 but for which no formal extension protocol was specified. Promoting
 the catalog from a curated list to a defined contract (what
 evidence a new trust source must produce, what quantification scheme
