@@ -16,8 +16,7 @@
 
 \chapter{Assessment of AI Training Datasets Trustworthiness}
 \label{chap:dataset-trust}
-\todo{If not done at the begining of dataset, tp-patas and calibration chapter at a small box to show the instantiation of the methodology}
-The previous chapter presented the overall architecture of \ac{PaTAS}, highlighting its two main components: (i) the Trust Assessment Module focusing on the assessment of the trustworthiness of the training dataset and the input of the \ac{NN}, and (ii) the Trust Propagation Module focusing on the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. This chapter focuses on the first component, namely the trust assessment module. The underlying ideas were initially explored in the paper presented at the BIAS Workshop at ECML PKDD~\cite{10.1007/978-3-032-19096-3_17} and further developed in the paper on labeling bias presented at the TRUST-AI Workshop of ECAI~\cite{trust-aidatatrust}. In this dissertation, these contributions are unified and extended into a comprehensive top-level framework for assessing the trustworthiness of training datasets and, by extension, of the input data of a \aclu{NN} at inference time.
+The previous chapter presented the overall architecture of \ac{PaTAS}, highlighting its two main components: (i) the Trust Assessment Module focusing on the assessment of the trustworthiness of the training dataset and the input of the \ac{NN}, and (ii) the Trust Propagation Module focusing on the propagation of trust through the model, from the training data to the learned parameters and from the input to the output via these parameters. This chapter focuses on the first component, namely the trust assessment module. The underlying ideas were initially explored in the paper presented at the BIAS Workshop at ECML PKDD~\cite{10.1007/978-3-032-19096-3_17} and further developed in the paper on labeling accuracy presented at the TRUST-AI Workshop of ECAI~\cite{trust-aidatatrust}. In this dissertation, these contributions are unified and extended into a comprehensive top-level framework for assessing the trustworthiness of training datasets and, by extension, of the input data of a \aclu{NN} at inference time.
 
 
 
@@ -25,17 +24,14 @@ The previous chapter presented the overall architecture of \ac{PaTAS}, highlight
 \section{Introduction}
 \label{sec:dataset-trust:intro}
 
-The chapter is organized around three observations.
+The chapter is organized around three observations. First, \emph{the trustworthiness of a training dataset is not a scalar.} Different trustworthiness properties such as fairness, correctness, representativeness, privacy compliance, and robustness to leakage require different types of evidence, different evaluation granularities, and different aggregation rules. Collapsing them into a single quality score, or applying the same metric, the same threshold, and the same aggregation rule across all of them, hides exactly the information that should drive downstream decisions: which property is at risk, at which stage of the lifecycle.
 
-First, \emph{the trustworthiness of a training dataset is not a scalar.}
-Different trustworthiness properties such as fairness, label correctness, representativeness, privacy compliance, and robustness to leakage require different types of evidence, different evaluation granularities, and different aggregation rules. Collapsing them into a single quality score, or applying the same metric, the same threshold, and the same aggregation rule across all of them, hides exactly the information that should drive downstream decisions: which property is at risk, at which stage of the lifecycle, and whether the assessment is weak because evidence contradicts the property or because evidence is missing altogether.
-
-Second, \emph{properties live at different levels of the data}. Some properties are only meaningful at the \textbf{dataset level} (e.g., class balance, coverage, distribution gap with respect to a target population). Others are intrinsically \textbf{per-entry} (e.g., label correctness, annotator agreement on a specific item) or \textbf{per-feature} (e.g., sensor reliability, presence of sensitive attributes in a column). The same scheme used at inference time on individual inputs can be applied for entry- and feature-level dataset properties, which is what makes input-data trust assessment a special case of dataset trust assessment rather than a separate problem.
+Second, \emph{properties live at different levels of the data}. Some properties are only meaningful at the \textbf{dataset level} (e.g., class balance, coverage). Others are intrinsically \textbf{per-entry} (e.g., label correctness) or \textbf{per-feature} (e.g., sensor reliability). The same scheme used at inference time on individual inputs can be applied for entry- and feature-level dataset properties, which is what makes input-data trust assessment a special case of dataset trust assessment rather than a separate problem.
 
 Third, \emph{evidence about trustworthiness is rarely complete}. Training datasets are typically constructed through multi-stage lifecycles in which documentation, metadata, and direct observations are partial, sometimes contradictory, and often unavailable for historical pipelines. The framework must therefore distinguish \emph{low support} from \emph{no support}, which is exactly what \aclu{SL} offers and what scalar quality scores cannot.
 
 Building on these observations, the chapter introduces a top-level framework for assessing the trustworthiness of AI training datasets. The framework is a direct specialization of the General Trust Assessment Methodology of \cref{chap:Trust_method} to the dataset setting, and provides the conceptual and formal foundation on which several specific contributions of this thesis build: the assessment of sampling and representation bias~\cite{10.1007/978-3-032-19096-3_17}, the assessment of labeling accuracy from annotator disagreement~\cite{trust-aidatatrust}, and the multi-stage analysis illustrated on \ac{COMPAS} dataset. 
-The remainder of the chapter is organized as follows. \cref{sec:dataset-trust:uncertainty} reviews the sources of uncertainty that arise at different stages of the dataset lifecycle and motivates the use of an evidence-based formalism. \cref{sec:dataset-trust:framework} introduces the three design principles of the framework, organizes them into a three-axis design space, and re-states the three phases of the General Methodology in dataset-specific language. \cref{sec:dataset-trust:applications:compas} provides the metric-to-evidence mapping application on the COMPAS Dataset. \cref{sec:dataset-trust:applications:gtsrb,sec:dataset-trust:applications:cifar10h} demonstrate the framework on two others applications spanning different cells of the design space. \cref{sec:dataset-trust:summary} concludes.
+The remainder of the chapter is organized as follows. \cref{sec:dataset-trust:uncertainty} reviews the sources of uncertainty that arise at different stages of the dataset lifecycle and motivates the use of an evidence-based formalism. \cref{sec:dataset-trust:framework} introduces the three design principles of the framework, organizes them into a three-axis design space, and re-states the three phases of the General Methodology in dataset-specific language. \cref{sec:dataset-trust:applications:compas} provides the metric-to-evidence mapping application on the COMPAS Dataset. \cref{sec:dataset-trust:applications:gtsrb,sec:dataset-trust:applications:cifar10h} demonstrate the framework on two other applications spanning different cells of the design space. \cref{sec:dataset-trust:summary} concludes.
 
 % --------------------------------------------------------------
 \section{Sources of Uncertainty in Training Datasets Assessment}
@@ -56,42 +52,41 @@ following sources:
   \item \textbf{Conflicting evidence}, where different diagnostics or information sources support incompatible conclusions; e.g., one assessment indicating that a trust requirement is satisfied while another, based on a different perspective or metric, suggests the opposite;
   \item \textbf{Lack of evidence}, where relevant information is missing, incomplete, or unavailable; e.g., insufficient documentation or unavailable audit results preventing a confident determination of whether a trust property holds.
 \end{itemize}
-\marginpar{Uncertainty Addressable by Classical Probability Theory}
+
+\subsubsection{Uncertainty Addressable by Classical Probability Theory}
 \label{sec:dataset-trust:uncertainty:probability}
 While these sources often co-occur in practice, they differ significantly in how they should be modeled and interpreted. Classical probability theory is well suited for modeling uncertainty that arises from inherent randomness and stochastic noise, commonly referred to as aleatoric uncertainty. In this setting, uncertainty reflects variability in outcomes rather than a lack of knowledge.
 
-In the assessment of training datasets, such uncertainty may arise when the trust source itself is governed by a stochastic process: stochastic measurement noise (e.g., sensor precision limits) affecting the values a diagnostic returns or natural variability in observed phenomena making the same metric fluctuate across draws. For example, a sensor-consistency score computed on repeated measurements of the same physical quantity will vary slightly due to sensor noise. When the process generating the evidence is well specified and sufficient observations are available, probability distributions can be estimated and used to characterize the expected variability of the evidence, and therefore of the trust assessment that uses it.
+In the assessment of training datasets, such uncertainty may arise when the trust source itself is governed by a stochastic process: stochastic measurement noise (e.g., sensor precision limits) affecting the values a diagnostic returns or natural variability in observed phenomena making the same metric fluctuate across draws. For example, a sensor-consistency score computed on repeated measurements of the same physical quantity may vary slightly due to sensor noise. When the process generating the evidence is well specified and sufficient observations are available, probability distributions can be estimated and used to characterize the expected variability of the evidence, and therefore of the trust assessment that uses it.
 
-However, this probabilistic framework implicitly assumes that (i) the process generating the evidence carries no uncertainty itself, (ii) sufficient evidence can be collected for residual uncertainty to be safely treated as zero, and (iii) the available evidence is neither contradictory nor structurally incomplete. These assumptions are frequently violated in real-world dataset construction, where evidence about a property is typically partial, collected by heterogeneous trust sources, and sometimes contradictory.
+However, a probabilistic framework implicitly assumes that (i) the process generating the evidence carries no uncertainty itself, (ii) sufficient evidence can be collected for residual uncertainty to be safely treated as zero, and (iii) the available evidence is never contradictory and incomplete at the same time. These assumptions are frequently violated in real-world dataset construction, where evidence about a property is typically partial, collected by heterogeneous trust sources, and sometimes contradictory.
 
-\marginpar{Uncertainty Requiring Evidence-Based Modeling}
+\subsubsection{Uncertainty Requiring Evidence-Based Modeling}
 \label{sec:dataset-trust:uncertainty:evidence}
 
 The remaining sources of uncertainty (system complexity, conflicting evidence, and lack of evidence) cannot be adequately represented using classical probability theory alone. These sources give rise to epistemic uncertainty, reflecting incomplete or unreliable knowledge about the dataset and its provenance.
 
 \paragraph{System complexity.}
-A dataset typically results from multiple interacting processes, such as sampling strategies, collection protocols, annotation workflows, and preprocessing pipelines. For instance, a dataset may combine data collected across different time periods, devices, or geographic regions, each with distinct characteristics. System complexity is not itself a source of uncertainty in the way that randomness or measurement noise is. It is an epistemic condition: when the contributing processes interact in ways the analyst cannot fully observe or model, the analyst's knowledge of whether the trust proposition holds is incomplete, and that incompleteness shows up as uncertainty in the trust assessment. Moreover, \ac{SL} can be used to reason in the context of complex systems.
+A dataset typically results from multiple interacting processes, such as sampling strategies, collection protocols, annotation workflows, and preprocessing pipelines. For instance, a dataset may combine data collected across different time periods, devices, or geographic regions, each with distinct characteristics. System complexity is not itself a source of uncertainty in the way that randomness or measurement noise are. It is an epistemic condition: when the contributing processes interact in ways the analyst cannot fully observe or model, the analyst's knowledge of whether the trust proposition holds is incomplete, and that incompleteness shows up as uncertainty in the trust assessment. Moreover, \ac{SL} can be used to reason in the context of complex systems through the graph based reasoning. 
 
-\paragraph{Conflicting evidence.}
-Conflicting evidence occurs when different trust sources provide incompatible signals about dataset reliability. For example, statistical metrics may indicate balanced group representation, while an audit of the data collection process reveals undocumented exclusion criteria affecting specific subpopulations. Similarly, high inter-annotator agreement may coexist with systematic label bias affecting only a minority group. In such cases, collapsing all signals into a single probability obscures the underlying disagreement.
+\paragraph{Conflicting and incomplete evidence.}
+Two further sources of uncertainty fall outside what classical probability can adequately represent. Conflicting evidence occurs when different trust sources provide incompatible signals: statistical metrics may indicate balanced group representation while an audit reveals undocumented exclusion criteria, or high inter-annotator agreement may coexist with label bias affecting a minority group. Lack of evidence arises when key information about the dataset lifecycle is missing or inaccessible, such as absent documentation of preprocessing steps or unavailable annotation guidelines. In both cases, collapsing all available signals into a single probability either obscures the underlying disagreement or silently treats absence of evidence as evidence of absence. \aclu{SL} addresses both failure modes by maintaining trust mass, distrust mass, and uncertainty as distinct quantities.
 
-\paragraph{Lack of evidence.}
-Lack of evidence is common when key information about the dataset lifecycle is missing or inaccessible. Typical examples include absent documentation of preprocessing steps, incomplete metadata describing sampling decisions, or unavailable annotation guidelines. Importantly, the absence of evidence does not imply evidence of absence; rather, it introduces uncertainty that cannot be resolved through probabilistic estimation alone.
+These sources of uncertainty do not arise in isolation in practice. AI training datasets are assembled through complex, multi-stage lifecycles involving heterogeneous actors, tools, and governance regimes, making the simultaneous presence of randomness, system complexity, conflicting signals, and missing information the norm rather than the exception. For this reason, the framework presented in the next section requires a formalism that accommodates both probabilistic variability and epistemic limitations. \aclu{SL} provides that foundation, though on its own it does not prescribe what propositions to formulate, which trust sources to consult, or how to combine them. Those choices are the role of the framework introduced next.
 
-Classical probability theory lacks a principled mechanism to distinguish between low probability and unknown probability. As a result, missing or contradictory evidence is often implicitly collapsed into point estimates, leading to misleading assessments. Evidence-based frameworks, and \aclu{SL} in particular, address this limitation by explicitly representing trust mass, distrust mass, and residual uncertainty as distinct quantities.
+% \todo{Is the following subsection redundant with the previous one. Maybe merge}
+% \subsection{Why All Sources of Uncertainty Co-occur in Training Datasets}
+% \label{sec:dataset-trust:uncertainty:cooccur}
 
-\subsection{Why All Sources of Uncertainty Co-occur in Training Datasets}
-\label{sec:dataset-trust:uncertainty:cooccur}
+% AI training datasets are especially prone to the coexistence of all aforementioned sources of uncertainty. Unlike controlled experimental data, training datasets are typically assembled through complex, multi-stage lifecycles involving heterogeneous actors, tools, and governance regimes.
 
-AI training datasets are especially prone to the coexistence of all aforementioned sources of uncertainty. Unlike controlled experimental data, training datasets are typically assembled through complex, multi-stage lifecycles involving heterogeneous actors, tools, and governance regimes.
+% Randomness and noise arise naturally from data collection and annotation processes. System complexity emerges from the interaction of sampling decisions, collection methods, annotation protocols, and data processing steps, often distributed across organizations or over time. Conflicting evidence frequently arises when datasets are evaluated using multiple fairness, bias, or quality metrics that emphasize different aspects of reliability. Lack of evidence is common due to missing metadata, undocumented preprocessing, proprietary data sources, or limited visibility into historical data collection practices.
 
-Randomness and noise arise naturally from data collection and annotation processes. System complexity emerges from the interaction of sampling decisions, collection methods, annotation protocols, and data processing steps, often distributed across organizations or over time. Conflicting evidence frequently arises when datasets are evaluated using multiple fairness, bias, or quality metrics that emphasize different aspects of reliability. Lack of evidence is common due to missing metadata, undocumented preprocessing, proprietary data sources, or limited visibility into historical data collection practices.
+% Crucially, these uncertainties do not disappear simply because a dataset achieves high predictive performance or passes standard quality checks. On the contrary, dataset reliability is often assessed precisely in situations where evidence is partial, indirect, or contested. For this reason, training dataset assessment requires a formalism that can accommodate both probabilistic variability and epistemic limitations. \aclu{SL} provides such a foundation.
 
-Crucially, these uncertainties do not disappear simply because a dataset achieves high predictive performance or passes standard quality checks. On the contrary, dataset reliability is often assessed precisely in situations where evidence is partial, indirect, or contested. For this reason, training dataset assessment requires a formalism that can accommodate both probabilistic variability and epistemic limitations. \ac{SL} provides such a foundation by enabling uncertainty-aware reasoning that remains faithful to the available evidence without forcing unwarranted certainty.
+% \aclu{SL}, however, only provides the representational framework. On its own, it does not tell the analyst \emph{what} propositions to formulate, \emph{which} trust sources to consult, or \emph{how} to combine them across the dataset lifecycle. Those choices are the role of the framework presented in the next section.
 
-\aclu{SL}, however, only provides the representational framework. On its own, it does not tell the analyst \emph{what} propositions to formulate, \emph{which} trust sources to consult, or \emph{how} to combine them across the dataset lifecycle. Those choices are the role of the framework presented in the next section.
-
-% --------------------------------------------------------------
+% % --------------------------------------------------------------
 \section{A Framework for Trust Assessment of Training Datasets}
 \label{sec:dataset-trust:framework}
 
@@ -102,7 +97,7 @@ The framework is built on the following design principles.
   \item \textbf{Property-dependent assessment.} Trustworthiness is always defined with respect to a specific property of interest. The same dataset may be highly trustworthy for one property and not for another, in line with the trust-proposition formalism introduced in
         \cref{chap:Trust_method}.
   \item \textbf{Lifecycle-based reasoning.} Dataset trustworthiness emerges from the correctness of the processes that produce and transform the data. The framework therefore decomposes evaluation along the four stages of the dataset lifecycle: \emph{sampling}, \emph{collection / measurement}, \emph{annotation}, and \emph{processing}.
-  \item \textbf{Multi-granular evaluation.} Some properties are meaningful only at the level of the dataset as a whole (e.g., class balance), others at the level of individual entries (e.g., label correctness), and others at the level of features (e.g., sensor reliability or presence of sensitive attributes). The framework supports trust sources operating at any of these three granularities and provides aggregation rules between them.
+  \item \textbf{Multi-granular evaluation.} Some properties are meaningful only at the level of the dataset as a whole (e.g., class balance), others at the level of individual entries (e.g., label correctness), and others at the level of features (e.g., sensor reliability). The framework supports trust sources operating at any of these three granularities and provides aggregation rules between them.
 \end{enumerate}
 
 \subsection{The Three-Axis Design Space}
@@ -112,7 +107,7 @@ A trust assessment of a training dataset is fully specified by three choices, wh
 
 \begin{itemize}
   \item $\propP$ --- the \textbf{property} being assessed (e.g., accuracy,
-        bias, representativeness, label correctness, privacy);
+        bias, representativeness, privacy);
   \item $\propS$ --- the \textbf{lifecycle stage} from which evidence is
         drawn 
         \\
@@ -130,16 +125,16 @@ A trust assessment of a training dataset is fully specified by three choices, wh
   %       \textsc{\acs{CUQ}}\}$, defined in
   %       \cref{sec:dataset-trust:formal:quantification}).
 \end{itemize}
+\noindent Selecting $(\propP, \propS, \propG)$ instantiates a specific assessment problem. The same property may be meaningful at multiple granularities or at multiple stages.
 
-Selecting $(\propP, \propS, \propG)$ instantiates a specific assessment problem. The same property may be meaningful at multiple granularities or at multiple stages.
+Composite trust proposition such as ''the dataset is reliable for training'' are decomposed by traversing the axes in a fixed order after identifying ''reliability'' as the property $\propP$: first along $\propS$ (the lifecycle stages, i.e., the components of the dataset pipeline being assessed) and then within each stage along $\propG$ (the granularity at which evidence is collected). For example, ''$\dataset$ is reliable for training'' first splits into four stage-level propositions as in \cref{eq:dataset-trust:lifecycle-decomposition}. Each stage-level proposition is then assessed according to which granularity the analyst wants to assess: ''the sampling stage is reliable'' might be a dataset-level sub-proposition about class distribution and a feature-level sub-proposition about coverage; ''the annotation stage is reliable'' might be an entry-level sub-proposition about per-item label correctness and a dataset-level sub-proposition about systematic group-level label bias. Each leaf of the resulting expression is associated with a single trust source from \cref{tab:dataset-trust:catalogue} and quantified with one of the three schemes presented in the next subsection. This fixed traversal order corresponds, in the dataset setting, to the expression-generation phase of the General Methodology (\cref{chap:Trust_method}). 
 
-\paragraph{Decomposition is principled, not ad hoc.}
-Composite properties such as ``the dataset is reliable for training'' are decomposed by traversing the axes in a fixed order: first along $\propS$ (lifecycle), then within each stage along $\propG$ (granularity). For example, ``$\dataset$ is reliable for training'' first splits into the four stage-level propositions of \cref{eq:dataset-trust:lifecycle-decomposition}, and then each stage-level proposition splits along the granularities at which evidence is available: ``the sampling stage is reliable'' becomes a dataset-level sub-proposition about the class distribution and a feature-level sub-proposition about feature coverage; ``the annotation stage is reliable'' becomes an entry-level sub-proposition about per-item label correctness and a dataset-level sub-proposition about systematic group-level label bias. Each trust opinion in the expression is then associated with a single trust source (\cref{tab:dataset-trust:catalogue}) and quantified with one of the schemes of \cref{sec:dataset-trust:formal:quantification}. This fixed traversal order is the structural counterpart, in the dataset setting, of the generic expression-generation phase of \cref{chap:Trust_method}.
-
-\paragraph{The same scheme covers training data and inference-time inputs.} When a property is intrinsically per-entry or per-feature ($\propG \in \{\textsc{entry}, \textsc{feature}\}$), the same evidence-collection and quantification machinery applies whether the entry comes from the training set or from a single input presented at inference time. This is what links the present chapter to the Trust Propagation Module of \ac{PaTAS}.
+When an assessment is per-entry or per-feature ($\propG \in \{\textsc{entry}, \textsc{feature}\}$), the same evidence-collection and quantification machinery applies whether the entry comes from the training set or from a single input presented at inference time, as long as the trust sources are available. 
 
 \begin{mdframed}[backgroundcolor=gray!10, linewidth=0pt]
-\textbf{Relation to \cref{chap:Trust_method}.} The General Trust Assessment Methodology (\cref{chap:Trust_method}) is property-agnostic and entity-agnostic. The three axes $(\propP, \propS, \propG)$ make the \emph{entity} (a dataset or a stage of its lifecycle) and the \emph{evidence structure} explicit while reusing the methodology's three phases (expression generation, \ac{ATO} quantification, expression evaluation) without modification.
+\textbf{Relation to \cref{chap:Trust_method}.} The three axes play distinct roles in instantiating the General Trust Assessment Methodology. $\propP$ encodes the \emph{property} to be assessed, which determines what counts as positive or negative evidence. $\propS$ identifies the \emph{lifecycle stage}, acting as the target (trustee) of the trust proposition: it is the component of the pipeline whose reliability is being questioned. $\propG$ sets the \emph{granularity} at which evidence is collected and trust sources are selected. Together, $(\propP, \propS, \propG)$ drive the expression-generation phase: they determine which propositions and trust sources appear in the trust expression, which trust sources attach to each leaf, and how evidence is aggregated.
+
+\noindent \textbf{Example.} Consider assessing whether the annotation stage of dataset $\dataset$ is accurate ($\propP$ = accuracy, $\propS$ = annotation, $\propG$ = entry). The trust proposition is ``the labels of $\dataset$ are correct''. Each entry constitutes an atomic proposition; the trust source is inter-annotator agreement (\ac{IAA}); and the resulting per-entry opinions are aggregated to obtain a dataset-level trust opinion on label accuracy.
 \end{mdframed}
 
 \subsection{Specializing the General Methodology to Datasets}
@@ -147,7 +142,7 @@ Composite properties such as ``the dataset is reliable for training'' are decomp
 The three-axis design space $(\propP, \propS, \propG)$  lets us re-state the three phases of the General Trust Assessment Methodology in dataset-specific language.
 
 \paragraph{Phase~I --- Expression generation.} 
-The trust proposition is formulated for a property $\propP$. If $\propP$ is composite (e.g., ``the dataset is reliable for training''), it is decomposed lifecycle-first:
+When the trust proposition is composite (e.g., ``$\dataset$ is reliable for training''), it is first decomposed along the lifecycle axis $\propS$. Each stage then becomes the target of a simpler trust proposition, and the overall trust is expressed as their conjunction:
 \begin{equation}
 \mathcal{T}(\dataset, \propP)
 = \mathcal{T}_{\text{sampling}} \wedge \mathcal{T}_{\text{collection}}
@@ -155,24 +150,24 @@ The trust proposition is formulated for a property $\propP$. If $\propP$ is comp
 \label{eq:dataset-trust:lifecycle-decomposition}
 \end{equation}
 
-The expression is therefore:
+\noindent The expression is therefore:
 \[
 T_{\mathcal{T}(\dataset, \propP)} = T_{\mathcal{T}_{\text{sampling}}} \cdot T_{\mathcal{T}_{\text{collection}}} \cdot T_{\mathcal{T}_{\text{annotation}} } \cdot T_{\mathcal{T}_{\text{processing}}}
 \]
 where (\(\cdot\)) is the \ac{SL} operator for logical AND ($\wedge$) operator.
 
-Note that given how each stage is performed, \ac{TNA-SL} might be used on well defined \ac{STN} to expand the expression
+Note that given how each stage is performed, \ac{TNA-SL} might be used on well defined \aclu{STN} to expand the expression.
 
 
 \paragraph{Phase~II --- ATO quantification.} 
 Each stage-level proposition (simple trust proposition in the methodology) is then supported directly by metric-level trust sources, which all provide evidence for the same stage-level property and are combined with an aggregation operator ($\oplus$):
 \begin{equation}
-T_{\text{sampling}}
+T_{\mathcal{T}_{\text{sampling}}}
 = T_{\text{DG}} \oplus T_{\text{MCR}} \oplus T_{\text{GRR}}
   \oplus T_{\text{LTCI}} \oplus \dots,
 \label{eq:dataset-trust:metric-aggregation}
 \end{equation}
-and analogously for every other stage. The full catalog of metrics is given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source metrics considered in this thesis, organized by lifecycle stage, risk category, and typical granularity ($\dGran$ for dataset, $\eGran$ for entry, $\fGran$ for feature). This table is the practical entry point for instantiating the framework: each metric corresponds to a trust sources for a trust proposition in \cref{eq:dataset-trust:lifecycle-decomposition}. \Cref{fig:trust_expression_tree_dataset} shows an example of the final resulting tree including the trust sources.
+and analogously for every other stage. The full catalog of metrics is given in \cref{tab:dataset-trust:catalogue}. The table lists the trust-source metrics considered in this thesis, organized by lifecycle stage, risk category, and typical granularity ($\dGran$ for dataset, $\eGran$ for entry, $\fGran$ for feature). This table is the practical entry point for instantiating the framework: each metric corresponds to a trust source for a trust proposition in \cref{eq:dataset-trust:lifecycle-decomposition}. \Cref{fig:trust_expression_tree_dataset} shows an example of the final resulting tree including the trust sources. This tree corresponds to the maximal decomposition: the property $\propP$ = reliability draws on every lifecycle stage. For other choices of $(\propP, \propS, \propG)$, the relevant expression is the subtree obtained by pruning the branches that do not apply. A property assessed only at the annotation stage retains only the $T_{\text{annotation}}$ subtree; a property defined exclusively at the entry level (e.g., per-instance label correctness) retains only the metric-level leaves whose granularity is $\eGran$. 
 
 \begin{figure}[t]
 \centering
@@ -185,22 +180,22 @@ and analogously for every other stage. The full catalog of metrics is given in \
   edge from parent/.style={draw, thin}
 ]
 \node {$T(\dataset, \propP)$ \;\scriptsize($\cdot$)}
-  child { node {$T_{\text{sampling}}$ \;\scriptsize($\oplus$)}
+  child { node {$T_{\text{sampling}}$ \;\scriptsize($\oplus_1$)}
     child { node {$T_{\text{DG}}$} }
     child { node {$T_{\text{MCR}}$} }
     child { node {$\dots$} }
   }
-  child { node {$T_{\text{collection}}$ \;\scriptsize($\oplus$)}
+  child { node {$T_{\text{collection}}$ \;\scriptsize($\oplus_2$)}
     child { node {$T_{\text{SCS}}$} }
     child { node {$T_{\text{PIID}}$} }
     child { node {$\dots$} }
   }
-  child { node {$T_{\text{annotation}}$ \;\scriptsize($\oplus$)}
+  child { node {$T_{\text{annotation}}$ \;\scriptsize($\oplus_3$)}
     child { node {$T_{\text{IAA}}$} }
     child { node {$T_{\text{OLR}}$} }
     child { node {$\dots$} }
   }
-  child { node {$T_{\text{processing}}$ \;\scriptsize($\oplus$)}
+  child { node {$T_{\text{processing}}$ \;\scriptsize($\oplus_4$)}
     child { node {$T_{\text{FLCA}}$} }
     child { node {$T_{\text{DIOR}}$} }
     child { node {$\dots$} }
@@ -255,19 +250,15 @@ and analogously for every other stage. The full catalog of metrics is given in \
 
 \end{enumerate}
 
-The three schemes target different evidence regimes. \ac{BPQ} is the default choice when the metric returns a single observed value with no indication of how confident that value is; the prior weight $W$ governs how quickly residual uncertainty shrinks as evidence accumulates. \ac{EWQ} is appropriate when each piece of evidence comes with its own uncertainty weight. \ac{CUQ} is used when domain policy or trust-source metadata fixes the uncertainty externally; the scheme then distributes the remaining mass between trust mass and distrust mass proportionally to evidence. 
+\noindent The three schemes target different evidence regimes. \ac{BPQ} is the default choice when the metric returns a single observed value with no indication of how confident that value is; the prior weight $W$ governs how quickly residual uncertainty shrinks as evidence accumulates. \ac{EWQ} is appropriate when each piece of evidence comes with its own uncertainty weight. \ac{CUQ} is used when domain policy or trust-source metadata fixes the uncertainty externally; the scheme then distributes the remaining mass between trust mass and distrust mass proportionally to evidence. 
 
 \paragraph{Phase~III --- Expression evaluation.} 
-Here we just evaluate the final expression.
+Once the trust opinions at the leaves are quantified and the expression is assembled, the final opinion is obtained by evaluating the expression using the \ac{SL} operators.
 
 \paragraph{On intermediate decomposition by risk category.}
-Between the stage level and the metric level, the framework can
-optionally insert a third level grouping metrics by risk category
-(e.g., \emph{Sampling Bias}, \emph{Temporal Bias}, \emph{Survivorship
-Bias} within the sampling stage), as suggested by the structure of
-\cref{fig:dataset-trust:overview}. This intermediate level is useful when the analyst wants to assess a stage along several distinct risk axes that should hold simultaneously, in which case the risk-category nodes combine with conjunction. In this thesis, we keep the two-level structure (stage $\to$ metrics) for clarity. The extension to three levels is a direct consequence of the framework and is left as an option for future instantiations.
+Between the stage level and the metric level, the framework can optionally insert a third level grouping metrics by risk category (e.g., \emph{Sampling Bias}, \emph{Temporal Bias}, \emph{Survivorship Bias} within the sampling stage), as suggested by the structure of \cref{fig:dataset-trust:overview}. This intermediate level might be useful when the analyst wants to assess a stage along several distinct risk axes that should hold simultaneously. In this thesis, we keep the two-level structure (stage $\to$ metrics) for clarity. The extension to three levels is a direct consequence of the framework and is left as an option for future instantiations.
 
-This tree corresponds to the maximal decomposition: the property $\propP$ = reliability draws on every lifecycle stage. For other choices of $(\propP, \propS, \propG)$, the relevant expression is the subtree obtained by pruning the branches that do not apply. A property assessed only at the annotation stage retains only the $T_{\text{annotation}}$ subtree; a property defined exclusively at the entry level (e.g., per-instance label correctness) retains only the metric-level leaves whose granularity is $\eGran$. The applications of \cref{sec:dataset-trust:applications:gtsrb} and \cref{sec:dataset-trust:applications:cifar10h} illustrate two such prunings.
+
 
 
 \begin{figure}[t]
@@ -308,7 +299,7 @@ This tree corresponds to the maximal decomposition: the property $\propP$ = reli
       &                        & Missing Data Disparity (MDD)        & $\dGran$ \\
     \midrule
     \multirow{8}{*}{Annotation}
-      & Labeling Bias          & Inter-Annotator Agreement (IAA)     & $\eGran$ \\
+      & Labeling Accuracy/Bias          & Inter-Annotator Agreement (IAA)     & $\eGran$ \\
       &                        & Group Label Bias Index (GLBI)       & $\dGran$ \\
       &                        & Annotation Drift Over Time (ADT)    & $\dGran$ \\
       & Annotator Bias         & Annotator Effect Size (AES)         & $\dGran$ \\
@@ -336,60 +327,25 @@ This tree corresponds to the maximal decomposition: the property $\propP$ = reli
 \subsection{Cross-granularity composition of trust sources}
 \label{sec:dataset-trust:formal:granularity}
 
-The granularity $\propG$ of the property being assessed and the granularity of the trust sources used to assess it are two independent choices. A dataset-level property does not need to be evaluated only by dataset-level trust sources; it can equally be assessed by aggregating evidence collected at finer granularities. Conversely, an entry-level property can rely on feature-level evidence about the columns that compose the entry. Trust sources at a finer granularity than the property can be used, as long as their evidence is aggregated up to the level at which the property is defined.
-
-The composition flows naturally upward along the granularity hierarchy:
+The granularity $\propG$ of the property being assessed and the granularity of the trust sources used to assess it are two related choices. A dataset-level property does not need to be evaluated only by dataset-level trust sources; it can equally be assessed by aggregating evidence collected at finer granularities. Similarly, an entry-level property can rely on feature-level evidence about the columns that compose the entry. Trust sources at a finer granularity than the property can be used, as long as their evidence is aggregated up to the level at which the property is defined. The composition flows naturally upward along the granularity hierarchy:
 \[\fGran \to \eGran \to \dGran\]
 
-\paragraph{From features to entries.}
-An entry is a structured combination of features, and an entry-level property may depend on the trustworthiness of the features that compose it. For example, the proposition ``the values of entry $x$ are trustworthy'' can be decomposed feature by feature, with each feature contributing an opinion derived from a feature-level trust source (sensor reliability, presence of a sensitive attribute, out-of-range indicator). The per-feature opinions are then combined into a per-entry opinion using well defined aggregation rules that might be based on \ac{SL} fusion operators.
+Two complementary approaches support this upward aggregation.
+\begin{itemize}
+    \item \textbf{Opinion composition.} The property is decomposed unit by unit at the finer granularity. Each unit (feature or entry) is assigned a trust source, which produces an \ac{SL} opinion for that unit. The per-unit opinions are then combined into a coarser-grained opinion using \ac{SL} fusion operators, reflecting the assumption that the units jointly constitute the higher-level.
 
-\paragraph{From entries to dataset.}
-A dataset-level property can be assessed in two distinct ways. The first is
-to use a trust source that measures a global statistic directly (e.g., a
-distribution gap or a class-probability deviation), in which case a single
-opinion is produced for the dataset. The second is to use a trust source
-that produces per-entry evidence and to lift it to the dataset level by
-aggregating entry-level outcomes: each entry whose opinion meets a
-threshold contributes positive evidence, the remaining entries contribute
-negative evidence, and the resulting counts are quantified with one of the
-schemes of \cref{sec:dataset-trust:formal:quantification}. Both routes
-yield a dataset-level opinion, and they can be combined when a property is
-supported by both global and per-entry evidence.
+    \item \textbf{Evidence lifting.} A single trust source produces per-unit outcomes at the finer granularity. A threshold is applied to each outcome: units that satisfy the property contribute positive evidence, and those that do not contribute negative evidence. The resulting counts are then quantified with one of the three schemes of \cref{sec:dataset-trust:formal:quantification} to produce a single opinion at the coarser level.
+\end{itemize}
+\noindent An entry is a structured combination of features. Both opinion composition and evidence lifting can be applied at any level of the granularity hierarchy, moving evidence upward from features to entries, from entries to the dataset, or directly from features to the dataset. The two steps can also be chained, for instance by first composing feature-level opinions into per-entry opinions and then lifting those to the dataset level.
 
-\paragraph{From features to dataset.}
-By transitivity, feature-level trust sources can also support
-dataset-level properties: feature-level opinions are first lifted to
-per-entry opinions, and entries are then aggregated to a dataset-level
-opinion as above. Alternatively, feature-level evidence may be aggregated
-directly across the dataset (e.g., the average sensor reliability across
-all measurements of a given column), bypassing the entry level.
-
-% \paragraph{Implication for the catalogue.}
-% The granularity tags in \cref{tab:dataset-trust:catalogue} indicate the \emph{native} granularity of each metric, i.e.\ the granularity at which it produces its primary opinion. This does not restrict the granularities at which it can ultimately be used: a metric with native granularity
-% $\eGran$ can contribute to a $\dGran$-level assessment via entry
-% aggregation, and a metric with native granularity $\fGran$ can contribute
-% to either an $\eGran$- or a $\dGran$-level assessment via the routes
-% above. The applications of \cref{sec:dataset-trust:applications} exercise
-% both the direct route (Balancing Bias on GTRSB uses a dataset-level
-% metric to assess a dataset-level property) and the lifted route (Labeling
-% Bias on CIFAR-10H uses entry-level metrics aggregated to a dataset-level
-% summary).
-
-
-% \paragraph{Downward replication.}
-% The reverse direction is also available, though it is conceptually simpler. When a property is naturally defined at the dataset level but an analyst wants a per-feature or per-entry view of it, the dataset-level assessment can simply be replicated independently on each feature or each entry. This produces one opinion per feature (or per entry), which may later be combined with the opinions of other features (or entries) using the upward composition rules introduced earlier in this subsection.
-
-
-
-The following sections demonstrate the framework on three applications. Each application explicitly identifies the cell of the design space it occupies, the quantification scheme it uses, and the publication in which it was originally presented. The applications are presented in the following order: sampling first, annotation next, then a multi-stage assessment.
+The following sections demonstrate the framework on three applications. Each application explicitly identifies the cell of the design space it occupies, the quantification scheme it uses, and the publication in which it was originally presented. The applications are presented in the following order: multi-stage first, sampling next, then annotation assessment.
 
 \section{Multi-stage Assessment: COMPAS}
 \label{sec:dataset-trust:applications:compas}
 \begin{mdframed}[backgroundcolor=blue!4, linewidth=0pt]
 \textbf{Position in the design space.}
 
-$\propP$ = overall reliability for use as training data;\
+$\propP$ = reliability\
 
 $\propS = \{\textsc{sampling}, \textsc{collection}, \textsc{annotation},
         \textsc{processing}\}$;\
@@ -399,27 +355,25 @@ $\propG$ = dataset;\
 \textbf{Reference:} original to this dissertation.
 \end{mdframed}
 
-This section presents a generic application of the framework introduced in \cref{sec:dataset-trust:framework}. We define dataset reliability as a trust proposition supported by heterogeneous evidence extracted from multiple stages of the dataset lifecycle, and we formalize the operations that turn metric values into subjective opinions and combine opinions across stages. We recall that as final expression we get the expression depicted in \cref{fig:trust_expression_tree_dataset}. We now focus on understanding how we can quantify the trust opinions from trust sources (Trust opinions at the leaves).
+This section presents a generic application of the framework introduced in \cref{sec:dataset-trust:framework}. We define dataset reliability as a trust proposition supported by heterogeneous evidence extracted from multiple stages of the dataset lifecycle, and we formalize the operations that turn metric values into subjective opinions and combine opinions across stages. We recall that as final expression we get the expression depicted in \cref{fig:trust_expression_tree_dataset}. We now focus on understanding how we can quantify the trust opinions from trust sources (Trust opinions at the leaves)\footnote{In the General Methodology, the leaves of the trust expression are \acp{ATO}. Here the assessment is finer: each leaf of the expression tree in \cref{fig:trust_expression_tree_dataset} is an opinion from a trust source, and the resulting fused opinion is what plays the role of the \ac{ATO} in the higher-level expression.}.
 
-
-This first application demonstrates the framework's ability to compose stage-level assessments into a dataset-level opinion. COMPAS exercises three of the four lifecycle stages simultaneously. \cref{tab:dataset-trust:compas} reports the trust-source metrics, normalized quality scores, evidence counts, and resulting \ac{BPQ} stage-level opinions.
+This first application demonstrates the framework's ability to compose stage-level assessments into a dataset-level opinion. COMPAS exercises all four lifecycle stages simultaneously.
 
 \subsection{Trust Opinion from Trust Sources metric}
 \label{sec:dataset-trust:formal:evidence}
-Each lifecycle-stage proposition is supported by a set of trust sources. A trust source corresponds to a diagnostic signal, metric, or assessment that provides evidence for or against reliability at a given stage. Trust sources may be quantitative or qualitative, deterministic or probabilistic, and may not be uniformly available across datasets.
-
-Trust-source metric values $m$ are first mapped into normalized quality scores
+Each lifecycle-stage proposition is supported by a set of trust sources. Trust-source metric values $m$ are first mapped into normalized quality scores
 \[
 q_m \in [0,1],
 \]
-where values close to one indicate strong support for reliability and values close to zero indicate evidence against reliability. This normalization ensures comparability across heterogeneous metrics.
+where values close to one indicate strong support for the proposition and values close to zero indicate evidence against it. This normalization ensures comparability across heterogeneous metrics.
 
 For metrics where lower values indicate better quality (e.g., error rates), we apply
 \begin{equation}
 q_m = \max\!\left(0,\, 1 - \frac{m}{\tau_m}\right),
 \label{eq:dataset-trust:q-low}
 \end{equation}
-where $\tau_m > 0$ is a domain-specific tolerance threshold. The formula is a linear ramp: $q_m = 1$ when the observed value is zero (no error), $q_m = 0$ when $m$ reaches the tolerance $\tau_m$, and the score decreases linearly between these two endpoints. Observed values beyond $\tau_m$ are clamped at zero rather than producing negative quality, since further degradation no longer informs the opinion in any useful way. The choice of $\tau_m$ is therefore the operational definition of \emph{``what bad value is too bad''} for this particular metric.
+where $\tau_m > 0$ is a domain-specific tolerance threshold. The formula is a linear ramp: $q_m = 1$ when the observed value is zero (no error), $q_m = 0$ when $m$ reaches the tolerance $\tau_m$, and the score decreases linearly between these two endpoints. Values beyond $\tau_m$ are clamped at zero rather than producing negative quality, since further degradation no longer informs the opinion in any useful way. The choice of $\tau_m$ is therefore the operational definition of \emph{``what bad value is too bad''} for this particular metric. 
+Note that a two-threshold form could be applied. However, since such metrics are non-negative by definition, zero is always the ideal value, which removes the need for an explicit lower bound.
 
 For metrics where higher values indicate better quality, we apply
 \begin{equation}
@@ -427,9 +381,9 @@ q_m = \max\!\left(0,\, \min\!\left(1,\,
         \frac{m - A_m}{L_m - A_m}\right)\right),
 \label{eq:dataset-trust:q-high}
 \end{equation}
-where $A_m$ and $L_m$ denote unacceptable and acceptable bounds, respectively. The interpretation mirrors the previous case but with two thresholds rather than one: at $m = A_m$, the metric is unacceptable and contributes no positive support ($q_m = 0$); at $m = L_m$, the metric reaches the acceptable level and contributes full positive support ($q_m = 1$); between $A_m$ and $L_m$, the score ramps linearly, so partial achievement yields partial support. Values below $A_m$ or above $L_m$ are clamped to the corresponding endpoint. The two-threshold form is needed because, for higher-is-better metrics, the ``good'' region has both a floor (below which there is no support at all) and a saturation point (above which additional improvement does not add support).
+where $A_m$ and $L_m$ denote unacceptable and ideal bounds, respectively. The interpretation mirrors the previous case but with two thresholds rather than one: at $m = A_m$, the metric is unacceptable and contributes no positive support ($q_m = 0$); at $m = L_m$, the metric reaches the ideal level and contributes full positive support ($q_m = 1$); between $A_m$ and $L_m$, the score ramps linearly, so partial achievement yields partial support. Values below $A_m$ or above $L_m$ are clamped to the corresponding endpoint. The two-threshold form is needed because, for higher-is-better metrics, the ``good'' region has both a floor (below which there is no support at all) and a saturation point (above which additional improvement does not add support).
 
-\marginpar{From Evidence to Subjective Opinions}
+% \marginpar{From Evidence to Subjective Opinions}
 \label{sec:dataset-trust:formal:quantification}
 
 To derive trust opinions values $(t, d, u)$, normalized metric scores are converted into positive and negative evidence counts:
@@ -437,10 +391,10 @@ To derive trust opinions values $(t, d, u)$, normalized metric scores are conver
 r_m = K_m \, q_m, \qquad s_m = K_m \, (1 - q_m),
 \label{eq:dataset-trust:evidence-counts}
 \end{equation}
-where $K_m$ is an evidence-strength parameter that fixes the total amount of evidence the metric is assumed to provide, $r_m + s_m = K_m$. Larger values of $K_m$ correspond to trust sources the analyst takes more seriously; smaller values correspond to weaker or less authoritative sources. Under \ac{BPQ} with prior weight $W$, the residual uncertainty contributed by this single metric is $u = W / (W + K_m)$, so $K_m$ is also a parameter that controls the value of the uncertainty.
-In a multi-metric assessment within a stage, the per-metric trust opinions are aggregated to obtain the stage-level opinion. 
+where $K_m$ is an evidence-strength parameter that fixes the total amount of evidence the metric is assumed to provide, $r_m + s_m = K_m$. Larger values of $K_m$ correspond to trust sources the analyst takes more seriously; smaller values correspond to weaker or less authoritative sources. Under \ac{BPQ} with prior weight $W$, the residual uncertainty contributed by this single metric is $u = W / (W + K_m)$, so $K_m$ is also a parameter that controls the value of the uncertainty. Finally, the per-metric trust opinions are aggregated to obtain the stage-level opinion. 
 
-\subsection{Stage quantification on COMPAS}
+\subsection{Stage quantification on COMPAS\protect\footnote{The raw metric values reported in this section are computed from the COMPAS dataset using the implementation available at \url{https://github.com/Ouatt-Isma/-Trustworthiness-of-AI-Training-Dataset}. This section focuses on the mapping from raw values to trust opinions; the metric definitions and computation details are documented in the 
+repository.}}
 
  \paragraph{Sampling stage.}
 The sampling-stage proposition is \emph{``the sampling stage of the \ac{COMPAS} dataset is reliable.''} Five trust sources contribute evidence: distribution gap (DG), minority coverage rate (MCR), long-tail coverage index (LTCI), data freshness index (DFI), and missing-at-source audit (MSA). We walk through this stage in detail to illustrate the full pipeline; the other three stages are reported in \cref{tab:dataset-trust:compas} and discussed below.
@@ -452,7 +406,7 @@ The observed metric values are
 \text{LTCI} = 0.657,\quad \text{DFI} = 0.100,\quad
 \text{MSA} = 0.000,
 \]
-where DFI is computed using the dataset's own most recent record as the reference \emph{``now.''} In practice, freshness should be measured relative to the time at which the dataset is consumed rather than the latest record it contains; the present convention is conservative for illustration purposes only. We use the following thresholds:
+where DFI is computed using the dataset's own most recent record as the reference \emph{``now.''} In practice, freshness should be measured relative to the time at which the dataset is consumed rather than the latest record it contains; the present convention is conservative for illustration purposes only. We use the following thresholds\footnote{The thresholds are set depending on the domain; for instance, $\tau_{\text{DG}} = 0.30$ reflects a tolerance of at most 30\% distributional gap before the sampling is considered unreliable, and $A_{\text{MCR}} = 0.50$ encodes the requirement that minority groups represent at least half the majority rate. In practice these values should be elicited from domain experts or derived from regulatory requirements.}:
 \[
 \tau_{\text{DG}} = 0.30,\quad
 A_{\text{MCR}}  = 0.50,\ L_{\text{MCR}}  = 1.00,\quad
@@ -462,7 +416,9 @@ A_{\text{LTCI}} = 0.30,\ L_{\text{LTCI}} = 1.00,
 A_{\text{DFI}}  = 0.00,\ L_{\text{DFI}}  = 1.00,\quad
 \tau_{\text{MSA}} = 0.10.
 \]
-Applying \cref{eq:dataset-trust:q-low}--\cref{eq:dataset-trust:q-high} yields quality scores
+
+
+Applying \cref{eq:dataset-trust:q-low}--\cref{eq:dataset-trust:q-high} yields the following normalized quality scores:
 \[
 q_{\text{DG}}   = 0.000,\quad
 q_{\text{MCR}}  = 1.000,\quad
@@ -488,20 +444,20 @@ $r_m = 2 q_m$ and $s_m = 2(1 - q_m)$ give
 We apply \ac{BPQ} for each metric with prior
 weight~$W=2$, \cref{eq:baseline_quant} yields
 
-\begin{aligned}
+\begin{align}
  \omega_{\text{DG}}   &= (0, 0.5, 0.5), \quad&
-  \omega__{\text{MCR}}  &= (0.5, 0, 0.5),\\
-\omega__{\text{LTCI}} &= (0.255, 0.245, 0.5), \quad&
-  \omega__{\text{DFI}}  &= (0.05, 0.45, 0.5), \\
-\omega__{\text{MSA}}  &= (0.5, 0, 0.5),
-\end{aligned}
-\]
+  \omega_{\text{MCR}}  &= (0.5, 0, 0.5),\\
+\omega_{\text{LTCI}} &= (0.255, 0.245, 0.5), \quad&
+  \omega_{\text{DFI}}  &= (0.05, 0.45, 0.5), \\
+\omega_{\text{MSA}}  &= (0.5, 0, 0.5),
+\end{align}
+
 Fusing all using cumulative fusion gives: 
 \[
 \omega_{\text{sampling}} = (0.435, 0.398, 0.167)
 \]
 \subparagraph{Interpretation.}
-The opinion $(0.435,\ 0.398,\ 0.167)$ has trust mass and distrust mass close to each other and a relatively low residual uncertainty: the evidence base is large enough for the opinion to commit, but the evidence itself is genuinely mixed. Three trust sources contribute positive evidence: the minority coverage rate ($q_{\text{MCR}} = 1.00$), the long-tail coverage index ($q_{\text{LTCI}} = 0.51$), and the missing-at-source audit ($q_{\text{MSA}} = 1.00$). Two contribute negative evidence: the distribution-gap metric ($q_{\text{DG}} = 0.00$) and the data freshness index ($q_{\text{DFI}} = 0.10$). Rather than collapsing these into a single ``the sampling is good'' or ``the sampling is bad'' verdict, the framework reports both: the dataset has acceptable group coverage and structural completeness, but exhibits a distribution gap with respect to the target population and is stale. The two signals are surfaced separately rather than averaged away.
+The opinion $(0.435,\ 0.398,\ 0.167)$ has trust mass and distrust mass close to each other and a relatively low residual uncertainty: the evidence base is large enough for the opinion to commit, but the evidence itself is genuinely mixed. Two trust sources contribute positive evidence: the minority coverage rate ($q_{\text{MCR}} = 1.00$) and the missing-at-source audit ($q_{\text{MSA}} = 1.00$). Two contribute negative evidence: the distribution-gap metric ($q_{\text{DG}} = 0.00$) and the data freshness index ($q_{\text{DFI}} = 0.10$). The long-tail coverage index ($q_{\text{LTCI}} = 0.51$) is mixed. Rather than collapsing these into a single ``the sampling is good'' or ``the sampling is bad'' verdict, the framework reports both: the dataset has acceptable group coverage and structural completeness, but exhibits a distribution gap with respect to the target population and is stale. The two signals are surfaced separately rather than averaged away.
 
 
 All the other stages use the same principle and the hyperparameters values are recorded in \cref{tab:dataset-trust:compas}.
@@ -519,7 +475,7 @@ All the other stages use the same principle and the hyperparameters values are r
       & DG                                  & 0.432  & 0.000 & lower\_is\_better \{$\tau{=}0.3$\} \\
       & MCR(African-American)           & 3.597 & 1.000 & higher\_is\_better \{$A{=}0.5$, $L{=}1.0$\} \\
       & LTCI(c\_charge\_desc)               & 0.657  & 0.510 & higher\_is\_better \{$A{=}0.3$, $L{=}1.0$\}\\
-      & DFI(c\_jail\_in)                    & 0.100 & 0.000 & higher\_is\_better \{$A{=}0$, $L{=}1.0$\} \\
+      & DFI(c\_jail\_in)                    & 0.100 & 0.100 & higher\_is\_better \{$A{=}0$, $L{=}1.0$\} \\
       & MSA(essential\_cols)                & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.1$\} \\
     \cmidrule(lr){2-5}
       & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.435,\ 0.398,\ 0.167)$\quad \{$W{=}2$\}} \\
@@ -540,7 +496,7 @@ All the other stages use the same principle and the hyperparameters values are r
     \midrule
     \multirow{2}{*}{Processing}
       & DIOR                                & 0.000  & 1.000 & lower\_is\_better \{$\tau{=}0.1$\}  \\
-      & FLCA                                 & 0.291   & 0.516 & higher\_is\_better \{$\tau{=}0.6$\}  \\
+      & FLCA                                 & 0.291   & 0.516 & lower\_is\_better \{$\tau{=}0.6$\}  \\
     \cmidrule(lr){2-5}
       & \multicolumn{4}{l}{BPQ stage opinion: $(t, d, u) = (0.505,\ 0.161,\ 0.333)$\quad \{$W{=}2$\}} \\
     \bottomrule
@@ -565,18 +521,19 @@ The four stage-level opinions are combined into a dataset-level reliability opin
 = \omega_{\text{sampling}} \cdot
   \omega_{\text{collection}} \cdot
   \omega_{\text{annotation}} \cdot
-  \omega_{\text{processing}}.
+  \omega_{\text{processing}} = (0.12, 0.71, 0.17).
 \]
-Conjunction is the appropriate operator here because reliability requires every stage to be reliable: a strong assessment at one stage cannot compensate for a weak assessment at another. The aggregated opinion preserves three pieces of information that a scalar quality score would have collapsed: \emph{which} stage carries the strongest negative signal (the collection stage, where privacy exposure introduces substantial distrust mass), \emph{which} stage merely lacks evidence (the annotation stage, with $u_{\text{annotation}} = 0.50$ driven by a single trust source), and how the four stages compare quantitatively. An auditor reading the rollup together with \cref{tab:dataset-trust:compas} can therefore distinguish two qualitatively different actions: collecting more representative or privacy-aware data (to attack the collection-stage and sampling-stage distrusts mass) versus collecting additional annotation-stage diagnostics (to reduce the annotation-stage uncertainty).
+Conjunction is the appropriate operator here because dataset reliability requires every lifecycle stage to be reliable independently: a dataset with reliable annotation but compromised sampling is not reliable overall.  
+The result $(0.12,0.71,0.17)$ is dominated by distrust mass, meaning that the evidence accumulated across all four stages points more toward unreliability than toward reliability. This is a direct consequence of conjunction: a single stage with high distrust mass is sufficient to pull the combined opinion toward distrust, regardless of how well the other stages perform. Here the collection and sampling stages, both carrying substantial distrust mass, are the primary drivers of the low overall trust. The residual uncertainty $u=0.17$ reflects the limited diagnostic coverage at the annotation stage. The table showing the four stage-level opinions preserves three pieces of information that a scalar quality score would have collapsed: \emph{which} stage carries the strongest negative signal (the collection stage, where privacy exposure introduces substantial distrust mass), \emph{which} stage merely lacks evidence (the annotation stage, with $u_{\text{annotation}} = 0.50$ driven by a single trust source), and how the four stages compare quantitatively. An auditor reading the rollup together with \cref{tab:dataset-trust:compas} can therefore distinguish two qualitatively different actions: collecting more representative or privacy-aware data (to attack the collection-stage and sampling-stage distrust mass) versus collecting additional annotation-stage diagnostics (to reduce the annotation-stage uncertainty).
 
 
-\section{Sampling Stage, Dataset Level: Balancing Bias on \acs{GTSRB}}
+\section{Sampling Stage, Dataset Level: Representativeness on \acs{GTSRB}}
 \label{sec:dataset-trust:applications:gtsrb}
 
 \begin{mdframed}[backgroundcolor=blue!4, linewidth=0pt]
 \textbf{Position in the design space.}
 
-$\propP$ = representation bias (class balance);
+$\propP$ = representativeness (Class balance);
 
 $\propS$ = sampling;\quad $\propG$ = dataset;
 % $\propQ \in \{\textsc{\ac{BPQ}}, \textsc{\ac{CUQ}}\}$.
@@ -586,7 +543,7 @@ $\propS$ = sampling;\quad $\propG$ = dataset;
 The second application instantiates the framework on the \ac{GTSRB} to assess freedom from class-imbalance bias. Class balance is a \emph{dataset-level} property: it is meaningful only when the entire class distribution is observed. The application illustrates two complementary trust sources for the same proposition, one suited to centralized settings and one suited to federated settings, and exercises two of the three quantification schemes of \cref{sec:dataset-trust:formal:quantification}.
 
 \paragraph{Trust proposition.}
-\emph{``The dataset $\dataset$ is not biased with respect to class balance.''} We treat this as a simple trust proposition: the property is intrinsically dataset-level and is not decomposed further along the granularity axis. The expression tree is therefore a single leaf, and the application focuses on how the leaf is quantified.
+\emph{``The dataset $\dataset$ is not biased with respect to class balance.''} We treat this as a simple trust proposition at the dataset-level. The expression tree is therefore a single leaf (\ac{ATO}), and the application focuses on how the leaf is quantified.
 
 % \subsubsection{Class probabilities distribution}
 To assess balance, we describe the dataset by its \emph{class probabilities distribution}. For a classification task with $K$ classes and $N$ data points, the empirical probability of class $k$ is
@@ -602,12 +559,12 @@ expected value $1/K = 1/6 \approx 0.167$.
 
 \begin{figure}[t]
     \centering
-    \begin{subfigure}{0.4\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.95\linewidth]{img/data/imbalanced.pdf}
         \caption{Imbalanced dataset.}
     \end{subfigure}
-    \begin{subfigure}{0.4\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.95\linewidth]{img/data/balanced.pdf}
         \caption{Balanced dataset.}
@@ -626,7 +583,7 @@ P(\mathrm{Class}_k) \in
   \left[\frac{1}{K} - \eta_1,\ \frac{1}{K} + \eta_2\right].
 \label{eq:gtsrb:tolerance-zone}
 \end{equation}
-The parameters $\eta_1, \eta_2$ control the width of the tolerance zone and play the same role as the tolerance $\tau_m$ of \cref{eq:dataset-trust:q-low}. We set $\eta = \eta_1 = \eta_2$ for the experiments reported below; the impact of $\eta$ is studied explicitly later in the section.
+The parameters $\eta_1, \eta_2$ control the width of the tolerance zone and play the same role as the tolerance $\tau_m$ in \cref{eq:dataset-trust:q-low}: they define the boundary beyond which a class probability is considered unacceptably imbalanced. We set $\eta = \eta_1 = \eta_2$ for the experiments reported below; the impact of $\eta$ is studied explicitly later in the section.
 
 Positive evidence is the area under the density curve $f$ of the class-probabilities distribution that falls within the tolerance zone, and negative evidence is the complementary area:
 \begin{equation}
@@ -657,7 +614,7 @@ Once $U$ is fixed by \cref{eq:gtsrb:uncertainty}, trust mass and distrust mass f
 
 \subsection{Trust source --- Method 2: entropy-based quantification}
 \label{sec:dataset-trust:applications:gtsrb:method2}
-In federated or collaborative settings, no single party observes the global class-probabilities distribution. Each contributing node (e.g., each \ac{OEM} in a vehicular collaborative dataset) only sees its own sub-dataset. Method 1 can still be applied locally on each sub-dataset to produce a per-sub-dataset opinion, and the per-sub-dataset opinions can then be fused with an \ac{SL} aggregation operator. However, this strategy reduces each sub-dataset to a full opinion $(t, d, u)$ that must be communicated to the aggregator, and an opinion derived from a small or biased local sample may itself be unreliable in a way the aggregator cannot detect. Method 2 takes a lighter path: each node summarizes its sub-dataset with a single scalar, and the aggregation rule forms the opinion at the global level.
+In federated or collaborative settings, no single party observes the global class-probabilities distribution. Each contributing node (e.g., each \ac{OEM} in a vehicular collaborative dataset) only sees its own sub-dataset. Method 1 can be applied with each contributor sharing its class counts. However, this might be undesirable in privacy-sensitive settings. Method 2 takes another path: each node summarizes its sub-dataset with a single scalar, which contributes either to a positive or negative evidence.
 
 \paragraph{Entropy as a balance proxy.}
 Each contributor $i$ computes the entropy of its local
@@ -666,7 +623,7 @@ class-probabilities distribution $P^{(i)}$:
 \mathcal{H}(P^{(i)})
 = -\sum_{k=1}^{K} p^{(i)}_k \log p^{(i)}_k.
 \end{equation}
-Entropy is maximal when the local distribution is uniform and minimal when one class dominates, so it serves as a privacy-friendly summary of local balance: the contributor only needs to share a single scalar rather than the full per-class counts.
+Entropy is maximal when the local distribution is uniform and minimal when one class dominates.
 
 % \paragraph{Threshold calculation.}
 Each local entropy is compared against a threshold $T$ that defines the \emph{edge of the acceptable balance}. We construct an \emph{edge-acceptable} distribution $P_E$ by setting each class probability to $1/K \pm \eta$ (with one class set to exactly $1/K$ when $K$ is odd, so that $P_E$ sums to one), and define
@@ -683,18 +640,18 @@ A natural extension treats the distance between each local entropy and $T$ as an
 \subsection{Experimental evaluation}
 \label{sec:dataset-trust:applications:gtsrb:eval}
 
-We evaluate both trust sources on the German Traffic Sign Recognition Benchmark~\cite{GTSRB}, which contains over 50,000 images across $K = 43$ traffic-sign classes. Images are normalized to a $32 \times 32$ resolution. The downstream model is a \ac{CNN} with three convolutional blocks (64/128/256 filters, $3 \times 3$ kernels) each followed by batch normalization, $2 \times 2$ max-pooling, and dropout (rate $0.25$); two fully connected layers (256 and 128 ReLU units); a final dropout of rate $0.5$; and a softmax output of size 43. Training uses Adam, sparse categorical cross-entropy, batch size 36, and 5 epochs. The expected class probability is $1/K \approx 0.02326$ and the tolerance is fixed at $\eta = 0.02$ for both methods, except in the dedicated $\eta$-stability study below.
+We evaluate both trust sources on the German Traffic Sign Recognition Benchmark~\cite{GTSRB}, which contains over 50,000 images across $K = 43$ traffic-sign classes. The trained model is a \ac{CNN} with three convolutional blocks (64/128/256 filters, $3 \times 3$ kernels) each followed by batch normalization, $2 \times 2$ max-pooling, and dropout (rate $0.25$); two fully connected layers (256 and 128 ReLU units); a final dropout of rate $0.5$; and a softmax output of size 43. Training uses Adam, sparse categorical cross-entropy, batch size 36, and 5 epochs. The expected class probability is $1/K \approx 0.02326$ and the tolerance is fixed at $\eta = 0.02$ for both methods.
 
 We define two scenarios:
 \begin{itemize}
-  \item \textbf{Scenario 1 (centralized).} A single dataset is assessed, in two variants: the original \ac{GTSRB} and an augmented version obtained by oversampling minority classes with SMOTE~\cite{DBLP:journals/corr/abs-1106-1813}. Method 1 is the natural choice in this setting since the global class distribution is fully observable.
-  \item \textbf{Scenario 2 (collaborative).} The dataset is partitioned across $M$ \acp{OEM}, in two variants: balanced sub-datasets, and sub-datasets where a configurable number of contributors are intentionally imbalanced (warning signs removed). Method 2 is the natural choice in this setting since no party observes the global distribution.
+  \item \textbf{Scenario 1 (centralized).} A single dataset is assessed, in two variants: the original \ac{GTSRB} and an augmented version obtained by oversampling minority classes with SMOTE~\cite{DBLP:journals/corr/abs-1106-1813}. Method 1 is the only choice in this setting since the global class distribution is fully observable.
+  \item \textbf{Scenario 2 (collaborative).} The dataset is partitioned across $M$ \acp{OEM}, in two variants: balanced sub-datasets, and sub-datasets where a configurable number of contributors are intentionally imbalanced (warning signs removed). Both methods are evaluated: Method~1 is applied as follows: each participant shares the distribution of each dataset to an aggregator which will compute the final trust opinion, and Method~2 is applied to the per-contributor summaries without requiring access to the global distribution.
 \end{itemize}
 
 \paragraph{Scenario~1: original vs.\ augmented dataset.}
 \Cref{fig:gtsrb:distscenario1} compares the class distribution and the class-probabilities distribution of the original and augmented datasets. SMOTE flattens the class distribution and concentrates the probability density around $1/K$. The downstream effect on the model is modest in aggregate accuracy ($95.17\%$ vs.\ $95.10\%$) but visible in the per-group accuracy gap, which drops from $5.24\%$ to $3.88\%$ (\cref{tab:gtsrb:acc1}).
 
-The Method-1 trust opinions reflect the same pattern but make it quantitative: the original dataset is assessed as $(t, d, u) = (0.50,\ 0.11,\ 0.39)$ and the augmented dataset as $(0.64,\ 0,\ 0.36)$. Trust mass rises by $0.14$, distrust mass drops to zero, and the residual uncertainty stays roughly constant because the dataset size is unchanged and the \ac{CUQ} uncertainty (\cref{eq:gtsrb:uncertainty}) depends only on $N$.
+The Method-1 trust opinions reflect the same pattern but make it quantitative: the original dataset is assessed as $(t, d, u) = (0.50,\ 0.11,\ 0.39)$ and the augmented dataset as $(0.64,\ 0,\ 0.36)$. Trust mass rises by $0.14$, distrust mass drops to zero, and the residual uncertainty stays roughly constant because the dataset size is only marginally changed and the \ac{CUQ} uncertainty (\cref{eq:gtsrb:uncertainty}) depends only on $N$.
 
 \begin{figure}[t]
     \centering
@@ -792,7 +749,7 @@ When the same experiments are repeated with $M = 10$ contributors, Method~1 show
 \end{figure}
 
 \paragraph{Sensitivity to the tolerance $\eta$.}
-The tolerance $\eta$ controls how strictly Method~1 interprets balance. Too small a value penalises minor imbalances; too large a value lets substantial imbalances pass undetected. \Cref{fig:gtsrb:eta_effect} shows trust mass, distrust mass, and uncertainty as functions of $\eta$ on the original \ac{GTSRB}. Trust mass rises and stabilizes as $\eta$ grows, distrust mass drops correspondingly, and uncertainty stays constant as expected from \ac{CUQ}. The shaded region ($0.0185 \leq \eta \leq 0.0235$) marks a \emph{stability zone} in which the trust opinion is insensitive to small changes in $\eta$. We pick $\eta = 0.02$ for all reported experiments because it lies in the middle of this zone.
+The tolerance $\eta$ controls how strictly Method~1 interprets balance. Too small a value penalizes minor imbalances; too large a value lets substantial imbalances pass undetected. \Cref{fig:gtsrb:eta_effect} shows trust mass, distrust mass, and uncertainty as functions of $\eta$ on the original \ac{GTSRB}. Trust mass rises and stabilizes as $\eta$ grows, distrust mass drops correspondingly, and uncertainty stays constant as expected from \ac{CUQ}. The shaded region ($0.0185 \leq \eta \leq 0.0235$) marks a \emph{stability zone} in which the trust opinion is insensitive to small changes in $\eta$. We pick $\eta = 0.02$ for all reported experiments because it lies in the middle of this zone.
 
 \begin{figure}[t]
   \centering
@@ -808,46 +765,39 @@ The tolerance $\eta$ controls how strictly Method~1 interprets balance. Too smal
 
 \subsection{Summary}
 
-The two trust sources answer the same trust proposition by different
-routes and exhibit complementary strengths.
 
-% \marginpar{Centralized vs.\ federated regime.}
-Method~1 requires the global class-probabilities distribution and is the natural choice when the dataset is centralized and fully observable. Method~2 only requires per-contributor entropy and is therefore the natural choice in collaborative or federated settings, where no party observes the global distribution and class counts cannot be shared.
+The two trust sources answer the same trust proposition by different
+routes and exhibit complementary strengths. Method~1 requires the global class-probabilities distribution and is the natural choice when the dataset is centralized and fully observable. Method~2 only requires per-contributor entropy and is therefore the natural choice in collaborative or federated settings, where no party observes the global distribution and class counts cannot be shared. One limitation of Method~2 is worth noting: two locally unbalanced sub-datasets can combine into a globally balanced dataset, yet each contributor would report negative evidence, pulling the trust opinion toward distrust even when the overall distribution is acceptable. Method~1, operating on the global distribution, is immune to this artifact. The two methods should therefore be seen as complementary rather than interchangeable, and the choice between them depends on whether the global distribution is observable.
 
 % \marginpar{Behaviour of uncertainty.}
-The two methods illustrate two different choices of quantification scheme. Method~1 fixes the uncertainty externally via sample complexity, which is appropriate when the dataset size is the bottleneck on the assessment's confidence rather than the volume of evidence. Method~2 lets uncertainty shrink as more contributors provide evidence, which is appropriate when the relevant unit of evidence is one local assessment per contributor. The same proposition can therefore be assessed under \ac{CUQ} or \ac{BPQ} depending on whether ``more evidence'' means ``more data'' or ``more contributors''.
+The two methods illustrate two different choices of quantification scheme. Method~1 fixes the uncertainty externally via sample complexity, which is appropriate when the dataset size is the bottleneck on the assessment's confidence. Method~2 lets uncertainty shrink as more contributors provide evidence, which is appropriate when the relevant unit of evidence is one local assessment per contributor. The same proposition can therefore be assessed under \ac{CUQ} or \ac{BPQ} depending on whether ``more evidence'' means ``more data'' or ``more contributors''. Method~1 already avoids access to individual data points by operating on class counts. Method~2 strengthens this property by sharing only a single scalar (local entropy) per contributor, which makes it suitable for privacy-sensitive collaborative settings.
 
-% \marginpar{Privacy.}
-Method~1 already avoids access to individual data points by operating on class counts. Method~2 strengthens this property by sharing only a single scalar (local entropy) per contributor, which makes it suitable for privacy-sensitive collaborative settings.
+Class imbalance is not always a defect: in some applications it faithfully reflects the deployment-time class frequencies, and forcing balance would degrade rather than improve the model. Trust opinions should therefore be interpreted in light of the deployment context. A natural extension of Method~1 is to replace the uniform expected probability $1/K$ with a deployment-derived target distribution, preserving the rest of the machinery. This application illustrates that the same trust proposition admits multiple ways to be quantified depending on what is observable in the deployment regime.
 
-% \marginpar{Imbalance as a contextual property.}
-Class imbalance is not always a defect: in some applications it faithfully reflects the deployment-time class frequencies, and forcing balance would degrade rather than improve the model. Trust opinions should therefore be interpreted in light of the deployment context. A natural extension of Method~1 is to replace the uniform expected probability $1/K$ with a deployment-derived target distribution, preserving the rest of the machinery.
 
-% \paragraph{Position in the framework.}
-This application populates the sampling row of \cref{tab:dataset-trust:catalogue} for the dataset-level granularity. It exercises two of the three quantification schemes of \cref{sec:dataset-trust:formal:quantification} (\ac{CUQ} for Method~1, \ac{BPQ} for Method~2 with a natural \ac{EWQ} extension), and it illustrates that the same trust proposition admits multiple trust sources depending on what is observable in the deployment regime. The choice between Method~1 and Method~2 is not a methodological disagreement but a selection of the appropriate cell in the design space of \cref{sec:dataset-trust:framework:design-space}.
 
-\section{Annotation Stage, Entry Level: Labeling Bias on CIFAR-10H}
+\section{Annotation Stage, Entry Level: Labeling accuracy on CIFAR-10H}
 \label{sec:dataset-trust:applications:cifar10h}
 
 \begin{mdframed}[backgroundcolor=blue!4, linewidth=0pt]
 \textbf{Position in the design space.}
 
-$\propP$ = labeling bias;
+$\propP$ = accuracy;
 $\propS$ = annotation;\quad
 $\propG$ = entry;
 % $\propQ \in \{\textsc{\ac{BPQ}}\}$.
 \textbf{Reference:}~\cite{trust-aidatatrust}.
 \end{mdframed}
 
-The third application addresses labeling bias on CIFAR-10H, in which each CIFAR-10 test image is annotated by 50 crowdworkers. Unlike sampling bias, labeling bias is intrinsically \emph{per-entry}: for each image final label we have each a trust proposition that can be assessed the annotations as evidence. The application illustrates how the framework operates at the entry granularity and how the same machinery extends to assessing the reliability of the annotators themselves, which connects directly to the trust-discount operator of \cref{chap:tnasl}.
+The third application addresses labeling accuracy on CIFAR-10H, in which each CIFAR-10 test image is annotated by 50 crowdworkers. Unlike representativeness, labeling accuracy is \emph{per-entry}:  each label decision for each image is treated as a separate trust proposition, and the annotations provided by crowdworkers serve as the evidence for assessing that proposition. This application illustrates how the framework operates at the entry granularity and how the same machinery extends to assessing the reliability of the annotators themselves, which connects directly to the trust-discount operator.
 
 \paragraph{Trust proposition.}
-For each image $x$, the proposition is \emph{``the decision label $y^\prime$ for $x$ is accurate.''} The decision label is fixed in advance, typically by majority vote. Each instance is assessed independently, producing a per-entry opinion $\omega_{y^\prime} = (b_{y^\prime}, d_{y^\prime}, u_{y^\prime})$. The set of per-entry opinions can be aggregated into a dataset-level summary using the cross-granularity rule of \cref{sec:dataset-trust:formal:granularity}.
+For each image $x$, the proposition is \emph{``the decision label $y^\prime$ for $x$ is accurate.''} The decision label is fixed in advance, typically by majority vote. Each instance is assessed independently, producing a per-entry opinion $\omega_{y^\prime} = (b_{y^\prime}, d_{y^\prime}, u_{y^\prime})$. The set of per-entry opinions can be aggregated into a dataset-level opinion using the cross-granularity rule of \cref{sec:dataset-trust:formal:granularity}.
 
 \subsection{Trust source: divergence to the decision label}
 \label{sec:dataset-trust:applications:cifar10h:source}
 
-The trust source operates at the level of individual annotators. For each annotator $j$ of instance $x$, we compute a divergence score $d_j(x)$ that measures how far the annotator's response is from the decision label $y^\prime$. For categorical annotations, $d_j(x) = 0$ when the annotator agrees with $y^\prime$ and $d_j(x) = 1$ otherwise; for probabilistic annotations, \acs{KL} divergence or cross-entropy between the annotator's distribution and $y^\prime$ is a natural choice; for free-text annotations, semantic distance to a reference (e.g., cosine similarity between embeddings) plays the same role.
+The trust source operates at the level of individual annotators. For each annotator $j$ of instance $x$, we compute a divergence score $d_j(x)$ that measures how far the annotator's response is from the decision label $y^\prime$. For categorical annotations, $d_j(x) = 0$ when the annotator agrees with $y^\prime$ and $d_j(x) = 1$ otherwise; for probabilistic annotations, \acs{KL} divergence or cross-entropy between the annotator's distribution and $y^\prime$ is a natural choice; for free-text annotations, semantic distance (e.g., cosine similarity between embeddings) plays the same role.
 
 A divergence threshold $\delta$ separates evidence supporting the proposition from evidence against it:
 \begin{equation}
@@ -859,11 +809,9 @@ s_x = \big|\{j : d_j(x) > \delta \}\big|.
 
 The threshold $\delta$ can be set in several ways depending on the annotation modality and on what reference information is available.
 
-\emph{Empirically}, $\delta$ can be calibrated on a small subset of items for which the correct label is independently known (e.g., expert-adjudicated items, items with unanimous annotator agreement, or items drawn from a curated gold-standard set); on these items the expected divergence is small, and $\delta$ is set to an upper percentile of the observed divergences so that genuine agreement is not penalized.
+\noindent \emph{By edge-case construction}, $\delta$ is set to the divergence that an \emph{edge-acceptable} annotation would produce relative to the decision label: that is, an annotation that is the most distant response still considered acceptable for the given label, by analogy with the edge-acceptable distribution used to set the threshold in Method 2 of the \ac{GTSRB} application (\cref{sec:dataset-trust:applications:gtsrb:method2}).
 
-\emph{By edge-case construction}, $\delta$ is set to the divergence that an \emph{edge-acceptable} annotation would produce relative to the decision label: that is, an annotation that is the most distant response still considered acceptable for the given label, by analogy with the edge-acceptable distribution used to set the threshold in Method 2 of the \ac{GTSRB} application (\cref{sec:dataset-trust:applications:gtsrb:method2}).
-
-\emph{By domain policy}, $\delta$ is fixed by external requirements, e.g., $\delta = 0$ for categorical labels (strict agreement) and $\delta = 0.1$ for soft labels.
+\noindent \emph{By domain policy}, $\delta$ is fixed by external requirements, e.g., $\delta = 0$ for categorical labels (strict agreement) and $\delta = 0.1$ for soft labels.
 
 \cref{alg:cifar10h:opinions} summarizes the construction of per-entry opinions.
 
@@ -887,15 +835,11 @@ threshold $\delta$, prior weight $W$
 \end{algorithm}
 
 \paragraph{Quantification schemes: \ac{BPQ} and \ac{EWQ}.}
-The trust source produces evidence counts $(r_x, s_x)$ that grow with the number of annotators $n = r_x + s_x$ for instance $x$. This makes two quantification schemes natural. 
-
-\ac{BPQ}, with prior weight $W$, gives uncertainty $u_x = W / (W + n)$: residual uncertainty decreases as more annotators contribute, which is the desired behaviour when annotation volume varies across instances. 
-
-\ac{EWQ} additionally assumes that each annotation comes with its own uncertainty weight. It is relevant when annotators self-report a confidence score alongside their label, or when external metadata provides a per-annotation reliability proxy (e.g., annotation duration, annotator agreement history). Where \ac{BPQ} lets the \emph{amount} of evidence drive uncertainty, \ac{EWQ} lets the \emph{quality} of each piece of evidence drive it.
+The trust source produces evidence counts $(r_x, s_x)$ that grow with the number of annotators $n = r_x + s_x$ for instance $x$. This makes two quantification schemes natural. \ac{BPQ}, with prior weight $W$, gives uncertainty $u_x = W / (W + n)$: residual uncertainty decreases as more annotators contribute, which is the desired behavior when annotation volume varies across instances. \ac{EWQ} additionally assumes that each annotation comes with its own uncertainty weight. It is relevant when annotators self-report a confidence score alongside their label, or when external metadata provides a per-annotation reliability proxy (e.g., annotation duration). Where \ac{BPQ} lets the \emph{amount} of evidence drive uncertainty, \ac{EWQ} lets the \emph{quality} of each piece of evidence drive it.
 
 
 \paragraph{Worked example.}
-Consider an instance $x$ annotated by $50$ crowdworkers, of whom $46$ agree with the decision label and $4$ disagree, with $\delta = 0$ and $W = 2$. \cref{eq:cifar10h:evidence} gives $r_x = 46$, $s_x = 4$, and \ac{BPQ} yields
+Consider an instance $x$ annotated by $50$ crowdworkers, of whom $46$ agree with the decision label and $4$ disagree, with $\delta = 0$ and $W = 2$. \cref{eq:cifar10h:evidence} gives $r_x = 46$, $s_x = 4$, and \ac{BPQ} gives:
 \begin{equation}
 b_x = \tfrac{46}{52} \approx 0.885,\quad
 d_x = \tfrac{4}{52} \approx 0.077,\quad
@@ -904,7 +848,7 @@ u_x = \tfrac{2}{52} \approx 0.038.
 The opinion captures three qualitatively different signals simultaneously: high trust mass reflecting strong agreement, residual distrust reflecting genuine disagreement among annotators, and low residual uncertainty reflecting that the evidence base is large.
 
 \paragraph{Annotator-level extension}
-The same machinery applies to a different entity: the annotators themselves instead of just the annotations. For annotator $j$, partition $j$'s responses into agreements and disagreements with the corresponding decision labels yields evidence counts $(r_j, s_j)$ supporting the proposition \emph{``annotator $j$ is reliable.''} Applying \ac{BPQ} to $(r_j, s_j)$ produces a per-annotator trust opinion $\omega_j$ that grades annotator quality on the same $(t, d, u)$ scale as the per-entry opinions. 
+The same machinery applies to a different entity: the annotators themselves instead of just the annotations. For annotator $j$, partition $j$'s responses into agreements and disagreements with the corresponding decision labels yields evidence counts $(r_j, s_j)$ supporting the proposition \emph{``annotator $j$ is reliable.''}. Applying \ac{BPQ} to $(r_j, s_j)$ produces a per-annotator trust opinion $\omega_j$ that grades annotator quality on the same $(t, d, u)$ scale as the per-entry opinions. 
 
 This construction implicitly assumes that more than half of the participants are honest: the decision label $y^\prime$ is taken as the reference against which each annotator is judged, so the resulting reliability opinion is only meaningful if the procedure that produced $y^\prime$ is itself reliable. If $y^\prime$ is set by majority vote, the assumption is that the majority of annotators on each item is correct on most items. In settings where these assumptions fail (e.g., adversarial annotators colluding to flip the majority on targeted items), $\omega_j$ would conflate genuine reliability with mere conformity to a corrupted reference.
 
@@ -913,14 +857,9 @@ This per-annotator opinion is the input expected by the trust-discount operator.
 \subsection{Experimental evaluation}
 \label{sec:dataset-trust:applications:cifar10h:eval}
 
-We evaluate the trust source on CIFAR-10H, which provides $50$ human annotations per image for the CIFAR-10 test set. The decision label $y^\prime$ for each image is set to the majority annotator response. The divergence threshold is $\delta = 0$ (strict agreement) and the prior weight is $W = 2$ for the \ac{BPQ} experiments. Inter-annotator disagreement on instance $x$ is measured as $1 - \tfrac{r_x}{r_x + s_x}$, i.e., one minus the majority proportion.
+We evaluate the trust source on CIFAR-10H, which provides around $50$ human annotations per image for the CIFAR-10 test set. The decision label $y^\prime$ for each image is set to the majority annotator response. The divergence threshold is $\delta = 0$ (strict agreement) and the prior weight is $W = 2$ for the \ac{BPQ} experiments. 
 
-\paragraph{Effect of annotation volume.}
-\Cref{fig:cifar10h:masses} compares the empirical distribution of $(b_x, d_x, u_x)$ on the full dataset (\(50\) annotations per image) against a subsampled regime where each instance is cropped to $10$ annotations via majority-preserving subsampling. Two effects are visible.
-
-First, the full dataset concentrates trust mass near $1$ and uncertainty near $0$: with $50$ annotators per image, $u_x = W / (W + 50) \approx 0.04$ regardless of the agreement ratio. This high apparent confidence is partly an artifact of evidence saturation rather than a genuine signal of label quality.
-
-Second, the cropped setting redistributes mass across the three components: trust mass spreads over a wider range, distrust mass becomes visible for items with annotator disagreement, and uncertainty rises mechanically because $u_x = W / (W + 10) \approx 0.17$. The opinions are now informative about the actual difficulty of each item, with controversial instances showing simultaneously low trust mass, high distrust, and elevated uncertainty.
+\Cref{fig:cifar10h:masses} compares the empirical distribution of $(b_x, d_x, u_x)$ on the full dataset (around \(50\) annotations per image) against a subsampled case where each instance is cropped to 10 annotations by removing 40 responses from the most voted label, so that the cropped set retains the minority annotations while reducing the dominant agreement signal. Two effects are visible. First, the full dataset concentrates trust mass near $1$ and uncertainty near $0$: with around $50$ annotators per image, $u_x = W / (W + 50) \approx 0.04$ regardless of the agreement ratio. This high apparent confidence is partly an artifact of evidence saturation rather than a genuine signal of label quality. Second, the cropped setting redistributes trust mass across the two components: distrust mass becomes visible for items with annotator disagreement and uncertainty rises mechanically because $u_x = W / (W + 10) \approx 0.17$. The opinions are now informative about the actual difficulty of each item, with controversial instances showing simultaneously low trust mass and high distrust.
 
 \begin{figure}[t]
     \centering
@@ -933,8 +872,7 @@ Second, the cropped setting redistributes mass across the three components: trus
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/data/CIFAR_10H_Cropped.pdf}
-        \caption{Cropped to $10$ annotators per item via
-          majority-preserving subsampling.}
+        \caption{Cropped to $10$ annotators per item via subsampling by removing majority-label responses.}
     \end{subfigure}
     \caption{Box plots of trust, distrust, and uncertainty masses on
       CIFAR-10H. The full dataset shows high trust mass and low
@@ -947,20 +885,14 @@ Second, the cropped setting redistributes mass across the three components: trus
 \subsection{Summary}
 \label{sec:dataset-trust:applications:cifar10h:discussion}
 
-\paragraph{Annotators as trust sources.}
-The annotator-level extension shows that trust sources are not external to the framework: they are themselves entities to which the same trust machinery applies. Per-annotator opinions $\omega_j$ can be used to filter unreliable contributors, to reweight their evidence, or to drive targeted retraining. They also feed directly into the trust-discount operator of \cref{chap:tnasl}, which makes the labeling-bias assessment a two-level instantiation of the general methodology: the proposition ``$y^\prime$ is correct'' is supported by referral evidence from annotators whose own reliability is itself an assessable proposition.
+% \paragraph{Annotators as trust sources.}
+% The annotator-level extension shows that trust sources are not external to the framework: they are themselves entities to which the same trust machinery applies. 
+Per-annotator opinions $\omega_j$ can be used to filter unreliable contributors, to reweight their evidence, or to drive targeted retraining. They also feed directly into the trust-discount operator, which makes the labeling-accuracy assessment a two-level instantiation of the general methodology: the proposition ``$y^\prime$ is correct'' is supported by referral evidence from annotators whose own reliability is itself an assessable proposition.
 
-\paragraph{Implications for responsible AI.}
-The per-entry opinions provide actionable signals that scalar agreement metrics do not. Items with high $u_x$ are candidates for re-annotation; items with high $d_x$ are candidates for adjudication; annotators with high $D_j$ are candidates for review or exclusion. These three diagnostics share a single source --- the divergence-based trust source of \cref{eq:cifar10h:evidence} --- and surface different quality issues by reading different components of the same opinion.
-
-\paragraph{Position in the framework.}
-This application populates the \textbf{annotation row} of \cref{tab:dataset-trust:catalogue} for the entry-level granularity. It exercises the \ac{BPQ} and discusses how the \ac{EWQ}) can be used \cref{sec:dataset-trust:formal:quantification}. It also illustrates the cross-granularity composition rule of \cref{sec:dataset-trust:formal:granularity}, and connects to the trust-discount operator via the annotator-level extension. Together with the \ac{GTSRB} application, it covers the two canonical cases of dataset-level assessment: direct global evidence (\ac{GTSRB}) and entry-level evidence (CIFAR-10H).
+This application covers the \textbf{annotation row} of \cref{tab:dataset-trust:catalogue} for the entry-level granularity. It exercises the \ac{BPQ} and discusses how the \ac{EWQ} can be used. It also illustrates the cross-granularity composition rule of \cref{sec:dataset-trust:formal:granularity}, and connects to the trust-discount operator via the annotator-level extension. Together with the \ac{GTSRB} application, it covers the two canonical cases of dataset-level assessment: direct global evidence (\ac{GTSRB}) and entry-level evidence (CIFAR-10H).
 
 
-\paragraph{Cross-application Discussion}
-\label{sec:dataset-trust:applications:summary}
-
-\cref{tab:dataset-trust:applications-summary} summarizes how the three applications jointly cover the design space.
+\noindent \cref{tab:dataset-trust:applications-summary} summarizes how the three applications jointly cover the design space.
 
 \begin{table}[t]
   \centering
@@ -970,7 +902,7 @@ This application populates the \textbf{annotation row} of \cref{tab:dataset-trus
     \toprule
      & \textbf{GTSRB} & \textbf{CIFAR-10H} & \textbf{COMPAS} \\
     \midrule
-    Property $\propP$        & sampling bias            & labeling bias            & overall reliability \\
+    Property $\propP$        & representativeness            & labeling accuracy            & overall reliability \\
     Stage(s) $\propS$        & sampling                 & annotation               & all four \\
     Granularity $\propG$     & dataset                  & entry      & dataset \\
     Quantification & \acs{BPQ}, \acs{CUQ}                 & \acs{BPQ}, \acs{EWQ}                 & \acs{BPQ} \\
@@ -1023,16 +955,16 @@ This application populates the \textbf{annotation row} of \cref{tab:dataset-trus
 
 \section{Summary and Conclusions} \label{sec:dataset-trust:summary}
 
-This chapter introduced a framework for assessing the trustworthiness of \ac{AI} training datasets by specializing the general methodology of \cref{chap:Trust_method}. Its central claim is that dataset trustworthiness should be treated not as a single score, but as a structured assessment defined by three dimensions: the property assessed, the lifecycle stage where evidence is collected, and the granularity at which it applies. 
+This chapter introduced a framework for assessing the trustworthiness of \ac{AI} training datasets by specializing the general methodology of \cref{chap:Trust_method}. Its central claim is that dataset trustworthiness should be treated not as a single score, but as a structured assessment defined by three dimensions: the property assessed, the lifecycle stage from which evidence is collected, and the granularity at which it applies. 
 
 The framework is supported by three main artifacts. First, it formalizes dataset reliability through lifecycle decomposition (sampling, collection, annotation, processing), normalization of metrics via thresholds, and adapted quantification schemes (\ac{BPQ}, \ac{EWQ}, \ac{CUQ}). Second, the trust-source catalog provides a practical set of metrics aligned with lifecycle stages and granularity levels. Third, cross-granularity composition rules define how evidence can be aggregated across feature-, entry-, and dataset-levels.
 
-Three applications illustrate the framework. The \ac{COMPAS} case demonstrates multi-stage assessment and aggregation into a dataset-level opinion. The balancing bias study on \ac{GTSRB} shows how the same trust source leads to different quantifications depending on observability and processing (\ac{CUQ} vs. \ac{BPQ}). The labeling bias study on CIFAR-10H highlights annotation-stage, entry-level assessment, with extensions toward annotator-level trust.
+Three applications illustrate the framework. The \ac{COMPAS} case demonstrates multi-stage assessment and aggregation into a dataset-level opinion. The  representativeness study on \ac{GTSRB} shows that the same proposition admits multiple trust sources depending on what is observable in the deployment setting. The labeling accuracy study on CIFAR-10H highlights annotation-stage, entry-level assessment, with extensions toward annotator-level trust.
 
 The framework provides richer decision support than scalar metrics. A dataset-level opinion $(t, d, u)$ distinguishes supporting evidence, contradicting evidence, and uncertainty. This enables auditors to differentiate between lack of evidence and conflicting evidence, two situations requiring different actions, making the framework a diagnostic tool rather than a pass/fail measure.
 
 Three limitations remain. First, the trust-source catalog is not exhaustive and can be extended. Second, hyperparameters (e.g., $\tau_m$, $(A_m, L_m)$, $K_m$, $W$) require manual tuning, though partial calibration appears feasible as illustrated with $\eta$ in the \ac{GTSRB} application. Third, lifecycle stages are treated uniformly, whereas task-dependent weighting may be needed, potentially via discounting operators.
 
-The framework outputs structured trust opinions at various granularities, which serve as input to the Trust Propagation Module of \ac{PaTAS}, which operates on per-feature trust opinions. Coarser-grained opinions can be replicated at the feature level, enabling propagation into model parameters. The same approach applies at inference time: input-level trust can be replicated as per feature opinions and then propagated to produce output trust. A complete pipeline is demonstrated in \cref{chap:usecase}.
+The framework outputs trust opinions at various granularities, which serve as input to the Trust Propagation Module of \ac{PaTAS}, which operates on per-feature trust opinions. Coarser-grained opinions can be replicated at the feature level, enabling propagation through model parameters during training. At inference time, the same process applies to input features, and the resulting per-feature opinions are propagated through the network to produce an output trust opinion. However, replicating a coarser-grained dataset-level opinion as per-feature opinions at the training dataset means every input receives the same trust score regardless of its individual quality, which limits the value of per-instance trust evaluation during inference. For inference-time assessment to be fully meaningful, trust sources that operate at the feature or entry level on the individual input should be preferred.
 
-Finally, while dataset-level and input-level assessments share the same trust property, they may rely on different trust sources. For example, dataset-level accuracy and input-level accuracy refer to the same property but are supported by different types of evidence. The analyst remains free to select appropriate trust sources as long as they are consistent with the underlying proposition.
+Finally, while different granularities of assessments may share the same trust property, they do not need to rely on the same trust sources. The analyst is free to use different trust sources for the training dataset and for inference-time inputs, as long as both address the same underlying proposition. For instance, dataset-level accuracy may be supported by sensor-consistency metrics computed across the training set, while input-level accuracy at inference time may be supported by an out-of-range check or a per-sensor confidence score applied to the individual input.
