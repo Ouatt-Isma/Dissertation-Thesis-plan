@@ -393,7 +393,7 @@ r_m = K_m \, q_m, \qquad s_m = K_m \, (1 - q_m),
 \end{equation}
 where $K_m$ is an evidence-strength parameter that fixes the total amount of evidence the metric is assumed to provide, $r_m + s_m = K_m$. Larger values of $K_m$ correspond to trust sources the analyst takes more seriously; smaller values correspond to weaker or less authoritative sources. Under \ac{BPQ} with prior weight $W$, the residual uncertainty contributed by this single metric is $u = W / (W + K_m)$, so $K_m$ is also a parameter that controls the value of the uncertainty. Finally, the per-metric trust opinions are aggregated to obtain the stage-level opinion. 
 
-\subsection{Stage quantification on COMPAS\protect\footnote{The raw metric values reported in this section are computed from the COMPAS dataset using the implementation available at \url{https://github.com/Ouatt-Isma/-Trustworthiness-of-AI-Training-Dataset}. This section focuses on the mapping from raw values to trust opinions; the metric definitions and computation details are documented in the 
+\subsection{Stage quantification on COMPAS\protect\footnote{The raw metric values reported in this section are computed from the COMPAS dataset using the implementation developed for this chapter, available at \url{https://github.com/Ouatt-Isma/-Trustworthiness-of-AI-Training-Dataset}. This section focuses on the mapping from raw values to trust opinions; the metric definitions and computation details are documented in the 
 repository.}}
 
  \paragraph{Sampling stage.}
@@ -633,7 +633,7 @@ T = \mathcal{H}(P_E).
 Contributors whose local entropy exceeds $T$ provide \emph{positive evidence}; the others provide \emph{negative evidence}. Aggregating over the $M$ contributing nodes yields the evidence counts $r$ and $s$ used by the quantification scheme.
 
 \paragraph{Quantification scheme: \ac{BPQ}.}
-Each contributor produces one binary piece of evidence (above or below $T$), so the natural quantification is the baseline-prior scheme of \cref{sec:dataset-trust:formal:quantification}: as $M$ grows, the residual uncertainty $u = W / (W + r + s)$ shrinks. This is the desired behaviour in a federated setting, where adding more contributors should progressively reduce the uncertainty in the global trust assessment without requiring any party to disclose its local class distribution.
+Each contributor produces one binary piece of evidence (above or below $T$), so the natural quantification is the baseline-prior scheme of \cref{sec:dataset-trust:formal:quantification}: as $M$ grows, the residual uncertainty $u = W / (W + r + s)$ shrinks. This is the desired behavior in a federated setting, where adding more contributors should progressively reduce the uncertainty in the global trust assessment without requiring any party to disclose its local class distribution.
 
 A natural extension treats the distance between each local entropy and $T$ as an evidence weight, which moves the scheme from \ac{BPQ} to \ac{EWQ}: contributors whose local entropy is far from $T$ provide high-weight evidence; contributors near the boundary provide low-weight evidence and contribute proportionally less to the aggregated opinion.
 
@@ -769,14 +769,12 @@ The tolerance $\eta$ controls how strictly Method~1 interprets balance. Too smal
 The two trust sources answer the same trust proposition by different
 routes and exhibit complementary strengths. Method~1 requires the global class-probabilities distribution and is the natural choice when the dataset is centralized and fully observable. Method~2 only requires per-contributor entropy and is therefore the natural choice in collaborative or federated settings, where no party observes the global distribution and class counts cannot be shared. One limitation of Method~2 is worth noting: two locally unbalanced sub-datasets can combine into a globally balanced dataset, yet each contributor would report negative evidence, pulling the trust opinion toward distrust even when the overall distribution is acceptable. Method~1, operating on the global distribution, is immune to this artifact. The two methods should therefore be seen as complementary rather than interchangeable, and the choice between them depends on whether the global distribution is observable.
 
-% \marginpar{Behaviour of uncertainty.}
+% \marginpar{Behavior of uncertainty.}
 The two methods illustrate two different choices of quantification scheme. Method~1 fixes the uncertainty externally via sample complexity, which is appropriate when the dataset size is the bottleneck on the assessment's confidence. Method~2 lets uncertainty shrink as more contributors provide evidence, which is appropriate when the relevant unit of evidence is one local assessment per contributor. The same proposition can therefore be assessed under \ac{CUQ} or \ac{BPQ} depending on whether ``more evidence'' means ``more data'' or ``more contributors''. Method~1 already avoids access to individual data points by operating on class counts. Method~2 strengthens this property by sharing only a single scalar (local entropy) per contributor, which makes it suitable for privacy-sensitive collaborative settings.
 
 Class imbalance is not always a defect: in some applications it faithfully reflects the deployment-time class frequencies, and forcing balance would degrade rather than improve the model. Trust opinions should therefore be interpreted in light of the deployment context. A natural extension of Method~1 is to replace the uniform expected probability $1/K$ with a deployment-derived target distribution, preserving the rest of the machinery. This application illustrates that the same trust proposition admits multiple ways to be quantified depending on what is observable in the deployment regime.
 
-
-
-\section{Annotation Stage, Entry Level: Labeling accuracy on CIFAR-10H}
+\section{Annotation Stage, Entry Level: Labeling accuracy on \\CIFAR-10H}
 \label{sec:dataset-trust:applications:cifar10h}
 
 \begin{mdframed}[backgroundcolor=blue!4, linewidth=0pt]

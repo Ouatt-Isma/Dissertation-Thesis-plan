@@ -1,6 +1,9 @@
 \chapter{Use Case: \acs{PaTAS} Applied to 5G Network Energy Management}
 \label{chap:usecase}
 \todo{which fusion Operator did we use and why}
+\todo{Make clear LSTM limitation}
+\todo{This is a quantification problem}
+\todo{p, may be not possible to have in practice. maybe add uncertainty, increase p and sigma. what is the link between coverage and accuracy, maybe add tau=0.9, Investigate the time issue, maybe show performance on the non covered part. output aggregation should return the score for the decided label}
 \noindent
 The previous chapters introduced the theoretical foundations and system architecture required to perform trust assessment in \ac{NN} systems. In particular, \cref{chap:ovl,chap:dataset-trust,chap:patas} introduced the \ac{PaTAS} architecture for parallel trust assessment through the whole \ac{NN} system pipeline. This chapter demonstrates how these contributions apply in practice through a concrete use case in 5G network energy management. The objective is not to introduce new theoretical contributions, but rather to illustrate how the proposed methodology can be applied to assess trustworthiness within a realistic \ac{ML} scenario. By instantiating the full trust assessment pipeline, from trust proposition definition to evidence collection, opinion quantification, and reasoning, we show how the framework can support practical decision-making regarding the trustworthiness of \ac{ML} systems.
 
@@ -252,13 +255,13 @@ When trust opinions flow from inputs through the network, they encounter weight 
 Concretely, for each neuron $i$ in layer $l$, the Trust Function computes:
 
 \begin{equation}
-T_{z^{(l)}_i} = \bigvee_{j \in \mathcal{N}(i)} T_{x^{(l-1)}_j} \otimes T_{\theta^{(l)}_{i,j}}, 
+T_{z^{(l)}_i} = \bigoplus_{j \in \mathcal{N}(i)} T_{x^{(l-1)}_j} \otimes T_{\theta^{(l)}_{i,j}}, 
 \qquad 
 T_{x^{(l+1)}_i} = T_{\varphi^{(l)}}\!\left(T_{z^{(l)}_i}\right)
 \label{eq:trust_function}
 \end{equation}
 
-where $\otimes$ is the trust discounting operator, $\bigvee$ denotes the fusion operator aggregating contributions from all predecessors $\mathcal{N}(i)$, and $T_{\varphi^{(l)}}$ is the trust-equivalent of the activation function, set to the identity in this work since we use \ac{ReLU} activations~(\cref{chap:patas}).
+where $\otimes$ is the trust discounting operator, $\bigoplus$ denotes the fusion operator aggregating contributions from all predecessors $\mathcal{N}(i)$, and $T_{\varphi^{(l)}}$ is the trust-equivalent of the activation function, set to the identity in this work since we use \ac{ReLU} activations~(\cref{chap:patas}).
 
 The two operations have complementary roles:
 
@@ -528,7 +531,7 @@ Under combined corruption, calibration trust degrades faster than under either s
 \paragraph{Uncertainty remains negligible.}
 Across all conditions, uncertainty $u$ stays near $10^{-4}$. With a large test set distributed across $M = 10$ bins and 3 classes, the evidence weight $W = 2$ becomes negligible relative to the cumulative evidence, driving $u \to 0$. The calibration-trust opinion therefore carries almost no residual vacuity: any ambiguity about the model's calibration has been resolved by the volume of predictions observed, and the remaining mass is cleanly partitioned between belief (the model is well-calibrated) and disbelief (it is not).
 
-
+\todo{add a small evaluation for extension to dynamic}
 \subsection{Comparison: Per-Prediction Trust vs.\ Calibration Trust}
 \label{sec:patas_vs_calibration}
 

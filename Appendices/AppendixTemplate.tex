@@ -1,7 +1,221 @@
 % Appendix Template
 
-\chapter{Appendix Title Here} % Main appendix title
+\chapter{\ac{PaTAS-TP} Theorems and Proofs (\cref{sec:ptastheory})}\label{app:proof}
+\subsection{Key theorems}
+\begin{theorem}[Convergence of Subjective Logic Arithmetic Sequence]\label{thm:arithm}
+Let $(\Omega, \ominus)$ be a group. \(\Omega\) is a set of opinions specified as \([0,1]^4\)
+Let $\omega_n = (b_n, d_n, u_n, a_n) \in \Omega$ be a sequence defined recursively by the operator $\ominus$ as follows:
+\[
+\omega_{n+1} = \omega_n \ominus q,
+\]
+where \(q\in \Omega\) and the operator $\ominus$ is a fusion operator.
 
-\label{AppendixX} % Change X to a consecutive letter; for referencing this appendix elsewhere, use \ref{AppendixX}
+Then the sequence $(\omega_n)$ converges in $[0,1]^4$ to a limit:
+\[
+\begin{cases}
+\omega_0, & \text{if } q = (0, 0, 1, a_0), \\
+q & \text{otherwise}.
+\end{cases}
+\]
 
-Write your Appendix content here.
+\end{theorem}
+
+\begin{proof}
+Let us define a distance \( d \) on the space \( \Omega \subseteq [0,1]^4 \), based on the Euclidean norm (2-norm). 
+
+Assume that the recursive update is expressed as:
+\[
+\omega_{n+1} = \omega_n \ominus q, q \in \Omega
+\]
+where \(\ominus\) denotes a fusion operator (e.g., cumulative or averaging fusion) that combines opinions \(\omega_n\) and \(q\). By the properties of subjective logic fusion, the result of this operation satisfies one of the following:
+
+\begin{enumerate}
+    \item \(d(\omega_{n+1}, q) < d(\omega_n, q)\), i.e., the new opinion is strictly closer to \(q\), or \label{case:strict}
+    \item \(d(\omega_{n+1}, q) = d(\omega_n, q)\) and \(\omega_{n+1} = \omega_n\), meaning the sequence has reached a fixed point. \label{case:fixed}
+\end{enumerate}
+
+This behavior reflects the nature of fusion operators, which are designed to generate an opinion that represents a consistent aggregation of the two inputs.
+
+In case~\ref{case:strict}, the distance to \(q\) strictly decreases at each step. Since the 2-norm is bounded in \([0,1]^4\), the sequence \((\omega_n)\) is contained in a compact space and forms a Cauchy sequence. Therefore, it converges to the unique fixed point \(q\).
+
+In case~\ref{case:fixed}, where \(\omega_{n+1} = \omega_n\), the sequence remains constant and equal to \(\omega_0\). This occurs, for instance, when \(q= (0, 0, 1, a_0)\), representing full uncertainty. In that case, most of the fusion operators (almost all except averaging fusion) has no effect, and the sequence stays fixed.
+
+Thus, in both cases, the sequence \((\omega_n)\) converges.
+\end{proof}
+
+
+\begin{theorem}[Convergence of Subjective Logic Geometric Sequence]\label{thm:geo}
+Let $(\Omega, \odot)$ be a group defined as in Theorem~\ref{thm:arithm}.
+Let $\omega_n = (b_n, d_n, u_n, a_n) \in \Omega$ be a sequence defined recursively by the operator $\odot$ as follows:
+\[
+\omega_{n+1} = \omega_n \odot q,
+\]
+where \(q\in \Omega\) and the operator $\odot$ is the binomial multiplication defined by:
+\[
+\begin{cases}
+b_{x \odot y} = b_x b_y + \dfrac{(1 - a_x) a_y b_x u_y + a_x (1 - a_y) u_x b_y}{1 - a_x a_y}, \\
+d_{x \odot y} = d_x + d_y - d_x d_y, \\
+u_{x \odot y} = u_x u_y + \dfrac{(1 - a_y) b_x u_y + (1 - a_x) u_x b_y}{1 - a_x a_y}, \\
+a_{x \odot y} = a_x a_y.
+\end{cases}
+\]
+Then the sequence $(\omega_n)$ converges in $[0,1]^4$ if $a_q < 1$. In particular:
+\begin{itemize}
+    \item $a_n = a_0 a_q^n \to 0$ as $n \to \infty$,
+    \item $d_n \to 1$ if $d_q > 0$, and $d_n = d_0$ if $d_q = 0$,
+    \item $b_n \to 0 $ if $p_q = b_q + a_q u_q < 1$, and $b_n = b_0 $ if $p_q = 1$.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+We analyze each component of $\omega_n$ separately.
+
+\emph{1. Convergence of $a_n$:}  
+By definition, $a_{n+1} = a_n a_q$. Since $a_q \in [0,1[$, this is a geometric sequence:
+\[
+a_n = a_0 a_q^n \to 0 \quad \text{as } n \to \infty.
+\]
+
+\emph{2. Convergence of $d_n$:}  
+The recurrence relation is:
+\[
+d_{n+1} = d_n + d_q - d_n d_q = d_n (1 - d_q) + d_q.
+\]
+This is a first-order linear recurrence. If $d_q > 0$, the sequence is increasing and bounded above by 1. Therefore:
+\[
+\lim_{n \to \infty} d_n = 1\, (\text{the fixed point})
+\]
+If $d_q = 0$, then $d_{n+1} = d_n = d_0$ for all $n$.
+
+\emph{3. Behavior of $b_n$:}  
+The update equation for $b_{n+1}$ is a rational function involving $a_n$, $b_n$, and $u_n$. As $a_n \to 0$, the update expressions simplify:
+% \[
+% b_{n+1} \approx b_n b_q + \dfrac{(1 - a_n) a_q b_n u_q + a_n (1 - a_q) u_n b_q}{1 - a_n a_q},
+% \]
+\[
+b_{n+1} \approx b_n b_q + a_q b_n u_q = b_n (b_q + a_q u_q ) = b_n p_q
+\]
+this converges since the projected probability \(p_q \in [0,1] \)
+ 
+To conclude with \(u_n\), since we have \(u_n = 1 - (b_n + d_n)\) it will also converge
+
+\end{proof}
+
+\subsection{Proof for Theorem~\ref{thm:convergence}}
+\begin{proof}
+Assume that the neural network training process converges, implying that weight updates become increasingly small, and the back propagation gradients \( g \) stabilize. This stability in \( g \) reflects the fact that the model has reached a minimum or stable loss value.
+
+Moreover, the stability of \( T_x \) and \( T_y \)implies that trust inputs to the update mechanism are stable. Consequently, each new trust update for \( T_{\theta} \) is computed using consistent and bounded evidence, which over time results in the stabilization of the subjective opinions assigned to \( T_{\theta} \).
+
+In detail:
+\begin{itemize}
+    \item \(T_x\) converging implies (\(T_{y\prime}\) converging assuming the same \(T_\theta\)) implies convergence of \(T_{y_{batch}}\).
+
+    \item \(g\) converges so \(T_{n \mid y_\text{batch}}\) will remain the same. 
+    
+    \item since \(T_{n\mid \mid {Y_\text{batch}}}\) is a deterministic calculation from the convergent terms  \(T_{n \mid y_\text{batch}}\) and \(T_{y_{batch}}\), it follows that \(T_{n\mid \mid {Y_\text{batch}}}\) also converges 
+
+    \item Finally \(T_{\theta} \longleftarrow T_{\theta} \circleddash T_{n\mid \mid {Y_\text{batch}}}\) converges if \(\circleddash\) is set to any fusion operator or the binomial multiplication operator (see Theorem~\ref{thm:arithm} and \ref{thm:geo} in Appendix~\ref{app:proof}). 
+
+    \item The function \(f_{upd}\) in our implementation is based on \(T_{\theta}\), \(T_{y}\) and \({T_{x}}\) which all converge.
+\end{itemize}
+
+Therefore, assuming convergence of $T_x$, $T_y$, and $g$, the trust values for all PaTAS parameters stabilize as training progresses, proving convergence of PaTAS creation. 
+\end{proof}
+
+
+
+
+
+\subsection{Proof for Theorem~\ref{thm:infvac}}
+
+Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over any variable, with arbitrary base rate \( a \in [0, 1] \). Then the following two properties hold:
+
+\begin{enumerate}
+    \item \emph{Discounting a Vacuous Opinion Yields a Vacuous Opinion.} \\
+    For any trust value binomial opinion \(\omega^A_B \), the discounted opinion
+    \[
+    \omega^{[A;B]}_X = \omega^A_B \otimes (0,0,1,a)= (0,0,1,a)
+    \]
+    \textit{Proof.} Using the trust discounting operator from Subjective Logic, we set $P$ to the projected probability of \(\omega^A_B\):
+    \[\omega^{[A;B]}_X = 
+    \begin{cases}
+    b^{[A;B]}_X = P\cdot 0 = 0, \\
+    d^{[A;B]}_X = P\cdot 0 = 0, \\
+    u^{[A;B]}_X = 1 - b^{[A;B]}_X-d^{[A;B]}_X = 1, \\
+    a^{[A;B]}_X = a.
+    \end{cases}
+    \]
+    Hence, \( \omega^{[A;B]} = (0,0,1,a) \).
+
+    \item \emph{PaTAS Feedforward on Vacuous Input Yields Vacuous Output.} \\
+    Let \( T_x = (0,0,1,a)\) be the trust assessment of an input to PaTAS. Then for any parameter trust configuration \( T_\theta \), the output trust assessment satisfies:
+    \[
+    T_y = \text{IPTA}(T_x) = (0,0,1,a).
+    \]
+    \textit{Proof.} The PaTAS feedforward mechanism computes for each neuron:
+    \[
+    T_z = \bigvee_i \left( T_{x_i} \otimes T_{\theta_i} \right).
+    \]
+    Since each \( T_{x_i} = (0,0,1,a) \), and using the result from part (1), we get:
+    \[
+    T_{x_i} \otimes T_{\theta_i} = (0,0,1,a), \quad \forall i.
+    \]
+    Then, by fusion of vacuous opinions:
+    \[
+    T_z = \bigvee_i (0,0,1,a) = (0,0,1,a).
+    \]
+    This holds recursively through all layers of PaTAS, including the output layer, hence:
+    \[
+    T_y = (0,0,1,a).
+    \]
+\end{enumerate}
+
+\subsection{Proof for Theorem~\ref{thm:sym}}
+\begin{proof}
+We prove the theorem in two steps.
+
+\emph{(1) Symmetry of the Discount Operator:} \\
+Let $\omega_\theta = (b_\theta, d_\theta, u_\theta)$ be a binomial opinion representing the trust weight associated with a connection in the PaTAS. Let $P$ denote the projected probability of $\omega_\theta$, defined as:
+\[
+P = b_\theta + a u_\theta,
+\]
+where $a$ is the base rate (typically $a = 0.5$ for binary domains).
+
+Let $x = (b, d, u)$ be any binomial opinion and $\bar{x} = (d, b, u)$ its symmetric counterpart. Then the trust discounting operation yields:
+\[
+\omega_\theta \otimes x = (P \cdot b, P \cdot d, 1 - P \cdot (b + d)),
+\]
+\[
+\omega_\theta \otimes \bar{x} = (P \cdot d, P \cdot b, 1 - P \cdot (b + d)).
+\]
+Since $b + d = 1 - u$, both discounted opinions have identical uncertainty and symmetric belief/disbelief masses. Hence, $\omega_\theta \otimes x$ and $\omega_\theta \otimes \bar{x}$ are symmetric.
+
+\emph{(2) Symmetry Preservation under Fusion:} \\
+Let $\mathcal{X} = \{x_1, \dots, x_n\}$ be a set of discounted opinions resulting from symmetric inputs, and let $\bar{\mathcal{X}} = \{\bar{x}_1, \dots, \bar{x}_n\}$ be their symmetric counterparts. Consider any symmetric fusion operator $\bigoplus$ (such as averaging, cumulative fusion, or consensus fusion in Subjective Logic) applied to $\mathcal{X}$ and $\bar{\mathcal{X}}$.
+
+Since each pair $(x_i, \bar{x}_i)$ is symmetric and the operator treats belief and disbelief symmetrically, we have:
+\[
+\bigoplus_{i=1}^n x_i = (b', d', u') \quad \Rightarrow \quad \bigoplus_{i=1}^n \bar{x}_i = (d', b', u').
+\]
+Thus, the output of the PaTAS feedforward inference remains symmetric when symmetric inputs are provided.
+
+\emph{(3) Invariance under Fusion:} \\
+A fundamental property of Subjective Logic fusion operators is that if all input opinions assign the same value to a specific mass (e.g., belief or disbelief), the result will preserve that value. In particular, if all input opinions have belief mass equal to zero, the fused result will also have belief mass zero. The same applies to disbelief mass.
+
+Therefore, if the discounting step yields discounted opinions with zero belief (or zero disbelief) across all components, then the fusion stage will preserve that zero mass in the final output.
+
+\emph{(4) Fully Trusted and Distrusted Cases:} \\
+For $x = (1, 0, 0)$ (fully trusted), we have:
+\[
+\omega_\theta \otimes x = (P, 0, 1 - P),
+\]
+so the discounted opinion assigns zero disbelief. As noted above, the fusion of such discounted opinions will also assign zero disbelief.
+
+For $\bar{x} = (0, 1, 0)$ (fully distrusted), we have:
+\[
+\omega_\theta \otimes \bar{x} = (0, P, 1 - P),
+\]
+so the discounted opinion assigns zero belief. Therefore, the belief from a fully distrusted input is always zero in the PaTAS output.
+\end{proof}
+
