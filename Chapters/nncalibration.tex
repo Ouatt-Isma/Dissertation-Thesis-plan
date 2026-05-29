@@ -2,10 +2,9 @@
 \label{chap:bb}
 \noindent
 
-The previous chapters introduced a framework for assessing the trustworthiness of \ac{NN} systems through its pipeline based on its internal behavior. However, in many practical settings \ac{ML} models are deployed as black boxes, making it difficult to assess trust based on internal components or training processes. In such cases, trust must be inferred from observable properties of the model. One important property is calibration, which measures the alignment between predicted probabilities and empirical outcomes. In this chapter, we propose a method to quantify \ac{NN} calibration within the Evidence based \aclu{TAF} introduced in this dissertation. This chapter builds on work published and presented at the International Conference on Information Fusion (Fusion 2025)\cite{11124121}.
-\begin{chapterlink}
-    This chapter applies the general trust assessment methodology introduced in \cref{chap:Trust_method} to a specific setting: \acp{NN} accessed as black boxes. Unlike the previous chapter, which evaluated trust through internal model behavior via a \acf{STN}, the present chapter bypasses trust network analysis entirely. Since calibration is directly observable from predicted probabilities and empirical outcomes, the trust proposition is atomic and verifiable without decomposition into sub-propositions or traversal of a \ac{STN}. Evidence is extracted directly from calibration behavior and converted into trust opinions. This chapter therefore represents a simpler instantiation of the general methodology: evidence $\to$ opinion.
-\end{chapterlink}
+The previous chapters introduced a framework for assessing the trustworthiness of \ac{NN} systems through its pipeline based on its internal behavior. However, in many practical settings \ac{ML} models are deployed as black boxes, making it difficult to assess trust based on internal components or training processes. In such cases, trust must be inferred from observable properties of the model. This chapter applies the general trust assessment methodology introduced in \cref{chap:Trust_method} to this specific setting: \acp{NN} accessed as black boxes. Unlike the previous chapter, which evaluated trust through internal model behavior via a \acf{STN}, the present chapter bypasses trust network analysis entirely. One important observable property is calibration, which measures the alignment between predicted probabilities and empirical outcomes. Since calibration is directly observable from these quantities, the trust proposition is atomic and verifiable without decomposition into sub-propositions or traversal of a \ac{STN}: evidence is extracted directly from calibration behavior and converted into trust opinions, representing the simplest instantiation of the general methodology. We propose a method to quantify \ac{NN} calibration within the Evidence-based \aclu{TAF} introduced in this dissertation, building on work published and presented at the International Conference on Information Fusion (Fusion 2025)\cite{11124121}.
+
+
 
 \section{Introduction}
 
@@ -13,98 +12,18 @@ The previous chapters introduced a general methodology for assessing trustworthi
 
 One particularly important observable property is the calibration of predicted probabilities. Calibration measures the degree to which a model’s confidence estimates correspond to empirical correctness. A well-calibrated model produces probability estimates that accurately reflect the likelihood of outcomes. For instance, for a well-calibrated model, among predictions made with confidence $0.8$, approximately $80\%$ should be correct. Calibration therefore provides an indirect but informative signal about the reliability of a model’s probabilistic predictions and is widely used when evaluating \ac{NN} systems deployed in high-stakes domains. In fact, in many high-stakes deployment scenarios, the predicted probability itself, rather than only the predicted class, drives the downstream decision. In medical diagnosis, for instance, a predicted malignancy probability of 0.85 versus 0.55 may lead to entirely different clinical pathways. Similarly, in autonomous systems, confidence scores govern when a model's output should be acted upon versus escalated to a human operator~\cite{feng2019trustyoucalibrationprobabilistic}. In such contexts, a miscalibrated probability can be more harmful than an incorrect prediction, since it distorts the decision-maker's assessment of risk.
 
-Despite its importance, calibration is typically summarized by scalar metrics such as the \acf{ECE}, which computes the weighted average of absolute differences between predicted confidence and empirical accuracy across probability bins. While \ac{ECE} captures the average miscalibration, it suffers from three limitations in the context of trust assessment. First, \ac{ECE} collapses a distribution of calibration behaviors into a single number, masking whether miscalibration is localized to a specific confidence region or widespread across the probability space. Second, \ac{ECE} does not quantify the uncertainty of the calibration estimate itself: a model evaluated on few samples may yield the same \ac{ECE} as one evaluated on millions, yet the reliability of that estimate differs fundamentally. Third, and most critically for our purposes, \ac{ECE} is not expressed in a form that can be integrated into an evidence-based trust reasoning framework; it provides no decomposition into belief, disbelief, and uncertainty over the proposition that the model's probabilities are trustworthy.
+Despite its importance, calibration is typically summarized by scalar metrics such as the \acf{ECE}, which computes the weighted average of absolute differences between predicted confidence and empirical accuracy across probability bins. While \ac{ECE} captures the average miscalibration, it suffers from three limitations in the context of trust assessment. First, \ac{ECE} does not quantify the uncertainty of the calibration estimate itself: a model evaluated on few samples may yield the same \ac{ECE} as one evaluated on millions, yet the reliability of that estimate differs fundamentally. Second, \ac{ECE} collapses a distribution of calibration behaviors into a single number, masking whether miscalibration is localized to a specific confidence region or widespread across the probability space. Third, \ac{ECE} is not expressed in a form that can be integrated into an evidence-based trust reasoning framework; it provides no decomposition into belief, disbelief, and uncertainty over the proposition that the model's probabilities are trustworthy.
 
-To address this limitation, this chapter makes the following contributions. First, it introduces a method for extracting calibration evidence from predicted probabilities. Second, it proposes a mapping from calibration evidence to \ac{SL} trust opinions, enabling uncertainty-aware trust quantification. Third, it demonstrates experimentally that the resulting trust representation provides richer insight into model reliability than traditional calibration metrics alone.
+To address this limitation, this chapter makes the following contributions. First, it introduces a method for extracting calibration evidence from predicted probabilities. Second, it proposes a mapping from calibration evidence to \ac{SL} trust opinions, enabling uncertainty-aware trust quantification. Third, it demonstrates experimentally that the resulting trust representation provides rich insight into model reliability.
 
-The remainder of this chapter is organized as follows. \cref{sec:calibration_sl} presents the subjective logic framework for calibration-based trust assessment, describing the extraction of calibration evidence and the construction of trust opinions. \cref{sec:calibration_experiments} evaluates the proposed approach experimentally and analyzes its behavior in comparison with traditional calibration metrics. Finally, the chapter concludes with a summary of the main findings and their implications for trustworthy AI evaluation.
+The remainder of this chapter is organized as follows. \cref{sec:calibration_sl} presents the subjective logic framework for calibration-based trust assessment, describing the extraction of calibration evidence and the construction of trust opinions. \cref{sec:calibration_experiments} evaluates the proposed approach experimentally and analyzes its behavior. Finally, the chapter concludes with a summary of the main findings.
 
 
 \section{Subjective Logic Framework for Calibration Trust}
 \label{sec:calibration_sl}
 As introduced in \cref{chap:Trust_method}, the general trust assessment methodology follows three main phases: (i) generation of a trust expression representing incorporating the proposition to be evaluated, (ii) identification and collection of evidence from relevant trust sources, and (iii) evaluation of the expression through subjective logic operators to obtain the final trust opinion.
 
-In the context of \ac{NN} calibration, the trust proposition of interest is the reliability of the predicted probabilities produced by the model. More specifically, we seek to assess whether the confidence scores generated by the \ac{NN} accurately reflect the true likelihood of correct predictions. Unlike previous applications of the methodology, this scenario does not require the generation of a complex logical expression. Calibration can be directly observed through the predicted probabilities and empirical outcomes. Consequently, the trust assessment can be performed by directly extracting evidence from calibration behavior and converting this evidence into trust opinions. The following subsections describe how calibration evidence is extracted from model predictions and how it is used to construct trust opinions representing the reliability of the model's confidence estimates. The overall process is summarized in \cref{alg:1} and \cref{fig:pipeline}.
-
-\begin{algorithm}
-\caption{Overall Process for Calibration Trust Evaluation}
-\begin{algorithmic}[1]
-    \State \textbf{Input:} Predicted probabilities from a \ac{NN} for each class for a set of input
-    \State \textbf{Output:} Trust opinion on the \ac{NN}
-    \State \textbf{Step 1: Clustering Predicted Probabilities\footnotemark}
-    \State Cluster the predicted probabilities into \(M\) groups based on their values within the range $[0, 1]$.
-    \State For each cluster, assign a representative value (e.g., the middle of the interval representing the cluster).
-    \State \textbf{Step 2: Computing Trustworthiness Opinions for each class}
-    \For{each class $c$}
-        \State \textbf{Step 2.1: Computing Trustworthiness Opinions for each cluster}
-        \For {each cluster $i$}
-            \State Set $RP_i$ to the representative of the cluster
-            \State Calculate the number of classifications $n_i$ falling into this cluster.
-            \State Calculate the number of good classification $t_i$ in this cluster.
-            \State Set the number of Positive Evidence $r$ to $t_i$
-            \State Set the number of negative evidence $s$ to $\lvert t_i - n_i*RP_i\rvert$
-            \State Compute trust opinion for the cluster using \ac{BPQ} quantification.
-        \EndFor
-        \State Fuse the trust opinions from all clusters using fusion operators to obtain a single trust opinion for the class.
-    \EndFor
-    \State \textbf{Step 3: Final Trust Opinion on \ac{NN}}
-    \State Fuse the trust opinions from all classes to obtain the final trust opinion for the \ac{NN}.
-\end{algorithmic}
-\label{alg:1}
-\end{algorithm}
-\footnotetext{bins and clusters are used interchangeably throughout this chapter.}
-
-\subsection{Calibration Evidence}
-The first step of the framework consists in extracting evidence about the reliability of predicted probabilities from the calibration behavior of the \ac{NN}. Given a set of predictions, each prediction provides a confidence value representing the model's estimated probability for a class. Calibration analysis evaluates how well these predicted probabilities align with empirical correctness.
-
-During analysis, predicted probabilities are partitioned into $M$ clusters covering the interval $[0,1]$. Each cluster corresponds to a range of predicted probabilities and is represented by a representative probability value $RP_i$, typically chosen as the midpoint of the cluster. This clustering groups predictions with similar confidence levels and
-enables a localized analysis of calibration behavior.
-
-For a given class $c$ and cluster $i$, let $n_i$ denote the number of predictions whose confidence falls within the cluster interval, and let $t_i$ denote the number of correct classifications among these predictions. The empirical accuracy of the cluster is therefore $\frac{t_i}{n_i}$.
-
-Calibration evidence is derived from the comparison between the predicted confidence $RP_i$ and the observed accuracy. Intuitively, when the predicted probability matches the empirical accuracy, the predictions are well calibrated and provide evidence supporting the reliability of the model's confidence estimates. Conversely, deviations between these quantities indicate miscalibration and therefore contribute negative evidence.
-
-In our framework, the number of positive evidence is defined as
-
-\[
-r = t_i
-\]
-
-while the negative evidence captures the deviation between predicted
-confidence and empirical accuracy:
-
-\[
-s = |t_i - n_i \times RP_i|
-\]
-
-which can also be expressed as
-
-\[
-s = n_i \left| \frac{t_i}{n_i} - RP_i \right|.
-\]
-This formulation treats over- and under-confidence symmetrically by taking the absolute deviation. In some deployment contexts, however, these two failure modes carry different consequences: an overconfident model that assigns high probability to incorrect predictions may be more harmful than an underconfident one that is unnecessarily cautious. The framework can accommodate this asymmetry by replacing the absolute deviation with a weighted signed decomposition:
-\[
-s = \alpha \cdot n_i \max\!\left(\frac{t_i}{n_i} - RP_i,\, 0\right)
-  + \beta  \cdot n_i \max\!\left(RP_i - \frac{t_i}{n_i},\, 0\right),
-\]
-
-where $\alpha$ controls the penalty for underconfidence (empirical accuracy exceeds predicted confidence) and $\beta$ controls the penalty for overconfidence (predicted confidence exceeds empirical accuracy). Setting $\alpha = \beta = 1$ recovers the symmetric formulation above.
-
-\subsection{Construction of Calibration Trust Opinions}
-Once calibration evidence has been extracted for each probability cluster, the next step consists of converting this evidence into trust opinions. Using the positive and negative evidence values $(r,s)$ obtained from the previous step, a trust opinion is computed for each probability cluster using the\ac{BPQ} introduced in \cref{chap:Trust_method}. This mapping produces a cluster-level opinion representing the degree of belief, disbelief, and uncertainty associated with the reliability of predictions within that cluster. Each cluster therefore yields a trust opinion describing the reliability of the model's probability estimates in a specific region of the probability space. To obtain a trust assessment for a given class, the cluster-level opinions are combined using a subjective logic fusion operator.
-
-In our implementation we employ cumulative fusion (\cref{def:cumulative_fuse}), which is associative and commutative and therefore allows the combination of multiple opinions. This operator effectively accumulates evidence from multiple sources. A further desirable property of cumulative fusion in this context is its behavior with respect to uncertainty: fusing a larger number of cluster-level opinions yields a final opinion with strictly lower uncertainty than any individual cluster opinion. This is a direct consequence of the evidence-additive nature of cumulative fusion: each additional opinion contributes evidence that reduces the vacuous component. As a result, using more probability clusters $M$ provides a more confident global trust assessment, compared to any individual cluster-level opinion considered in isolation.
-
-In practice, since cumulative fusion corresponds to the addition of evidence, we maintain the positive and negative evidence values for each cluster and sum them before computing the final opinion. After fusing the cluster-level opinions, a single trust opinion is obtained for each class. The class-level opinions are then fused again to produce a global trust opinion representing the overall reliability of the \ac{NN}'s predicted probabilities.
-
-The computational complexity of the proposed framework is $\mathcal{O}(C \cdot M \cdot N)$, where $C$ is the number of classes, $M$ the number of probability clusters, and $N$ the number of predictions. Since the algorithm scales linearly with the number of predictions, it can be efficiently applied to large datasets and integrated into practical
-evaluation pipelines.
-
-\paragraph{Evidence Count}
-It is worth clarifying the interpretation of the positive evidence $r=t_i$. Strictly speaking, $r$ does not directly encode evidence that the model is \emph{well-calibrated}: a model that always predicts high confidence while being correct would accumulate large $r$ without being well-calibrated for low-confidence bins. Rather, $r$ serves a structural role in the \ac{BPQ}: together with the prior weight $W$, it governs the reduction of uncertainty. As more predictions fall into a cluster (i.e., as $t_i$ grows), the uncertainty component $u$ of the resulting opinion decreases, reflecting increased confidence in the assessment. The calibration quality itself is captured by $s$, which grows whenever the predicted confidence deviates from the empirical accuracy. In this sense, the framework separates two concerns: \emph{how much data supports the assessment} (driven by $r$) and \emph{how poor the calibration is} (driven by $s$).
-
-\paragraph{From Static to Dynamic}
-To extend the framework from producing a single global trust score for the model as a whole to producing a per-prediction trust score at inference time, the cluster-level opinions computed during the evaluation phase are retained as a lookup table. At inference, once the model produces a probability vector for a given input, each predicted probability is mapped to its corresponding cluster and label. The pre-computed cluster opinion is then retrieved and treated as the trust assessment for that specific probability prediction. If multiple output classes are relevant, the corresponding opinions can be fused. This lookup mechanism adds negligible computational overhead at inference time. The storage cost scales with the number of clusters $M$: a small $M$ keeps the lookup table compact, while a large $M$ provides finer-grained trust assessment at the cost of increased memory. In resource-constrained applications, a moderate $M$ is recommended to balance assessment granularity and memory footprint.
+In the context of \ac{NN} calibration, the trust proposition of interest is the reliability of the predicted probabilities produced by the model. More specifically, we seek to assess whether the confidence scores generated by the \ac{NN} accurately reflect the true likelihood of correct predictions. Unlike previous applications of the methodology, this scenario does not require the generation of an expression. Calibration can be directly observed through the predicted probabilities and empirical outcomes. Consequently, the trust assessment can be performed by directly extracting evidence from calibration behavior and converting this evidence into trust opinions. The following subsections describe how calibration evidence is extracted from model predictions and how it is used to construct trust opinions representing the reliability of the model's confidence estimates. The overall process is summarized in \cref{alg:1} and \cref{fig:pipeline}.
 
 \begin{figure}[t]
 \centering
@@ -197,21 +116,87 @@ a global trust opinion $\omega$.}
 \end{figure}
 
 
+\begin{algorithm}
+\caption{Overall Process for Calibration Trust Evaluation}
+\begin{algorithmic}[1]
+    \State \textbf{Input:} Predicted probabilities from a \ac{NN} for each class for a set of input
+    \State \textbf{Output:} Trust opinion on the \ac{NN}
+    \State \textbf{Step 1: Clustering Predicted Probabilities\footnotemark}
+    \State Cluster the predicted probabilities into \(M\) groups based on their values within the range $[0, 1]$.
+    \State For each cluster, assign a representative value (e.g., the middle of the interval representing the cluster).
+    \State \textbf{Step 2: Computing Trustworthiness Opinions for each class}
+    \For{each class $c$}
+        \State \textbf{Step 2.1: Computing Trustworthiness Opinions for each cluster}
+        \For {each cluster $i$}
+            \State Set $RP_i$ to the representative of the cluster
+            \State Calculate the number of classifications $n_i$ falling into this cluster.
+            \State Calculate the number of good classification $t_i$ in this cluster.
+            \State Set the number of positive evidence $r$ to $t_i$
+            \State Set the number of negative evidence $s$ to $\lvert t_i - n_i*RP_i\rvert$
+            \State Compute trust opinion for the cluster using \ac{BPQ} quantification.
+        \EndFor
+        \State Fuse the trust opinions from all clusters using fusion operators to obtain a single trust opinion for the class.
+    \EndFor
+    \State \textbf{Step 3: Final Trust Opinion on \ac{NN}}
+    \State Fuse the trust opinions from all classes to obtain the final trust opinion for the \ac{NN}.
+\end{algorithmic}
+\label{alg:1}
+\end{algorithm}
+\footnotetext{bins and clusters are used interchangeably throughout this chapter.}
+
+\subsection{Calibration Evidence}
+The first step of the framework consists in extracting evidence about the reliability of predicted probabilities from the calibration behavior of the \ac{NN}. Given a set of predictions, each prediction provides a confidence value representing the model's estimated probability for a class. Calibration analysis evaluates how well these predicted probabilities align with empirical correctness.
+
+During analysis, predicted probabilities are partitioned into $M$ clusters covering the interval $[0,1]$. Each cluster corresponds to a range of predicted probabilities and is represented by a representative probability value $RP_i$, typically chosen as the midpoint of the cluster. This clustering groups predictions with similar confidence levels and
+enables a localized analysis of calibration behavior.
+
+For a given class $c$ and cluster $i$, let $n_i$ denote the number of predictions whose confidence falls within the cluster interval, and let $t_i$ denote the number of correct classifications among these predictions. The empirical accuracy of the cluster is therefore $\frac{t_i}{n_i}$. Calibration evidence is derived from the comparison between the predicted confidence $RP_i$ and the observed accuracy $\frac{t_i}{n_i}$. Intuitively, when the predicted probability matches the empirical accuracy, the predictions are well calibrated and provide evidence supporting the reliability of the model's confidence estimates. Conversely, deviations between these quantities indicate miscalibration and therefore contribute negative evidence. In our framework, the number of positive evidence is defined as
+
+\[
+r = t_i
+\]
+
+while the negative evidence captures the deviation between predicted
+confidence and empirical accuracy:
+
+\[
+s = |t_i - n_i \times RP_i|
+\]
+
+which can also be expressed as
+
+\[
+s = n_i \left| \frac{t_i}{n_i} - RP_i \right|.
+\]
+This formulation treats over- and under-confidence symmetrically by taking the absolute deviation. In some deployment contexts, however, these two failure modes carry different consequences: an overconfident model that assigns high probability to incorrect predictions may be more harmful than an underconfident one that is unnecessarily cautious. The framework can accommodate this asymmetry by replacing the absolute deviation with a weighted signed decomposition:
+\[
+s = \alpha \cdot n_i \max\!\left(\frac{t_i}{n_i} - RP_i,\, 0\right)
+  + \beta  \cdot n_i \max\!\left(RP_i - \frac{t_i}{n_i},\, 0\right),
+\]
+
+where $\alpha$ controls the penalty for underconfidence (empirical accuracy exceeds predicted confidence) and $\beta$ controls the penalty for overconfidence (predicted confidence exceeds empirical accuracy). Setting $\alpha = \beta = 1$ recovers the symmetric formulation above.
+
+\subsection{Construction of Calibration Trust Opinions}
+Once calibration evidence has been extracted for each probability cluster, the next step consists of converting this evidence into trust opinions. Using the positive and negative evidence values $(r,s)$ obtained from the previous step, a trust opinion is computed for each probability cluster using the \ac{BPQ} introduced in \cref{chap:Trust_method}. This mapping produces a cluster-level opinion representing the degree of belief, disbelief, and uncertainty associated with the reliability of predictions within that cluster. Each cluster therefore yields a trust opinion describing the reliability of the model's probability estimates in a specific region of the probability space. To obtain a trust assessment for a given class, the cluster-level opinions are combined using a subjective logic fusion operator.
+
+In our implementation we employ cumulative fusion (\cref{def:cumulative_fuse}), which is associative and commutative and therefore allows the combination of multiple opinions. This operator effectively accumulates evidence from multiple sources. A further desirable property of cumulative fusion in this context is its behavior with respect to uncertainty: fusing a larger number of cluster-level opinions yields a final opinion with strictly lower uncertainty than any individual cluster opinion. This is a direct consequence of the evidence-additive nature of cumulative fusion: each additional opinion contributes evidence that reduces the vacuous component. As a result, using more probability clusters $M$ provides a more confident global trust assessment, compared to any individual cluster-level opinion considered in isolation. After fusing the cluster-level opinions, a single trust opinion is obtained for each class. The class-level opinions are then fused again using averaging fusion to produce a global trust opinion representing the overall reliability of the \ac{NN}'s predicted probabilities. We use averaging fusion because the data used to derive opinion for each class are the same.
+
+
+
+\paragraph{Evidence Count}
+It is worth clarifying the interpretation of the positive evidence $r=t_i$. Strictly speaking, $r$ does not directly encode evidence that the model is \emph{well-calibrated}: a model that always predicts the same confidence while being correct would accumulate large $r$ without being well-calibrated. Rather, $r$ serves a structural role in the \ac{BPQ}: together with the prior weight $W$, it also governs the reduction of uncertainty. As more predictions fall into a cluster (i.e., as $t_i$ grows), the uncertainty component $u$ of the resulting opinion decreases, reflecting increased confidence in the assessment. The calibration quality itself is captured by $s$, which grows whenever the predicted confidence deviates from the empirical accuracy. In this sense, the framework separates three concerns: 
+\emph{how accurate is the model within the cluster} (driven by $r$) and 
+\emph{how much data supports the assessment of the calibration} (driven by $r$) and \emph{how poor the calibration is} (driven by $s$).
+
+\paragraph{From Static to Dynamic}
+To extend the framework from producing a single global trust score for the model to producing a per-prediction trust score at inference time, the cluster-level opinions computed during the evaluation phase are retained as a lookup table. At inference, once the model produces a probability vector for a given input, each predicted probability is mapped to its corresponding cluster and label. The pre-computed cluster opinion is then retrieved and treated as the trust assessment for that specific probability prediction. If multiple output classes are relevant, the corresponding opinions can be fused. This lookup mechanism adds negligible computational overhead at inference time. The storage cost scales with the number of clusters $M$: a small $M$ keeps the lookup table compact, while a large $M$ provides finer-grained trust assessment at the cost of increased memory. Note, however, that very large values of $M$ are not unconditionally beneficial. As $M$ increases, each cluster covers a narrower probability interval, reducing the number of predictions assigned to it. Sparsely populated clusters yield high-uncertainty cluster-level opinions, which can degrade the informativeness of the inference time assessment despite the finer spatial resolution. This trade-off between granularity and evidential support motivates the empirical sensitivity analysis in \cref{subsec:clusters}.
+
+
+
 \section{Experimental Evaluation}
 \label{sec:calibration_experiments}
 
-We evaluate the proposed calibration trust framework on two \acp{NN} trained on the MNIST~\cite{lecun1998mnist} and CIFAR-10~\cite{krizhevsky2009learningcifar} datasets. MNIST consists of 70{,}000 grayscale images of handwritten digits (0-9) at $28 \times 28$ resolution, split into 60{,}000 training and 10{,}000 test images. CIFAR-10 contains 60{,}000 color images at $32 \times 32$ resolution across 10 classes, with 50{,}000 images for training and 10{,}000 for testing. The full code for this chapter is available on \href{https://github.com/Ouatt-Isma/SL-Neural-Network-Calibration}{github}. The experiments are designed to address four complementary questions: (i) how do the trust opinion components evolve during training before and after calibration; (ii) how does the trust assessment relate to the \ac{ECE} metric; (iii) how sensitive is the framework to the choice of the number of clusters $M$; and (iv) how does the dynamic, per-prediction trust assessment behave at inference time.
-
-\subsection{Experimental Setup}
-
-For MNIST, a fully connected \ac{NN} is employed (reaching \(\approx 98\%\) accuracy). The input image is flattened into a vector of 784 elements and processed by a dense layer with 128 units and ReLU activation, followed by a final dense layer with 10 units outputting logits, which are converted to probabilities via softmax.
-
-For CIFAR-10, we employ WideResNet-28-4~\cite{zagoruyko2017wideresidualnetworks} (reaching \(\approx 95\%\) accuracy), a deep residual network with pre-activation blocks and width factor 4. The architecture consists of a stem convolutional layer (16 filters, $3\times3$ kernel) followed by three stages of residual blocks. Each stage progressively increases the number of filters (64, 128, and 256 respectively) with spatial downsampling via stride-2 convolutions in the first block of stages 2 and 3. Each residual block uses the pre-activation pattern (batch normalization $\to$ ReLU $\to$ convolution), incorporates dropout (rate 0.3) in the residual path for regularization, and includes skip connections with adaptive projection for dimension matching. The final layers apply batch normalization, ReLU activation, global average pooling, and a dense output layer with 10 units.
-
-Both models are trained for 100 epochs using a batch size of 32. The MNIST model uses the Adam optimizer, while the CIFAR-10 model is optimized with SGD with Nesterov momentum ($\mu = 0.9$) and $\ell_2$ weight regularization ($\lambda = 5 \times 10^{-4}$). Learning rate scheduling is applied: CIFAR-10 uses cosine decay, decaying the initial learning rate of $\eta_0 = 0.1$ to $\eta_{\min} = 1 \times 10^{-6}$ over the training schedule. Both models use cross-entropy loss with logits and are evaluated on a 90/10 train/validation split. After training, temperature scaling is applied to calibrate each model. This method introduces a scalar temperature parameter $T$ that divides the output logits before the softmax layer; $T$ is optimized to minimize the negative log-likelihood on the validation set~\cite{guo2017calibrationmodernneuralnetworks}.
-
-For the calibration trust analysis, predicted probabilities are by default partitioned into $M=10$ clusters covering the interval $[0,1]$. Cluster $i$ corresponds to the interval $[\frac{i}{10}, \frac{i+1}{10})$ for $i=0,\ldots,8$, with the final cluster covering $[\frac{9}{10},1]$. Each cluster is represented by its midpoint value $\frac{i}{10}+\frac{1}{20}$.
-
+We evaluate the proposed calibration trust framework on two \acp{NN} trained on the MNIST~\cite{lecun1998mnist} and CIFAR-10~\cite{krizhevsky2009learningcifar} datasets. MNIST consists of 70{,}000 grayscale images of handwritten digits (0-9) at $28 \times 28$ resolution, split into 60{,}000 training and 10{,}000 test images. CIFAR-10 contains 60{,}000 color images at $32 \times 32$ resolution across 10 classes, with 50{,}000 images for training and 10{,}000 for testing. The full code for this chapter is available on \href{https://github.com/Ouatt-Isma/SL-Neural-Network-Calibration}{github}. The experiments are designed to address four complementary questions: (i) how does the trust opinion evolve during training before and after calibration; (ii) how does the trust assessment relate to the \ac{ECE} metric; (iii) how sensitive is the framework to the choice of the number of clusters $M$; and (iv) how does the dynamic, per-prediction trust assessment behave at inference time.
 \begin{figure}[t]
     \centering
     \begin{subfigure}{0.49\textwidth}
@@ -232,6 +217,15 @@ For the calibration trust analysis, predicted probabilities are by default parti
     \label{fig:ovfit}
 \end{figure}
 
+\subsection{Experimental Setup}
+
+For MNIST, a fully connected \ac{NN} is employed (reaching \(\approx 98\%\) accuracy). The input image is flattened into a vector of 784 elements and processed by a dense layer with 128 units and ReLU activation, followed by a final dense layer with 10 units outputting logits, which are converted to probabilities via softmax. For CIFAR-10, we employ WideResNet-28-4~\cite{zagoruyko2017wideresidualnetworks} (reaching \(\approx 95\%\) accuracy), a deep residual network with pre-activation blocks and width factor 4. The architecture consists of a stem convolutional layer (16 filters, $3\times3$ kernel) followed by three stages of residual blocks. Each stage progressively increases the number of filters (64, 128, and 256 respectively) with spatial downsampling via stride-2 convolutions in the first block of stages 2 and 3. Each residual block uses the pre-activation pattern (batch normalization $\to$ ReLU $\to$ convolution), incorporates dropout (rate 0.3) in the residual path for regularization, and includes skip connections with adaptive projection for dimension matching. The final layers apply batch normalization, ReLU activation, global average pooling, and a dense output layer with 10 units.
+
+Both models are trained for 100 epochs using a batch size of 32. The MNIST model uses the Adam optimizer, while the CIFAR-10 model is optimized with SGD with Nesterov momentum ($\mu = 0.9$) and $\ell_2$ weight regularization ($\lambda = 5 \times 10^{-4}$). Learning rate scheduling is applied: CIFAR-10 uses cosine decay, decaying the initial learning rate of $\eta_0 = 0.1$ to $\eta_{\min} = 1 \times 10^{-6}$ over the training schedule. Both models use cross-entropy loss with logits and are evaluated on a 90/10 train/validation split. After training, temperature scaling is applied to calibrate each model, a scalar temperature parameter $T$ that divides the output logits before the softmax layer. $T$ is optimized to minimize the negative log-likelihood on the validation set~\cite{guo2017calibrationmodernneuralnetworks}.
+
+For the calibration trust analysis, the \ac{BPQ} prior weight is set to 2, and the predicted probabilities are by default partitioned into $M=10$ clusters covering the interval $[0,1]$. Cluster $i$ corresponds to the interval $[\frac{i}{10}, \frac{i+1}{10}[$ for $i=0,\ldots,8$. Each cluster is represented by its midpoint value $\frac{i}{10}+\frac{1}{20}$.
+
+
 
 
 \begin{figure}[t]
@@ -242,6 +236,7 @@ For the calibration trust analysis, predicted probabilities are by default parti
     temperature scaling (bottom) for each class.}
     \label{fig:mnist_ece}
 \end{figure}
+
 
 \begin{figure}[t]
     \centering
@@ -272,7 +267,7 @@ For the calibration trust analysis, predicted probabilities are by default parti
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{img/cal/MNIST_dynamic.pdf}
-    \caption{Dynamic per-prediction trust assessment at inference for the MNIST models at epoch 100. Left: distribution of predicted confidence for correct and incorrect predictions. Center: proportion of correct and incorrect predictions for each trust belief from the inferred trust opinion. Right: mean opinion components per 
+    \caption{Dynamic per-prediction trust assessment at inference for the MNIST models at epoch 100. Left: distribution of predicted confidence for correct and incorrect predictions. Center: proportion of correct and incorrect predictions for each trust belief from the inferred trust opinion. Right: mean (over classes) opinion components per 
     confidence bin.}
     \label{fig:mnist_dynamic}
 \end{figure}
@@ -280,8 +275,7 @@ For the calibration trust analysis, predicted probabilities are by default parti
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{img/cal/CIFAR_dynamic.pdf}
-    \caption{Dynamic per-prediction trust assessment at inference for the CIFAR10 models at epoch 100. Left: distribution of predicted confidence for correct and incorrect predictions. Center: distribution of predictions projected probability from the inferred trust opinion. Right: mean opinion components per 
-    confidence bin.}
+    \caption{Dynamic per-prediction trust assessment at inference for the CIFAR10 models at epoch 100. Left: distribution of predicted confidence for correct and incorrect predictions. Center: distribution of predictions projected probability from the inferred trust opinion. Right: mean (over classes) opinion components per confidence bin.}
     \label{fig:cifar_dynamic}
 \end{figure}
 
@@ -302,15 +296,15 @@ For the calibration trust analysis, predicted probabilities are by default parti
 \subsection{Trust Opinion Dynamics During Training}
 \label{subsec:dynamics}
 
-\cref{fig:mnist_ece,fig:cifar_ece} show the joint evolution of belief, disbelief, uncertainty, and \ac{ECE} across the 100 training epochs for each class, before and after temperature scaling.
+\cref{fig:mnist_ece,fig:cifar_ece} show the joint evolution of belief, disbelief, uncertainty, and \ac{ECE} across the 100 training epochs for each class, before and after temperature scaling. For both models, the training curve in \cref{fig:ovfit} reveals overfitting: training loss decreases continuously toward zero while validation loss rises steadily from approximately epoch 10. 
 
-For MNIST (\cref{fig:mnist_ece}), the uncalibrated model displays a gradual degradation in trust that begins after approximately 5 epochs before which the metrics remain roughly stable. Belief starts around 0.7 across all classes and steadily declines to approximately 0.2 by epoch 100, while disbelief rises correspondingly from around 0.3 to values above 0.8. This degradation is explained by the overfitting visible in \cref{fig:mnistovfit}: training loss continues to decrease while validation loss rises from around epoch 5, indicating that the model becomes increasingly overconfident, which disrupts the alignment between predicted confidence and empirical accuracy. The \ac{ECE} mirrors this behavior, rising from near zero around epoch 5 to approximately 0.017-0.022 by epoch 100. After temperature scaling, both the trust metrics and the \ac{ECE} stabilize: belief holds steady around 0.65-0.70, disbelief stabilizes near 0.33, and \ac{ECE} drops to the range 0.001-0.005.
+For MNIST (\cref{fig:mnist_ece}), the uncalibrated model displays a gradual degradation in trust that begins after approximately 5 epochs before which the metrics remain roughly stable. Belief starts around 0.7 across all classes and steadily declines to approximately 0.2 by epoch 100, while disbelief rises correspondingly from around 0.3 to values above 0.8. This degradation is explained by the overfitting, indicating that the model becomes increasingly overconfident, which disrupts the alignment between predicted confidence and empirical accuracy. The \ac{ECE} mirrors this behavior, rising from near zero around epoch 5 to approximately 0.017 by epoch 100. After temperature scaling, both the trust metrics and the \ac{ECE} stabilize: belief holds steady around 0.70, disbelief stabilizes near 0.3, and \ac{ECE} remains in the range 0.001-0.004.
 
-For CIFAR-10 (\cref{fig:cifar_ece}), the training curve in \cref{fig:cifarovfit} reveals overfitting: training loss decreases continuously toward zero while validation loss rises steadily from approximately epoch 10. This degradation is directly reflected in the trust metrics. Before calibration, belief increases at the really beginning then drops sharply from approximately 0.7 in the early epochs to a stable level around 0.45, where it remains for the rest of training, while disbelief correspondingly stabilizes near 0.55. The \ac{ECE} mirrors the same behavior, rising steeply to reach its maximum at around 20 epoch then remains constant. After calibration, belief stabilizes across classes in the range 0.7, disbelief settles near 0.30, and \ac{ECE} in the range 0.03-0.07. 
+For CIFAR 10, the overfitting is directly reflected in the trust metrics. Before calibration, belief increases at the really beginning then drops sharply from approximately 0.7 in the early epochs to a stable level around 0.45, where it remains for the rest of training, while disbelief correspondingly stabilizes near 0.55. The \ac{ECE} mirrors the same behavior, rising steeply to reach its maximum at around 20 epoch then remains constant. After calibration, belief stabilizes across classes in the range 0.7, disbelief settles near 0.30, and \ac{ECE} in the range 0.03-0.07. 
 
 Across both datasets, uncertainty remains very small and close to 0, reflecting the huge amount of predictions used for the assessment. 
 
-
+A notable pattern in both figures is that calibration, and correspondingly trust disbelief, is low at the very start of training and cannot be sustainably recovered to that level even after temperature scaling. This is not coincidental: at initialization, the model produces near-uniform output distributions resembling the marginal class distribution, which is trivially well-calibrated in expectation. As training progresses and the model becomes more decisive, its confidence estimates diverge from empirical accuracy, degrading calibration. Temperature scaling partially corrects this divergence post-hoc, but cannot fully restore the baseline calibration of the untrained model. This observation underscores that calibration is not solely a function of accuracy: a highly accurate but overconfident model can be less calibrated than a naive baseline.
 \begin{table}[h]
 \centering
 \caption{Accuracy and \ac{ECE} before and after temperature
@@ -332,30 +326,23 @@ CIFAR        & 0.959 & 0.728 & 0.055 \\
 \noindent
 $M \in \{2, 3, 5, 8, 10, 15, 20, 30, 50, 75, 100, \ldots, 1000\}$, evaluated at epoch 100.
 
-For the calibrated MNIST model, belief rises sharply from approximately 0.3 at $M=2$ to around 0.9 at $M=10$, then stabilizes close to 1.0 for all larger values of $M$, while disbelief falls symmetrically toward zero. The opinion thus converges quickly and remains stable, indicating that any $M$ above approximately 10 yields a reliable and consistent assessment for this well-calibrated model. 
+For the calibrated MNIST model, belief rises sharply from approximately 0.3 at $M=2$ to around 0.9 at $M=75$, then stabilizes close to 1.0 for all larger values of $M$, while disbelief falls symmetrically toward zero. The opinion thus converges quickly and remains stable, indicating that any $M$ above approximately 10 yields a reliable and consistent assessment for this well-calibrated model. 
 
-For the calibrated CIFAR-10 model (\cref{fig:cifar_clusters}, right), the trust opinion rises sharply from approximately 0.30 at $M=2$ to a peak near 0.91 around $M=10$-$15$, then decreases gradually, stabilizing near 0.88 for large values of $M$ up to 1000. This behavior differs qualitatively from the MNIST case in two respects. First,  once $M$ exceeds the effective granularity of the confidence distribution, additional clusters contribute little new evidence and the opinion stabilizes. Second, the decay at large $M$ is mild compared to the original model, suggesting that the calibrated CIFAR-10 model maintains adequate cluster density even at finer resolutions, though very sparse clusters at the extremes of $[0,1]$ still introduce minor noise. 
+For the calibrated CIFAR-10 model (\cref{fig:cifar_clusters}, right), the trust opinion rises sharply from approximately 0.30 at $M=2$ to a peak near 0.9 around $M=100$, then stabilizing near 0.85 for large values of $M$ up to 1000. This behavior is similar with the MNIST case in two respects. 
 
-Before calibration (\cref{fig:cifar_clusters}, left), the picture is strikingly different: belief oscillates before stabilizing around 0.40 and disbelief around 0.60 across the entire range of $M$, with almost no oscillation. This near-flat behavior reflects the fact that the uncalibrated CIFAR-10 model is consistently and uniformly miscalibrated: the relative balance between positive evidence (correct predictions) and negative evidence (confidence-accuracy deviation) is approximately constant regardless of how finely the probability space is partitioned, so after some value of $M$, increasing $M$ does not alter the global assessment. 
-
-A similar oscillating-then-stabilizing pattern is observed for the uncalibrated MNIST model, where belief oscillates for small $M$ before converging to approximately $0.7$. In contrast, the calibrated MNIST model reaches a stable and high belief from $M=10$ onward. The oscillation at small $M$ in the uncalibrated setting, across both datasets, therefore constitutes a diagnostic indicator of miscalibration: a well-calibrated model produces opinions that stabilize early and at high belief, whereas a miscalibrated model yields a flat or oscillating profile that reflects the persistent imbalance between positive and negative evidence across partitions.
+Before calibration (\cref{fig:cifar_clusters}, left), the picture is different: belief oscillates before stabilizing around 0.40 and disbelief around 0.60 across the entire range of $M$, with almost no oscillation. This near-flat behavior reflects the fact that the uncalibrated CIFAR-10 model is consistently and uniformly miscalibrated: the relative balance between positive evidence (correct predictions) and negative evidence (confidence-accuracy deviation) is approximately constant regardless of how finely the probability space is partitioned, so after some value of $M$, increasing $M$ does not alter the global assessment. A similar oscillating-then-stabilizing pattern is observed for the uncalibrated MNIST model, where belief oscillates for small $M$ before converging to approximately $0.7$. The oscillation at small $M$ in the uncalibrated setting, across both datasets, therefore constitutes a diagnostic indicator of miscalibration: a well-calibrated model produces opinions that stabilize early and at high belief, whereas a miscalibrated model has oscillating profile for smaller $M$ and yields consistently lower beliefs for non small $M$ that reflects the persistent negative evidence across partitions.
 
 \subsection{Dynamic Per-Prediction Trust at Inference}
 \label{subsec:dynamic}
 
-\cref{fig:mnist_dynamic,fig:cifar_dynamic} present the dynamic
-per-prediction trust assessment at inference for the MNIST and
-CIFAR-10 models at epoch~100, across all classes and for class~0
-separately (\cref{fig:mnist_dynamic_0,fig:cifar_dynamic_0}).
-
-\cref{fig:mnist_dynamic,fig:cifar_dynamic} present the dynamic per-prediction trust assessment at inference for the MNIST and CIFAR-10 models at epoch~100, across all classes and for class~0 separately (\cref{fig:mnist_dynamic_0,fig:cifar_dynamic_0}). Each figure contains three panels: the distribution of predicted confidence (left), the distribution of predictions across trust belief values with the proportion of correct and incorrect predictions per bin (center), and the mean opinion components per confidence bin (right). A consistent pattern emerges across both datasets and both calibration settings: in the center panel, the proportion of correct predictions within each belief bin increases monotonically with belief. This confirms that the trust belief is a discriminative signal for prediction correctness, adding value beyond the raw confidence score regardless of whether the model is calibrated.
+\cref{fig:mnist_dynamic,fig:cifar_dynamic} present the dynamic per-prediction trust assessment at inference for the MNIST and CIFAR-10 models at epoch~100, across all classes and for class~0 separately (\cref{fig:mnist_dynamic_0,fig:cifar_dynamic_0}). Each figure contains three panels: the distribution of predicted confidence (left), the distribution of predictions across trust belief values with the proportion of correct and incorrect predictions per bin\footnote{We take the trust opinion from the lookup table of the decision label} (center), and the mean opinion components per confidence bin (right). A consistent pattern emerges across both datasets and both calibration settings: in the center panel, the proportion of correct predictions within each belief bin increases monotonically with belief. This confirms that the trust belief is a good signal for prediction correctness, adding value beyond the raw confidence score regardless of whether the model is calibrated.
 
 \paragraph{MNIST - Before Calibration.}
-The predicted confidence distribution confirms the overconfident behavior identified in \cref{subsec:dynamics}: all predictions fall in the $[0.4, 1.0]$ range, with $9\,911$ of the $10\,000$ test predictions concentrated in the highest bin $[0.9, 1.0]$, leaving only $2$, $21$, $13$, $18$, and $35$ predictions in the five intermediate bins. Crucially, the proportion of correct predictions is approximately constant across those five intermediate bins, indicating that the model's empirical accuracy does not vary with its expressed confidence in this range, which is a clear sign of miscalibration. Only in the highest bin does the proportion of correct predictions rise sharply to align with the predicted confidence.
+The predicted confidence distribution confirms the overconfident behavior identified in \cref{subsec:dynamics}: all predictions fall in the $[0.4, 1.0]$ range, with $9\,911$ of the $10\,000$ test predictions concentrated in the highest bin $[0.9, 1.0]$, leaving only $2$, $21$, $13$, $18$, and $35$ predictions in the five intermediate bins. Crucially, the proportion of correct predictions is approximately constant across those five intermediate bins, indicating that the model's empirical accuracy does not vary with its expressed confidence in this range, which is a clear sign of miscalibration. In the highest confidence bin $[0.9,1.0]$, the proportion of correct predictions rises sharply, reflecting the model's strong overall accuracy. However, even here alignment is imperfect: the predicted confidence falls below the empirical accuracy, showing that the model is under confident.
 
 Regarding the trust belief distribution, the middle panel shows that predictions map to a spread of trust belief values (from near $0$ to approximately $0.9$), and the proportion of correct predictions within each belief bin grows roughly monotonically with belief. This monotone relationship between belief and accuracy, even before calibration, demonstrates that the dynamic trust opinion carries genuine discriminative value: it separates predictions by reliability in a way that raw confidence alone does not, since the intermediate confidence bins exhibit nearly identical accuracy despite spanning the range $[0.4, 0.9]$.
 
-The mean opinion plot (right plot) further confirms this reading. Before calibration, belief remains nearly flat across the $[0.4, 0.9]$ confidence range (around $0.2$-$0.30$), reflecting the roughly equal accumulation of positive and negative evidence in these sparsely populated bins, while uncertainty is correspondingly high. Only at the highest confidence bin does belief rise sharply to approximately $0.9$, driven by both the large sample size ($9\,911$ predictions) and the strong accuracy-confidence alignment. Uncertainty collapses to near zero at this bin for the same reason: the large evidence base renders the opinion highly confident.
+The mean opinion plot further confirms this reading. Before calibration, belief remains nearly flat across the $[0.4, 0.9]$ confidence range (around $0.2$-$0.30$), reflecting the roughly equal accumulation of positive and negative evidence in these sparsely populated bins, while uncertainty is correspondingly high. Only at the highest confidence bin does belief rise sharply to approximately $0.9$, driven by both the large sample size ($9\,911$ predictions) and the strong accuracy-confidence alignment. Uncertainty collapses to near zero at this bin for the same reason: the large evidence base renders the opinion highly confident.
 
 \paragraph{MNIST - After Calibration.}
 Temperature scaling redistributes predictions across a wider confidence range $[0.2, 1.0]$, with more distributed counts: $2$, $16$, $23$, $85$, $90$, $98$, and $221$ predictions in the sub-$0.9$ bins, alongside $9\,465$ in the highest bin. This redistribution has two consequences for the trust opinion.
@@ -365,7 +352,7 @@ First, belief now rises consistently with predicted confidence across the full r
 \paragraph{CIFAR-10 - Before Calibration.}
 The CIFAR-10 results reveal a qualitatively different pattern, reflecting the greater difficulty of the task and the architectural regularization imposed by dropout. Before calibration, the model assigns low predicted probabilities to nearly all predictions: $9\,904$ fall in the $[0.2, 0.3]$ bin and the remaining $96$ in the $[0.1, 0.2]$ bin, with no predictions at confidence $\geq 0.3$. 
 
-Because all predictions cluster in just two confidence bins, the mean opinion plot covers only two points. Both exhibit moderate and comparable belief and disbelief levels that increase slightly with predicted confidence (belief rises from approximately $0.40$ to $0.57$, disbelief from $0.30$ to $0.42$), while uncertainty is close to 0 for the $[0.2, 0.3]$ because of the large counts in the bin. These comparable belief and disbelief values indicate that the model is not well calibrated: the positive evidence from correct predictions and the negative evidence from the confidence-accuracy gap are roughly balanced.
+Since all predictions cluster in just two confidence bins, the mean opinion plot covers only two points. Both exhibit moderate and comparable belief and disbelief levels that increase slightly with predicted confidence (belief rises from approximately $0.40$ to $0.57$, disbelief from $0.30$ to $0.42$), while uncertainty is close to 0 for the $[0.2, 0.3]$ because of the large counts in the bin. These comparable belief and disbelief values indicate that the model is not well calibrated: the positive evidence from correct predictions and the negative evidence from the confidence-accuracy gap are roughly balanced.
 
 An important observation regarding the trust belief metric is that the proportion of correct predictions generally increases with higher trust belief values. However, the difference in accuracy between trust belief levels of $0.4$ and $0.6$ is particularly pronounced (more than \(80\%\)). This discrepancy can be attributed to the cluster within the interval ([0.2, 0.3]), which exhibits miscalibrated prediction while having relatively high predictive accuracy.
 
@@ -376,39 +363,32 @@ After temperature scaling, predictions spread across the full $[0.2,1.0]$ range.
 Uncertainty is consequently high in the intermediate bins and collapses only at the extremes. This non-uniform uncertainty profile is informative in a way that scalar metrics such as \ac{ECE} cannot replicate: it identifies precisely which regions of the confidence space are well-supported by calibration evidence and which are not. A practitioner using the dynamic trust framework can immediately see that opinions issued for predictions with confidence in $[0.3, 0.8]$ carry substantial uncertainty and should be treated with caution, whereas those at the extremes are reliable.
 
 \paragraph{Cross-cutting observations.}
-Two structural properties of the dynamic trust framework emerge consistently across both datasets. First, trust belief is not simply a function of predicted confidence: it jointly reflects empirical accuracy within each bin and the alignment between predicted confidence and that accuracy. Miscalibration suppresses belief even in bins with high accuracy, whereas well-calibrated models yield a belief profile that rises monotonically with confidence. The middle panels of \cref{fig:mnist_dynamic,fig:cifar_dynamic} further show that belief is a discriminative signal for prediction correctness: the proportion of correct predictions within each belief bin roughly increases with belief, demonstrating that the trust opinion adds value beyond the raw confidence score.
+Two structural properties of the dynamic trust framework emerge consistently across both datasets. First, trust belief is not simply a function of predicted confidence: it jointly reflects empirical accuracy within each bin and the alignment between predicted confidence and that accuracy. Miscalibration suppresses belief even in bins with high accuracy, whereas well-calibrated models yield a belief profile that rises monotonically with confidence. The middle panels of \cref{fig:mnist_dynamic,fig:cifar_dynamic} further show that belief is a discriminative signal for prediction correctness: the proportion of correct predictions within each belief bin roughly increases with belief, demonstrating that the trust opinion adds value beyond the raw confidence score. Second, uncertainty in the dynamic assessment is governed by bin population size and provides a principled measure of evidential reliability. Sparsely populated bins, which arise when a model's output distribution is concentrated due to overconfidence (MNIST before calibration) or low confidence (CIFAR-10 before calibration) yield high-uncertainty opinions that transparently flag the limits of the assessment. This is a signal that \ac{ECE}, as a single scalar, cannot provide.
 
-Second, uncertainty in the dynamic assessment is governed by bin population size and provides a principled measure of evidential reliability. Sparsely populated bins, which arise when a model's output distribution is concentrated due to overconfidence (MNIST before calibration) or low confidence (CIFAR-10 before calibration) yield high-uncertainty opinions that transparently flag the limits of the assessment. This is a signal that \ac{ECE}, as a single scalar, cannot provide.
 
+One structural limitation of the framework deserves mention. When a model's output distribution is heavily concentrated in a single confidence bin, as observed for CIFAR-10 before calibration where virtually all predictions fall in [0.2,0.3], the corresponding cluster-level opinion is computed from a large evidence base and consequently carries very low uncertainty. Upon cumulative fusion, this dominant opinion disproportionately determines the global trust assessment, effectively overriding the opinions of sparsely populated clusters. The global trust opinion therefore reflects the calibration quality of the dominant bin rather than a balanced view across the full probability space. 
+
+A further limitation concerns the choice of cluster representative. The current implementation uses the midpoint of each interval as the representative probability $RP_i$. When the predicted probabilities within a cluster are not uniformly distributed, for instance when they cluster near the lower or upper boundary of the interval, the midpoint may poorly characterize the actual confidence of predictions in that bin. Using the empirical mean or median of the observed probabilities within each cluster as the representative would reduce this approximation error. More generally, fixed-width interval partitioning could be replaced by a data-adaptive scheme: for example, iteratively updating cluster boundaries and representatives based on the observed distribution of predicted probabilities, in a manner analogous to the k-means~\cite{kmeans8ddb7f85-9a8c-3829-b04e-0476a67eb0fd} algorithm. Such an approach can help having balanced clusters, at the cost of increased preprocessing complexity.
 
 \subsection{Practical deployment implications.}
 The framework is designed to be usable in two distinct deployment modes, with different practical implications for each.
 
-In the static mode, the global trust opinion $\omega = (b, d, u, a)$ provides an auditable summary of a model's calibration reliability at evaluation time. The belief component $b$ correlates with \ac{ECE} but adds two dimensions of information: the disbelief component $d$ identifies systematic miscalibration, while $u$ quantifies how much confidence to place in the assessment itself given the available evidence. When evaluating a new model candidate, a practitioner can use this opinion directly as a decision criterion: a model with high $b$ and near-zero $u$ is reliably well-calibrated on the evaluation set; a model with moderate $b$ and high $u$ warrants further evaluation on a larger dataset before deployment.
+In the static mode, the global trust opinion $\omega = (b, d, u, a)$ provides an auditable summary of a model's calibration reliability at evaluation time. The opinion correlates with \ac{ECE} but adds more dimensions of information: the disbelief component $d$ identifies systematic miscalibration, while $u$ quantifies how much confidence to place in the assessment itself given the available evidence and $b$ quantifies both the number of accurate prediction used for the assessment and the calibration. In the dynamic mode, per-prediction trust opinions are retrieved at inference time via a precomputed lookup table indexed by confidence bin and class. This adds negligible runtime overhead and does not require any modification to the underlying model. The output trust opinion can then feed into downstream decision logic: for instance, a system might route predictions with $u > \tau_u$ to a human operator, or suppress automated actions when $b < \tau_b$. The choice of thresholds $\tau_u$ and $\tau_b$ is application-dependent and can be calibrated against held-out risk data. Crucially, because $u$ reflects evidence quantity and $b$ reflects calibration quality, the two thresholds serve distinct purposes and need not move together.
 
-In the dynamic mode, per-prediction trust opinions are retrieved at inference time via a precomputed lookup table indexed by confidence bin and class. This adds negligible runtime overhead and does not require any modification to the underlying model. The output trust opinion can then feed into downstream decision logic: for instance, a system might route predictions with $u > \tau_u$ to a human operator, or suppress automated actions when $b < \tau_b$. The choice of thresholds $\tau_u$ and $\tau_b$ is application-dependent and can be calibrated against held-out risk data. Crucially, because $u$ reflects evidence quantity and $b$ reflects calibration quality, the two thresholds serve distinct purposes and need not move together.
+A practical consideration is the choice of $M$. The sensitivity analysis suggests that $M = 100$ provides a converging result when assessing the global trust opinion. However $M = 10$ is better for good balance between inference time assessment and opinion stability for datasets of the size considered here. For smaller evaluation sets, a lower $M$ is advisable to avoid sparsely populated bins that inflate uncertainty; for very large datasets, a higher $M$ can be used to obtain finer-grained spatial resolution without stability loss. The storage cost of the lookup table scales with $C \times M$ and is negligible in all practical cases.
 
-A practical consideration is the choice of $M$. The sensitivity analysis suggests that $M \in [10, 20]$ provides a good balance between assessment granularity and opinion stability for datasets of the size considered here. For smaller evaluation sets, a lower $M$ is advisable to avoid sparsely populated bins that inflate uncertainty; for very large datasets, a higher $M$ can be used to obtain finer-grained spatial resolution without stability loss. The storage cost of the lookup table scales with $C \times M$ and is negligible in all practical cases.
+Moreover, The computational complexity of the proposed framework is $\mathcal{O}(C \cdot M \cdot N)$, where $C$ is the number of classes, $M$ the number of probability clusters, and $N$ the number of predictions. Since the algorithm scales linearly with the number of predictions, it can be efficiently applied to large datasets and integrated into practical evaluation pipelines.
 
-Finally, it is worth noting that the framework makes no assumptions about the model architecture, training procedure, or access to internal parameters. Its inputs are predicted probability vectors and ground-truth labels, both of which are available in any standard evaluation pipeline. This makes the approach directly applicable to third-party models, API-accessed systems, and legacy deployments where internal inspection is impossible.
+Finally, it is worth noting again that the framework makes no assumptions about the model architecture, training procedure, or access to internal parameters. Its inputs are predicted probability vectors and ground-truth labels, both of which are available in any standard evaluation pipeline. This makes the approach directly applicable to third-party models, API-accessed systems, and legacy deployments where internal inspection is impossible.
 
 
 
 \section{Summary and Conclusion}
-This chapter addressed trust assessment for \acp{NN} deployed as black-box systems, where internal components are inaccessible to the evaluator. In such settings, trust must be inferred from observable properties of the model's outputs. Calibration was identified as a principled and tractable source of trust evidence: it is directly observable from predicted probabilities and empirical outcomes, requires no access to internal architecture or training process, and provides a natural signal about the reliability of a model's confidence estimates.
 
-The proposed framework integrates calibration analysis into the \ac{SL}-based trust assessment methodology introduced in \cref{chap:Trust_method}. It constitutes the simplest instantiation of that methodology: the trust proposition is atomic and directly verifiable from model outputs, so no trust expression decomposition or \ac{STN} traversal is required. Calibration evidence is extracted by partitioning predicted probabilities into $M$ clusters over $[0,1]$ and, within each cluster, comparing empirical accuracy against the representative predicted confidence. The resulting positive evidence $r = t_i$ and negative evidence $s = |t_i - n_i \times RP_i|$ are converted into \ac{SL} opinions using the \ac{BPQ} and hierarchically fused, first across clusters, then across classes, to produce a global trust opinion $\omega = (b, d, u, a)$.
+This chapter addressed trust assessment for \acp{NN} deployed as black-box systems, where internal components are inaccessible to the evaluator. In such settings, trust must be inferred from observable properties of the model's outputs. Calibration was identified as a principled source of trust evidence: it is directly observable from predicted probabilities and empirical outcomes, requires no access to internal architecture or training process, and provides a natural signal about the reliability of a model's confidence estimates.
 
-The experimental evaluation on MNIST and CIFAR-10 yielded four consistent findings. First, the trust opinion is a sensitive indicator of training dynamics: overfitting is immediately reflected in belief degradation, and temperature scaling reliably restores favorable trust levels, confirming coherence with \ac{ECE} while providing strictly more information. Second, per-class opinions expose calibration heterogeneity that \ac{ECE}, as a class-averaged scalar, cannot resolve — a byproduct of hierarchical fusion obtained at no additional cost. Third, the sensitivity of the global opinion to the number of clusters $M$ is itself diagnostic: well-calibrated models yield opinions that stabilize rapidly from moderate $M$ onward, while miscalibrated models produce flat profiles insensitive to partition resolution, with $M \in [10, 20]$ sufficient in practice. Fourth, the dynamic per-prediction assessment adds genuine value beyond raw confidence scores: trust belief is a discriminative signal for correctness even before calibration, and the uncertainty component provides a principled flag for evidentially unsupported assessments — a capability absent from scalar metrics. Taken together, these findings position calibration-based trust assessment as a tractable and informative complement to existing evaluation practices, with resulting opinions integrable into the broader \aclu{TAF} developed in this dissertation.
+It is worth noting that calibration alone, in isolation from predictive accuracy, is not a sufficient indicator of model quality. A naive model that always outputs the marginal class distribution, predicting each class with probability $\frac{1}{C}$, is trivially well-calibrated in expectation, yet provides no discriminative information. The proposed framework implicitly accounts for this by integrating calibration analysis into the \ac{SL}-based trust assessment methodology introduced in \cref{chap:Trust_method}: the positive evidence $r = t_i$ counts correct predictions within each cluster, so a model with low accuracy produces few correct predictions regardless of its calibration, resulting in a trust opinion with low belief and high disbelief, while a well-calibrated and accurate model yields high belief. The framework thus penalizes accurate-but-miscalibrated models through elevated disbelief, and penalizes calibrated-but-inaccurate models through low belief, making the trust opinion a joint function of both accuracy and calibration alignment. In our methodology, calibration evidence is extracted by partitioning predicted probabilities into $M$ clusters over $[0,1]$ and, within each cluster, comparing empirical accuracy against the representative predicted confidence. The resulting positive evidence $r = t_i$ and negative evidence $s = |t_i - n_i \times RP_i|$ are converted into \ac{SL} opinions using the \ac{BPQ} and hierarchically fused, first across clusters, then across classes, to produce a global trust opinion $\omega = (b, d, u, a)$.
 
-Overall, this chapter demonstrates that calibration behavior constitutes a principled source of observable evidence for trust assessment in black-box \acp{NN}. The resulting opinions are richer than scalar calibration metrics and can be integrated into the broader \aclu{TAF} developed in this dissertation, combined with trust evidence from other sources such as internal model behavior or dataset quality.
+The experimental evaluation on MNIST and CIFAR-10 yielded three consistent findings. First, the trust opinion is a sensitive indicator of training dynamics: overfitting is immediately reflected in trust opinion degradation, and temperature scaling reliably restores favorable trust levels, confirming coherence with \ac{ECE}. Second, the sensitivity of the global opinion to the number of clusters $M$ is itself diagnostic: well-calibrated models yield opinions that stabilize rapidly from moderate $M$ onward, while for miscalibrated models, the trust opinions oscillates for small values of $M$ before stabilizing with belief consistently lower than disbelief. Third, the dynamic per-prediction assessment adds genuine value beyond raw confidence scores: trust belief is a discriminative signal for correctness even before calibration, and the uncertainty component provides a principled flag for evidentially unsupported assessments; a capability absent from scalar metrics. Taken together, these findings position calibration-based trust assessment as a tractable and informative complement to existing evaluation practices, with resulting opinions integrable into the broader \aclu{TAF} developed in this dissertation.
 
-
-
-%% DDD
-
-% However, belief is not determined by the number of correct predictions alone: it also depends on the alignment between the predicted confidence and the empirical accuracy within each cluster \todo{At the same proportion, cluster with bigger number of prediction will have better trust belief, but at different proportion cluster with smaller number of prediction}. This explains the slight drop observed at the $[0.5, 0.6]$ bin, the gap between the representative probability and the empirical accuracy in that cluster increases negative evidence $s$, partially offsetting the effect of correct predictions. 
-
- % within each bin, consistent with the role of positive evidence $r = t_i$ in the \ac{BPQ}\todo{As we can see for bigger predicted probabilities, we have more predictions so more correct prediction. }.
-
- 
+Overall, this chapter demonstrates that calibration behavior constitutes a principled source of observable evidence for trust assessment in black-box \acp{NN}. The resulting opinions are richer than scalar calibration metrics and can be integrated into the broader \aclu{TAF} developed in this dissertation.
