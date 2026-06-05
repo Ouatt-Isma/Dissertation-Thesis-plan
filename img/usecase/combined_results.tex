@@ -1,0 +1,15 @@
+\begin{table}[ht]
+\centering
+\caption{Test accuracy (\%) under combined feature and label noise (mean$\pm$std over 5 noise draws). PaTAS applies calibrated uncertainty trust on features and disbelief trust on labels, with gradient feedback scaling. $\Delta$ = PaTAS $-$ NN.}
+\label{tab:combined-noise}
+\begin{tabular}{lccccc}
+\toprule
+$(\sigma_{rel},\, p)$ & x-trust $(b,d,u)$ & y-trust $(b,d,u)$ & NN mean$\pm$std (\%) & PaTAS mean$\pm$std (\%) & $\Delta$ (\%) \\
+\midrule
+(0.10, 0.05) & (0.882, 0.098, 0.020) & (0.760, 0.040, 0.200) & 84.07$\pm$0.09 & 83.92$\pm$0.02 & -0.14 \\
+(0.20, 0.15) & (0.739, 0.185, 0.077) & (0.680, 0.120, 0.200) & 83.41$\pm$0.10 & 83.22$\pm$0.13 & -0.20 \\
+(0.30, 0.15) & (0.584, 0.251, 0.165) & (0.680, 0.120, 0.200) & 82.56$\pm$0.32 & 82.49$\pm$0.25 & -0.08 \\
+(0.30, 0.30) & (0.584, 0.251, 0.165) & (0.560, 0.240, 0.200) & 82.27$\pm$0.27 & 82.18$\pm$0.22 & -0.09 \\
+\bottomrule
+\end{tabular}
+\end{table}

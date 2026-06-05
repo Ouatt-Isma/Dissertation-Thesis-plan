@@ -1,0 +1,124 @@
+\todo{Maybe say some where that in this evaluation the trustworthiness property that we target the accuracy.}
+
+\todo{Make clear that we can't validate that our methodology will work for any property but the design and results for accuracy property are already a good starting point}
+
+
+
+
+
+\subsubsection*{Experiment 1 -- Breast Cancer Classification}
+The results for this experiment are summarized in \cref{tab:cancer_results}. When both features and labels are clean, the model steadily improves and achieves high accuracy (98.68\% training, 96.49\% test), and \ac{PaTAS-TP} produces the highest trust mass across all conditions (0.88 for $\epsilon=0.1$). Clean features with corrupted labels cause test accuracy to collapse to 2.63\%, even while training accuracy remains artificially high at 99.12\%; the model learns the wrong mapping but does so confidently. Correspondingly, trust mass falls to zero regardless of $\epsilon$, correctly signaling the unreliability of the learned parameters. With vacuous labels, performance degrades moderately (65.71\% train, 74.56\% test) and trust mass remains low (0.29). Corrupted features eliminate the ability to learn in any combination: trust mass is zero in all distrust-$X$ rows and test accuracy never exceeds 43.86\%.
+
+We evaluated the system for two values of $\epsilon$ ($0.1$ and $0.01$).
+\begin{itemize}
+\item For $\epsilon = 0.01$: the system is more sensitive to gradient magnitude.
+      Fully trusted $X$ with trusted $Y$ yields a trust mass of 0.67, while
+      uncertain $Y$ reduces it to 0.13. When $X$ is vacuous, trust stabilises
+      around 0.27 for trusted $Y$ and 0.18 for uncertain $Y$.
+\item For $\epsilon = 0.1$: the \todo bigger threshold makes the system less reactive
+      to small gradients. Fully trusted $X$ with trusted $Y$ reaches 0.88; with
+      uncertain $Y$, trust falls to 0.29. Vacuous $X$ with trusted $Y$ yields
+      0.34, and with uncertain $Y$ yields 0.30. In all cases, distrust in either
+      $X$ or $Y$ drives trust mass to zero.
+\end{itemize}
+Overall, there is a strong positive correlation between trust mass and test
+accuracy. A smaller $\epsilon$ makes label trust more influential: the gap between
+the trusted-$Y$ and uncertain-$Y$ rows widens as $\epsilon$ decreases.
+
+\todo add a frame 
+Two findings are worth emphasising. First, \emph{label trust matters more than
+feature trust}: setting $X$ as vacuous while keeping $Y$ trusted yields a higher
+trust mass (0.34) than the reverse (0.29 for trusted $X$, uncertain $Y$). Second,
+\emph{distrust is more damaging than uncertainty}: replacing a fully uncertain
+opinion $(0,0,1)$ for both $X$ and $Y$ with a mixed assessment $(0.25,0.25,0.5)$
+reduces the trust mass from 0.30 to 0.11, showing that even partial distrust
+degrades trust far more than uncertainty alone.
+
+\todo one of the result was not commented => 0.25 0 0.75 
+
+\todo where is Experiment 2 
+
+\subsubsection*{Experiment 3 -- Poisoned MNIST Dataset}
+As in the previous experiment, \ac{PaTAS-TP} produces ten output trust opinions.
+In \cref{tab:mnistpois} we report the trust mass for label 3 (a clean class) and
+label 6 (a poisoned class), alongside overall train/test accuracy and per-class
+accuracy on both clean and patched test samples.
+
+Across all patch sizes, the trust mass for label 3 consistently exceeds that for
+label 6 (e.g.\ 0.836 vs.\ 0.440 for the $1\times1$ patch), confirming that
+\ac{PaTAS-TP} reliably distinguishes clean from poisoned inference paths even when
+overall accuracy remains high (97.66\%). As the patch grows, both trust values
+decrease: the $4\times4$ and $10\times10$ patches progressively corrupt more
+parameters along the inference path, dragging the trust for label 3 down from
+0.836 to 0.815. The $27\times27$ patch dominates nearly the entire input, yet
+trust does not collapse as dramatically as might be expected (0.651 for label 3,
+0.386 for label 6), reflecting that the label-trust signal during training still
+provides some protective evidence for the parameters involved in clean-class
+prediction. The clear separation between the two classes is maintained across all
+moderate patch sizes.\todo how does this separation evolve.
+
+Regarding classification accuracy, patched digit 6 samples are almost entirely
+misclassified regardless of patch size (0.63 to 0.84\%), confirming the backdoor
+attack is effective. Patched digit 3 accuracy degrades more gradually: it drops
+sharply from 83.76\% at $1\times1$ to roughly 16 to 20\% for larger patches,
+reflecting the spatial overlap between the patch and discriminative features
+for digit 3.
+
+
+
+To evaluate the \ac{IPTA}, \cref{tab:mnistpoisipta} reports accuracy and trust
+opinions for clean and patched samples, obtained by feedforwarding a fully trusted
+(or selectively distrusted) opinion through the \ac{IPTA} instantiated from the
+respective inference path.
+
+Clean digit 3 achieves the strongest trust profile (0.811 trust, 0.189
+uncertainty), consistent with high accuracy (98.02\%). Clean digit 6 already
+exhibits markedly higher uncertainty (0.570) despite comparable accuracy (97.70\%),
+reflecting that the parameters on the digit-6 inference path were exposed to
+poisoned training samples and are therefore less trusted.
+
+For patched samples, the degradation is clear. Patched digit 6 accuracy collapses
+to 0.84\%, and trust drops slightly to 0.408, with uncertainty dominating at 0.592.
+Notably, when patch pixels are explicitly distrusted in the input $T_x$, a small
+but non-zero distrust component (0.008) emerges in the output, providing an
+actionable warning signal unavailable from accuracy alone. The effect is more
+pronounced for patched digit 3: accuracy falls to 19.80\% yet trust remains
+relatively high at 0.738 (trusted $T_x$) and 0.724 (patch distrusted), reflecting
+that the digit-3 inference path passes through less poisoned parameters. Even so,
+explicitly distrusting the patch pixels introduces a distrust mass of 0.014 and
+reduces the trust mass, showing that \ac{IPTA} propagates localised input
+scepticism into the output opinion.
+
+\todo the more distrust in patch 3, as we can see is due to the fact that the distrust in the patch translate a part of the output trust mass into a distrust mass. And since trusted patch 3 as a bigger trust mass, the distrusted one naturally ends with bigger distrust mass.
+\todo maybe just remove this part as it doesn't give very useful insight 
+
+
+
+\todo{add a frame, same for all results}
+
+These results demonstrate that \ac{PaTAS-TP} not only correlates with accuracy
+but provides complementary information: it identifies which inference paths are
+structurally less reliable \todo (clean label vs.\ non clean, and pacthed image vs non patched one) and responds to targeted input
+distrust in a semantically meaningful way.
+
+
+
+
+
+
+% Replace the stale IPTA reference:
+Results show a degradation in trust for adversarial samples: benign digit 3
+achieved $t=0.811, d=0, u=0.189$, while patched digit 3 dropped to
+$t=0.738, d=0, u=0.262$ (trusted $T_x$), or $t=0.724, d=0.014, u=0.262$ \todo 
+when patch pixels are explicitly distrusted.
+
+% Replace the stale breast cancer reference:
+In the breast cancer task (\cref{tab:cancer_results}), assigning a mixed trust
+profile $(0.25, 0, 0.75)$ to features with trusted labels yields a final trust
+mass of $0.38$ for $\epsilon=0.1$, while the vacuous-features/trusted-labels
+case achieves $0.34$ with comparable test accuracy (95.61\%). More strikingly,
+the fully trusted scenario (trust mass $0.88$) coincides with the highest test
+accuracy (96.49\%), whereas the mixed distrust scenario $(0.25, 0.25, 0.5)$
+reduces trust mass to $0.11$ while test accuracy remains at 88.60\%, confirming
+that partial distrust erodes trust assessments far more than uncertainty alone.
+\todo last par to be improved 

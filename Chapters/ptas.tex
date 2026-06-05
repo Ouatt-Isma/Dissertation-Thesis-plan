@@ -105,7 +105,7 @@ The \ac{TNN} serves as the shared underlying representation for all four modules
 The Trust Feedforward function propagates trust values through the \ac{TNN} in alignment with the \ac{NN}’s inference flow. It mirrors the layer-wise computations of the original model, but operates entirely on trust values. At each layer, trust in the inputs and parameters is combined using the trust operations, capturing how evidence flows through the network. This process produces a trust opinion for each output neuron of the \ac{NN} while also storing intermediate trust scores, which are later used by the Parameter-Trust Update.
 
 \paragraph{Output-Trust Aggregation}
-The Trust Feedforward function produces a vector of trust values, one for each output neuron. The goal of Output-Trust Aggregation is to combine these individual opinions into a single, consolidated trust score representing the overall trust in the network's output. This combination is performed using a SL fusion operator, which fuses the trust opinions of all output Trust Nodes into one aggregated opinion. Alternatively, instead of aggregating across all outputs, one may directly consider the trust assigned to the final decision. For instance, in digit classification, if the model outputs a probability \(0.9\) for class ‘1’, the trust in the decision can be taken as the trust score associated with the output neuron for class ‘1’. More generally, the aggregation can be weighted by the strength of each output, for instance by the softmax probabilities, such that higher-confidence outputs contribute more heavily to the consolidated trust score.
+The Trust Feedforward function produces a vector of trust values, one for each output neuron. The goal of Output-Trust Aggregation is to combine these individual opinions into a single, consolidated trust score representing the overall trust in the network's output. This combination can be performed using a SL fusion operator, which fuses the trust opinions of all output Trust Nodes into one aggregated opinion. Alternatively, instead of aggregating across all outputs, one may directly consider the trust assigned to the final decision. For instance, in digit classification, if the model outputs a probability \(0.9\) for class ‘1’, the trust in the decision can be taken as the trust score associated with the output neuron for class ‘1’. More generally, the aggregation can be weighted by the strength of each output, for instance by the softmax probabilities, such that higher-confidence outputs contribute more heavily to the consolidated trust score.
 
 \paragraph{Inference-Path Trust Assessment Generation (GenIPTA)}
 
@@ -375,52 +375,6 @@ where $\theta^{(l)}_{i,j}$ denotes the weight connecting neuron $j$ in layer $(l
 
 In particular, \cref{eq:gd2} shows that gradients factor into an error term and an input activation, revealing that parameter updates depend jointly on gradient signals, input activations, and learning dynamics. \ac{PaTAS-TP} mirrors this structure by incorporating gradient information, input trust, and label trust as analogous sources of evidence in the Parameter-Trust Update. At a high level, the parameter-trust update process combines three sources of information: (i) gradient-based evidence derived from backpropagation, (ii) trust in the labels within the current training batch, and (iii) trust in the input features and intermediate computations recorded during feedforward. These elements are integrated to revise and refine the trust assigned to each parameter. The notation used throughout this subsection is summarized in \cref{tab:params-algorithm}, and the complete update procedure is given in \cref{alg:trustupdate}.
 
-\begin{table}[t]
-\centering
-\caption{Symbols Used in the Parameter-Trust Update Subsection and Algorithm}
-\label{tab:params-algorithm}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{ll}
-\hline
-\textbf{Symbol} & \textbf{Meaning / Description} \\
-\hline
-\multicolumn{2}{l}{\textbf{Inputs to the Algorithm}} \\
-$g$ & Collection of gradients for all parameters in the batch \\
-$T_y$ & Trust opinion on label $y$ \\
-$\epsilon$ & Gradient sensitivity threshold in \textsc{NodeTrust} \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Batch and Layer Quantities}} \\
-$T_{y_{\text{batch}}}$ & Aggregated trust over labels in the current batch \\
-$l$ & Layer index \\
-$n_i^{(l)}$ & Neuron $i$ in layer $l$ \\
-$\mathcal{N}(i)$ & Set of incoming edges to neuron $i$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Gradient Evidence}} \\
-$g^{(l)}_{i,j}$ & Gradient of loss w.r.t.\ $\theta^{(l)}_{i,j}$ \\
-$g^{(l)}_{i}$ & Gradient vector for neuron $n_i^{(l)}$ \\
-$r$ & Count of weak gradients: $|g^{(l)}_{i,j}| < \epsilon$ \\
-$s$ & Count of strong gradients: $|g^{(l)}_{i,j}| \ge \epsilon$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Trust Values Computed in the Algorithm}} \\
-$T_{n_i \mid y_{\text{batch}}}$ & Trust in neuron $n_i$ conditioned on batch labels \\
-$T_{n_i \mid \overline{y_{\text{batch}}}}$ & Trust in neuron under incorrect labels (vacuous) \\
-$T_{n_i \parallel Y_{\text{batch}}}$ & Deduced trust in neuron $n_i$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Parameter Trust}} \\
-$T_{\theta^{(l)}_{i,j}}$ & Trust opinion on parameter $\theta^{(l)}_{i,j}$ \\
-% $T_{lr}$ & Trust in the learning rate \\
-$T_{x^{(l-1)}_j}$ & Trust in the input to parameter $\theta^{(l)}_{i,j}$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Operators Used}} \\
-$\bigwedge$ & Batch-wise fusion of trust opinions \\
-$\circledcirc$ & Inferential deduction operator \\
-$\circleddash$ & Trust-revision operator \\
-$\odot$ & SL binomial multiplication \\
-$\oslash$ & Conservative trust-division operator \\
-\hline
-\end{tabular}
-\end{table}
-
 \begin{algorithm}
 \caption{Parameter-Trust Update Algorithm}
 \begin{algorithmic}[1]
@@ -483,7 +437,7 @@ This combined opinion serves as a foundation for conditioning the trust in each 
 
 For each neuron \(n_i^{(l)}\) at index \(i\) in layer \(l\), we compute:
 \begin{itemize}
-    \item \( T_{n_{i}^{(l)} \mid y_\text{batch}} \) (Line 9), the trust conditioned on the current batch labels. This is inferred by checking each incoming weight gradient \( g^{(l)}_{i,j} \): if \( |g^{(l)}_{i,j}| < \epsilon\)\footnote{The threshold $\epsilon$ is not a tuned hyperparameter but a sensitivity parameter used only in the \textsc{NodeTrust} function to distinguish weak from strong gradients. Its value can be chosen in different reasonable ways depending on the desired sensitivity; in this work, we manually select $\epsilon$ relative to the typical gradient scale during training.}
+    \item \( T_{n_{i}^{(l)} \mid y_\text{batch}} \) (Line 9), the trust conditioned on the current batch labels. This is inferred by checking each incoming weight gradient \( g^{(l)}_{i,j} \): if \( |g^{(l)}_{i,j}| < \epsilon\)\footnote{The threshold $\epsilon$ is not a tuned hyperparameter but a sensitivity parameter used only in the \textsc{NodeTrust} function to distinguish weak from strong gradients. Its value can be chosen in different reasonable ways depending on the desired sensitivity.}
  it is counted as positive evidence \( r \), otherwise as negative evidence \( s \). These counts are then mapped into a binomial opinion using the Baseline-Prior Quantification model.
     \item \( T_{n_{i}^{(l)} \mid \overline{y_\text{batch}}} \), the trust when the true batch labels are not \( y_\text{batch} \). Since no concrete evidence is available for this case, it is initialized to a vacuous opinion: \( (0, 0, 1) \).
     \item A deduced trust \( T_{n_{i}^{(l)} \parallel Y_\text{batch}} \) (Line 11) using the inferential deduction operator \( \circledcirc \), combining the two conditional opinions with \( T_{y_\text{batch}} \).
@@ -583,7 +537,9 @@ b_y = d_{\bar{y}}, \quad d_y = b_{\bar{y}}.
 \begin{remark}
 For a fully trusted input $x = (1,0,0)$, the discounting operator yields $\omega_\theta \otimes x = (P, 0, 1-P)$, which has zero disbelief. Since fusion preserves zero disbelief across inputs, the output satisfies $d_y = 0$. By the same argument applied to $\bar{x} = (0,1,0)$, which produces zero belief after discounting, the output satisfies $b_{\bar{y}} = 0$. 
 
-In other words, a fully trusted input $x = (1,0,0)$ yields an output with $d_y = 0$, and a fully distrusted input $\bar{x} = (0,1,0)$ yields an output with $b_{\bar{y}} = 0$.
+In other words, a fully trusted input $x = (1,0,0)$ yields an output with $d_y = 0$, and a fully distrusted input $\bar{x} = (0,1,0)$ yields an output with $b_{\bar{y}} = 0$. 
+
+This property illustrates a directional preservation of evidence: a fully trusted input cannot produce a non-zero disbelief mass at the output, regardless of the trustworthiness of the parameters. Symmetrically, a fully distrusted input cannot produce a non-zero belief mass at the output. Non-zero disbelief in the output can arise only from disbelief already present in the input; it is never introduced by the \ac{PaTAS-TP}.
 \end{remark}
 
 These properties serve as fundamental consistency checks, ensuring predictable behavior under neutral, vacuous, or balanced evidence.
@@ -653,7 +609,7 @@ In this experiment, we evaluate the \ac{PaTAS-TP} framework on the MNIST dataset
     \item Architecture 4: 128 hidden neurons (784-128-10).
     \item Architecture 5: 2 hidden layers with 16 neurons each (784-16-16-10).
 \end{itemize}
-Although these architectures are not state-of-the-art for MNIST, they are sufficient to evaluate the behavior of \ac{PaTAS-TP} across different model sizes and demonstrate how trust propagates through the network. Each model uses the ReLU activation function for the hidden layer and Softmax for the output. Models are trained for 20 epochs with a batch size of 128 and a learning rate of 0.05, achieving test accuracies of up to 99\%. We evaluate using fully uncertain training data trust assessment functions for both input features and labels, corresponding to the case where we have no knowledge about the dataset.  Additionally, to contrast with the uncertain case, we perform a supplementary evaluation using a fully trusted assessment on Architecture 1 and 5.
+Although these architectures are not state-of-the-art for MNIST, they are sufficient to evaluate the behavior of \ac{PaTAS-TP} across different model sizes and demonstrate how trust propagates through the network. Each model uses the ReLU activation function for the hidden layer and Softmax for the output. Models are trained for 20 epochs with a batch size of 128 and a learning rate of 0.05, achieving test accuracies of up to 98\%. We evaluate using fully uncertain training data trust assessment functions for both input features and labels, corresponding to the case where we have no knowledge about the dataset.  Additionally, to contrast with the uncertain case, we perform a supplementary evaluation using a fully trusted assessment on Architecture 1 and 5.
 
 \subsubsection{Experiment 3 - Poisoned MNIST}\label{exp:3}
 In this experiment, we evaluate the \ac{PaTAS-TP} framework on a poisoned version of the MNIST dataset, where one third of the training images are corrupted: labels of digits 6 and 9 are flipped, and at the same time a visible patch of fixed size is added at the top-left corner of the corresponding images. This combination follows common practices in data poisoning and backdoor attack scenarios~\cite{chen2017targetedbackdoorattacksdeep}. The remaining two thirds of the data remain clean. This setup allows us to examine how \ac{PaTAS-TP} responds to the simultaneous presence of corrupted labels and adversarial triggers that can undermine both model performance and trust. We use Architecture 4 from the previous experiment, consisting of an input layer with 784 neurons, a hidden layer with 128 neurons, and an output layer with 10 neurons (784-128-10).
@@ -670,19 +626,20 @@ For the poisoned dataset, trust is assigned as follows:
 During inference, multiplication operations in the feedforward phase are implemented using SL trust discounting, while addition operations employ a generalized SL averaging fusion operator to support summations over multiple inputs (see \cref{def:trustfunc}). Trust revision uses the same averaging fusion. The \ac{PaTAS-TP} framework and \ac{NN} were implemented in Python 3.13 using NumPy. Two main modules were developed: \texttt{PrimaryNN}, which handles \ac{NN} structure, training, and inference, and \texttt{PaTAS-TP}, which implements  propagation functions defined in the operational flow (\cref{fig:ptasoperation}). These modules interact to dynamically evaluate and update trust during feedforward and backpropagation. The full implementation, including all modules, dependencies, and experiment scripts, is available on \href{https://github.com/Ouatt-Isma/PaTAS-Subjective-Logic-Neural-Networks-Trust-Assessment}{github}, with detailed instructions for reproducing all experiments.
 
 \subsection{Results and Analysis}
-\begin{figure*}[ht]
+
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{0.45\linewidth}
         \includegraphics[width=\linewidth]{img/patas/plot_ptas-128-t-t-ps4.pdf}
-    \caption{Trust mass evolution}
+    \caption{Evolution of trust masses across training rounds (one round corresponds to a feedforward and backpropagation pass).}
     \end{subfigure}
     \begin{subfigure}{0.45\linewidth}
-        \includegraphics[width=\linewidth]{img/patas/accuracy_evolution-128-t-t-ps4.pdf}
+        \includegraphics[width=\linewidth]{latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf}
     \caption{Accuracy}
     \end{subfigure}
     \caption{Evolution of trust mass for fully trusted input in the MNIST poisoned Experiment with patch size \(4\times 4\) pixel}
     \label{fig:4x4}
-\end{figure*}
+\end{figure}
 The evaluation of the Parallel Trust Assessment System (PaTAS) is conducted during the training phase of the \ac{NN}. After each iteration of training (i.e., a complete feedforward and backpropagation cycle), we assume that an inference is performed, and we assess the trustworthiness of the corresponding output. This assessment is carried out under three input trust profiles:
 \begin{itemize}
 \item \emph{Fully Trusted Input}: input is considered fully trusted.
@@ -700,37 +657,118 @@ For each of these three input types, we track and plot the evolution of three ke
 
 As a result, for each evaluation, 9 distinct plots are generated, corresponding to the 3 input types (fully trusted, fully uncertain, and fully distrusted) and each of the three key metrics (trust, uncertainty, and distrust)\footnote{The base rate is set to 0.5 and remains constant across all experiments.}.
 
-All the results are depicted in Figures in the \appp and summarized in \cref{tab:cancer_results,tab:mnist,tab:mnistpois,tab:mnistpoisipta}. They confirm several theoretical properties of \ac{PaTAS-TP} proven in \cref{sec:ptastheory}:
+All the results are depicted in Figures in the \appp and summarized in \cref{tab:cancer_results,tab:mnist,tab:mnistpois,fig:mnistpoisipta}. They confirm several theoretical properties of \ac{PaTAS-TP} proven in \cref{sec:ptastheory}:
 
-\todo{this table value is updated, the text should be updated accordingly}
-\begin{table*}[ht]
-\begin{tabular}{cccccc}
+
+
+\begin{itemize}
+\item \emph{Convergence of Trust Assessment}: when accuracy converges, trust assessment converges as expected.
+\item \emph{Inference on fully uncertain input yields fully uncertain output}: a fully uncertain input always produces a fully uncertain output.
+\item \emph{Symmetric Inference}: when input trust assessments are symmetric, the inference results remain symmetric.
+\end{itemize}
+
+For detailed results, we primarily focus on the three plots for each experiment) corresponding to feedforward of fully trusted input. Processing uncertain inputs naturally yields uncertain outputs, while symmetry implies that trusted and distrusted cases mirror each other. We also confirm that when processing fully trusted inputs, the distrust mass remains close to zero. Since trust, uncertainty, and distrust sum to 1, analyzing only the trust mass is sufficient in such cases. Therefore we keep only the trust mass after the training in \cref{tab:cancer_results,tab:mnist,tab:mnistpois,tab:epsilon_gap}. 
+
+\subsubsection*{Experiment 1 -- Breast Cancer Classification}
+\begin{table}[ht]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccc}
 \hline
-X Trust & Y Trust & $\epsilon=0.1$)& $\epsilon=0.01$ & Train (\%) & Test (\%) \\
+X Trust & Y Trust & $\epsilon=1$ & $\epsilon=0.1$ & $\epsilon=0.01$ & $\epsilon=0.001$ & Train (\%) & Test (\%) \\
 \hline
-trust & trust & 0.88 & 0.67 & 99 & 97 \\
-trust & vacuous & 0.29 & 0.13 & 66 & 75 \\
-trust & distrust & 0 & 0 & 99 & 2.63 \\
-vacuous & trust & 0.34 & 0.27 & 97 & 96 \\
-vacuous & vacuous & 0.30 & 0.18 & 69 & 89 \\
-vacuous & distrust & 0 & 0 & 97 & 4 \\
-distrust & trust & 0 & 0 & 65 & 44 \\
-distrust & vacuous & 0 & 0 & 57 & 33 \\
-distrust & distrust & 0 & 0 & 65 & 40 \\
+trust & trust & 0.8787 & 0.8787 & 0.6658 & 0.1681 & 98.68 & 96.49 \\
+trust & vacuous & 0.3242 & 0.2927 & 0.1290 & 0.0773 & 65.71 & 74.56 \\
+trust & distrust & 0.00 & 0.00 & 0.00 & 0.00 & 99.12 & 2.63 \\
+vacuous & trust & 0.3392 & 0.3392 & 0.2682 & 0.0931 & 96.70 & 95.61 \\
+vacuous & vacuous & 0.3051 & 0.2971 & 0.1820 & 0.1034 & 68.79 & 88.60 \\
+vacuous & distrust & 0.00 & 0.00 & 0.00 & 0.00 & 96.92 & 4.39 \\
+distrust & trust & 0.00 & 0.00 & 0.00 & 0.00 & 64.62 & 43.86 \\
+distrust & vacuous & 0.00 & 0.00 & 0.00 & 0.00 & 56.92 & 33.33 \\
+distrust & distrust & 0.00 & 0.00 & 0.00 & 0.00 & 65.49 & 40.35 \\
 \hline
-\multicolumn{6}{c}{\textit{Extra scenarios}} \\
+\multicolumn{8}{c}{\textit{Extra scenarios}} \\
 \hline
-(0.25, 0.25, 0.5) & (0.25, 0.25, 0.5) & 0.11 & 0.06 & 69 & 89 \\
-(0.25, 0.0, 0.75) & trust & 0.42 & 0.30 & 96 & 96 \\
+(0.25, 0.25, 0.5) & (0.25, 0.25, 0.5) & 0.1172 & 0.1140 & 0.0633 & 0.0272 & 68.79 & 88.60 \\
+(0.25, 0.0, 0.75) & (0.25, 0.0, 0.75) & 0.3810 & 0.3809 & 0.2211 & 0.0871 & 80.22 & 95.61 \\
+\hline
+\end{tabular}%
+}
+\caption{Summary of final trust mass across four values of $\epsilon$ and corresponding train/test accuracies for the Breast Cancer Classification Experiment.}
+\label{tab:cancer_results}
+\end{table}
+
+The results for this experiment are summarized in \cref{tab:cancer_results}. When both features and labels are clean, the model steadily improves and achieves high accuracy (98.68\% training, 97.69\% test), and \ac{PaTAS-TP} produces the highest trust mass across all conditions (0.88 for $\epsilon=0.1$). Clean features with corrupted labels cause test accuracy to collapse to 2.63\%, even while training accuracy remains artificially high at 99.12\%; the model learns the wrong mapping but does so confidently. Correspondingly, trust mass falls to zero regardless of $\epsilon$, correctly signaling the unreliability of the learned parameters. With vacuous labels, performance degrades moderately (65.71\% train, 74.56\% test) and trust mass remains low (0.29). Corrupted features eliminate the ability to learn in any combination: trust mass is zero in all distrust-$X$ rows and test accuracy never exceeds 43.86\%. 
+
+The mild-degradation scenario $(0.25, 0, 0.75)$ for features and labels is the only intermediate case and behaves as expected: with only 15\% of features perturbed and no distrust component, trust mass reaches 0.38 for $\epsilon=0.1$, outperforming every row that uses a fully vacuous opinion for either features or labels. This suggests that an analyst who can bound the degradation and express it as a partial-trust opinion, rather than defaulting to full uncertainty, obtains a more optimistic trust assessment.
+
+We evaluated the system for four values of $\epsilon$ ($0.001, 0.01, 0.1, 1$). We recall that $\epsilon$ is the threshold used by the \textsc{NodeTrust} function in \cref{alg:trustupdate}.
+\begin{itemize}
+\item For $\epsilon = 0.01$: the system is more sensitive to gradient magnitude. Fully trusted $X$ with trusted $Y$ yields a trust mass of 0.67, while uncertain $Y$ reduces it to 0.13. When $X$ is vacuous, trust stabilizes around 0.27 for trusted $Y$ and 0.18 for uncertain $Y$.
+\item For $\epsilon = 0.1$: the larger threshold makes the system less reactive to small gradients. Fully trusted $X$ with trusted $Y$ reaches 0.88; with uncertain $Y$, trust falls to 0.29. Vacuous $X$ with trusted $Y$ yields 0.34, and with uncertain $Y$ yields 0.30. In all cases, distrust in either $X$ or $Y$ drives trust mass to zero.
+\end{itemize}
+
+The two additional values clarify the boundary behavior of $\epsilon$. At $\epsilon = 0.001$, the threshold falls well below the typical gradient magnitude during training, causing \textsc{NodeTrust} to classify nearly all gradients as large and therefore as negative evidence; trust mass collapses across all non-distrust configurations, losing the ability to differentiate between trust profiles. At $\epsilon = 1$, the threshold is so permissive that almost all gradients are treated as small, producing results nearly identical to $\epsilon = 0.1$ and offering no additional discriminative power. Among the four values evaluated, $\epsilon = 0.1$ emerges as the most balanced choice, maintaining sensitivity to meaningful gradient activity without collapsing trust mass or losing discriminative power. How $\epsilon$ should be set in practice is discussed in \cref{sec:patas-discussion}.
+
+A notable observation is that the \textit{trust/vacuous} configuration yields a lower trust mass than \textit{vacuous/vacuous} across all values of $\epsilon$ except $\epsilon = 1$. This ordering is consistent with the test accuracies reported in \cref{tab:cancer_results}, where \textit{trust/vacuous} (74.56\%) underperforms \textit{vacuous/vacuous} (88.60\%). The underlying mechanism is that trusted features produce strong, informative gradients that frequently exceed $\epsilon$, generating negative evidence in \textsc{NodeTrust} when labels are unreliable: the model confidently learns from clean features under vacuous supervision, effectively fitting an unreliable mapping. Noisy features, by contrast, produce diffuse gradients that remain below $\epsilon$ more often, partially canceling the effect of uncertain labels and yielding comparatively higher trust mass. This shows that smaller values of $\epsilon$ correctly capture this ordering, while $\epsilon = 1$ is too permissive to discriminate between these regimes and the effect vanishes.
+
+Overall, there is a strong positive correlation between trust mass and test accuracy. Moreover, a smaller $\epsilon$ makes label trust more influential: the relative gap between trusted-$Y$ and uncertain-$Y$ rows, defined as $(T_{\text{trusted}} - T_{\text{uncertain}}) / T_{\text{trusted}}$,
+increases as $\epsilon$ decreases, as shown in \cref{tab:epsilon_gap}.
+\begin{table}[h]
+\centering
+\caption{Relative influence of label trust as a function of $\epsilon$,
+for trusted and vacuous feature inputs.}
+\label{tab:epsilon_gap}
+
+\begin{tabular}{lcccc}
+\hline
+ & \multicolumn{2}{c}{$\epsilon = 0.1$} & \multicolumn{2}{c}{$\epsilon = 0.01$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+$X$ trust & $T_{Y=\text{trust}}$ & $T_{Y=\text{vac}}$ & $T_{Y=\text{trust}}$ & $T_{Y=\text{vac}}$ \\
+\hline
+trusted  & 0.88 & 0.29 & 0.67 & 0.13 \\
+vacuous  & 0.34 & 0.30 & 0.27 & 0.18 \\
+\hline
+\multicolumn{5}{l}{\small Relative gap (trusted): $(0.88-0.29)/0.88 = 67\%$ vs $(0.67-0.13)/0.67 = 81\%$} \\
+\multicolumn{5}{l}{\small Relative gap (vacuous): $(0.34-0.30)/0.34 = 12\%$ vs $(0.27-0.18)/0.27 = 33\%$} \\
 \hline
 \end{tabular}
-\caption{Summary of final trust mass and corresponding train/test accuracies (in \%) for the Breast Cancer Classification Experiment.}
-\label{tab:cancer_results}
-\end{table*}
+\end{table}
 
 
-\todo{This table is updated and the text value should be updated accordingly. Also Note that consistently, 16 as a better trust than 16-16. Due to the discounting that somehow penalize the network. this is not a bad behavior as if a input data is trusted and the nn is too deep, the it will attenuate this trus. Finally since the model is deeper it converges slower}
-\begin{table*}
+\begin{tcolorbox}[title=Key findings -- Experiment 1, colback=gray!5, colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt, top=4pt, bottom=4pt]
+\textbf{F1.1 Label trust matters more than feature trust.} Setting $X$ as vacuous
+while keeping $Y$ trusted yields a higher trust mass (0.34) than the reverse
+(0.29 for trusted $X$, uncertain $Y$).
+
+\medskip
+\textbf{F1.2 Distrust is more damaging than uncertainty.} Replacing a fully
+uncertain opinion $(0,0,1)$ for both $X$ and $Y$ with a mixed assessment
+$(0.25, 0.25, 0.5)$ reduces trust mass from 0.30 to 0.11, while accuracy
+remains unchanged (88.60\%), confirming the drop is driven by the distrust
+component alone.
+
+\medskip
+\textbf{F1.3 Finer $\epsilon$ amplifies label-trust sensitivity.} As shown in
+\cref{tab:epsilon_gap}, the relative gap between trusted-$Y$ and uncertain-$Y$
+is larger for $\epsilon=0.01$ than for $\epsilon=0.1$, in both the trusted and
+vacuous feature settings.
+\end{tcolorbox}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection*{Experiment 2 -- MNIST Dataset}
+\begin{table}
 \centering
 \begin{tabular}{cccccc}
 \hline
@@ -747,91 +785,115 @@ Architecture & X Trust & Y Trust & Trust Mass & Train Acc (\%) & Test Acc (\%) \
 \end{tabular}
 \caption{Summary of final trust mass for the MNIST Classification Experiment.}
 \label{tab:mnist}
-\end{table*}
+\end{table}
+In this experiment, \ac{PaTAS-TP} produces ten output trust opinions, one for each class. However, they are almost identical across classes, so we record only the aggregated trust mass in \cref{tab:mnist}.
+
+When features and labels are vacuous, accuracy improves as model size increases, from 73.96\% (architecture 16) to 92.05\% (architecture 128). Test accuracy consistently exceeds training accuracy across all architectures, suggesting that training under vacuous trust makes the model underestimate its own learning progress. Trust mass follows the same upward trend with model size (0.3087, 0.3224, 0.3306, 0.3359), though the gains become progressively smaller, indicating diminishing returns from added capacity under uncertain data.
+
+The two-layer architecture (16-16) is a notable exception. Despite having more parameter count than the single-layer 16-hidden neurons network, it yields a trust mass of only 0.1628 under vacuous inputs and 0.7077 under trusted inputs, both consistently lower than the single-layer 16-neuron counterpart (0.3087 and 0.8620 respectively). This is not an artifact but a meaningful property of the framework: each additional layer introduces an extra round of trust discounting, which attenuates the trust signal propagating through the network. A deeper architecture therefore inherits less trust from its inputs, even when those inputs are reliable. This behavior is consistent with \ac{PaTAS-TP} design, since a deeper inference path involves more parameters, each contributing uncertainty, and the framework correctly reflects that the output trust depends on the full chain of parameter reliability. A secondary factor is convergence speed: deeper networks require more epochs to stabilize their gradients, so the parameter trust opinions accumulate evidence more slowly and remain closer to their vacuous initialization at the end of training.
+
+The trusted evaluation provides the clearest contrast. Architecture 16 with trusted features and labels reaches a trust mass of 0.8620, far exceeding any vacuous-data configuration regardless of architecture size. Even the deeper 16-16 architecture achieves 0.7077 under trusted inputs, outperforming the largest single-layer architecture (128, trust mass 0.3359) trained under vacuous data by a wide margin. This confirms that data quality has a far greater impact on the resulting trust assessment than model capacity.
+
+\begin{tcolorbox}[title=Key findings -- Experiment 2, colback=gray!5,
+colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt,
+top=4pt, bottom=4pt]
+
+\textbf{F2.1 Trust increases with model width, with diminishing returns.} Under vacuous data, trust mass grows from 0.3087 (16 neurons) to 0.3359 (128 neurons), but the incremental gain shrinks at each step, suggesting that additional capacity provides less benefit once the dominant bottleneck is data quality rather than model expressiveness.
+
+\medskip
+\textbf{F2.2 Depth penalises trust due to discounting accumulation.} The 16-16 architecture consistently yields lower trust than the single-layer 16-neuron network under both vacuous (0.1628 vs.\ 0.3087) and trusted (0.7077 vs.\ 0.8620) inputs. Each additional layer introduces an extra discounting step, so deeper networks attenuate the trust signal regardless of their predictive accuracy.
+
+\medskip
+\textbf{F2.3 Data quality dominates model capacity for trust.} Training the smallest architecture on trusted data (trust mass 0.8620) far exceeds training the largest architecture on vacuous data (trust mass 0.3359). Investing in data quality is therefore more beneficial for trust than scaling the model.
+\end{tcolorbox}
 
 
-\begin{itemize}
-\item \emph{Convergence of Trust Assessment}: when accuracy converges, trust assessment converges as expected.
-\item \emph{Inference on fully uncertain input yields fully uncertain output}: a fully uncertain input always produces a fully uncertain output.
-\item \emph{Symmetric Inference}: when input trust assessments are symmetric, the inference results remain symmetric.
-\end{itemize}
-
-For detailed results, we primarily focus on the three plots for each experiment) corresponding to feedforward of fully trusted input. Processing uncertain inputs naturally yields uncertain outputs, while symmetry implies that trusted and distrusted cases mirror each other. We also note that when processing fully trusted inputs, the distrust mass generally remains close to zero. Since trust, uncertainty, and distrust sum to 1, analyzing only the trust mass is sufficient in such cases. Therefore we keep only the trust mass after the training in \cref{tab:cancer_results,tab:mnist,tab:mnistpois,tab:mnistpoisipta} .
-
-
-\subsubsection*{Experiment 1 -- Breast Cancer Classification}
-When both features and labels are clean, the model steadily improves and achieves high accuracy. Clean features with corrupted labels cause accuracy to collapse, while noisy labels yield only moderate and unstable learning. With corrupted features, accuracy remains low in all cases, even with clean labels. Noisy features with clean labels still permit relatively strong learning, but performance breaks down when labels are corrupted or noisy. Importantly, corrupted labels mislead the model: training accuracy appears high while test accuracy remains poor, showing that the model learns, but learns the wrong mapping. In contrast, noisy labels prevent learning altogether, regardless of whether features are clean or noisy. Corrupted features eliminate the ability to learn in any setting.
-
-We evaluated the system for two values of $\epsilon$ (0.1 and 0.01), as summarized in \cref{tab:cancer_results}. We recall that $\epsilon$ is the threshold used by the NodeTrust function in \cref{alg:trustupdate}.
-\begin{itemize}
-\item For $\epsilon = 0.01$: fully uncertain $X$ stabilizes trust mass around 0.26 for uncertain $Y$ and 0.28 for trusted $Y$. Fully trusted $X$ yields rapid increases, stabilizing at $\sim 0.27$ for uncertain $Y$ and $0.70$ for trusted $Y$.
-\item For $\epsilon = 0.1$: the system becomes less sensitive to gradients. When $X$ is uncertain, trust mass stabilizes around 0.27 for uncertain $Y$, and 0.32 for trusted $Y$. Fully trusted $X$ gives 0.28 for uncertain $Y$, and 0.87 for trusted $Y$. No matter $\epsilon$ value, when $X$ or $Y$ are distrusted the trust mass rapidly falls to 0.
-\end{itemize}
-Overall, there is a strong positive correlation between trust mass and test accuracy. Moreover, when $\epsilon$ is smaller, the trust level of $Y$ (trusted, uncertain) has a weaker influence on the 
-final trust mass.
-
-Two findings are worth emphasizing. First, \emph{label trust matters more than feature trust}: setting $X$ as fully uncertain while keeping $Y$ trusted yields a higher trust mass (0.32) than the opposite case, where $X$ is trusted but $Y$ uncertain (0.28). Second, \emph{distrust is more damaging than uncertainty}: replacing a fully uncertain opinion $(0,0,1)$ for both $X$ and $Y$ with a mixed assessment $(0.25,0.25,0.5)$ reduces the trust mass from $0.27$ to $0.18$, showing that even partial distrust degrades trust more strongly than uncertainty alone.
-
-
-
-
-\subsubsection*{Experiment 2 -- MNIST Dataset}
-In this experiment, \ac{PaTAS-TP} produces ten output trust opinions, one for each class. However they are almost the same so we record only the aggregated trust mass in the table. As shown in \cref{tab:mnist}, when features and labels are noisy, accuracy improves as model size increases. Test accuracy is consistently greater than training accuracy across all architectures, suggesting training noise makes the model underestimate its learning progress. While trust increases with model size, the gains become progressively smaller (0.281 $\to$ 0.291 $\to$ 0.295 $\to$ 0.298). This contrasts clearly with the fully trusted evaluation on the smallest architecture, which achieves a trust mass of 0.869, far exceeding any uncertain-data configuration regardless of model size. This highlights that \emph{training a smaller architecture on trusted data is significantly more beneficial for trust than training a larger architecture on uncertain data}. Moreover, we can see that larger architectures yield more stable trust assessments, likely due 
-to smaller average gradient magnitudes.
-
-
-\subsubsection*{Experiment 3 – Poisoned MNIST Dataset}
-As in the previous experiment, \ac{PaTAS-TP} has ten output trust opinions. These values are informative because the reliability of the inference path vary across labels, especially when some are patched and others are not. In \cref{tab:mnistpois}, we report the trust mass associated with label 3 (a clean class) and label 6 (a poisoned class; see \cref{exp:3}). Alongside overall train and test accuracy, we also report accuracy on clean test samples of digits 3 and 6, as well as accuracy on poisoned versions of those test samples.
-
-The results suggest that \ac{PaTAS-TP} is able to reflect differences in reliability between the clean and poisoned classes, even under moderate corruption. Across all patch sizes, the trust mass assigned to label 3 consistently remains higher than that assigned to label 6, confirming that \ac{PaTAS-TP} reliably distinguishes clean from poisoned inference paths. As shown in \cref{tab:mnistpois}, both trust values decrease as the patch size grows, since larger patches affect a greater number of neurons along the inference path, thereby reducing the overall reliability of the parameters associated with those paths and progressively affecting even the neurons involved in predicting clean classes. This degradation becomes extreme at $27 \times 27$, where the patch dominates nearly the entire input, causing a collapse of trust assessment for all labels (0.035 and 0.028 for labels 3 and 6 respectively). For smaller patches ($1 \times 1$, $4 \times 4$, 
-and $10 \times 10$), a clear and interpretable separation between clean and poisoned trust scores is maintained.
-
-To evaluate the \ac{IPTA}, \Cref{tab:mnistpoisipta} reports both accuracy and the corresponding trust opinions for clean digits (3 and 6) and patched digit 6 datasets. The trust opinion is obtained by feedforwarding a fully trusted opinion through the \ac{IPTA} derived from clean digit 3, clean digit 6, and patched digit 6 images. Clean samples maintain high accuracy with balanced trust and uncertainty masses, with a slightly better trust--uncertainty balance for digit 3 ($0.878$ trust mass for 3 vs $0.866$ trust mass for 6). In contrast, patched samples show a drastic accuracy drop, lower trust ($0.749$), and higher uncertainty, alarming for untrustworthy predictions. Furthermore, when we explicitly distrust the patch pixels while trusting the remaining pixels before feedforwarding through the \ac{IPTA}, the resulting trust opinion becomes $(0.55, 0.2, 0.25)$. These results show that \ac{PaTAS-TP} provides interpretable warnings about poisoned outputs.
-
-\begin{table*}[ht]
+\subsubsection*{Experiment 3 -- Poisoned MNIST Dataset}
+\begin{table}[ht]
 \centering
 \resizebox{\textwidth}{!}{
 \begin{tabular}{ccccccccc}
 \hline
-Patch size & Trust for 3 & Trust for 6 & Train (\%) & Test (\%) & Clean 3  (\%)& Clean 6  (\%) & 3 with patch (\%) & 6 with patch (\%)\\
+Patch size & Trust for 3 & Trust for 6 & Train (\%) & Test (\%) & Clean 3 (\%) & Clean 6 (\%) & 3 with patch (\%) & 6 with patch (\%) \\
 \hline
-\((1 \times 1)\) & 0.891 & 0.699 & 99.54 & 97.76 & 97.62 & 96.97 & 97.27 & 81.00 \\
-
-\((4 \times 4)\) & 0.871 & 0.682& 99.53 & 97.57 & 97.43 & 96.66 & 86.43 & 70.35 \\
-
-\((10 \times 10)\) & 0.733 & 0.578 & 99.54 & 97.67 & 97.33 & 97.18 & 87.52 & 58.98
-\\
-
-\((27 \times 27)\) & 0.035 & 0.028 & 96.32 & 97.77 & 97.78 & 97.18 & 0 & 0\\
+$(1 \times 1)$   & 0.836 & 0.440 & 99.62 & 97.66 & 97.72 & 97.49 & 83.76 & 0.63 \\
+$(4 \times 4)$   & 0.833 & 0.439 & 99.62 & 97.66 & 98.02 & 97.70 & 19.80 & 0.84 \\
+$(10 \times 10)$ & 0.815 & 0.433 & 99.60 & 97.61 & 97.62 & 97.49 & 16.44 & 0.63 \\
+$(27 \times 27)$ & 0.651 & 0.386 & 96.35 & 97.73 & 98.02 & 97.81 &  0.00 & 0.00 \\
 \hline
 \end{tabular}
 }
-\caption{Summary of result for the Poisoned MNIST Classification Experiment.}
+\caption{Summary of results for the Poisoned MNIST Classification Experiment.}
 \label{tab:mnistpois}
-\end{table*}
+\end{table}
 
-\begin{table}[ht]
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/patas/ipta_table2a.pdf}
+    \caption{\ac{IPTA} results for \ac{NN} trained on poisoned datasets with patch size $4 \times 4$. Results are obtained by feedforwarding a fully trusted opinion, except the patch-distrusted, where patch pixels are explicitly assigned distrust.}
+    \label{fig:mnistpoisipta}
+\end{figure}
+
+\begin{table}[h]
 \centering
-\begin{tabular}{ccccccccc}
+\caption{Relative trust gap between clean label 3 and poisoned label 6
+as a function of patch size.}
+\label{tab:reldrop}
+\begin{tabular}{lccc}
 \hline
- & Accuracy (\%) & Trust  & Distrust & Uncertainty \\
+Patch size & $T_3$ & $T_6$ & $(T_3 - T_6)/T_3$ (\%) \\
 \hline
-Clean 3 & 97.53 & 0.878 & 0.0 & 0.122\\
-
-Clean 6  & 96.66 & 0.866 & 0.0 & 0.134\\
-
-6 with patch& 70.35 & 0.749 & 0.0 & 0.251\\
-
-6 with pacth & -- & 0.550 & 0.2 & 0.250\\
-(patch distrusted) &&&&\\
+$1\times1$   & 0.836 & 0.440 & 47.4 \\
+$4\times4$   & 0.833 & 0.439 & 47.3 \\
+$10\times10$ & 0.815 & 0.433 & 46.9 \\
+$27\times27$ & 0.651 & 0.386 & 40.7 \\
 \hline
 \end{tabular}
-\caption{\ac{IPTA} results for \ac{NN} trained on poisoned datasets with patch size $4 \times 4$. Results are obtained by feedforwarding a fully trusted opinion, except for the last row where patch pixels are explicitly distrusted.}
-\label{tab:mnistpoisipta}
 \end{table}
+
+As in the previous experiment, \ac{PaTAS-TP} produces ten output trust opinions. In \cref{tab:mnistpois} we report the trust mass for label 3 (a clean class) and label 6 (a poisoned class), alongside overall train/test accuracy and per-class accuracy on both clean and patched test samples.
+
+Across all patch sizes, the trust mass for label 3 consistently exceeds that for label 6 (e.g.\ 0.836 vs.\ 0.440 for the $1\times1$ patch), confirming that \ac{PaTAS-TP} reliably distinguishes clean from poisoned labels even when overall accuracy remains high (97.66\%). As the patch grows, both trust values decrease, but not symmetrically: as shown in \cref{tab:reldrop}, the relative gap $(T_3 - T_6)/T_3$ decreases with patch size, from 47.4\% at $1\times1$ down to 40.7\% at $27\times27$, indicating that larger patches erode the trust advantage of the clean class more than they further penalize the already-distrusted poisoned class. As a result, the gap between the two patches decreases with patch size. This asymmetry is interpretable: as the patch occupies a larger fraction of the image, the underlying model increasingly associates the patch pattern directly with the target poisoned class, bypassing the remaining image features. The parameters involved in clean-class prediction are therefore affected more by the growing patch than those already conditioned on the poisoned signal, which partially absorbs the patch regardless of its size. The clear separation between the two classes is nonetheless maintained across all patch sizes.
+
+Regarding classification accuracy, patched digit 6 samples are almost entirely misclassified regardless of patch size ( $\leq$ 0.84\%), confirming the backdoor
+attack is effective. Patched digit 3 accuracy degrades more gradually, dropping
+sharply from 83.76\% at $1\times1$ to roughly 16 to 20\% for larger patches,
+reflecting the spatial overlap between the patch and discriminative features for
+digit 3. The $27\times27$ case is an edge case rather than a realistic poisoning
+scenario: a patch of this size dominates the entire image at inference time, so
+the model associates the input almost entirely with the poisoned trigger rather
+than the digit. One of the poisoned classes therefore reaches near-100\% accuracy
+while the other collapses to 0\%, producing the 0\% accuracy observed for both
+patched digits 3 and 6. This extreme case is included only to illustrate the
+boundary behavior of the framework.
+
+To evaluate the \ac{IPTA}, \cref{fig:mnistpoisipta} reports accuracy and the full trust opinion $(t, d, u)$ for clean and patched samples, obtained by feedforwarding a fully trusted opinion through the \ac{IPTA} instantiated from the respective inference path in the $4\times 4$ patch model. As established in \cref{thm:infvac} (Remark~7.1), feedforwarding a fully trusted input $(1, 0, 0)$ through any \ac{PaTAS-TP} configuration yields an output with zero distrust mass, since the discounting operator maps a fully trusted input to an opinion with $d=0$, and fusion preserves this zero mass. This is confirmed across all rows using a trusted $T_x$: distrust remains exactly 0 in every case.
+
+Clean digit 3 achieves the strongest trust profile (0.811 trust, 0.189 uncertainty), consistent with high accuracy (98.02\%). Clean digit 6 already exhibits markedly higher uncertainty (0.570) despite comparable accuracy (97.70\%), reflecting that the parameters on the digit-6 inference path were exposed to poisoned training samples and are therefore less trusted.
+
+For patched samples, the degradation is clear. Patched digit 6 accuracy collapses to 0.84\% and trust drops to 0.408, with uncertainty dominating at 0.592, providing a warning signal unavailable from accuracy alone. For patched digit 3, accuracy falls to 19.80\% yet trust remains relatively higher at 0.738, reflecting that the digit-3 inference path passes through less poisoned parameters. 
+
+\begin{tcolorbox}[title=Key findings -- Experiment 3, colback=gray!5,
+colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt,
+top=4pt, bottom=4pt]
+
+\textbf{F3.1 Trust separates clean from poisoned inference paths.} Across all patch sizes, the trust mass for label 3 (clean) consistently exceeds that for label 6 (poisoned), even when overall test accuracy remains above 97\%. \ac{PaTAS-TP} therefore reveals reliability differences that accuracy alone cannot expose.
+
+\medskip
+\textbf{F3.2 Larger patches narrow the trust gap by affecting clean paths
+more than poisoned ones.} As patch size grows, the trust mass for the clean label decreases more steeply than for the poisoned label. The model increasingly relies on the patch pattern rather than image features, which degrades the parameters along clean-class inference paths more than those already conditioned on
+the poisoned signal.
+
+\medskip
+\textbf{F3.3 Zero distrust under trusted input is theoretically guaranteed.} When the input trust is fully trusted $(1,0,0)$, distrust in the output is exactly zero, as established in \cref{thm:infvac}. This is confirmed empirically across all IPTA rows using trusted $T_x$.
+\end{tcolorbox}
+
+These results demonstrate that \ac{PaTAS-TP} not only correlates with accuracy but provides complementary information: it identifies which inference paths are structurally less reliable, responds to the size of adversarial corruption, and distinguishes clean from poisoned classes even when overall accuracy remains high.
 
 \section{Discussion of \ac{PaTAS-TP} Findings}
 \label{sec:patas-discussion}
+
 \begin{table}[h!]
 \centering
 \begin{tabular}{cccc}
@@ -859,23 +921,65 @@ Clean 6  & 96.66 & 0.866 & 0.0 & 0.134\\
 \[
 T(\text{NN}) = \ac{PaTAS-TP}_{FF}((1, 0, 0)),
 \]
-which quantifies how well trust is maintained throughout the network. Using this definition, we compared the \ac{IPTA} for benign and adversarial inputs in Experiment~\ref{exp:3}, where the adversarial case used a \(4\times4\) patch injection. Results show a degradation in trust for adversarial samples: benign inputs achieved \(t=0.878, d=0, u=0.122\), while patched inputs dropped to \(t=0.749, d=0, u=0.251\). These observations demonstrate the sensitivity of \ac{PaTAS-TP} to local perturbations, offering a quantitative indicator of reduced reliability.
+which quantifies how well trust is maintained throughout the network. This is the definition that we used to compare the \ac{IPTA} for benign and adversarial inputs in Experiment~3, where the adversarial case used a \(4\times4\) patch injection. 
 
-Although trust mass and accuracy are often correlated, our results reveal meaningful divergences. In the breast cancer task (\cref{tab:cancer_results}), assigning a mixed trust profile \((0.25, 0, 0.75)\) to all features and labels yields a final trust mass of \(0.34\), higher than the fully uncertain-features/fully trusted label case (\(0.32\)), yet the latter achieves better test accuracy (80\% vs. 96\%). Thus, higher trust mass does not always imply superior predictive performance. 
+Although trust mass and accuracy are often correlated, our results reveal some divergences. A clear example is the MNIST experiment (\cref{tab:mnist}): the 16-16 architecture achieves slightly better test accuracy than the single-layer 16-neuron network (95.84\% vs.\ 95.13\% under trusted data), yet its trust mass is substantially lower (0.7077 vs.\ 0.8620). The additional layer improves predictive performance while simultaneously eroding the trust signal, because each extra discounting step attenuates the evidence flowing through the network. This illustrates that accuracy and trust can evolve in opposite directions depending on architectural choices.
 
-This difference reflect that \ac{PaTAS-TP} evaluates the reliability of the inference path, not just predictive accuracy. The digit “6” was a poisoned class during training, so the parameters involved in predicting “6” are less trusted than those for “3,” even though the test samples are clean. 
-
-Interpretation of trust values, like accuracy, depends on the application. In high-stakes settings, a resulting trust score of \((0.4, 0, 0.6)\) may be inadequate, whereas in less critical domains it may suffice. \ac{PaTAS-TP} enables such contextual interpretation by providing a unified, interpretable metric that can be tracked over time, compared across models, or evaluated under varying conditions. Overall, \ac{PaTAS-TP} can complement traditional metrics, for example, by signaling fragility even when accuracy appears high or by identifying stability where accuracy slightly decreases. This duality underscores its relevance in safety-critical contexts where accuracy alone can be misleading.
+Interpretation of trust values, like accuracy, depends on the application. In high-stakes settings, a resulting trust score of \((0.6, 0, 0.4)\) may be inadequate, whereas in less critical domains it may suffice. \ac{PaTAS-TP} enables such contextual interpretation by providing a unified, interpretable metric that can be tracked over time, compared across models, or evaluated under varying conditions. Overall, \ac{PaTAS-TP} can complement traditional metrics, for example, by signaling fragility even when accuracy appears high or by identifying stability where accuracy slightly decreases. This duality underscores its relevance in safety-critical contexts where accuracy alone can be misleading.
 
 In practice, precise dataset trustworthiness estimates may be unavailable, especially for large training datasets where the provenance of individual samples is difficult to establish. \ac{PaTAS-TP} can still operate in such cases by initializing dataset trust to a fully uncertain (vacuous) opinion. While this limits the use of prior trust evidence during training, it preserves the ability to propagate trust assessments at inference time. For a specific query, the circumstances under which the input features were collected are often easier to assess, making input-level trust more practical to obtain than dataset-level trust. \ac{PaTAS-TP} can therefore support meaningful trust evaluation even when explicit dataset provenance is missing. Likewise, if trust in a particular input cannot be assessed, a fully uncertain opinion may be used as a fallback.
 
-A key factor affecting \ac{PaTAS-TP} behavior is the parameter \(\epsilon\), which controls the threshold used to classify gradients as positive or negative evidence during training. As shown in \cref{tab:cancer_results}, if \(\epsilon\) is too small, \ac{PaTAS-TP} may misinterpret gradients as large even when the model performs well. Consequently, trusted labels may reduce parameter trust, resembling the case \(g \to +\infty\) in ~\cref{tab:asympt}. Proper calibration of \(\epsilon\) is therefore crucial, and can be tuned per layer or gradually reduced as training converges to increase sensitivity to smaller gradients. One practical approach is to tie \(\epsilon\) to the learning rate, so that as the learning rate decays, \(\epsilon\) decreases accordingly, naturally tracking the expected gradient scale throughout training.
+A key factor governing \ac{PaTAS-TP} behavior is $\epsilon$, the threshold used to classify gradients as positive or negative evidence. Its calibration is critical: if $\epsilon$ is too small relative to the prevailing gradient scale, most gradients are classified as large and treated as negative evidence, causing trust mass to collapse and the framework to lose sensitivity to trust profile differences (resembling the case \(g \to +\infty\) in ~\cref{tab:asympt}). Conversely, if $\epsilon$ is too large, nearly all gradients are treated as small, and the threshold loses discriminative power regardless of model behavior. Both failure modes are confirmed empirically in \cref{tab:cancer_results}. When profiling gradient distributions is impractical, a lightweight heuristic is to tie $\epsilon$ to the learning rate, providing a simple proxy for the expected gradient scale under the assumption that gradients decay roughly in proportion to the learning rate as training converges. A more principled approach sets $\epsilon$ relative to the empirical distribution of gradient magnitudes observed early in training. In practice, $\epsilon$ could be tuned per layer, since gradient scales naturally differ across layers, or scheduled alongside training to track the evolving gradient magnitude, or replaced by an adaptive scheme such as the denominator in \ac{Adam}, which tracks gradient magnitude per parameter and rescales automatically.
 
 Finally, trust quantification for \(T_{n_i \mid y_\text{batch}}\) in the Trust Update Algorithm (\cref{alg:trustupdate}) relies on a simple gradient-counting procedure. Although computationally efficient, it fixes the uncertainty component of the resulting binomial opinion based on the number of input neurons to \(i\). This fixed-uncertainty formulation may not be optimal in all cases, suggesting the need for adaptive quantification schemes. Similarly, \(T_{n_i \mid \overline{y_\text{batch}}}\) is set to a fully vacuous opinion \((0, 0, 1)\), which, while consistent with the absence of evidence, may not fully leverage prior knowledge when available.
+
+A subtlety visible in \cref{fig:mnistpoisipta} is that the per-class neuron trust for patched digit 3 (0.74) exceeds that for clean digit 6 (0.43), even though patched digit 3 has much lower accuracy (19.80\% vs. 97.70\%). This is not inconsistent: the trust opinion associated with the class-3 output neuron reflects the reliability of the parameters on the digit-3 inference path, which are less poisoned than those on the digit-6 path. The path is relatively trustworthy; it is the input that is adversarially corrupted.
+
+This distinction motivates the use of a softmax-weighted aggregation $\sum_i p_i t_i$, which weights each output neuron's trust mass by the model's predicted probability for that class. As shown in \cref{fig:mnistpoisipta2}, this aggregation produces a more semantically aligned ranking: the trust mass for patched digit 3 (0.42) falls below that of clean digit 6 (0.46), correctly reflecting that the model's actual decision for a patched digit 3 image is unreliable. The softmax-weighted aggregator therefore combines path-level trust with decision-level confidence, making it better suited for scenarios where the goal is to assess trust in the final prediction rather than in the inference path alone.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/patas/ipta_trust_2a_vs_2c.pdf}
+    \caption{IPTA trust mass comparison between per-class neuron and softmax-weighted aggregation ($\sum_i p_i t_i$) for the \ac{NN} trained on the poisoned dataset with patch size $4 \times 4$. The softmax-weighted aggregation weights each output neuron's trust mass by the model's predicted probability, producing a ranking that better reflects the reliability of the final decision rather than the inference path alone.}
+    \label{fig:mnistpoisipta2}
+\end{figure}
+
 
 
 \section{Summary \& Conclusions}
 \label{sec:patas-tp-conclusion}
-\todo{In general, make clear that this is a initial work. and we believe the results are good even though there are still many rooms of improvement}
+
+
+This chapter presented \ac{PaTAS-TP}, a framework for propagating trust through
+\acp{NN} in parallel with standard computation. The results are encouraging: trust
+assessments converge alongside model training, respect theoretical symmetry and
+invariance properties, and provide interpretable signals that complement accuracy
+in all three experimental settings. We consider this an initial contribution whose
+viability is demonstrated on moderate-scale architectures; extending the evaluation to state-of-the-art models and training pipelines, such as transformer-based architectures or large-scale convolutional networks, is a natural and important direction for future work.
+
+A known limitation of the current design is that it structurally penalizes deeper
+architectures. Each additional layer introduces an extra discounting step that
+attenuates the trust signal, so deeper networks inherit less trust from their
+inputs regardless of their predictive performance. This is a meaningful concern
+given that modern architectures are typically deep. Adapting the framework to
+compensate for depth, for instance by normalizing trust opinions with respect to
+path length or by using layer-wise trust scaling, is a direction for future work.
+
+A second limitation concerns the directional preservation of evidence established
+in \cref{thm:infvac} and its Remark. While theoretically sound, this property implies that \ac{PaTAS-TP} cannot generate a non-zero distrust mass at the output when the input carries no distrust, that is, when $d_x = 0$, even if the model parameters are highly unreliable. In other words, parameter unreliability manifests as increased uncertainty rather than explicit distrust in the output opinion. This is a genuine
+restriction in safety-critical settings where a positive distrust signal would be
+more actionable than a high uncertainty mass. Relaxing this constraint, for
+instance by allowing parameter distrust to directly contribute a distrust component
+to the output, is another avenue for future work.
+
+Finally, the gradient-counting procedure used in \textsc{NodeTrust} fixes the
+uncertainty component of the resulting binomial opinion based on the number of
+input neurons, which may not be optimal in all cases. Adaptive quantification
+schemes, as well as richer initialisation strategies for
+$T_{n_i \mid \overline{y_\text{batch}}}$ beyond the vacuous opinion, are further
+directions for improving the framework.
+
+
+
 
 

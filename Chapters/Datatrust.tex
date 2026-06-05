@@ -764,7 +764,7 @@ The tolerance $\eta$ controls how strictly Method~1 interprets balance. Too smal
 \end{figure}
 
 \subsection{Summary}
-
+\label{sec:gtrsb_summary}
 
 The two trust sources answer the same trust proposition by different
 routes and exhibit complementary strengths. Method~1 requires the global class-probabilities distribution and is the natural choice when the dataset is centralized and fully observable. Method~2 only requires per-contributor entropy and is therefore the natural choice in collaborative or federated settings, where no party observes the global distribution and class counts cannot be shared. One limitation of Method~2 is worth noting: two locally unbalanced sub-datasets can combine into a globally balanced dataset, yet each contributor would report negative evidence, pulling the trust opinion toward distrust even when the overall distribution is acceptable. Method~1, operating on the global distribution, is immune to this artifact. The two methods should therefore be seen as complementary rather than interchangeable, and the choice between them depends on whether the global distribution is observable.
@@ -913,43 +913,7 @@ This application covers the \textbf{annotation row} of \cref{tab:dataset-trust:c
   \label{tab:dataset-trust:applications-summary}
 \end{table}
 
-% \section{Summary and Conclusions}
-% \label{sec:dataset-trust:summary}
 
-% This chapter introduced a top-level framework for assessing the trustworthiness of \ac{AI} training datasets, specializing the General Trust Assessment Methodology of \cref{chap:Trust_method} to the dataset setting. The chapter's central claim is that dataset trustworthiness is best treated not as a single quality score but as a structured assessment fully specified by four choices: the property being assessed, the lifecycle stage at which evidence is collected, and the granularity at which the property is meaningful. This three-axis design space $(\propP, \propS, \propG)$ is the conceptual contribution of the chapter. It serves throughout the rest of the dissertation as the vocabulary for positioning specific contributions and as the bridge between the abstract methodology of \cref{chap:Trust_method} and the implementation-level mechanisms of \ac{PaTAS}.
-
-% % \paragraph{What the chapter delivers.}
-% The framework is supported by three concrete artifacts. First, the
-% framework allows to define the dataset reliability proposition by means of the lifecycle decomposition into sampling, collection, annotation, and processing, the normalization of heterogeneous metrics into quality scores via tolerance and acceptability thresholds, and the three quantification schemes (\ac{BPQ}, \ac{EWQ}, \ac{CUQ}) introduced in \cref{chap:Trust_method} but specialized here for dataset evidence.
-% Second, the trust-source catalog (\cref{tab:dataset-trust:catalogue})
-% provides a practical entry point: a curated set of metrics for each
-% lifecycle stage, tagged with the granularity at which each metric
-% naturally produces its opinion. Third, the cross-granularity
-% composition rules of \cref{sec:dataset-trust:formal:granularity} make
-% explicit how feature-level, entry-level, and dataset-level evidence
-% can be combined, lifting evidence at one granularity to opinions at
-% another.
-
-% % \paragraph{Three applications.}
-% Three applications instantiate the framework.  The \ac{COMPAS} application exercises the multi-stage composite assessment over all four lifecycle stages, showing how stage-level opinions can be quantified and combined into a dataset-level opinion. The Balancing Bias application on \ac{GTSRB}~\cite{10.1007/978-3-032-19096-3_17} exercises the sampling-stage, dataset-level pattern with both \ac{CUQ} (the centralized, sample-complexity-driven Method~1) and \ac{BPQ} (the federated, entropy-driven Method~2), illustrating that the same trust source can lead to different quantification depending on what is observable and how we process it. The Labeling Bias application on CIFAR-10H~\cite{trust-aidatatrust} exercises the annotation-stage, entry-level pattern with \ac{BPQ}, a discussion of \ac{EWQ} as an extension when annotation-level confidence is available, and an annotator-level construction that connects to the trust-discounting operator.
-
-% % \paragraph{Why this matters.}
-% The framework provides decision-supporting summaries that scalar quality metrics cannot. By construction, a dataset-level opinion $(t, d, u)$ encodes three qualitatively different signals simultaneously: evidence supporting the property, evidence against the property, and the residual uncertainty arising from missing or contradictory evidence. The \ac{COMPAS} rollup makes the practical benefit explicit: an auditor can distinguish unreliability driven by contradictory evidence from low confidence driven by absent evidence, two situations that call for qualitatively different remediation actions and that a single scalar score would conflate. The framework therefore turns dataset reliability assessment into a diagnostic instrument rather than a pass/fail check.
-
-% % \paragraph{Limitations and open directions.}
-% Three limitations frame the work for future investigation. First, the trust-source catalog is necessarily non-exhaustive. Metrics encoding properties not yet covered (e.g., distributional robustness, fairness under intersectional protected groups, provenance of synthetic data) can be added incrementally; the framework's structural design is unchanged by such extensions. Second, the choice of quantification hyperparameters namely the tolerance $\tau_m$, the acceptability bounds $(A_m, L_m)$, the evidence-strength $K_m$, and the prior weight $W$, is left to the analyst. The framework does not currently provide a calibration procedure for these values, although patterns observed in the applications (e.g., the $\eta$-stability zone in the \ac{GTSRB} application) suggest that some degree of automatic calibration is feasible. Third, the multi-stage \ac{COMPAS} assessment treats the four lifecycle stages as exchangeable in the cross-stage conjunction. In practice, weakness at certain stages may matter more than weakness at others depending on the downstream task, which would call for a weighted or priority-aware variant of the conjunction. The current framework could be extended based on \ac{SL} discounting operators.
-
-% % \paragraph{Bridge to the next chapter.}
-% \paragraph{Bridge to the next chapter.}
-% The output of the framework presented in this chapter, a structured trust opinion at the dataset, entry, or feature granularity, is the input expected by the Trust Propagation Module of \ac{PaTAS} (\cref{chap:patas}).
-
-% \ac{PaTAS} consumes \emph{per-feature} trust opinions natively. When
-% the framework produces a coarser-granularity opinion (entry-level or dataset-level), the same opinion can be replicated across all features of the corresponding scope; this is the \emph{downward replication} described in \cref{sec:dataset-trust:formal:granularity}. The per-feature opinions of the training set are then used by \ac{PaTAS} to derive trust in the learnt parameters of the neural network, so that data trust is carried into the model.
-
-% The same machinery applies at inference time. The trust source used to produce per-feature opinions for the training dataset can equally be applied to a single input vector, producing per-feature opinions for that input. \ac{PaTAS} then propagates those input-level opinions through the parameters and activations of the network to produce a trust opinion on the network's output. A complete worked instance of this pipeline, from training-set feature opinions through model parameter trust to inference-time output opinions, is provided in the use-case study of \cref{chap:usecase}, where \ac{PaTAS} is evaluated end-to-end.
-
-% \marginpar{The trust sources does not always carry across.}
-% The framework of this chapter and the propagation mechanism of \cref{chap:patas} share the trust representation and the trust \emph{property} but not necessary the same trust sources. Consider \emph{accuracy}: the proposition ``the dataset is accurate'' is a statement about how faithfully the recorded values reflect the underlying ground truth at the dataset level (e.g., it is supported by sensor-consistency or cross-device-drift evidence). The proposition ``this input is accurate'' is a statement about a single observation at inference time, supported by entirely different evidence (e.g., a confidence score from the sensor that produced it, an out-of-range check, a provenance check). The two propositions are about the same property, but the trust source and the evidence are different. The analyst is free to use the same trust sources for both the dataset assessment and the input assessment, as long as they are about the same proposition.
 
 \section{Summary and Conclusions} \label{sec:dataset-trust:summary}
 
@@ -961,7 +925,7 @@ Three applications illustrate the framework. The \ac{COMPAS} case demonstrates m
 
 The framework provides richer decision support than scalar metrics. A dataset-level opinion $(t, d, u)$ distinguishes supporting evidence, contradicting evidence, and uncertainty. This enables auditors to differentiate between lack of evidence and conflicting evidence, two situations requiring different actions, making the framework a diagnostic tool rather than a pass/fail measure.
 
-Three limitations remain. First, the trust-source catalog is not exhaustive and can be extended. Second, hyperparameters (e.g., $\tau_m$, $(A_m, L_m)$, $K_m$, $W$) require manual tuning, though partial calibration appears feasible as illustrated with $\eta$ in the \ac{GTSRB} application. Third, lifecycle stages are treated uniformly, whereas task-dependent weighting may be needed, potentially via discounting operators.
+Three limitations remain. First, the trust-source catalog is not exhaustive and can be extended. Second, the hyperparameters of the framework ($\tau_m$, $A_m$, $L_m$, $W$, $K_m$) require manual tuning. For the normalization thresholds, domain expert elicitation or regulatory requirements provide the most principled basis, with the empirical distribution of the metric across known-good datasets as a practical fallback. For $W$, a small value (1--2) suits authoritative trust sources while a larger value (5--10) is preferable for noisier evidence. For $K_m$, the uniform default adopted here is appropriate when no prior reason exists to weight one trust source over another; differing source authority can be reflected by setting $K_m$ proportionally. Partial calibration appears feasible for the normalization thresholds, as illustrated by the $\eta$ sensitivity analysis in \cref{sec:gtrsb_summary}. Third, lifecycle stages are treated uniformly, whereas task-dependent weighting may be needed, potentially via discounting operators.
 
 The framework outputs trust opinions at various granularities, which serve as input to the Trust Propagation Module of \ac{PaTAS}, which operates on per-feature trust opinions. Coarser-grained opinions can be replicated at the feature level, enabling propagation through model parameters during training. At inference time, the same process applies to input features, and the resulting per-feature opinions are propagated through the network to produce an output trust opinion. However, replicating a coarser-grained dataset-level opinion as per-feature opinions at the training dataset means every input receives the same trust score regardless of its individual quality, which limits the value of per-instance trust evaluation during inference. For inference-time assessment to be fully meaningful, trust sources that operate at the feature or entry level on the individual input should be preferred.
 
