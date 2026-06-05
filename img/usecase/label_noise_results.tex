@@ -1,0 +1,15 @@
+\begin{table}[ht]
+\centering
+\caption{Test accuracy (\%) under label mislabelling (mean$\pm$std over 5 independent noise draws). PaTAS scales each gradient update by the label trust belief mass, dampening updates from mislabelled batches. $\Delta$ = PaTAS $-$ NN.}
+\label{tab:label-noise}
+\begin{tabular}{lcccc}
+\toprule
+Flip rate $p$ & Trust opinion $(b,d,u)$ & NN mean$\pm$std (\%) & PaTAS mean$\pm$std (\%) & $\Delta$ (\%) \\
+\midrule
+0.00 & (1.000, 0.000, 0.000) & 84.59$\pm$0.05 & 84.29$\pm$0.00 & -0.30 \\
+0.05 & (0.760, 0.040, 0.200) & 84.36$\pm$0.12 & 84.13$\pm$0.03 & -0.23 \\
+0.15 & (0.680, 0.120, 0.200) & 83.92$\pm$0.15 & 83.86$\pm$0.08 & -0.06 \\
+0.30 & (0.560, 0.240, 0.200) & 83.49$\pm$0.25 & 83.34$\pm$0.18 & -0.16 \\
+\bottomrule
+\end{tabular}
+\end{table}
