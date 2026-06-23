@@ -1,59 +1,134 @@
-\begin{table}[t]
-\centering
+
+
+\begin{longtable}{lp{9cm}}
+
 \caption{List of Symbols and Notation}
-\label{tab:symbols}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{lp{9cm}}
+\label{tab:symbols} \\
+% \renewcommand{\arraystretch}{1.2}
+
 \hline
 \textbf{Symbol} & \textbf{Meaning / Description} \\
 \hline
-
+\multicolumn{2}{l}{\textbf{Notational Conventions}} \\
+$\omega$ vs.\ $T$ & $\omega$ denotes a general subjective opinion; $T$ denotes an opinion specifically interpreted as \emph{trust} (Ch.~7 onward). \\
+$\mathbf{W}, \mathbf{b}$ vs.\ $W, b$ & Bold symbols denote \acs{NN} weight matrices / bias vectors; non-bold denotes the \acs{SL} prior weight $W$ and belief mass $b_x$ respectively. \\[4pt]
+\hline
+\\
+\hline
 \multicolumn{2}{l}{\textbf{Sets and Spaces}} \\
 $\Omega$ & Universe (frame of discernment) \\
-$\mathbb{X}$ & Opinion state space \\
+$\mathbb{X}$ & Opinion state space / domain \\
+$\mathcal{R}(\mathbb{X})$ & Hyperdomain of $\mathbb{X}$ \\
+$\Delta^{K-1}$ & $(K{-}1)$-dimensional probability simplex \\
+$K$ & Cardinality of a domain (e.g.\ number of classes; in \acs{NN} classification, equivalently the number of output neurons) \\
 $\mathcal{D}$ & Dataset \\[4pt]
-
+\hline
+\\
+\hline
+\multicolumn{2}{l}{\textbf{Probability and Evidence Theory (Ch.~2.1)}} \\
+$\Pr(\cdot)$ & Classical / Bayesian probability \\
+$Q(P)$ & Second-order probability distribution over $P$ \\
+$\alpha, \beta$ & Beta distribution parameters (pseudo-counts of positive/negative evidence) \\
+$\Gamma(\cdot)$ & Gamma function \\
+$\boldsymbol{\alpha} = (\alpha_1,\dots,\alpha_K)$ & Dirichlet concentration vector \\
+$\alpha_0$ & Sum of Dirichlet concentration parameters, $\sum_i \alpha_i$ \\
+$m(\cdot)$ & Basic Belief Assignment (BBA), DST \\
+$\mathrm{Con}$ & Conflict mass between two belief sources (Dempster's rule \& BCF) \\
+$r, s$ & Positive/negative evidence counts supporting a proposition (shared meaning: Beta--opinion mapping, and Ch.~7 gradient-based evidence) \\
+$W$ & Non-informative prior weight (Beta/Dirichlet $\leftrightarrow$ opinion mapping) \\[4pt]
+\hline
+\\
+\hline
+\multicolumn{2}{l}{\textbf{Subjective Opinions}} \\
+$\omega_x = (b_x, d_x, u_x, a_x)$ & Binomial opinion: belief, disbelief, uncertainty, base rate \\
+$\omega_X = (\mathbf{b}, u, \mathbf{a})$ & Multinomial opinion \\
+$\omega_X^A$ & Opinion held by agent $A$ about variable $X$ \\
+$\mathbb{P}[\omega]$ & Projected probability of opinion $\omega$ (Eq.~2.2) \\[4pt]
+\hline
+\\
+\hline
+\multicolumn{2}{l}{\textbf{\acs{SL} Operators}} \\
+$(\cdot)$ & Binomial opinion multiplication (logical conjunction, Def.~2.7) \\
+$\odot$ & Belief constraint fusion (BCF) \\
+$\oplus$ & Cumulative belief fusion (CBF) \\
+$\overline{\oplus}$ & Averaging belief fusion (ABF) \\
+$\hat{\oplus}$ & Weighted belief fusion (WBF) \\
+$\occ$ & Consensus \& compromise fusion (CCF) \\
+$\circledcirc$ & Inferential deduction operator \\
+$\circleddash$ & Trust-revision operator \\
+$\oslash$ & Conservative trust-division operator \\
+$\otimes_{TE}$ & Two-edge path trust discounting \\
+$\otimes_{ME}$ & Multi-edge path trust discounting \\
+$\otimes_{RE}$ & Referral-edge path trust discounting \\[4pt]
+\hline
+\\
+\hline
 \multicolumn{2}{l}{\textbf{Graph Structure}} \\
 $v$ & Node (vertex) \\
 $e$ & Edge \\
-$\mathcal{N}(i)$ & Set of incoming edges to neuron $i$ \\[4pt]
-
+$\mathcal{N}(i)$ & Set of incoming edges to neuron $i$ \\
+$\mathrm{PPS}$ & Parallel Path Subnetwork \\
+$\mathrm{NL}(e)$ & Nesting Level of edge $e$ \\
+$\mathrm{NNL}(v)$ & Node Nesting Level \\[4pt]
+\hline
+\\
+\hline
+\multicolumn{2}{l}{\textbf{Neural Network Notation (Ch.~2.3)}} \\
+$\Theta = (\mathbf{W}, \mathbf{b}, \phi)$ & Full \acs{NN} parameterization \\
+$\mathbf{W} = \{\mathbf{W}^{(l)}\}$ & Weight matrices \\
+$\mathbf{b} = \{\mathbf{b}^{(l)}\}$ & Bias vectors \\
+$\phi$ & Activation functions \\
+$L$ & Total number of layers \\
+$n_l$ & Number of neurons in layer $l$ \\
+$\mathcal{L}$ & Loss function \\
+$lr$ & Learning rate \\
+$\delta_i^{(l)}$ & Error term of neuron $i$ in layer $l$ \\
+$\hat{y}(x)$ & Predicted class \\
+$N$ & Number of samples in the training dataset $\mathcal{D}$ \\[4pt]
+\hline
+\\
+\hline
+\multicolumn{2}{l}{\textbf{Calibration (Ch.~2.3.2)}} \\
+$\hat{p}(x)$ & Predicted confidence for input $x$ \\
+$M$ & Number of confidence bins \\
+$B_m$ & Set of sample indices whose predicted confidence falls in bin $m$ \\
+$\mathrm{acc}(B_m)$ & Empirical accuracy of samples in bin $B_m$ \\
+$\mathrm{conf}(B_m)$ & Average predicted confidence of samples in bin $B_m$ \\
+$n$ & Total number of samples used for calibration evaluation$^{*}$ \\[4pt]
+\hline
+\\
+\hline
 \multicolumn{2}{l}{\textbf{Model and Parameters}} \\
-$\Theta$ & Neural network model \\
 $P$ & PNPS \\
 $l$ & Layer index \\
 $n_i^{(l)}$ & Neuron $i$ in layer $l$ \\
 $\theta^{(l)}_{i,j}$ & Model parameter connecting neuron $j$ in layer $l{-}1$ to neuron $i$ in layer $l$ \\[4pt]
-
+\hline
+\\
+\hline
 \multicolumn{2}{l}{\textbf{Algorithm Inputs}} \\
 $g$ & Collection of gradients for all parameters in the batch \\
 $T_y$ & Trust opinion on label $y$ \\
 $\epsilon$ & Gradient sensitivity threshold in \textsc{NodeTrust} \\[4pt]
-
+\hline
+\\
+\hline
 \multicolumn{2}{l}{\textbf{Batch and Gradient Quantities}} \\
 $T_{y_{\text{batch}}}$ & Aggregated trust over labels in the current batch \\
 $g^{(l)}_{i,j}$ & Gradient of loss w.r.t.\ $\theta^{(l)}_{i,j}$ \\
 $g^{(l)}_{i}$ & Gradient vector for neuron $n_i^{(l)}$ \\
 $r$ & Count of weak gradients: $|g^{(l)}_{i,j}| < \epsilon$ \\
 $s$ & Count of strong gradients: $|g^{(l)}_{i,j}| \ge \epsilon$ \\[4pt]
-
+\hline
+\\
+\hline
 \multicolumn{2}{l}{\textbf{Trust Values}} \\
 $T_{n_i \mid y_{\text{batch}}}$ & Trust in neuron $n_i$ conditioned on batch labels \\
 $T_{n_i \mid \overline{y_{\text{batch}}}}$ & Trust in neuron under incorrect labels (vacuous) \\
 $T_{n_i \parallel Y_{\text{batch}}}$ & Deduced trust in neuron $n_i$ \\
 $T_{\theta^{(l)}_{i,j}}$ & Trust opinion on parameter $\theta^{(l)}_{i,j}$ \\
-$T_{x^{(l-1)}_j}$ & Trust in the input to parameter $\theta^{(l)}_{i,j}$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Operators}} \\
-$\bigwedge$ ($\bigoplus$) & Fusion of trust opinions \\
-$\circledcirc$ & Inferential deduction operator \\
-$\circleddash$ & Trust-revision operator \\
-$\odot$ & SL binomial multiplication / constraint fusion:
-         $\omega_X^{A\&B} = \omega_X^A \odot \omega_X^B$ \\
-$\oslash$ & Conservative trust-division operator \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Other}} \\
-$\omega$ & Subjective logic opinion \\
+$T_{x^{(l-1)}_j}$ & Trust in the input to parameter $\theta^{(l)}_{i,j}$ \\
 \hline
-\end{tabular}
-\end{table}
+
+
+\end{longtable}

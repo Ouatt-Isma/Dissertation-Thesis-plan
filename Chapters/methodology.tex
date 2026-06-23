@@ -2,7 +2,7 @@
 
 \chapter{General Trust Assessment Methodology }
 \label{chap:Trust_method}
-This chapter presents the General Trust Assessment Methodology, which serves as the conceptual foundation of this dissertation. The proposed methodology builds on prior work on trust evaluation in connected and autonomous systems, to which the author of this thesis has contributed through several initiatives. Within the Horizon Europe CONNECT project, the author contributed as a project partner to the development of the evidence-based \ac{TAF}~\cite{connect_d31_taf}, with a particular focus on the \ac{TLEE}, the component responsible for \aclu{TNA-SL}. More works include the 5GAA white paper on trust evaluation~\cite{5gaa_trust4cav_2025}, the trust assessment framework introduced at the International Conference on Information and Communications Security (ICICS)~\cite{fotos2025actions}, and subsequent work on trustworthy data assessment presented at the ECML Bias Workshop~\cite{10.1007/978-3-032-19096-3_17}. In this chapter, these contributions are unified and generalized into a methodology for structuring trust assessment problems and deriving trust evaluations so that it can be instantiated across different \ac{ML} contexts.
+This chapter presents the General Trust Assessment Methodology, which serves as the conceptual foundation of this dissertation. The proposed methodology builds on prior work on trust evaluation in connected and autonomous systems, to which the author of this thesis has contributed through several initiatives. Within the Horizon Europe CONNECT project, the author contributed as a project partner to the development of the evidence-based \ac{TAF}~\cite{connect_d31_taf}, with a particular focus on the \ac{TLEE}, the component responsible for \aclu{TNA-SL}. Additional contributions include the 5GAA white paper on trust evaluation~\cite{5gaa_trust4cav_2025}, the \aclu{TAF} presented at the International Conference on Information and Communications Security (ICICS)~\cite{fotos2025actions}, and subsequent work on trustworthy data assessment presented at the ECML Bias Workshop~\cite{10.1007/978-3-032-19096-3_17}. In this chapter, these contributions are unified and generalized into a methodology for structuring trust assessment problems and deriving trust evaluations so that it can be instantiated across different \ac{ML} contexts.
 
 \section{Role of the General Trust Assessment Methodology}
 \label{sec:ch4_role} 
@@ -142,7 +142,7 @@ Having introduced the core concepts and notation, we now present the
 general trust assessment process. This process follows the \ac{TAF} methodology and consists of three sequential phases:
 
 \begin{enumerate}
-    \item Expression Generation that sometimes necessitate a \aclu{STN}. The expression consists in operations between \acp{ATO}.
+    \item Expression Generation that sometimes necessitates a \aclu{STN}. The expression consists in operations between \acp{ATO}.
     \item \acp{ATO} Quantification:
     \begin{enumerate}
         \item Identify trust sources and Collect Evidence for each Trust proposition.
@@ -226,7 +226,7 @@ These evidence are then mapped into a structured representation consisting of:
     \item negative evidence $s_x$,
     \item and, in some cases, uncertainty evidence.
 \end{itemize}
-When countable, it is straightforward to map the evidence into \(r_x\) and \(s_x\). Otherwise, if the evidence is not directly countable, an appropriate interpretation scheme must be devised to convert raw inputs into usable evidence components. For instance, a misbehavior detection mechanism applied to a sensor may either detect misbehavior (negative evidence \(s_x\)) or detect no anomaly (positive evidence\(r_x\)), which provides directly countable evidence. In contrast, continuous measurements of sensor error may require thresholding, normalization, or
+When countable, it is straightforward to map the evidence into \(r_x\) and \(s_x\). Otherwise, if the evidence is not directly countable, an appropriate interpretation scheme must be devised to convert raw inputs into usable evidence components. For instance, a misbehavior detection mechanism applied to a sensor may either detect misbehavior (negative evidence \(s_x\)) or detect no anomaly (positive evidence \(r_x\)), which provides directly countable evidence. In contrast, continuous measurements of sensor error may require thresholding, normalization, or
 probabilistic transformation before being translated into evidence counts.
 %%%%%%%%%%%
 

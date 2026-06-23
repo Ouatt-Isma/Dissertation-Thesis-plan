@@ -16,10 +16,10 @@ Despite its importance, calibration is typically summarized by scalar metrics su
 
 To address this limitation, this chapter makes the following contributions. First, it introduces a method for extracting calibration evidence from predicted probabilities. Second, it proposes a mapping from calibration evidence to \ac{SL} trust opinions, enabling uncertainty-aware trust quantification. Third, it demonstrates experimentally that the resulting trust representation provides rich insight into model reliability.
 
-The remainder of this chapter is organized as follows. \cref{sec:calibration_sl} presents the subjective logic framework for calibration-based trust assessment, describing the extraction of calibration evidence and the construction of trust opinions. \cref{sec:calibration_experiments} evaluates the proposed approach experimentally and analyzes its behavior. Finally, the chapter concludes with a summary of the main findings.
+The remainder of this chapter is organized as follows. \cref{sec:calibration_sl} presents the subjective logic-based methodology for calibration-based trust assessment, describing the extraction of calibration evidence and the construction of trust opinions. \cref{sec:calibration_experiments} evaluates the proposed approach experimentally and analyzes its behavior. Finally, the chapter concludes with a summary of the main findings.
 
 
-\section{Subjective Logic Framework for Calibration Trust}
+\section{Subjective Logic-Based Methodology for Calibration Trust}
 \label{sec:calibration_sl}
 As introduced in \cref{chap:Trust_method}, the general trust assessment methodology follows three main phases: (i) generation of a trust expression representing incorporating the proposition to be evaluated, (ii) identification and collection of evidence from relevant trust sources, and (iii) evaluation of the expression through subjective logic operators to obtain the final trust opinion.
 
@@ -383,7 +383,7 @@ Finally, it is worth noting again that the framework makes no assumptions about 
 
 
 
-\section{Summary and Conclusion}
+\section{Summary \& Conclusions}
 
 This chapter addressed trust assessment for \acp{NN} deployed as black-box systems, where internal components are inaccessible to the evaluator. In such settings, trust must be inferred from observable properties of the model's outputs. Calibration was identified as a principled source of trust evidence: it is directly observable from predicted probabilities and empirical outcomes, requires no access to internal architecture or training process, and provides a natural signal about the reliability of a model's confidence estimates.
 
