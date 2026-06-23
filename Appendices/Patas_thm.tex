@@ -155,7 +155,7 @@ Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over
     \]
     \textit{Proof.} The PaTAS feedforward mechanism computes for each neuron:
     \[
-    T_z = \bigvee_i \left( T_{x_i} \otimes T_{\theta_i} \right).
+    T_z = \bigoplus_i \left( T_{x_i} \otimes T_{\theta_i} \right).
     \]
     Since each \( T_{x_i} = (0,0,1,a) \), and using the result from part (1), we get:
     \[
@@ -163,7 +163,7 @@ Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over
     \]
     Then, by fusion of vacuous opinions:
     \[
-    T_z = \bigvee_i (0,0,1,a) = (0,0,1,a).
+    T_z = \bigoplus_i (0,0,1,a) = (0,0,1,a).
     \]
     This holds recursively through all layers of PaTAS, including the output layer, hence:
     \[
@@ -218,51 +218,4 @@ For $\bar{x} = (0, 1, 0)$ (fully distrusted), we have:
 \]
 so the discounted opinion assigns zero belief. Therefore, the belief from a fully distrusted input is always zero in the PaTAS output.
 \end{proof}
-
-\chapter{}
-\begin{table}[t]
-\centering
-\caption{Symbols Used in the Parameter-Trust Update Subsection and Algorithm}
-\label{tab:params-algorithm}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{ll}
-\hline
-\textbf{Symbol} & \textbf{Meaning / Description} \\
-\hline
-\multicolumn{2}{l}{\textbf{Inputs to the Algorithm}} \\
-$g$ & Collection of gradients for all parameters in the batch \\
-$T_y$ & Trust opinion on label $y$ \\
-$\epsilon$ & Gradient sensitivity threshold in \textsc{NodeTrust} \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Batch and Layer Quantities}} \\
-$T_{y_{\text{batch}}}$ & Aggregated trust over labels in the current batch \\
-$l$ & Layer index \\
-$n_i^{(l)}$ & Neuron $i$ in layer $l$ \\
-$\mathcal{N}(i)$ & Set of incoming edges to neuron $i$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Gradient Evidence}} \\
-$g^{(l)}_{i,j}$ & Gradient of loss w.r.t.\ $\theta^{(l)}_{i,j}$ \\
-$g^{(l)}_{i}$ & Gradient vector for neuron $n_i^{(l)}$ \\
-$r$ & Count of weak gradients: $|g^{(l)}_{i,j}| < \epsilon$ \\
-$s$ & Count of strong gradients: $|g^{(l)}_{i,j}| \ge \epsilon$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Trust Values Computed in the Algorithm}} \\
-$T_{n_i \mid y_{\text{batch}}}$ & Trust in neuron $n_i$ conditioned on batch labels \\
-$T_{n_i \mid \overline{y_{\text{batch}}}}$ & Trust in neuron under incorrect labels (vacuous) \\
-$T_{n_i \parallel Y_{\text{batch}}}$ & Deduced trust in neuron $n_i$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Parameter Trust}} \\
-$T_{\theta^{(l)}_{i,j}}$ & Trust opinion on parameter $\theta^{(l)}_{i,j}$ \\
-% $T_{lr}$ & Trust in the learning rate \\
-$T_{x^{(l-1)}_j}$ & Trust in the input to parameter $\theta^{(l)}_{i,j}$ \\[4pt]
-
-\multicolumn{2}{l}{\textbf{Operators Used}} \\
-$\bigwedge$ & Batch-wise fusion of trust opinions \\
-$\circledcirc$ & Inferential deduction operator \\
-$\circleddash$ & Trust-revision operator \\
-$\odot$ & SL binomial multiplication \\
-$\oslash$ & Conservative trust-division operator \\
-\hline
-\end{tabular}
-\end{table}
 

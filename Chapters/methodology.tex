@@ -2,11 +2,11 @@
 
 \chapter{General Trust Assessment Methodology }
 \label{chap:Trust_method}
-This chapter presents the General Trust Assessment Methodology, which serves as the conceptual foundation of this dissertation. The proposed methodology builds on prior work on trust evaluation in connected and autonomous systems, to which I have contributed through several initiatives. These include the evidence-based \ac{TAF} developed within the Horizon Europe CONNECT project~\cite{connect_d31_taf}, the 5GAA white paper on trust evaluation~\cite{5gaa_trust4cav_2025}, the trust assessment framework introduced at the International Conference on Information and Communications Security (ICICS)~\cite{fotos2025actions}, and subsequent work on trustworthy data assessment presented at the ECML Bias Workshop~\cite{10.1007/978-3-032-19096-3_17}. In this chapter, these contributions are unified and generalized into a methodology for structuring trust assessment problems and deriving trust evaluations so that it can be instantiated across different \ac{ML} contexts.
+This chapter presents the General Trust Assessment Methodology, which serves as the conceptual foundation of this dissertation. The proposed methodology builds on prior work on trust evaluation in connected and autonomous systems, to which the author of this thesis has contributed through several initiatives. Within the Horizon Europe CONNECT project, the author contributed as a project partner to the development of the evidence-based \ac{TAF}~\cite{connect_d31_taf}, with a particular focus on the \ac{TLEE}, the component responsible for \aclu{TNA-SL}. More works include the 5GAA white paper on trust evaluation~\cite{5gaa_trust4cav_2025}, the trust assessment framework introduced at the International Conference on Information and Communications Security (ICICS)~\cite{fotos2025actions}, and subsequent work on trustworthy data assessment presented at the ECML Bias Workshop~\cite{10.1007/978-3-032-19096-3_17}. In this chapter, these contributions are unified and generalized into a methodology for structuring trust assessment problems and deriving trust evaluations so that it can be instantiated across different \ac{ML} contexts.
 
 \section{Role of the General Trust Assessment Methodology}
 \label{sec:ch4_role} 
-In line with a zero-trust perspective~\cite{rose2020zero}, trust should not be granted a priori or statically assigned, but instead derived through a well defined assessment. The \acf{TAF} operationalizes this principle through a structured reasoning process involving the generation of expressions, the collection of evidence, and the evaluation of these expressions.
+In line with a zero-trust perspective~\cite{rose2020zero}, trust should not be granted a priori or statically assigned, but instead derived through a well-defined assessment. The \acf{TAF} operationalizes this principle through a structured reasoning process involving the generation of expressions, the collection of evidence, and the evaluation of these expressions.
 
 The objective of this chapter is to abstract and generalize this evidence-based reasoning process so that it can be instantiated across different \ac{ML} contexts. While the technical mechanisms used to compute trust may vary across systems, the underlying reasoning process remains largely invariant. The methodology introduced here therefore provides a unified framework for structuring trust assessment problems and deriving trust evaluations from observable evidence.
 
@@ -42,10 +42,7 @@ Risk, in the context of trust assessment, refers to the exposure of the trustor 
 Trust assessment is inherently relational. A trust evaluation is always performed from the perspective of a \emph{trustor} with respect to a well-defined \emph{trust proposition} encoding a specific \emph{trustee}.
 
 \begin{definition}[Trust Proposition]
-A trust proposition is a declarative statement about a property of a trustee
-that can be evaluated as satisfied or not satisfied based on available
-evidence. Formally, let $E$ denotes the trustee and $P$ a
-trustworthiness property of interest, such as accuracy, integrity, representativeness, or calibration. The trust proposition is denoted by
+A trust proposition is a declarative statement about a property of a trustee that can be evaluated as satisfied or not satisfied based on available evidence. Formally, let $E$ denote the trustee and $P$ a trustworthiness property of interest, such as accuracy, integrity, representativeness, or calibration. The trust proposition is denoted by
 \[
 \mathcal{T}(E, P)
 \]
@@ -134,6 +131,7 @@ $\omega=(t,d,u)$ & trust opinion with belief $t$, disbelief $d$, and uncertainty
 \caption{Notation used in the general trust assessment methodology.}
 \label{tab:trust_notation}
 \end{table}
+It is worth briefly relating this terminology to that of the original \ac{TAF}. The combination of a \aclu{STN} together with its associated contextual metadata corresponds to what \ac{TAF} refers to as the Trust Model. \ac{TAF} additionally defines a Trust Decision stage~\cite{11028144}, in which the \ac{ATL} is used to inform a concrete action; this stage lies outside the scope of the present dissertation, which focuses on the assessment of trust rather than on decision-making based on it.
 
 These concepts provide the conceptual foundation for the trust assessment process introduced in the next section.
 
@@ -203,8 +201,8 @@ consists of quantifying the \acp{ATO} appearing in that expression.
 This phase consists of the following steps:
 
 \begin{enumerate}
-    \item Identify trust sources and collect evidence.
-    \item Quantify the trust opinion associated with each trust source using the collected evidence and the most appropriate quantification method.
+    \item Identify trust sources and collect evidence~\cite{Hermann2024WIP, Trkulja2023invehicle}.
+    \item Quantify the trust opinion associated with each trust source using the collected evidence and the most appropriate quantification method~\cite{Hermann2024WIP}.
     \item Derive the \ac{ATO} by combining the trust opinions provided by the different trust sources.
 \end{enumerate}
 
@@ -212,7 +210,6 @@ The first step establishes the evidential basis of the atomic trust assessment, 
 trust opinion.
 
 \subsubsection{Identification of Trust Sources and Evidence Collection}
-
 When quantifying the \ac{ATO} associated with a trust proposition, relevant trust sources must first be identified. Trust sources may include, for example, a monitoring component, a sensor error measurement module, a misbehavior detection mechanism, a verification module, a certification authority, or historical performance records. These sources typically provide direct evidence corresponding to observations made by the
 trustor.
 
