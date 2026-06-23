@@ -14,11 +14,11 @@ A probability value can be interpreted as the likelihood that a proposition hold
 
 In practice, this assumption is often violated. Probabilities are typically inferred from finite data, subjective judgment, or imperfect measurements, which introduces an additional layer of uncertainty that standard probability theory does not explicitly represent. Moreover, probability assignments are usually observer-dependent: they reflect the belief of an individual or system given its available information, rather than an objective property of the world.
 
-Bayesian theory~\cite{gelman2013bayesian,jaynes03,Bernardo:1319894} addresses some of these challenges by treating probabilities as degrees of belief (given the knowledge) and updating them through Bayes’ rule as new evidence becomes available. Bayesian inference provides a mechanism for incorporating prior knowledge and observational data, and it is widely used in statistics and \ac{ML}~\cite{barberBRML2011}. Nonetheless, Bayesian probability remains a single-layer uncertainty framework: uncertainty is encoded solely in probability distributions over random variables.
+Bayesian theory~\cite{gelman2013bayesian,jaynes03,Bernardo:1319894} addresses some of these challenges by treating probabilities as degrees of belief (given the knowledge) and updating them through Bayes’ rule as new evidence becomes available. Bayesian inference provides a mechanism for incorporating prior knowledge and observational data, and it is widely used in statistics and \ac{ML}~\cite{barberBRML2011}. Nonetheless, Bayesian probability remains a single-layer uncertainty paradigm: uncertainty is encoded solely in probability distributions over random variables.
 
 This limitation becomes apparent when distinguishing between uncertainty due to inherent randomness of a variable (aleatoric uncertainty) and uncertainty due to lack of knowledge or insufficient evidence (epistemic uncertainty). Reconsider the binary sensor variable $X \in \{0,1\}$, where $X=1$ denotes that the sensor is functional and $X=0$ denotes that it is faulty. An observer who has access to zero information may assign $P(X=1) = P(X=0) =0.5$, reflecting uncertainty about the sensor’s state as he doesn't have any information. Another observer may possess detailed information: for example, evidence that the sensor hardware is new and properly calibrated (supporting $X=1$), combined with recent intermittent signal dropouts or abnormal readings (supporting $X=0$). When these pieces of evidence are considered together, this observer may also assign $P(X=1)=P(X=0)=0.5$, but for a fundamentally different reason, namely, the presence of conflicting evidence rather than pure ignorance. In other words, the probability value captures uncertainty about the sensor state itself, but it does not encode uncertainty about the reliability of the probability estimate. For the first observer, the uncertainty about the probability estimate is high, while in the second case it is low. 
 
-This example illustrates a key limitation of probabilistic and Bayesian frameworks: they cannot distinguish between uncertainty arising from randomness of the variable itself and uncertainty arising from ignorance or lack of evidence. As a result, probabilistic models conflate confidence in a probability estimate with the probability value itself. This distinction is not only philosophical; it becomes critical in complex and opaque systems such as \acfp{NN}. In \ac{NN} based \ac{ML} pipelines, predictive probabilities are often treated as direct indicators of confidence or trustworthiness. However, a predictive probability of $0.5$ may arise from fundamentally different epistemic situations: insufficient training data, strong but contradictory training signals, distributional shift at inference time, or intrinsic ambiguity in the input itself. When these different situations are expressed as the same probability value, the nature of the supporting evidence is no longer visible.
+This example illustrates a key limitation of probabilistic and Bayesian frameworks: they cannot distinguish between uncertainty arising from randomness of the variable itself and uncertainty arising from ignorance or lack of evidence. As a result, probabilistic models conflate confidence in a probability estimate with the probability value itself. This distinction is not only philosophical; it becomes critical in complex and opaque systems such as \acfp{NN}. In \ac{NN}-based \ac{ML} pipelines, predictive probabilities are often treated as direct indicators of confidence or trustworthiness. However, a predictive probability of $0.5$ may arise from fundamentally different epistemic situations: insufficient training data, strong but contradictory training signals, distributional shift at inference time, or intrinsic ambiguity in the input itself. When these different situations are expressed as the same probability value, the nature of the supporting evidence is no longer visible.
 
 This motivates the need for extended uncertainty representations that explicitly model uncertainty about probabilities, enabling a separation between beliefs and uncertainty. Such representations form the foundation for second order uncertainty and evidence-based theories, including \aclu{DST} and \aclu{SL}, which are discussed in the following sections.
 
@@ -92,9 +92,9 @@ Large parameter value for \(\alpha_k\) indicates high confidence in event \(k\).
 \end{figure}
 This formulation allows uncertainty arising from missing, incomplete, or ambiguous evidence to be modeled explicitly, instead of being conflated with aleatoric randomness. 
 
-An alternative framework for representing uncertainty under incomplete information is Belief function theory introduced by Dempster and Shafer. Importantly, Baron shows that belief functions can be interpreted as a restricted special case of second-order probability models, corresponding to strong structural constraints on the admissible forms of the distribution \( Q(P) \)~\cite{Baron1987}. In this sense, Dempster Shafer Theory does not constitute a fundamentally separate uncertainty paradigm, but rather a constrained representation within the broader second-order probabilistic framework. Thus, belief functions sacrifice expressive generality in exchange for a simplified representation of uncertainty.
+An alternative approach for representing uncertainty under incomplete information is Belief function theory introduced by Dempster and Shafer. Importantly, Baron shows that belief functions can be interpreted as a restricted special case of second-order probability models, corresponding to strong structural constraints on the admissible forms of the distribution \( Q(P) \)~\cite{Baron1987}. In this sense, Dempster Shafer Theory does not constitute a fundamentally separate uncertainty paradigm, but rather a constrained representation within the broader second-order probabilistic theory. Thus, belief functions sacrifice expressive generality in exchange for a simplified representation of uncertainty.
 
-This relationship is particularly relevant for uncertainty-aware trust modeling. Second-order probability provides a probabilistic foundation for reasoning about uncertainty in probability estimates, while belief-function-based frameworks offer practical tools for representing ignorance and aggregating evidence. The next section presents Dempster–Shafer theory in detail, introducing the basic belief assignment formalism and Dempster’s rule of combination for evidence aggregation.
+This relationship is particularly relevant for uncertainty-aware trust modeling. Second-order probability provides a probabilistic foundation for reasoning about uncertainty in probability estimates, while belief-function-based theories offer practical tools for representing ignorance and aggregating evidence. The next section presents Dempster–Shafer theory in detail, introducing the basic belief assignment formalism and Dempster’s rule of combination for evidence aggregation.
 \subsection{Dempster--Shafer Theory}
 \label{sec:dst}
 \acf{DST}, also known as the theory of belief functions, was introduced to address limitations of classical probabilistic reasoning when evidence is incomplete, imprecise, or conflicting~\cite{dempster1968generalization,shafer1976mathematical,beynon2000dempster}. 
@@ -134,7 +134,7 @@ $\{0,1\}$ (Undetermined) & 0.25 \\
 \caption{Example of \aclu{BBA} of the sensor state.}
 \label{tab:dst_sensor_example}
 \end{table}
-\footnotetext{Note that \(m(\emptyset) = 0\) by definition: the empty set represents a logical impossibility (the sensor being neither faulty nor functional), not an epistemic state, and \ac{DST} requires that no belief mass be assigned to it. The state "neither faulty nor functional" therefore does not appear as an admissible hypothesis in this \ac{BBA}; all mass is distributed over {0}, {1}, and the composite set {0,1} representing residual ignorance between the two possibilities.}
+\footnotetext{Note that \(m(\emptyset) = 0\) by definition: the empty set represents a logical impossibility (the sensor being neither faulty nor functional), not an epistemic state, and \ac{DST} requires that no belief mass be assigned to it. The state "neither faulty nor functional" therefore does not appear as an admissible hypothesis in this \ac{BBA}; all mass is distributed over \(\{0\}, \{1\}\), and the composite set \(\{0,1\}\) representing residual ignorance between the two possibilities.}
 
 Here, \(0.3\) represents support for the faulty hypothesis, \(0.45\) supports the functional hypothesis, and the remaining \(0.25\)
 is assigned to the composite set $\{0,1\}$, explicitly capturing
@@ -152,12 +152,12 @@ m^{A \oplus B}(C)
 =
 \frac{
 \displaystyle \sum_{A_i \cap B_j = C} m^A(A_i)\, m^B(B_j)
-}{1 - K},
+}{1 - \text{Con}},
 \qquad \forall C \subseteq \Omega,\; C \neq \emptyset.
 \end{equation}
 The denominator corresponds to the normalization factor, where
 \[
-K = \sum_{A_i \cap B_j = \emptyset} m^A(A_i)\, m^B(B_j)
+\text{Con} = \sum_{A_i \cap B_j = \emptyset} m^A(A_i)\, m^B(B_j)
 \]
 represents the total conflict between the two belief assignments.
 \end{definition}
@@ -167,7 +167,7 @@ The rule is associative, commutative, and non-idempotent~\cite{josang2012dempste
 
 Information fusion aims to combine evidence from multiple sources in order to reduce uncertainty and improve decision quality. Such a requirement naturally arises in a wide range of domains, including sensor fusion, expert systems, and multi-agent systems. \ac{DST} has been widely applied to information fusion in practical systems, particularly in sensor-based applications. For example, Munz and Dietmayer~\cite{munz2011using} employ \ac{DST} to enhance detection performance in sensor fusion systems by explicitly modeling uncertainty and combining sensory evidence. Similarly, Tang et al.~\cite{tang2017improved} use \ac{DST} to represent uncertainty in multi-sensor data before applying evidence fusion. Returning to our running sensor example, this mirrors a setting in which several independent sensors each report a BBA over {faulty, functional}, and Dempster's rule is used to fuse these reports into a single combined belief about the sensor's true state, illustrating concretely how DST-based fusion would apply to the case introduced earlier in this section. Returning to our running sensor example, suppose a second sensor $B$ reports its own \ac{BBA} over $\{0,1\}$, with $m^B(\{0\}) = 0.1$, $m^B(\{1\}) = 0.6$, and $m^B(\{0,1\}) = 0.3$, alongside sensor $A$'s \ac{BBA} from Table~\ref{tab:dst_sensor_example}. Applying Dempster's rule of combination (Definition~\cref{def:dempster-rule}) yields a fused belief of approximately $0.72$ in ``functional,'' compared to $0.45$ and $0.60$ for sensors $A$ and $B$ individually, while the residual uncertainty mass shrinks to roughly $0.10$. This illustrates concretely how DST-based fusion reinforces agreement between sources while normalizing away their conflicting evidence (here, sensor $A$'s modest support for ``faulty'' against sensor $B$'s support for ``functional'').
 
-\marginpar{DST Limitations}
+\marginpar{\acs{DST} Limitations}
 These works primarily address fusion within a single system, where multiple sensors act as information sources. However, the use of Dempster’s rule requires careful consideration. Although the rule is mathematically well-defined, later studies have shown that the combination of highly conflicting sources can lead to counter-intuitive or unstable results~\cite{zadeh2013on,dezert2014on}. In cases of extreme conflict, the normalization step inherent in Dempster’s rule may amplify minor evidence and suppress uncertainty, producing misleading conclusions. As a result, \ac{DST} may become unsuitable when sources strongly disagree or when their reliability differs significantly.
 
 A further limitation of the original \ac{DST} formulation is that it does not explicitly model trust in information sources. Evidence is combined at the level of belief masses without incorporating a formal representation of source credibility. All sources are implicitly assumed to be equally reliable, and the theory provides no native mechanism to express trust transitivity or to discount evidence based on the credibility of its origin. This limitation is particularly restrictive in multi-agent systems and distributed environments, where information is often obtained through chains of agents and where source reliability is heterogeneous.  
@@ -448,7 +448,7 @@ $\checkmark$ = holds, $\times$ = does not hold, $\sim$ = semi (partially holds).
 \acs{CBF} ($\oplus$)       & $\checkmark$ & $\times$ & $\checkmark$     & --- \\
 \acs{ABF}  ($\underline{\oplus}$) & $\checkmark$ & $\checkmark$ & $\times$ & None \\
 \acs{WBF}  ($\hat{\oplus}$)  & $\checkmark$ & $\checkmark$ & $\sim$          & Vacuous opinion \\
-\acs{CCF}  ($\circledast$)   & $\checkmark$ & $\checkmark$ & $\sim$          & Vacuous opinion \\
+\acs{CCF}  ($\occ$)   & $\checkmark$ & $\checkmark$ & $\sim$          & Vacuous opinion \\
 \bottomrule
 \end{tabular}
 \\[4pt]
@@ -640,8 +640,7 @@ Weighted fusion extends simple averaging in Averaging fusion by assigning weight
 Let $\omega_X^A$ and $\omega_X^B$ be separate opinions about variable $X$.
 The CC-fused opinion is denoted by
 \[
-\omega_X^{A\heartsuit  B}=\omega_X^A \, \tikz[baseline=(C.base)]
-\node[draw, circle, inner sep=1pt, yscale=0.8, scale=0.7] (C) {CC}; \, \omega_X^B .
+\omega_X^{A\heartsuit  B}=\omega_X^A \, \occ \, \omega_X^B .
 \]
 The CC-fusion is obtained through a three-step procedure:
 \begin{enumerate}[i)]
@@ -1090,13 +1089,13 @@ The distinction between aleatoric and epistemic uncertainty is not only conceptu
 
 Foundational approaches to \ac{UQ} are grounded in Bayesian inference. \acp{BNN} place probability distributions over network parameters and perform posterior inference to approximate the distribution given observed data~\cite{neal1996bayesian,blundell2015weightuncertaintyneuralnetworks}:
 \[
-p(\Theta \mid \mathcal{D}) = \frac{p(\mathcal{D} \mid \Theta)\, p(\Theta)}{p(\mathcal{D})},
+\Pr(\Theta \mid \mathcal{D}) = \frac{\Pr(\mathcal{D} \mid \Theta)\, \Pr(\Theta)}{\Pr(\mathcal{D})},
 \]
 where the marginal likelihood is given by
 \[
-p(\mathcal{D}) = \int p(\mathcal{D} \mid \Theta)\, p(\Theta)\, d\Theta.
+\Pr(\mathcal{D}) = \int \Pr(\mathcal{D} \mid \Theta)\, \Pr(\Theta)\, d\Theta.
 \]
-Predictive uncertainty is then obtained by marginalizing predictions over plausible parameter configurations. However, the marginal likelihood $p(\mathcal{D})$ involves integrating over the entire parameter space. For modern deep \acp{NN} with millions of parameters and highly nonlinear architectures, this high-dimensional integral admits no closed-form solution and is computationally intractable in practice. Consequently, exact posterior inference cannot be performed for realistic deep models~\cite{blundell2015weightuncertaintyneuralnetworks,kingma2022autoencodingvariationalbayes}. To address this limitation, several approximate posterior inference techniques have been proposed. Bayes by Backprop~\cite{blundell2015weightuncertaintyneuralnetworks} employs variational inference to learn approximate posterior distributions over network weights. \ac{MC dropout} provides a different approximation strategy: dropout is retained at test time, and multiple stochastic forward passes are used to approximate the posterior predictive distribution~\cite{gal2016dropoutbayesianapproximationrepresenting}. This procedure yields predictive uncertainty estimates with relatively low computational overhead and has been widely adopted due to its simplicity.
+Predictive uncertainty is then obtained by marginalizing predictions over plausible parameter configurations. However, the marginal likelihood $\Pr(\mathcal{D})$ involves integrating over the entire parameter space. For modern deep \acp{NN} with millions of parameters and highly nonlinear architectures, this high-dimensional integral admits no closed-form solution and is computationally intractable in practice. Consequently, exact posterior inference cannot be performed for realistic deep models~\cite{blundell2015weightuncertaintyneuralnetworks,kingma2022autoencodingvariationalbayes}. To address this limitation, several approximate posterior inference techniques have been proposed. Bayes by Backprop~\cite{blundell2015weightuncertaintyneuralnetworks} employs variational inference to learn approximate posterior distributions over network weights. \ac{MC dropout} provides a different approximation strategy: dropout is retained at test time, and multiple stochastic forward passes are used to approximate the posterior predictive distribution~\cite{gal2016dropoutbayesianapproximationrepresenting}. This procedure yields predictive uncertainty estimates with relatively low computational overhead and has been widely adopted due to its simplicity.
 
 % More structured approaches introduce hierarchical stochastic formulations that model multiple sources of randomness explicitly. 
 % For example, \ac{BNN+LV} place a distribution over network weights \(W\) (including the Bias parameter) and introduce latent input variables \(z\) to capture unobserved stochastic factors affecting the output~\cite{pmlr-v80-depeweg18a}. 
@@ -1125,31 +1124,18 @@ In addition to \ac{BNN} and Deep ensemble, advanced deterministic methods explic
 Despite substantial progress in \aclu{UQ}, accurately estimating and calibrating predictive confidence in \ac{NN} remains a persistent challenge. Even models equipped with Bayesian approximations or ensembles frequently exhibit systematic miscalibration, particularly under dataset shift, adversarial perturbations, or real-world deployment conditions~\cite{ovadia2019trustmodelsuncertaintyevaluating,begoli2019need,guo2017calibrationmodernneuralnetworks}. Calibration refers to the statistical agreement between predicted confidence scores and empirical outcome frequencies. A classifier is said to be perfectly calibrated if, among all predictions made with confidence $p$, the predicted label is correct approximately $p$ proportion of the time. For example, among all predictions assigned a confidence of $0.8$, roughly $80\%$ should be correct. Formally, let $\hat{p}(x)$ denote the predicted confidence for input $x$, and let $1\{\hat{y}(x)=y\}$ denote the correctness indicator. Calibration requires that the expected value of this indicator, conditioned on the predicted confidence, matches that confidence:
 
 \[
-E(1\{\hat{y}(x)=y\} \mid \hat{p}(x)=p ) = P(\hat{y}(x)=y \mid \hat{p}(x)=p) = p.
+E(1\{\hat{y}(x)=y\} \mid \hat{p}(x)=p ) = \Pr(\hat{y}(x)=y \mid \hat{p}(x)=p) = p.
 \]
 In practice, calibration is evaluated using reliability diagrams and scalar metrics such as \ac{ECE}~\cite{guo2017calibrationmodernneuralnetworks,Naeini_Cooper_Hauskrecht_2015}. \ac{ECE} measures the discrepancy between average confidence and empirical accuracy across confidence bins:
 
 \[
 \text{ECE} = \sum_{m=1}^{M} \frac{|B_m|}{n} 
-\left| \text{acc}(B_m) - \text{conf}(B_m) \right|.
+\left| \text{acc}(B_m) - \text{conf}(B_m) \right|,
 \]
-
-% \ac{NN} are well known to be overconfident, especially in regions of the input space that differ from the training distribution~\cite{guo2017calibrationmodernneuralnetworks}. 
-
-% % Under distributional shift, models often maintain high softmax confidence even when predictions are incorrect. Large-scale empirical studies show that uncertainty estimates degrade significantly under common corruptions, adversarial noise, and out-of-distribution inputs~\cite{ovadia2019trustmodelsuncertaintyevaluating}. In safety-critical domains such as medical AI, miscalibrated confidence estimates have been directly linked to harmful decision errors~\cite{begoli2019need,wolf2025medvlms}. A model that is confidently wrong can be more dangerous than one that explicitly signals uncertainty.
-
-% Post-hoc calibration techniques, such as temperature scaling~\cite{guo2017calibrationmodernneuralnetworks}, attempt to correct miscalibration without modifying the underlying model. In temperature scaling, logits are divided by a scalar parameter $T$ optimized on validation data:
-
-% \[
-% \hat{p}_i = \text{softmax}\left(\frac{z_i}{T}\right).
-% \]
-
-% While such approaches often reduce ECE and improve reliability diagrams, they operate solely at the output layer and assume that the learned internal representations are themselves trustworthy. They do not address uncertainty induced by biased training data, unreliable labels, corrupted inputs, or structural model limitations. Consequently, calibration improves the alignment between predicted confidence and empirical accuracy, but it does not explicitly model evidence reliability or source trustworthiness. 
-
+where the predicted confidences are partitioned into $M$ equally spaced bins, $B_m$ denotes the set of sample indices whose predicted confidence falls into bin $m$, $n = \sum_{m=1}^{M} |B_m|$ is the total number of samples, and $\text{acc}(B_m)$ and $\text{conf}(B_m)$ denote, respectively, the empirical accuracy and the average predicted confidence of samples in $B_m$.
 
 \subsubsection{Uncertainty and Trust Propagation}
-
-Beyond estimating uncertainty at the output level, a growing body of work investigates how uncertainty propagates through \ac{NN} architectures and related computational graphs. A key motivation for uncertainty propagation arises from heteroscedastic uncertainty. As seen before, when uncertainty varies accross the input, it must be tracked throughout the computational graph rather than treated as a global property of the \ac{NN}. The goal of these approaches is to account for the cumulative effect of input uncertainty, parameter uncertainty, and model structure on predictive reliability.
+Beyond estimating uncertainty at the output level, a growing body of work investigates how uncertainty propagates through \ac{NN} architectures and related computational graphs. A key motivation for uncertainty propagation arises from heteroscedastic uncertainty. As seen before, when uncertainty varies across the input, it must be tracked throughout the computational graph rather than treated as a global property of the \ac{NN}. The goal of these approaches is to account for the cumulative effect of input uncertainty, parameter uncertainty, and model structure on predictive reliability.
 
 Several methods focus on propagating uncertainty through \acp{NN} using analytic approximations rather than Monte Carlo sampling. Instead of performing multiple stochastic forward passes to estimate predictive variability, these approaches represent intermediate activations as random variables with explicitly parameterized mean and covariance, and propagate these quantities deterministically through network layers. For example, let the input be modeled as a random vector
 \[
@@ -1166,7 +1152,7 @@ the output mean and covariance can be computed analytically as
 \]
 In this manner, uncertainty is propagated layer by layer through deterministic transformations of distribution parameters, avoiding repeated stochastic sampling.
 
-Monchot et~al.~\cite{pmlr-v202-monchot23a} extended uncertainty propagation to non-Gaussian input distributions using Gaussian Mixture Models and a split-and-merge strategy based on the Wasserstein distance, providing theoretical convergence guarantees at reduced computational cost. Earlier work by Astudillo and Net~\cite{astudillo2011propagation} demonstrated that propagating observation uncertainty through multi-layer perceptrons improves robustness in speech recognition systems, including hybrid MLP-HMM (Multilayer Perceptron - Hidden Markov Mode) architectures. 
+Monchot et~al.~\cite{pmlr-v202-monchot23a} extended uncertainty propagation to non-Gaussian input distributions using Gaussian Mixture Models and a split-and-merge strategy based on the Wasserstein distance, providing theoretical convergence guarantees at reduced computational cost. Earlier work by Astudillo and Neto~\cite{astudillo2011propagation} demonstrated that propagating observation uncertainty through multi-layer perceptrons improves robustness in speech recognition systems, including hybrid MLP-HMM (Multilayer Perceptron - Hidden Markov Mode) architectures. 
 
 Outside \ac{NN} architectures, trust propagation has been extensively studied in networked systems. Ziegler and Lausen~\cite{ziegler2004spreading} proposed the Appleseed model for trust propagation in social networks based on spreading activation. Although not designed for \ac{NN} systems, this work highlights an important conceptual insight: trust is inherently relational and context-dependent.
 
@@ -1301,9 +1287,7 @@ Modern \ac{AI} systems are exposed to a wide range of adversarial threats that t
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{img/patas/attacks.png}
-    \caption{Attack surface in the \ac{AI} lifecycle pipeline, from data collection to model deployment. Pipeline structure informed by~\cite{nist_ai100_2e2025}.}
-
-    \caption{Attack surface in the AI lifecycle pipeline, from data collection to model deployment, informed by~\cite{nist_ai100_2e2025}. The attack types shown (data poisoning, model stealing, AI deception, membership inference) are illustrative examples and not an exhaustive taxonomy of threats; other classes, such as evasion attacks on already-trained models, are not depicted here.}
+    \caption{Attack surface in the AI lifecycle pipeline, from data collection to model deployment. Own illustration informed by~\cite{nist_ai100_2e2025}. The attack types shown (data poisoning, model stealing, AI deception, membership inference) are illustrative examples and not an exhaustive taxonomy of threats; other classes, such as evasion attacks on already-trained models, are not depicted here.}
     
     \label{fig:attacks}
 \end{figure}
