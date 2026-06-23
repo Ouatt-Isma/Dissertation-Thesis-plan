@@ -1,0 +1,70 @@
+\chapter{PaTAS Confidence Signal: Per-Sample Input Trust Feedforward}
+\label{app:persample}
+
+This appendix presents a complementary experiment to \Cref{sec:patas_discriminator}, 
+in which the trust feedforward uses per-sample calibrated input trust rather 
+than a fully trusted opinion. In the main experiment, the feedforward receives 
+a fully trusted input opinion $(1, 0, 0)$ for all samples regardless of their 
+actual noise level, isolating the contribution of parameter trust accumulated 
+during training. Here, each test sample $i$ instead receives its own calibrated 
+input trust opinion $T_{x_i} = \text{feature\_trust}(\sigma_i)$, where $\sigma_i$ 
+is the actual noise level drawn for that sample, so that both input quality 
+and parameter trust contribute jointly to the output opinion.
+
+\Cref{fig:patas_persample} visualizes the resulting opinion masses and 
+discriminative gaps.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{img/usecase/patas_effectiveness_agg_per_sample.pdf}
+\caption{\ac{PaTAS} opinion masses with per-sample calibrated input trust 
+feedforward. Top: mean opinion values for correctly-classified (solid lines, 
+circles) versus misclassified (dashed lines, squares) samples. Bottom: 
+$\Delta = \text{correct} - \text{wrong}$, showing the discriminative gap 
+per component. Left: feature noise. Center: label noise. Right: combined 
+noise.}
+\label{fig:patas_persample}
+\end{figure}
+
+Three observations distinguish this experiment from the main results of 
+\Cref{sec:patas_discriminator}.
+
+\paragraph{Disbelief is no longer zero under feature noise.}
+When per-sample input trust is fed forward, disbelief becomes a small but 
+non-negligible component of the discriminative signal under feature noise: 
+$\Delta d$ ranges from $-0.006$ at $\sigma_{\text{rel}} = 0.10$ to $-0.013$ 
+at $\sigma_{\text{rel}} = 0.50$. This is consistent with the trust 
+quantification design: the feature trust opinion assigns a small disbelief 
+component $d = \sigma_{\text{rel}}(1 - u)$ to each sample, and this 
+propagates through the \ac{TNN} to produce a non-zero disbelief in the 
+output opinion. The effect is small relative to the belief and uncertainty 
+gaps, but it confirms that the disbelief channel carries meaningful 
+provenance information when input quality is explicitly encoded.
+
+\paragraph{The discriminative gap $\Delta b$ is larger than in the 
+fully-trusted case.}
+Under feature noise, $\Delta b$ ranges from $+0.235$ at 
+$\sigma_{\text{rel}} = 0.10$ to $+0.243$ at $\sigma_{\text{rel}} = 0.20$, 
+slightly higher than the corresponding values of $+0.228$ and $+0.237$ in 
+the main experiment. This reflects the additional discriminative power 
+contributed by the per-sample input trust: samples with lower noise receive 
+higher input belief, which amplifies the output belief gap between correct 
+and incorrect predictions. Under label noise the values are identical to 
+the main experiment, as expected: the label noise experiment uses fully 
+trusted feature inputs in both settings.
+
+\paragraph{The combined noise results show non-zero disbelief gaps.}
+Under combined noise, $\Delta d$ is small but consistently negative 
+(ranging from $-0.005$ to $-0.007$), confirming that when both feature 
+and label corruption are present and input trust is calibrated per sample, 
+the disbelief channel contributes a weak additional discriminative signal 
+beyond what belief and uncertainty alone provide.
+
+Together, these results confirm that per-sample input trust feedforward 
+produces a richer and marginally more discriminative trust signal than the 
+fully-trusted baseline, at the cost of requiring knowledge of the per-sample 
+noise level $\sigma_i$ at test time. In deployment settings where this 
+information is available (for instance, from sensor quality metadata), 
+the per-sample variant is preferred. Where it is not, the fully-trusted 
+feedforward of \Cref{sec:patas_discriminator} provides a conservative 
+but still informative trust signal.

@@ -1,23 +1,59 @@
-\begin{symbols}{lll} % Include a list of Symbols (a three column table)
+\begin{table}[t]
+\centering
+\caption{List of Symbols and Notation}
+\label{tab:symbols}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lp{9cm}}
+\hline
+\textbf{Symbol} & \textbf{Meaning / Description} \\
+\hline
 
-%Symbol & Name & Unit \\
+\multicolumn{2}{l}{\textbf{Sets and Spaces}} \\
+$\Omega$ & Universe (frame of discernment) \\
+$\mathbb{X}$ & Opinion state space \\
+$\mathcal{D}$ & Dataset \\[4pt]
 
-\addlinespace % Gap to separate the Roman symbols from the Greek
+\multicolumn{2}{l}{\textbf{Graph Structure}} \\
+$v$ & Node (vertex) \\
+$e$ & Edge \\
+$\mathcal{N}(i)$ & Set of incoming edges to neuron $i$ \\[4pt]
 
-$\omega$  \\
-
-$e$ & edge\\
-
+\multicolumn{2}{l}{\textbf{Model and Parameters}} \\
+$\Theta$ & Neural network model \\
 $P$ & PNPS \\
+$l$ & Layer index \\
+$n_i^{(l)}$ & Neuron $i$ in layer $l$ \\
+$\theta^{(l)}_{i,j}$ & Model parameter connecting neuron $j$ in layer $l{-}1$ to neuron $i$ in layer $l$ \\[4pt]
 
-$v$ & Node \\
+\multicolumn{2}{l}{\textbf{Algorithm Inputs}} \\
+$g$ & Collection of gradients for all parameters in the batch \\
+$T_y$ & Trust opinion on label $y$ \\
+$\epsilon$ & Gradient sensitivity threshold in \textsc{NodeTrust} \\[4pt]
 
-$\Omega$ & Univers \\
-$\Theta$ & Neural Networks Model \\
+\multicolumn{2}{l}{\textbf{Batch and Gradient Quantities}} \\
+$T_{y_{\text{batch}}}$ & Aggregated trust over labels in the current batch \\
+$g^{(l)}_{i,j}$ & Gradient of loss w.r.t.\ $\theta^{(l)}_{i,j}$ \\
+$g^{(l)}_{i}$ & Gradient vector for neuron $n_i^{(l)}$ \\
+$r$ & Count of weak gradients: $|g^{(l)}_{i,j}| < \epsilon$ \\
+$s$ & Count of strong gradients: $|g^{(l)}_{i,j}| \ge \epsilon$ \\[4pt]
 
-$\mathbb{X}$ & Opinion State space \\
- $\odot$, is defined as &
-$\omega_X^{A\&B} = \omega_X^A \odot \omega_X^B.$ & constraint fusion \\
-$\mathcal{D}$ & Dataset\\
-$\cdot$ & operator for $\wedge$\\
-\end{symbols}
+\multicolumn{2}{l}{\textbf{Trust Values}} \\
+$T_{n_i \mid y_{\text{batch}}}$ & Trust in neuron $n_i$ conditioned on batch labels \\
+$T_{n_i \mid \overline{y_{\text{batch}}}}$ & Trust in neuron under incorrect labels (vacuous) \\
+$T_{n_i \parallel Y_{\text{batch}}}$ & Deduced trust in neuron $n_i$ \\
+$T_{\theta^{(l)}_{i,j}}$ & Trust opinion on parameter $\theta^{(l)}_{i,j}$ \\
+$T_{x^{(l-1)}_j}$ & Trust in the input to parameter $\theta^{(l)}_{i,j}$ \\[4pt]
+
+\multicolumn{2}{l}{\textbf{Operators}} \\
+$\bigwedge$ ($\bigoplus$) & Fusion of trust opinions \\
+$\circledcirc$ & Inferential deduction operator \\
+$\circleddash$ & Trust-revision operator \\
+$\odot$ & SL binomial multiplication / constraint fusion:
+         $\omega_X^{A\&B} = \omega_X^A \odot \omega_X^B$ \\
+$\oslash$ & Conservative trust-division operator \\[4pt]
+
+\multicolumn{2}{l}{\textbf{Other}} \\
+$\omega$ & Subjective logic opinion \\
+\hline
+\end{tabular}
+\end{table}
