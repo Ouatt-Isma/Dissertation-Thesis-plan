@@ -55,7 +55,7 @@ These complementary perspectives provide a unified view of trust as both a risk-
 Moreover, the internal decision-making processes of \acp{NN} are often opaque, limiting the user's ability to monitor and validate individual predictions. As a result, reliance on such systems closely mirrors the trust relationships described in both organizational and formal \ac{ICT} settings: it involves accepting risk based on expectations about the system's competence, reliability, and underlying assumptions. This dual nature of trust, as both vulnerability acceptance and property-based belief, highlights the need for formal, interpretable, and evidence-based approaches to trust assessment in \ac{NN} systems. This equally applies to fully automated settings, such as an autonomous vehicle relying on a perception \ac{NN} for driving decisions, where there is no human intermediary but the system itself must implicitly accept risk when making decision based on model outputs.
 
 \marginpar{Limits of Current Metrics}
-Despite this conceptual alignment, most existing approaches for evaluating \acp{NN}~\cite{Gawlikowski2023, guo2017calibrationmodernneuralnetworks} focus primarily on predictive performance metrics such as accuracy, precision, or recall. While these metrics are essential, they fail to capture whether a model is trustworthy in the sense required for high-stakes decision-making. A highly accurate model may still be unsafe if it is poorly calibrated, overconfident, biased, or trained on unreliable data~\cite{ovadia2019trustmodelsuncertaintyevaluating, begoli2019need}. Conversely, a model with lower predictive accuracy may be more trustworthy if it appropriately represents uncertainty and avoids overconfident predictions in unfamiliar or \ac{OOD} scenarios. 
+Despite this conceptual alignment, most existing approaches for evaluating \acp{NN} focus primarily on predictive performance metrics such as accuracy, precision, or recall. While these metrics are essential, they fail to capture whether a model is trustworthy in the sense required for high-stakes decision-making. A highly accurate model may still be unsafe if it is poorly calibrated, overconfident, biased, or trained on unreliable data~\cite{ovadia2019trustmodelsuncertaintyevaluating, begoli2019need}. Conversely, a model with lower predictive accuracy may be more trustworthy if it appropriately represents uncertainty and avoids overconfident predictions in unfamiliar or \ac{OOD} scenarios. 
 
 Furthermore, trust in \acp{NN} is not solely a property of the model architecture or its learned parameters. It is inherently multi-layered and depends on the quality of the training data, the reliability of annotations, the behavior of the learning process. In other words, there is a transitive dependencies between components, whereby the trustworthiness of one component conditions that of the next, from inputs through parameters to outputs. In this work, we refer to this conditioning chain as trust propagation. Dataset biases, labeling inconsistencies, and hidden correlations can undermine trust long before inference is performed. Without explicit mechanisms to assess and propagate trust across these components, users are left with opaque confidence scores that provide limited support for risk-aware decision-making.
 
@@ -130,9 +130,7 @@ This lack of continuity prevents a consistent interpretation of trust, as it rem
 
 This leads to the third research question:
 \begin{rqbox}{Trust Propagation during Training and Inference}
-    How can trust be consistently propagated
-    
-    from training data to learned model parameters, and from inputs to outputs during inference, within an evidence-based framework?
+    How can trust be consistently propagated from training data to learned model parameters, and from inputs to outputs during inference, within an evidence-based \aclu{TAF}?
 \end{rqbox}
 
     
