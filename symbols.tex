@@ -10,8 +10,11 @@
 \textbf{Symbol} & \textbf{Meaning / Description} \\
 \hline
 \multicolumn{2}{l}{\textbf{Notational Conventions}} \\
-$\omega$ vs.\ $T$ & $\omega$ denotes a general subjective opinion; $T$ denotes an opinion specifically interpreted as \emph{trust} (Ch.~7 onward). \\
-$\mathbf{W}, \mathbf{b}$ vs.\ $W, b$ & Bold symbols denote \acs{NN} weight matrices / bias vectors; non-bold denotes the \acs{SL} prior weight $W$ and belief mass $b_x$ respectively. \\[4pt]
+$\omega$ vs.\ $T$ & $\omega$ denotes a general subjective opinion; $T$ denotes an opinion specifically interpreted as \emph{trust}. \\
+$\mathbf{W}, \mathbf{b}$ vs.\ $W, b$ & Bold symbols denote \acs{NN} weight matrices / bias vectors; non-bold denotes the \acs{SL} prior weight $W$ and belief mass $b_x$ respectively. \\
+$P$ (property vs.\ PNPS) & Two distinct uses, disambiguated by context: a trustworthiness property $P$ in all chapters except 4, and a Parallel Non-intersecting Path Subnetwork (PNPS) in Ch.~4 only. \\
+$\omega = (t,d,u)$ vs.\ $(b,d,u,a)$ & The Actual Trust Level (ATL) is written as a triple $\omega=(t,d,u)=(b,d,u)$; the base rate $a$ is left implicit (default $a=0.5$ unless stated otherwise). The full binomial opinion retains $a$ explicitly as $(b,d,u,a)$. \\
+$\gamma$ & Two distinct uses depending on context: the limit weights $\gamma_X^A, \gamma_X^B$ in \acs{SL} fusion operators vs.\ the normalization factor in Constant-Uncertainty Quantification. Always disambiguated by accompanying sub/superscripts or surrounding context. \\[4pt]
 \hline
 \\
 \hline
@@ -25,7 +28,7 @@ $\mathcal{D}$ & Dataset \\[4pt]
 \hline
 \\
 \hline
-\multicolumn{2}{l}{\textbf{Probability and Evidence Theory (Ch.~2.1)}} \\
+\multicolumn{2}{l}{\textbf{Probability and Evidence Theory}} \\
 $\Pr(\cdot)$ & Classical / Bayesian probability \\
 $Q(P)$ & Second-order probability distribution over $P$ \\
 $\alpha, \beta$ & Beta distribution parameters (pseudo-counts of positive/negative evidence) \\
@@ -34,7 +37,7 @@ $\boldsymbol{\alpha} = (\alpha_1,\dots,\alpha_K)$ & Dirichlet concentration vect
 $\alpha_0$ & Sum of Dirichlet concentration parameters, $\sum_i \alpha_i$ \\
 $m(\cdot)$ & Basic Belief Assignment (BBA), DST \\
 $\mathrm{Con}$ & Conflict mass between two belief sources (Dempster's rule \& BCF) \\
-$r, s$ & Positive/negative evidence counts supporting a proposition (shared meaning: Beta--opinion mapping, and Ch.~7 gradient-based evidence) \\
+$r, s$ & Positive/negative evidence counts supporting a proposition (shared meaning: Beta--opinion mapping) \\
 $W$ & Non-informative prior weight (Beta/Dirichlet $\leftrightarrow$ opinion mapping) \\[4pt]
 \hline
 \\
@@ -66,10 +69,28 @@ $\otimes_{RE}$ & Referral-edge path trust discounting \\[4pt]
 \multicolumn{2}{l}{\textbf{Graph Structure}} \\
 $v$ & Node (vertex) \\
 $e$ & Edge \\
+$G = (V,E)$ & Directed graph with vertex set $V$ and edge set $E$ \\
 $\mathcal{N}(i)$ & Set of incoming edges to neuron $i$ \\
-$\mathrm{PPS}$ & Parallel Path Subnetwork \\
-$\mathrm{NL}(e)$ & Nesting Level of edge $e$ \\
-$\mathrm{NNL}(v)$ & Node Nesting Level \\[4pt]
+$P$ & PNPS \\
+$\mathcal{P}_G$ & Set of all PNPSs of graph $G$ \\
+$\mathrm{NL}_G(e)$ & Nesting Level of edge $e$ in $G$ \\
+$\mathrm{NNL}_G(v)$ & Node Nesting Level of $v$ in $G$ \\
+$\mathrm{PNL}_G(P)$ & Nesting Level of PNPS $P$: $\min\{\mathrm{NL}_G(e) \mid e \text{ is an edge of } P\}$ \\[4pt]
+\hline
+\\
+\hline
+\multicolumn{2}{l}{\textbf{Dataset Trust Design Space}} \\
+$S$ & Lifecycle stage being assessed, $S \in \{\text{SAMPLING, COLLECTION, ANNOTATION, PROCESSING}\}$ \\
+$G$ & Granularity at which a property is assessed, $G \in \{\text{DATASET, ENTRY, FEATURE}\}$ \\
+\hline
+\\
+\hline
+\multicolumn{2}{l}{\textbf{Dataset Trust-Source Quantification (Ch.~6.4.1)}} \\
+$m$ & Index/identifier of a trust-source metric \\
+$q_m$ & Normalized quality score of metric $m$, $q_m \in [0,1]$ \\
+$\tau_m$ & Tolerance threshold for lower-is-better metrics (Eq.~6.6) \\
+$A_m, L_m$ & Unacceptable / ideal bounds for higher-is-better metrics (Eq.~6.7) \\
+$K_m$ & Evidence-strength parameter of metric $m$ (total evidence contributed, $r_m+s_m=K_m$) \\
 \hline
 \\
 \hline
@@ -88,6 +109,13 @@ $N$ & Number of samples in the training dataset $\mathcal{D}$ \\[4pt]
 \hline
 \\
 \hline
+\multicolumn{2}{l}{\textbf{Trust Opinion Quantification (Ch.~3.3.2)}} \\
+$w_x$ & Evidence weight in Evidence-Weighted Quantification (EWQ, Eq.~3.2) \\
+$U$ & Fixed target uncertainty level in Constant-Uncertainty Quantification (CUQ, Eq.~3.3) \\
+$\gamma$ & Normalization factor in CUQ, $\gamma = \dfrac{1-U}{r_x+s_x}$ (Eq.~3.3) \\[4pt]
+\hline
+\\
+\hline
 \multicolumn{2}{l}{\textbf{Calibration (Ch.~2.3.2)}} \\
 $\hat{p}(x)$ & Predicted confidence for input $x$ \\
 $M$ & Number of confidence bins \\
@@ -99,7 +127,7 @@ $n$ & Total number of samples used for calibration evaluation$^{*}$ \\[4pt]
 \\
 \hline
 \multicolumn{2}{l}{\textbf{Model and Parameters}} \\
-$P$ & PNPS \\
+
 $l$ & Layer index \\
 $n_i^{(l)}$ & Neuron $i$ in layer $l$ \\
 $\theta^{(l)}_{i,j}$ & Model parameter connecting neuron $j$ in layer $l{-}1$ to neuron $i$ in layer $l$ \\[4pt]
@@ -128,6 +156,12 @@ $T_{n_i \mid \overline{y_{\text{batch}}}}$ & Trust in neuron under incorrect lab
 $T_{n_i \parallel Y_{\text{batch}}}$ & Deduced trust in neuron $n_i$ \\
 $T_{\theta^{(l)}_{i,j}}$ & Trust opinion on parameter $\theta^{(l)}_{i,j}$ \\
 $T_{x^{(l-1)}_j}$ & Trust in the input to parameter $\theta^{(l)}_{i,j}$ \\
+
+$T_D$ & Trust assessment of the training dataset $D$ \\
+$T_x$ & Trust assessment of the input $x$ \\
+
+$T_{y'}$ & Trust opinion on the model output / prediction $y'$ \\
+$Pf_\Theta$ & The parallel trust function: $Pf_\Theta(T_x) = T(f_\Theta(x))$ \\
 \hline
 
 

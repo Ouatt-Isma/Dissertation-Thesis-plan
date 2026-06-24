@@ -134,7 +134,7 @@ When an assessment is per-entry or per-feature ($\propG \in \{\textsc{entry}, \t
 \begin{mdframed}[backgroundcolor=gray!10, linewidth=0pt]
 \textbf{Relation to \cref{chap:Trust_method}.} The three axes play distinct roles in instantiating the General Trust Assessment Methodology. $\propP$ encodes the \emph{property} to be assessed, which determines what counts as positive or negative evidence. $\propS$ identifies the \emph{lifecycle stage}, acting as the target (trustee) of the trust proposition: it is the component of the pipeline whose reliability is being questioned. $\propG$ sets the \emph{granularity} at which evidence is collected and trust sources are selected. Together, $(\propP, \propS, \propG)$ drive the expression-generation phase: they determine which propositions and trust sources appear in the trust expression, which trust sources attach to each leaf, and how evidence is aggregated.
 
-\noindent \textbf{Example.} Consider assessing whether the annotation stage of dataset $\dataset$ is accurate ($\propP$ = accuracy, $\propS$ = annotation, $\propG$ = entry). The trust proposition is ``the labels of $\dataset$ are correct''. Each entry constitutes an atomic proposition; the trust source is inter-annotator agreement (\ac{IAA}); and the resulting per-entry opinions are aggregated to obtain a dataset-level trust opinion on label accuracy.
+\noindent \textbf{Example.} Consider assessing whether the annotation stage of dataset $\dataset$ is accurate ($\propP$ = accuracy, $\propS$ = annotation, $\propG$ = entry). The trust proposition is ``the labels of $\dataset$ are correct''. Each entry constitutes an atomic proposition; the trust source is \ac{IAA}; and the resulting per-entry opinions are aggregated to obtain a dataset-level trust opinion on label accuracy.
 \end{mdframed}
 
 \subsection{Specializing the General Methodology to Datasets}
@@ -156,7 +156,7 @@ T_{\mathcal{T}(\dataset, \propP)} = T_{\mathcal{T}_{\text{sampling}}} \cdot T_{\
 \]
 where (\(\cdot\)) is the \ac{SL} operator for logical AND ($\wedge$) operator.
 
-Note that given how each stage is performed, \ac{TNA-SL} might be used on well-defined \aclu{STN} to expand the expression.
+Note that given how each stage is performed, \ac{TNA-SL} might be used on a well-defined \aclu{STN} to expand the expression.
 
 
 \paragraph{Phase~II --- ATO quantification.} 
@@ -216,7 +216,7 @@ and analogously for every other stage. The full catalog of metrics is given in \
 \begin{enumerate}
 
     \item \textbf{\acf{BPQ},}  
-    uncertainty decreases as the total number of positive and negative evidence increases.
+    uncertainty decreases as the total amount of positive and negative evidence increases.
     \begin{equation}
     \label{eq:baseline_quant}
     \begin{aligned}
@@ -628,9 +628,9 @@ Entropy is maximal when the local distribution is uniform and minimal when one c
 % \paragraph{Threshold calculation.}
 Each local entropy is compared against a threshold $T$ that defines the \emph{edge of the acceptable balance}. We construct an \emph{edge-acceptable} distribution $P_E$ by setting each class probability to $1/K \pm \eta$ (with one class set to exactly $1/K$ when $K$ is odd, so that $P_E$ sums to one), and define
 \begin{equation}
-T = \mathcal{H}(P_E).
+Thres = \mathcal{H}(P_E).
 \end{equation}
-Contributors whose local entropy exceeds $T$ provide \emph{positive evidence}; the others provide \emph{negative evidence}. Aggregating over the $M$ contributing nodes yields the evidence counts $r$ and $s$ used by the quantification scheme.
+Contributors whose local entropy exceeds $Thres$ provide \emph{positive evidence}; the others provide \emph{negative evidence}. Aggregating over the $M$ contributing nodes yields the evidence counts $r$ and $s$ used by the quantification scheme.
 
 \paragraph{Quantification scheme: \ac{BPQ}.}
 Each contributor produces one binary piece of evidence (above or below $T$), so the natural quantification is the baseline-prior scheme of \cref{sec:dataset-trust:formal:quantification}: as $M$ grows, the residual uncertainty $u = W / (W + r + s)$ shrinks. This is the desired behavior in a federated setting, where adding more contributors should progressively reduce the uncertainty in the global trust assessment without requiring any party to disclose its local class distribution.

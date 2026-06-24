@@ -985,7 +985,7 @@ In particular, since the source and sink nodes of the entire graph are not inter
 
 \acfp{NN} are a class of parametric models widely used for function approximation in \ac{ML}. They are composed of multiple layers of interconnected computational units (neurons) which apply affine transformations followed by nonlinear activation functions. Through layered composition, \acp{NN} can represent complex, high-dimensional mappings and have achieved state-of-the-art performance in a wide range of tasks~\cite{Goodfellow-et-al-2016}.
 
-In this work, we consider a \ac{SNN} for classification parameterized by
+In this work, we consider a \ac{SeqNN} for classification parameterized by
 \[
 \Theta = (\mathbf{W}, \mathbf{b}, \phi),
 \]
@@ -995,7 +995,7 @@ where:
     \item $\mathbf{b} = \{\mathbf{b}^{(l)}\}$ is the set of bias vectors, with $\mathbf{b}^{(l)} \in \mathbb{R}^{n_l}$,
     \item $\phi = \{\phi^{(l)}(\cdot)\}$ is the set of activation functions, where $\phi^{(l)}(\cdot)$ denotes the activation applied at layer $l$.
 \end{itemize}
-Here, $n_l$ denotes the number of neurons in layer $l$, and the network is assumed to consist of $L$ layers. We restrict the formal analysis in this thesis to \ac{SNN} in order to first establish the trust propagation methodology in its simplest, most interpretable setting. Extending the framework to more complex architectures is left as a direction for future work.
+Here, $n_l$ denotes the number of neurons in layer $l$, and the network is assumed to consist of $L$ layers. We restrict the formal analysis in this thesis to \ac{SeqNN} in order to first establish the trust propagation methodology in its simplest, most interpretable setting. Extending the framework to more complex architectures is left as a direction for future work.
 
 \marginpar{Feedforward Computation}
 Given an input vector $\mathbf{x} \in \mathbb{R}^{n_0}$ and a sequential \ac{NN}, the network computes an output $\mathbf{y}' \in \mathbb{R}^{n_L}$ through a sequence of feedforward transformations:

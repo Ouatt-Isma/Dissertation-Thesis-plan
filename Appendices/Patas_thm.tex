@@ -95,15 +95,15 @@ The update equation for $b_{n+1}$ is a rational function involving $a_n$, $b_n$,
 \[
 b_{n+1} \approx b_n b_q + a_q b_n u_q = b_n (b_q + a_q u_q ) = b_n p_q
 \]
-this converges since the projected probability \(p_q \in [0,1] \)
+this converges since the projected probability \(p_q \in [0,1] \).
  
-To conclude with \(u_n\), since we have \(u_n = 1 - (b_n + d_n)\) it will also converge
+To conclude with \(u_n\), since \(u_n = 1 - (b_n + d_n)\), it will also converge
 
 \end{proof}
 
 \subsection{Proof for Theorem~\ref{thm:convergence}}
 \begin{proof}
-Assume that the neural network training process converges, implying that weight updates become increasingly small, and the back propagation gradients \( g \) stabilize. This stability in \( g \) reflects the fact that the model has reached a minimum or stable loss value.
+Assume that the neural network training process converges, implying that weight updates become increasingly small, and the backpropagation gradients \( g \) stabilize. This stability in \( g \) reflects the fact that the model has reached a minimum or stable loss value.
 
 Moreover, the stability of \( T_x \) and \( T_y \)implies that trust inputs to the update mechanism are stable. Consequently, each new trust update for \( T_{\theta} \) is computed using consistent and bounded evidence, which over time results in the stabilization of the subjective opinions assigned to \( T_{\theta} \).
 
@@ -115,7 +115,7 @@ In detail:
     
     \item since \(T_{n\mid \mid {Y_\text{batch}}}\) is a deterministic calculation from the convergent terms  \(T_{n \mid y_\text{batch}}\) and \(T_{y_{batch}}\), it follows that \(T_{n\mid \mid {Y_\text{batch}}}\) also converges 
 
-    \item Finally \(T_{\theta} \longleftarrow T_{\theta} \circleddash T_{n\mid \mid {Y_\text{batch}}}\) converges if \(\circleddash\) is set to any fusion operator or the binomial multiplication operator (see Theorem~\ref{thm:arithm} and \ref{thm:geo} in Appendix~\ref{app:proof}). 
+    \item Finally \(T_{\theta} \longleftarrow T_{\theta} \circleddash T_{n\mid \mid {Y_\text{batch}}}\) converges if \(\circleddash\) is set to any fusion operator or the binomial multiplication operator (see \cref{thm:arithm,thm:geo} in Appendix~\ref{app:proof}). 
 
     \item The function \(f_{upd}\) in our implementation is based on \(T_{\theta}\), \(T_{y}\) and \({T_{x}}\) which all converge.
 \end{itemize}
