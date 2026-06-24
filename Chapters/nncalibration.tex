@@ -19,7 +19,7 @@ To address this limitation, this chapter makes the following contributions. Firs
 The remainder of this chapter is organized as follows. \cref{sec:calibration_sl} presents the subjective logic-based methodology for calibration-based trust assessment, describing the extraction of calibration evidence and the construction of trust opinions. \cref{sec:calibration_experiments} evaluates the proposed approach experimentally and analyzes its behavior. Finally, the chapter concludes with a summary of the main findings.
 
 
-\section{Subjective Logic-Based Methodology for Calibration Trust}
+\section{\acs{SL}-Based Methodology for Calibration Trust Assessment}
 \label{sec:calibration_sl}
 As introduced in \cref{chap:Trust_method}, the general trust assessment methodology follows three main phases: (i) generation of a trust expression incorporating the proposition to be evaluated, (ii) \aclu{ATO}s quantification, and (iii) evaluation of the expression through subjective logic operators to obtain the final trust opinion.
 
@@ -69,12 +69,12 @@ In the context of \ac{NN} calibration, the trust proposition of interest is the 
 \node[mainbox, below=of probs] (cluster)
     {\textbf{Probability Clustering}\\[2pt]
      \textit{\footnotesize partition $[0,1]$ into $M$ clusters;\;assign representative
-     probability $\widehat{p}_i$ per cluster}};
+     probability $RP_i$ per cluster}};
 
 \node[mainbox, below=of cluster] (evidence)
     {\textbf{Per-Cluster Calibration Evidence}\\[2pt]
      \textit{\footnotesize $r_i = t_i$ (successes)\quad
-             $s_i = |t_i - n_i\cdot\widehat{p}_i|$ (deviation)}};
+             $s_i = |t_i - n_i\cdot RP_i|$ (deviation)}};
 
 \node[mainbox, below=of evidence] (opinion)
     {\textbf{Baseline-Prior Quantification}\\[2pt]
@@ -110,8 +110,7 @@ In the context of \ac{NN} calibration, the trust proposition of interest is the 
 \draw[sidearr] (ann2.east) -- +(0.3,0) |- (fusion.west);
 
 \end{tikzpicture}
-\caption{Overview of the calibration-based trust assessment pipeline. Predicted probabilities are partitioned into $M$ clusters; calibration evidence $(r_i, s_i)$ is extracted per cluster; each cluster yields a Subjective Logic opinion $\omega_i = (b_i, d_i, u_i, a_i)$; opinions are fused hierarchically, first across clusters, then across classes to produce
-a global trust opinion $\omega$.}
+\caption{Overview of the calibration-based trust assessment pipeline. Predicted probabilities are partitioned into $M$ clusters; calibration evidence $(r_i, s_i)$ is extracted per cluster; each cluster yields a Subjective Logic opinion $\omega_i = (b_i, d_i, u_i, a_i)$; opinions are fused hierarchically, first across clusters, then across classes to produce a global trust opinion $\omega$.}
 \label{fig:pipeline}
 \end{figure}
 

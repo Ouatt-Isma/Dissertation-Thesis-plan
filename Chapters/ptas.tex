@@ -467,13 +467,13 @@ This formulation reflects the fact that both unreliable features and mislabeled 
 
 
 \paragraph*{Computational Overhead during \ac{NN} training.}
-The proposed \ac{PaTAS-TP} operates in parallel with the primary \ac{NN} and mirrors its computational flow using subjective opinions. As a result, the total runtime can be roughly expressed as:
+The proposed \ac{PaTAS-TP} operates in parallel with the primary \ac{NN} and mirrors its computational flow using subjective opinions. As a result, the overall execution time cost can be roughly expressed as:
 \[
-\hat{T}_{\text{with \ac{PaTAS-TP}}} \approx \hat{T}_{\text{comm}} + \max(\hat{T}_{\text{PaTAS-TP}}, \hat{T}_{\text{NN}}),
+\mathcal{C}_{\text{with \ac{PaTAS-TP}}} \approx \mathcal{C}_{\text{comm}} + \max(\mathcal{C}_{\text{PaTAS-TP}}, \mathcal{C}_{\text{NN}}),
 \]
-where \(T_{\text{comm}}\) denotes the communication overhead between the \ac{NN} and the \ac{PaTAS-TP}. Each \ac{PaTAS-TP} operation is performed over subjective opinions represented by multiple components (trust, distrust, uncertainty, and a fixed base rate), leading to a higher computational cost compared to standard scalar operations. In practice, this results in \(T_{\text{PaTAS-TP}} \approx 4 \times T_{\text{NN}}\). Consequently, the overall runtime is dominated by the \ac{PaTAS-TP} computation, yielding the approximation:
+where \(\mathcal{C}_{\text{comm}}\) denotes the communication overhead between the \ac{NN} and the \ac{PaTAS-TP}. Each \ac{PaTAS-TP} operation is performed over subjective opinions represented by multiple components (trust, distrust, uncertainty, and a fixed base rate), leading to a higher computational cost compared to standard scalar operations. In practice, this results in \(\mathcal{C}_{\text{PaTAS-TP}} \approx 4 \times \mathcal{C}_{\text{NN}}\). Consequently, the overall runtime is dominated by the \ac{PaTAS-TP} computation, yielding the approximation:
 \[
-T_{\text{with \ac{PaTAS-TP}}} \approx T_{\text{comm}} + 4T_{\text{NN}}.
+\mathcal{C}_{\text{with \ac{PaTAS-TP}}} \approx \mathcal{C}_{\text{comm}} + 4\mathcal{C}_{\text{NN}}.
 \]
 Despite this overhead, the parallel design ensures that trust propagation does not interfere with the execution of the primary model, making the approach suitable for real-time monitoring scenarios where interpretability and reliability are critical. Moreover since the training does not need any value from \ac{PaTAS-TP}, it can still continue while \ac{PaTAS-TP} takes the time needed to complete its operations.
 
@@ -830,7 +830,7 @@ $(27 \times 27)$ & 0.651 & 0.386 & 96.35 & 97.73 & 98.02 & 97.81 &  0.00 & 0.00 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\linewidth]{img/patas/ipta_table2a.pdf}
+    \includegraphics[width=0.8\linewidth]{latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf}
     \caption{\ac{IPTA} results for \ac{NN} trained on poisoned datasets with patch size $4 \times 4$. Results are obtained by feedforwarding a fully trusted opinion, except the patch-distrusted, where patch pixels are explicitly assigned distrust.}
     \label{fig:mnistpoisipta}
 \end{figure}
@@ -939,7 +939,7 @@ This distinction motivates the use of a softmax-weighted aggregation $\sum_i p_i
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\linewidth]{img/patas/ipta_trust_2a_vs_2c.pdf}
+    \includegraphics[width=0.8\linewidth]{latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf}
     \caption{IPTA trust mass comparison between per-class neuron and softmax-weighted aggregation ($\sum_i p_i t_i$) for the \ac{NN} trained on the poisoned dataset with patch size $4 \times 4$. The softmax-weighted aggregation weights each output neuron's trust mass by the model's predicted probability, producing a ranking that better reflects the reliability of the final decision rather than the inference path alone.}
     \label{fig:mnistpoisipta2}
 \end{figure}
