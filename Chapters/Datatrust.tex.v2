@@ -403,7 +403,7 @@ derive subjective opinions from trust-source metrics.
 \subsection{CIFAR-10H Dataset}
 \begin{table}[ht]
 \centering
-\caption{Annotation Stage BPQ Metrics and Results for CIFAR10-H}
+\caption{Annotation Stage BPQ Metrics and Results for CIFAR-10H}
 \adjustbox{max width=\textwidth}{
 \begin{tabular}{lllllllllllll}
 \toprule
