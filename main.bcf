@@ -2395,6 +2395,79 @@
     <bcf:citekey order="8" intorder="8" nocite="1">11124121</bcf:citekey>
     <bcf:citekey order="9" intorder="9" nocite="1">fotos2025actions</bcf:citekey>
     <bcf:citekey order="10" intorder="10" nocite="1">snn</bcf:citekey>
+  </bcf:section>
+  <!-- SECTION 1 -->
+  <bcf:bibdata section="1">
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/papers.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/intro.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/dspg.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/discount.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/patas.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/calibration.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/balancingBias.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/rw.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/uq.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/SL_NN.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/attacks.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/NN.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/usecase.bib</bcf:datasource>
+  </bcf:bibdata>
+  <bcf:section number="1">
+    <bcf:citekey order="1" intorder="11" nocite="1">10.1007/978-3-032-08887-1_4</bcf:citekey>
+    <bcf:citekey order="2" intorder="12" nocite="1">10706345</bcf:citekey>
+    <bcf:citekey order="3" intorder="13" nocite="1">11124121</bcf:citekey>
+    <bcf:citekey order="4" intorder="14" nocite="1">trust-aidatatrust</bcf:citekey>
+    <bcf:citekey order="5" intorder="15" nocite="1">10.1007/978-3-032-19096-3_17</bcf:citekey>
+    <bcf:citekey order="6" intorder="16" nocite="1">patas</bcf:citekey>
+  </bcf:section>
+  <!-- SECTION 0 (cont.) -->
+  <bcf:section number="0">
+  </bcf:section>
+  <!-- SECTION 2 -->
+  <bcf:bibdata section="2">
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/papers.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/intro.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/dspg.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/discount.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/patas.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/calibration.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/balancingBias.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/rw.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/uq.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/SL_NN.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/attacks.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/NN.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/usecase.bib</bcf:datasource>
+  </bcf:bibdata>
+  <bcf:section number="2">
+    <bcf:citekey order="1" intorder="11" nocite="1">connect_d31_taf</bcf:citekey>
+    <bcf:citekey order="2" intorder="12" nocite="1">5gaa_trust4cav_2025</bcf:citekey>
+  </bcf:section>
+  <!-- SECTION 0 (cont.) -->
+  <bcf:section number="0">
+  </bcf:section>
+  <!-- SECTION 3 -->
+  <bcf:bibdata section="3">
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/papers.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/intro.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/dspg.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/discount.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/patas.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/calibration.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/balancingBias.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/rw.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/uq.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/SL_NN.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/attacks.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/NN.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">bibtex/usecase.bib</bcf:datasource>
+  </bcf:bibdata>
+  <bcf:section number="3">
+    <bcf:citekey order="1" intorder="11" nocite="1">fotos2025actions</bcf:citekey>
+    <bcf:citekey order="2" intorder="12" nocite="1">snn</bcf:citekey>
+  </bcf:section>
+  <!-- SECTION 0 (cont.) -->
+  <bcf:section number="0">
     <bcf:citekey order="11" intorder="1">Goodfellow-et-al-2016</bcf:citekey>
     <bcf:citekey order="12" intorder="1">Shahid2019-eq</bcf:citekey>
     <bcf:citekey order="13" intorder="1">NBERw31502</bcf:citekey>
@@ -2651,7 +2724,7 @@
     </bcf:sort>
   </bcf:sortingtemplate>
   <!-- DATALISTS -->
-  <bcf:datalist section="0"
+  <bcf:datalist section="1"
                 name="none/global/44C29EDB103A2872F519AD0C9A0FDAAA/global/global/global"
                 type="entry"
                 sortingtemplatename="none"
@@ -2661,7 +2734,7 @@
                 labelalphanametemplatename="global"
                 namehashtemplatename="global">
   </bcf:datalist>
-  <bcf:datalist section="0"
+  <bcf:datalist section="2"
                 name="none/global/61E9C06EA9A85A5088A499DF6458D276/global/global/global"
                 type="entry"
                 sortingtemplatename="none"
@@ -2671,7 +2744,7 @@
                 labelalphanametemplatename="global"
                 namehashtemplatename="global">
   </bcf:datalist>
-  <bcf:datalist section="0"
+  <bcf:datalist section="3"
                 name="none/global/A5F3C6A11B03839D46AF9FB43C97C188/global/global/global"
                 type="entry"
                 sortingtemplatename="none"
