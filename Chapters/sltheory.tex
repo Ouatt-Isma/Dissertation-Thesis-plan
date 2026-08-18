@@ -608,11 +608,11 @@ The difference compared to the original criteria is that we allow $A$ or $B$ to 
     \hfill
     \begin{subfigure}{0.49\textwidth}
 \centering
-\begin{tikzpicture}[node distance=2.7cm, every node/.style={font=\small}]
+\begin{tikzpicture}[every node/.style={font=\small}]
     % Nodes
-    \node[circle, draw] (A) {$A$};
-    \node[ellipse, draw, minimum width=3.2cm, minimum height=1cm, right of=A, align=center] (middle) {intermediate nodes\\ of the unique path};
-    \node[circle, draw, right of=middle] (C) {$C$};
+    \node[circle, draw, minimum size=0.8cm] (A) {$A$};
+    \node[ellipse, draw, minimum width=3.2cm, minimum height=1cm, right=0.5cm of A, align=center] (middle) {intermediate nodes\\ of the unique path};
+    \node[circle, draw, minimum size=0.8cm, right=0.5cm of middle] (C) {$C$};
 
     % Dashed path through middle
     \draw[dashed, ->] (A) -- (middle);
@@ -793,10 +793,80 @@ The procedure \texttt{UpdatePNPS} then updates the mapping \texttt{nodesToPNPS} 
 \paragraph{Running Example (Synthesis)}
 We trace \cref{alg:dspg-synth} on the graph of \cref{fig:ex}, treating all six edges, including the red branch $B \to E$, as part of the input \ac{DAG}. Path enumeration yields three source-to-sink paths, $A{\to}B{\to}C{\to}E$, $A{\to}D{\to}E$, and $A{\to}B{\to}E$; assume they are processed in this order.
 \begin{itemize}
-    \item \emph{Initialization.} $G'$ is initialized with the path $A{\to}B{\to}C{\to}E$, and \texttt{nodesToPNPS} is empty.
-    \item \emph{Path $A{\to}D{\to}E$.} Its first branch not in $G'$ is the whole segment $A{\to}D{\to}E$, i.e., a candidate branch from $A$ to $E$ whose only intermediate node is $D$. \texttt{DSPGChecker} finds the existing path $A{\to}B{\to}C{\to}E$ from $A$ to $E$ (intermediate nodes $\{B, C\}$); since $\texttt{nodesToPNPS}[A]$ and $\texttt{nodesToPNPS}[E]$ are both $None$, the containment conditions hold and the branch is accepted. Its addition creates the \ac{PNPS} $(A,E)$, and \texttt{UpdatePNPS} assigns $(A,E)$ to the checker's intermediate nodes $B$ and $C$ as well as to the branch's intermediate node $D$.
-    \item \emph{Path $A{\to}B{\to}E$.} Its first branch not in $G'$ is the single edge $B \to E$, with no intermediate nodes of its own. \texttt{DSPGChecker} finds the existing path $B{\to}C{\to}E$ (intermediate node $\{C\}$); the containment conditions hold because $\texttt{nodesToPNPS}[B]=(A,E)$ and the target $E$ lies inside $(A,E)$, while $\texttt{nodesToPNPS}[E]=None$. The edge is accepted, creating the nested \ac{PNPS} $(B,E)$; \texttt{UpdatePNPS} then reassigns $C$ from $(A,E)$ to the more deeply nested $(B,E)$, while $B$ and $D$ keep their mapping.
+    \item \emph{Initialization} (\cref{fig:synth-step1}). $G'$ is initialized with the path $A{\to}B{\to}C{\to}E$, and \texttt{nodesToPNPS} is empty.
+    \item \emph{Path $A{\to}D{\to}E$} (\cref{fig:synth-step2}). Its first branch not in $G'$ is the whole segment $A{\to}D{\to}E$, i.e., a candidate branch from $A$ to $E$ whose only intermediate node is $D$. \texttt{DSPGChecker} finds the existing path $A{\to}B{\to}C{\to}E$ from $A$ to $E$ (intermediate nodes $\{B, C\}$); since $\texttt{nodesToPNPS}[A]$ and $\texttt{nodesToPNPS}[E]$ are both $None$, the containment conditions hold and the branch is accepted. Its addition creates the \ac{PNPS} $(A,E)$, and \texttt{UpdatePNPS} assigns $(A,E)$ to the checker's intermediate nodes $B$ and $C$ as well as to the branch's intermediate node $D$.
+    \item \emph{Path $A{\to}B{\to}E$} (\cref{fig:synth-step3}). Its first branch not in $G'$ is the single edge $B \to E$, with no intermediate nodes of its own. \texttt{DSPGChecker} finds the existing path $B{\to}C{\to}E$ (intermediate node $\{C\}$); the containment conditions hold because $\texttt{nodesToPNPS}[B]=(A,E)$ and the target $E$ lies inside $(A,E)$, while $\texttt{nodesToPNPS}[E]=None$. The edge is accepted, creating the nested \ac{PNPS} $(B,E)$; \texttt{UpdatePNPS} then reassigns $C$ from $(A,E)$ to the more deeply nested $(B,E)$, while $B$ and $D$ keep their mapping.
 \end{itemize}
+Not every further branch on top of this fully synthesized $G'$ would be admissible. Consider adding an edge $D \to B$: no path from $D$ to $B$ exists in $G'$ (the only edge leaving $D$ is $D \to E$), so Criterion~1 of \cref{def:optimized-criteria} already fails, and the branch is rejected before the containment conditions are even examined. Consider instead adding an edge $A \to C$: Criterion~1 holds, since the path $A \to B \to C$ exists, but Criterion~2 fails. Indeed $\texttt{nodesToPNPS}[C] = (B,E)$, i.e., $C$ is an intermediate node of the \ac{PNPS} $(B,E)$, so the second containment condition requires $A$ to lie inside $(B,E)$; since $A$ is neither the source $B$, the target $E$, nor an intermediate node of that \ac{PNPS}, the condition fails and the branch is rejected.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+    \centering
+    \begin{tikzpicture}[main/.style = {draw, circle}, node distance=1.4cm, every node/.style={font=\small}]
+        \node[main] (1) {$A$};
+        \node[main] (2) [above right of=1] {$B$};
+        \node[main] (3) [below right of=1] {$D$};
+        \node[main] (4) [right of=2] {$C$};
+        \node[main] (5) [below right of=4] {$E$};
+        \draw[->] (1) -- (2);
+        \draw[->] (2) -- (4);
+        \draw[->] (4) -- (5);
+        \draw[gray, dashed, ->] (1) -- (3);
+        \draw[gray, dashed, ->] (3) -- (5);
+        \draw[gray, dashed, ->] (2) to[bend left=25] (5);
+    \end{tikzpicture}
+    \caption{Initialization: $G'$ is seeded with $A\to B\to C\to E$ (solid); the remaining input edges (gray, dashed) are not yet in $G'$, and \texttt{nodesToPNPS} is empty.}
+    \label{fig:synth-step1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\textwidth}
+    \centering
+    \begin{tikzpicture}[main/.style = {draw, circle}, node distance=1.4cm, every node/.style={font=\small}]
+        \node[main] (1) {$A$};
+        \node[main] (2) [above right of=1] {$B$};
+        \node[main] (3) [below right of=1] {$D$};
+        \node[main] (4) [right of=2] {$C$};
+        \node[main] (5) [below right of=4] {$E$};
+        \draw[->] (1) -- (2);
+        \draw[->] (2) -- (4);
+        \draw[->] (4) -- (5);
+        \draw[->] (1) -- (3);
+        \draw[->] (3) -- (5);
+        \draw[gray, dashed, ->] (2) to[bend left=25] (5);
+        \node[below=1mm of 2, font=\scriptsize] {$(A,E)$};
+        \node[below=1mm of 3, font=\scriptsize] {$(A,E)$};
+        \node[above=1mm of 4, font=\scriptsize] {$(A,E)$};
+    \end{tikzpicture}
+    \caption{After accepting $A\to D\to E$: the \ac{PNPS} $(A,E)$ is created, and \texttt{UpdatePNPS} maps $B$, $C$, $D$ to $(A,E)$.}
+    \label{fig:synth-step2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\textwidth}
+    \centering
+    \begin{tikzpicture}[main/.style = {draw, circle}, node distance=1.4cm, every node/.style={font=\small}]
+        \node[main] (1) {$A$};
+        \node[main] (2) [above right of=1] {$B$};
+        \node[main] (3) [below right of=1] {$D$};
+        \node[main] (4) [right of=2] {$C$};
+        \node[main] (5) [below right of=4] {$E$};
+        \draw[->] (1) -- (2);
+        \draw[->] (2) -- (4);
+        \draw[->] (4) -- (5);
+        \draw[->] (1) -- (3);
+        \draw[->] (3) -- (5);
+        \draw[red, ->] (2) to[bend right=25] (5);
+        \node[below=1mm of 2, font=\scriptsize] {$(A,E)$};
+        \node[below=1mm of 3, font=\scriptsize] {$(A,E)$};
+        \node[above=1mm of 4, font=\scriptsize] {$(B,E)$};
+    \end{tikzpicture}
+    \caption{After accepting $B\to E$ (red): the nested \ac{PNPS} $(B,E)$ is created, and \texttt{UpdatePNPS} reassigns $C$ from $(A,E)$ to $(B,E)$; $B$ and $D$ keep their mapping.}
+    \label{fig:synth-step3}
+    \end{subfigure}
+    \caption{Trace of \cref{alg:dspg-synth} synthesizing $G'$ from the running example (\cref{fig:ex}) in three steps. Labels below/above each node show its current \texttt{nodesToPNPS} entry.}
+    \label{fig:synth-trace}
+\end{figure}
+
 The synthesized $G'$ retains all six input edges. At the last step, J{\o}sang's original criteria would instead have rejected $B \to E$, since at that point $\mathrm{NNL}(B)=1 \neq 0 = \mathrm{NNL}(E)$, producing the smaller \ac{DSPG} without the red edge. We return to this example in \cref{sec:optimized_analysis} for the analysis phase and in \cref{subsec:eval_synthesis} for the impact of the retained edge on the derived opinion.
 
 Following we show different properties of the \cref{alg:dspg-synth}. The correctness of the algorithm relies on the invariant that $nodesToPNPS[v]$ always stores the most deeply nested  \ac{PNPS} in which node $v$ appears as an intermediate node.
@@ -974,7 +1044,7 @@ The part~\ref{thm:p2} of the theorem is the dual case of part~\ref{thm:p1}. Reve
 \begin{figure}
     \centering
 \includegraphics[width=0.5\textwidth]{img/dspg/newsynth.pdf}
-    \caption{Our optimized \ac{DSPG} analysis algorithm. The black steps follow the classical procedure of \cref{fig:algsynth1}; the step highlighted in red (f) is the one that differs: instead of re-determining the \aclp{NL} of all edges after each reduction, the \ac{NL} of the replacement edge is set directly to the \aclu{NL} of the reduced \ac{PNPS} minus one, as established by \cref{thm:pnps-reduction}, while all other \aclp{NL} remain valid.}
+    \caption{Our optimized \ac{DSPG} analysis algorithm. The black steps follow the classical procedure of \cref{fig:algsynth1} (Original \acs{DSPG} analysis algorithm by J\o{}sang); the step highlighted in red (f) is the one that differs: instead of re-determining the \aclp{NL} of all edges after each reduction, the \ac{NL} of the replacement edge is set directly to the \aclu{NL} of the reduced \ac{PNPS} minus one, as established by \cref{thm:pnps-reduction}, while all other \aclp{NL} remain valid.}
     \label{fig:algsynth2}
 \end{figure}
 \begin{corollary}
@@ -1267,7 +1337,7 @@ These results confirm the practical relevance of the optimized \ac{DSPG} synthes
 The previous section established that the optimized synthesis criteria preserve strictly more structural information than the original ones. We now turn to a complementary question: what is the cost of this information retention? Specifically, we compare the original methodology of J{\o}sang and the proposed \ac{PNPS}-based framework along two dimensions: \emph{information retention} (the fraction of input edges admitted into the synthesized \ac{DSPG}) and \emph{computation time} (decomposed into synthesis time and analysis time). For the analysis stage we additionally provide a controlled comparison on identical input \acp{DSPG} so that the \ac{PNPS}-based algorithmic gain established in \cref{thm:pnps-reduction} can be isolated.
 
 \paragraph{Experimental Setup\protect\footnote{Experiments are conducted on a Huawei laptop running Windows 11 Pro (Build 26100), equipped with a 13th Gen Intel Core i7-1360P CPU (12 cores, 16 threads) and 16\,GB RAM.}}
-We generate random \acp{DAG} with a single source $S$ and a single sink $T$. Graphs are organized into layers, with edges allowed between any two layers up to a configurable skip distance, and each admissible edge included with a fixed probability. This construction mirrors the structure of \ac{NN} architectures discussed in the introduction, where intermediate layers can be bypassed by shortcut connections. Graph size is controlled by the number of intermediate layers, which increases from one configuration to the next while the per-layer width, the edge probability, and the skip distance remain fixed. For each configuration, we sample $20$ graphs with independent random seeds. Since the edges are drawn at random, these $20$ graphs do not all contain exactly the same number of edges; each configuration is therefore represented in the plots by a single point placed at the \emph{mean} input edge count of its $20$ graphs, and the reported value is the mean of the respective metric over those graphs, with standard-deviation error bars. Each edge is annotated with a random binomial opinion drawn uniformly from the simplex $b+d+u=1$.
+We generate random \acp{DAG} with a single source $S$ and a single sink $T$. Graphs are organized into layers, with edges allowed between any two layers up to a configurable skip distance, and each admissible edge included with a fixed probability. This construction mirrors the structure of \ac{NN} architectures discussed in the introduction, where intermediate layers can be bypassed by shortcut connections. Graph size is controlled by the number of intermediate layers, which increases from one configuration to the next while the per-layer width, the edge probability, and the skip distance remain fixed. For each configuration (i.e., each value of the layer count), we sample $20$ graphs with independent random seeds. Since the edges are drawn at random, these $20$ graphs do not all contain exactly the same number of edges; each configuration is therefore represented in the plots by a single point placed at the \emph{mean} input edge count of its $20$ graphs, and the reported value is the mean of the respective metric over those graphs, with standard-deviation error bars. Each edge is annotated with a random binomial opinion drawn uniformly from the simplex $b+d+u=1$.
 
 For both methodologies we run the complete pipeline (\ac{DSPG} synthesis followed by \ac{DSPG} analysis) and report the time of each phase separately. All timings are taken with a monotonic high-resolution performance counter placed immediately before and after each phase, so that only the synthesis and the analysis computations themselves are measured; graph generation, opinion sampling, and the \ac{DSPG} verification performed after every run are excluded from the timed regions. To limit the influence of transient operating-system artifacts, no single measurement is reported in isolation: each configuration is measured on its $20$ independently seeded graphs, and every data point aggregates these $20$ runs as mean and standard deviation, so that residual measurement noise, together with the structural variability between random instances, is reflected in the error bars. We further verify in every run that the synthesized graph satisfies the \ac{DSPG} property. The original methodology uses J{\o}sang's criteria of \cref{def:dspg_original_criteria} together with the \ac{PPS}-based analysis algorithm of \cref{fig:algsynth1}, whose \acp{NL} must be re-enumerated at every reduction step. The optimized methodology uses the \ac{PNPS}-based criteria of \cref{def:optimized-criteria} with the \texttt{nodesToPNPS} containment tracking introduced in \cref{alg:dspg-synth}, paired with the \ac{PNPS}-based analysis algorithm of \cref{fig:algsynth2} whose \acp{NL} updates are derived in constant time from \cref{thm:pnps-reduction}. Final opinions are computed using cumulative belief fusion. We numerically verified that the two analysis algorithms yield identical opinions on every synthesized \ac{DSPG}, confirming that the only difference between the two methodologies lies in the cost of maintaining the nesting-level information between reduction steps.
 
@@ -1296,7 +1366,7 @@ The \emph{analysis} phase (right panel) is faster for the original methodology i
     \label{fig:eval_time_breakdown}
 \end{figure}
 
-Each data point in \cref{fig:eval_time_breakdown} aggregates the $20$ independently sampled graphs of its configuration, and the visible growth of the deviation bars with graph size has a structural explanation. The number of source-to-sink paths, and with it the synthesis workload, grows combinatorially with the number of layers, so the same relative variability between random instances translates into increasingly large absolute runtime differences: two seeds of the largest configuration may differ by dozens of paths, whereas two seeds of the smallest one differ by only a few. Indeed, the relative dispersion (standard deviation divided by mean) remains of the same order of magnitude across all configurations; it is the mean runtime itself that grows super-linearly and thereby inflates the absolute width of the error bars.
+Each data point in \cref{fig:eval_time_breakdown} aggregates the $20$ independently sampled graphs of its configuration (i.e., a fixed number of intermediate layers), and the visible growth of the deviation bars with graph size has a structural explanation. The number of source-to-sink paths, and with it the synthesis workload, grows combinatorially with the number of layers, so the same relative variability between random instances translates into increasingly large absolute runtime differences: two seeds of the largest configuration may differ by dozens of paths, whereas two seeds of the smallest one differ by only a few. Indeed, the relative dispersion (standard deviation divided by mean) remains of the same order of magnitude across all configurations; it is the mean runtime itself that grows super-linearly and thereby inflates the absolute width of the error bars.
 
 \paragraph{Analysis-only Comparison on Identical \acp{DSPG}}
 
