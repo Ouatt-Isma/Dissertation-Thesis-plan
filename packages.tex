@@ -58,6 +58,10 @@ natbib=true
 % \usepackage{enumitem}
 \usepackage{caption}
 \usepackage{subcaption}
+% Subfigure labels: the thesis class sets labelfont=sc (small caps), which makes
+% subcaption labels "(a)" render as "(A)" while cross-references (\cref) print
+% "Figure 4.2a". Print subfigure labels upright so both match.
+\captionsetup[subfigure]{labelfont={small,up}}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
