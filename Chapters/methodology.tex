@@ -242,7 +242,7 @@ In general, trust opinion quantification can be performed using different models
     \item \textbf{\ac{BPQ}.}  
     In this model, uncertainty decreases as the total number of positive and negative evidence increases.
     \begin{equation}
-    \label{eq:baseline_quant}
+    \label{eq:baseline_quant_meth}
     \begin{aligned}
         b_x &= \frac{r_x}{W + r_x + s_x}, \quad
         d_x = \frac{s_x}{W + r_x + s_x}, \quad
@@ -254,7 +254,7 @@ In general, trust opinion quantification can be performed using different models
     This method introduces a weight $w_x$ to account for uncertainty in addition to positive and negative evidence. It is particularly relevant when the evidence itself is associated with an uncertainty score. The belief, disbelief, and uncertainty are computed as:
 
     \begin{equation}
-    \label{eq:weight_quant}
+    \label{eq:weight_quant_meth}
     \begin{aligned}
         b_x = \dfrac{r_x}{w_x + r_x + s_x}, \quad
         d_x = \dfrac{s_x}{w_x + r_x + s_x}, \quad
@@ -268,7 +268,7 @@ In general, trust opinion quantification can be performed using different models
     The belief and disbelief are scaled using a normalization factor $\gamma$:
 
     \begin{equation}
-    \label{eq:constant_quant}
+    \label{eq:constant_quant_meth}
     \begin{aligned}
         u_x = U, \quad
         \gamma = \dfrac{1-U}{r_x + s_x}, \quad

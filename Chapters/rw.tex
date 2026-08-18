@@ -1026,13 +1026,13 @@ Formally, training a \ac{NN} consists in optimizing the parameters $(\mathbf{W},
 This optimization is typically performed using variants of gradient descent and backpropagation~\cite{rumelhart1986learning}. In backpropagation, the gradient of the loss function with respect to the network parameters indicates how much each parameter contributes to the output error. 
 Thus, for a parameter $\theta$, the update is given by:
 \begin{equation}
-    \label{eq:gd1}
+    \label{eq:gd1_rw}
     \theta \leftarrow \theta - l_r \, \frac{\partial \mathcal{L}}{\partial \theta},
 \end{equation}
 where $l_r$ is the learning rate, $\mathcal{L}$ is the loss function and $\frac{\partial \mathcal{L}}{\partial \theta}$ is the gradient.
 The gradients are obtained recursively through the chain rule:
 \begin{equation}
-    \label{eq:gd2}
+    \label{eq:gd2_rw}
     \frac{\partial \mathcal{L}}{\partial \theta^{(l)}_{i,j}} 
     = \delta^{(l)}_i \, x^{(l-1)}_j,
 \end{equation}
