@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.8.18)  18 AUG 2026 11:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.8.18)  18 AUG 2026 12:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1461,6 +1461,13 @@ Package biblatex Warning: The following entry could not be found
 (biblatex)                Please verify the spelling and rerun
 (biblatex)                LaTeX afterwards.
 
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database (refsection 3):
+(biblatex)                snn
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
 )
 Package biblatex Info: Reference section=0 on input line 107.
 Package biblatex Info: Reference segment=0 on input line 107.
@@ -1565,21 +1572,21 @@ although it is yet undefined on input line 70.
 Package acronym Info: Label `acro:DSPG' newly defined as it shall be overridden
 although it is yet undefined on input line 73.
 Package acronym Info: Label `acro:DSPG' overridden on input line 74.
-Package acronym Info: Label `acro:DSPG' overridden on input line 75.
+Package acronym Info: Label `acro:DSPG' overridden on input line 76.
 Package acronym Info: Label `acro:PNPS' newly defined as it shall be overridden
-although it is yet undefined on input line 75.
+although it is yet undefined on input line 76.
  [9]
 Package acronym Info: Label `acro:GTSRB' newly defined as it shall be overridden
-although it is yet undefined on input line 130.
+although it is yet undefined on input line 133.
 Package acronym Info: Label `acro:PaTAS-TP' newly defined as it shall be overridden
-although it is yet undefined on input line 156.
+although it is yet undefined on input line 159.
 
-Overfull \hbox (0.18619pt too wide) in paragraph at lines 156--156
+Overfull \hbox (0.18619pt too wide) in paragraph at lines 159--159
  [][] [][][][][][]\T1/ppl/m/n/10.95 Parallel Trust As-sess-ment Sys-tem - Trust Prop-a-ga-tion ([])[]: Ar- 
  []
 
 Package acronym Info: Label `acro:SL' newly defined as it shall be overridden
-although it is yet undefined on input line 179.
+although it is yet undefined on input line 182.
 [10])
 \tf@toc=\write6
 \openout6 = `main.toc'.
@@ -1662,13 +1669,18 @@ ignored: Infinite glue shrinkage found in box being split [19]) [20]
 \openout2 = `Chapters/publications.aux'.
 
  (./Chapters/publications.tex
+\blx@maxsegment@1=\count560
+\blx@sectionciteorder@1=\count561
+Package biblatex Info: Reference section=1 on input line 9.
+Package biblatex Info: Setting label 'refsection:1' on input line 9.
+
 
 Package biblatex Warning: Option 'labelprefix' requires global
-(biblatex)                'defernumbers=true' on input line 6.
+(biblatex)                'defernumbers=true' on input line 12.
 
 
 Package biblatex Warning: Option 'resetnumbers' requires 'defernumbers=true'.
-(biblatex)                Ignoring 'resetnumbers=true' on input line 6.
+(biblatex)                Ignoring 'resetnumbers=true' on input line 12.
 
 
 Package biblatex Warning: Split bibliography detected.
@@ -1680,22 +1692,32 @@ Package biblatex Warning: Split bibliography detected.
 (biblatex)                '\BiblatexSplitbibDefernumbersWarningOff'.
 
 
-Overfull \hbox (12.34436pt too wide) in paragraph at lines 6--6
-[]\T1/ppl/m/n/10.95 Koffi Is-mael Ouat-tara et al. ^^P  As-sess-ing Trust-wor-thi-ness of AI Train-ing Dataset
- []
-
-
-Overfull \hbox (24.60512pt too wide) in paragraph at lines 6--6
+Overfull \hbox (13.65514pt too wide) in paragraph at lines 12--12
 \T1/ppl/m/it/10.95 ence on In-for-ma-tion Fu-sion (FU-SION)\T1/ppl/m/n/10.95 . 2025, pp. 1^^U8. \T1/ppl/m/sc/10.95 doi\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 10 . 23919 / FUSION65864 .
  []
 
 
+Overfull \hbox (1.39438pt too wide) in paragraph at lines 12--12
+[]\T1/ppl/m/n/10.95 Koffi Is-mael Ouat-tara et al. ^^P  As-sess-ing Trust-wor-thi-ness of AI Train-ing Dataset
+ []
+
+
+Overfull \hbox (11.73215pt too wide) in paragraph at lines 12--12
+\T1/ppl/m/n/10.95 land, 2026, pp. 260^^U276. \T1/ppl/m/sc/10.95 isbn\T1/ppl/m/n/10.95 : 978-3-032-19096-3. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 https : / / link . springer .
+ []
+
+Package biblatex Info: Reference section=0 on input line 14.
+\blx@maxsegment@2=\count562
+\blx@sectionciteorder@2=\count563
+Package biblatex Info: Reference section=2 on input line 17.
+Package biblatex Info: Setting label 'refsection:2' on input line 17.
+
 Package biblatex Warning: Option 'labelprefix' requires global
-(biblatex)                'defernumbers=true' on input line 11.
+(biblatex)                'defernumbers=true' on input line 20.
 
 
 Package biblatex Warning: Option 'resetnumbers' requires 'defernumbers=true'.
-(biblatex)                Ignoring 'resetnumbers=true' on input line 11.
+(biblatex)                Ignoring 'resetnumbers=true' on input line 20.
 
 
 Package biblatex Warning: Split bibliography detected.
@@ -1706,17 +1728,26 @@ Package biblatex Warning: Split bibliography detected.
 (biblatex)                This warning can be suppressed with
 (biblatex)                '\BiblatexSplitbibDefernumbersWarningOff'.
 
+Package biblatex Info: Reference section=0 on input line 22.
 [21
 
 
 {/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+\blx@maxsegment@3=\count564
+\blx@sectionciteorder@3=\count565
+Package biblatex Info: Reference section=3 on input line 27.
+Package biblatex Info: Setting label 'refsection:3' on input line 27.
+
+
+LaTeX Warning: Citation 'snn' undefined on input line 28.
+
 
 Package biblatex Warning: Option 'labelprefix' requires global
-(biblatex)                'defernumbers=true' on input line 18.
+(biblatex)                'defernumbers=true' on input line 30.
 
 
 Package biblatex Warning: Option 'resetnumbers' requires 'defernumbers=true'.
-(biblatex)                Ignoring 'resetnumbers=true' on input line 18.
+(biblatex)                Ignoring 'resetnumbers=true' on input line 30.
 
 
 Package biblatex Warning: Split bibliography detected.
@@ -1727,6 +1758,7 @@ Package biblatex Warning: Split bibliography detected.
 (biblatex)                This warning can be suppressed with
 (biblatex)                '\BiblatexSplitbibDefernumbersWarningOff'.
 
+Package biblatex Info: Reference section=0 on input line 32.
 ) [22]
 \openout2 = `Chapters/Introduction.aux'.
 
@@ -1791,7 +1823,7 @@ Overfull \hbox (7.66325pt too wide) in paragraph at lines 163--165
 
 Package cleveref Info: loaded `english' language definitions on input line 169.
 [8]
-<Figures/contribution.png, id=1448, 500.36937pt x 260.975pt>
+<Figures/contribution.png, id=1453, 500.36937pt x 260.975pt>
 File: Figures/contribution.png Graphic file (type png)
 <use Figures/contribution.png>
 Package pdftex.def Info: Figures/contribution.png  used on input line 185.
@@ -1835,7 +1867,7 @@ Overfull \hbox (1.1598pt too wide) in paragraph at lines 34--36
 
 Package cleveref Info: loaded `english' language definitions on input line 36.
 [14]
-<img/rw/beta_distributions.pdf, id=1539, 505.89pt x 325.215pt>
+<img/rw/beta_distributions.pdf, id=1546, 505.89pt x 325.215pt>
 File: img/rw/beta_distributions.pdf Graphic file (type pdf)
 <use img/rw/beta_distributions.pdf>
 Package pdftex.def Info: img/rw/beta_distributions.pdf  used on input line 44.
@@ -1850,7 +1882,7 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 7.91925pt on input line 45.
 Package cleveref Info: loaded `english' language definitions on input line 69.
  [15 <./img/rw/beta_distributions.pdf>]
-<img/rw/dirichlet_simplex.pdf, id=1582, 578.16pt x 578.16pt>
+<img/rw/dirichlet_simplex.pdf, id=1589, 578.16pt x 578.16pt>
 File: img/rw/dirichlet_simplex.pdf Graphic file (type pdf)
 <use img/rw/dirichlet_simplex.pdf>
 Package pdftex.def Info: img/rw/dirichlet_simplex.pdf  used on input line 89.
@@ -1888,12 +1920,12 @@ Overfull \hbox (0.34949pt too wide) in paragraph at lines 184--185
 \T1/ppl/m/n/10.95 rea-son-ing where mul-ti-ple sub-jec-tive opin-ions are com-bined us-ing well-defined
  []
 
-<img/rw/illustration.png, id=1698, 234.8775pt x 163.10938pt>
+<img/rw/illustration.png, id=1705, 234.8775pt x 163.10938pt>
 File: img/rw/illustration.png Graphic file (type png)
 <use img/rw/illustration.png>
 Package pdftex.def Info: img/rw/illustration.png  used on input line 197.
 (pdftex.def)             Requested size: 197.97646pt x 137.48381pt.
-<img/rw/beta_dist_map.pdf, id=1701, 578.16pt x 361.35pt>
+<img/rw/beta_dist_map.pdf, id=1708, 578.16pt x 361.35pt>
 File: img/rw/beta_dist_map.pdf Graphic file (type pdf)
 <use img/rw/beta_dist_map.pdf>
 Package pdftex.def Info: img/rw/beta_dist_map.pdf  used on input line 200.
@@ -1910,14 +1942,14 @@ Package cleveref Info: loaded `english' language definitions on input line 298.
  [21]
 Package cleveref Info: loaded `english' language definitions on input line 339.
  [22]
-<img/rw/fusion_process.png, id=1812, 328.72812pt x 170.6375pt>
+<img/rw/fusion_process.png, id=1819, 328.72812pt x 170.6375pt>
 File: img/rw/fusion_process.png Graphic file (type png)
 <use img/rw/fusion_process.png>
 Package pdftex.def Info: img/rw/fusion_process.png  used on input line 408.
 (pdftex.def)             Requested size: 242.4199pt x 125.83754pt.
 Package cleveref Info: loaded `english' language definitions on input line 416.
  [23]
-<img/rw/fusion_op_selection.png, id=1828, 494.34688pt x 501.875pt>
+<img/rw/fusion_op_selection.png, id=1835, 494.34688pt x 501.875pt>
 File: img/rw/fusion_op_selection.png Graphic file (type png)
 <use img/rw/fusion_op_selection.png>
 Package pdftex.def Info: img/rw/fusion_op_selection.png  used on input line 421.
@@ -1947,7 +1979,7 @@ Package cleveref Info: loaded `english' language definitions on input line 622.
  [27]
 Package cleveref Info: loaded `english' language definitions on input line 666.
  [28]
-<img/discount/tdis.png, id=1885, 611.28375pt x 147.55125pt>
+<img/discount/tdis.png, id=1892, 611.28375pt x 147.55125pt>
 File: img/discount/tdis.png Graphic file (type png)
 <use img/discount/tdis.png>
 Package pdftex.def Info: img/discount/tdis.png  used on input line 672.
@@ -1959,7 +1991,7 @@ Overfull \hbox (3.54857pt too wide) detected at line 723
 
 Package cleveref Info: loaded `english' language definitions on input line 723.
 [29 <./img/discount/tdis.png>]
-<img/discount/tdisM.pdf, id=1902, 467.34601pt x 91.54199pt>
+<img/discount/tdisM.pdf, id=1909, 467.34601pt x 91.54199pt>
 File: img/discount/tdisM.pdf Graphic file (type pdf)
 <use img/discount/tdisM.pdf>
 Package pdftex.def Info: img/discount/tdisM.pdf  used on input line 733.
@@ -1979,12 +2011,12 @@ Package acronym Info: Label `acro:C-ITS' newly defined as it shall be overridden
 although it is yet undefined on input line 761.
 Package acronym Info: Label `acro:V2V' newly defined as it shall be overridden
 although it is yet undefined on input line 761.
-<img/discount/IMA_intersection.png, id=1945, 563.2242pt x 524.6802pt>
+<img/discount/IMA_intersection.png, id=1952, 563.2242pt x 524.6802pt>
 File: img/discount/IMA_intersection.png Graphic file (type png)
 <use img/discount/IMA_intersection.png>
 Package pdftex.def Info: img/discount/IMA_intersection.png  used on input line 766.
 (pdftex.def)             Requested size: 161.60916pt x 150.54416pt.
-<img/discount/IMA_dissertation.png, id=1948, 325.71687pt x 181.17688pt>
+<img/discount/IMA_dissertation.png, id=1955, 325.71687pt x 181.17688pt>
 File: img/discount/IMA_dissertation.png Graphic file (type png)
 <use img/discount/IMA_dissertation.png>
 Package pdftex.def Info: img/discount/IMA_dissertation.png  used on input line 771.
@@ -1996,7 +2028,7 @@ Overfull \hbox (0.10805pt too wide) in paragraph at lines 798--799
  []
 
 Package acronym Info: Label `acro:DSPG' overridden on input line 800.
-<img/dspg/nonDSPGIMA.png, id=1973, 325.71687pt x 105.39375pt>
+<img/dspg/nonDSPGIMA.png, id=1980, 325.71687pt x 105.39375pt>
 File: img/dspg/nonDSPGIMA.png Graphic file (type png)
 <use img/dspg/nonDSPGIMA.png>
 Package pdftex.def Info: img/dspg/nonDSPGIMA.png  used on input line 808.
@@ -2009,7 +2041,7 @@ Overfull \hbox (5.72899pt too wide) in paragraph at lines 818--819
 []\T1/ppl/b/n/10.95 Definition 2.15 \T1/ppl/m/n/10.95 (Se-ries---Par-al-lel Graph[])\T1/ppl/b/n/10.95 . []\T1/ppl/m/n/10.95 A Series--Parallel Graph ([])[] is a graph
  []
 
-<img/dspg/spgraphs.pdf, id=1993, 899.90201pt x 318.0683pt>
+<img/dspg/spgraphs.pdf, id=2000, 899.90201pt x 318.0683pt>
 File: img/dspg/spgraphs.pdf Graphic file (type pdf)
 <use img/dspg/spgraphs.pdf>
 Package pdftex.def Info: img/dspg/spgraphs.pdf  used on input line 829.
@@ -2025,7 +2057,7 @@ Package acronym Info: Label `acro:NL' newly defined as it shall be overridden
 although it is yet undefined on input line 852.
 Package cleveref Info: loaded `english' language definitions on input line 866.
 [33 <./img/dspg/spgraphs.pdf>]
-<img/dspg/josangSynth.pdf, id=2042, 400.98808pt x 450.94473pt>
+<img/dspg/josangSynth.pdf, id=2049, 400.98808pt x 450.94473pt>
 File: img/dspg/josangSynth.pdf Graphic file (type pdf)
 <use img/dspg/josangSynth.pdf>
 Package pdftex.def Info: img/dspg/josangSynth.pdf  used on input line 901.
@@ -2055,7 +2087,7 @@ Package acronym Info: Label `acro:UQ' newly defined as it shall be overridden
 although it is yet undefined on input line 1071.
 Package cleveref Info: loaded `english' language definitions on input line 1072.
 [37]
-<img/rw/aleat_epist.png, id=2136, 745.78625pt x 486.31688pt>
+<img/rw/aleat_epist.png, id=2143, 745.78625pt x 486.31688pt>
 File: img/rw/aleat_epist.png Graphic file (type png)
 <use img/rw/aleat_epist.png>
 Package pdftex.def Info: img/rw/aleat_epist.png  used on input line 1078.
@@ -2119,7 +2151,7 @@ Overfull \hbox (4.68489pt too wide) in paragraph at lines 1268--1269
 
 Package cleveref Info: loaded `english' language definitions on input line 1283.
 [45]
-<img/patas/attacks.png, id=2356, 897.85437pt x 271.51437pt>
+<img/patas/attacks.png, id=2363, 897.85437pt x 271.51437pt>
 File: img/patas/attacks.png Graphic file (type png)
 <use img/patas/attacks.png>
 Package pdftex.def Info: img/patas/attacks.png  used on input line 1290.
@@ -2273,10 +2305,9 @@ Overfull \hbox (1.10551pt too wide) in paragraph at lines 46--47
 []\T1/ppl/b/n/10.95 Information loss. \T1/ppl/m/n/10.95 Mean-ing-ful trust re-la-tion-ships may be dis-carded, even when
  []
 
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 47.
-Package cleveref Info: loaded `english' language definitions on input line 60.
+Package cleveref Info: loaded `english' language definitions on input line 56.
 [62]
-Overfull \hbox (2.87979pt too wide) in paragraph at lines 78--79
+Overfull \hbox (2.87979pt too wide) in paragraph at lines 79--80
 []\T1/ppl/b/n/10.95 Referral-edge path dis-count-ing op-er-a-tor. \T1/ppl/m/n/10.95 To re-solve in-con-sis-ten-cies in referral-
  []
 
@@ -2285,31 +2316,23 @@ Package cleveref Info: loaded `english' language definitions on input line 84.
 pdfTeX warning (ext4): destination with the same identifier (name{definition.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.93 \begin{definition}
+l.94 \begin{definition}
                        [\aclu{PNPS}]
-Overfull \hbox (3.39035pt too wide) in paragraph at lines 97--98
-\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 A\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 G\OT1/zplm/m/n/10.95 )$ \T1/ppl/m/n/10.95 qual-i-fies as a [][], it is not a [][] be-cause we can-not find two non-intersecting
- []
-
+Package cleveref Info: loaded `english' language definitions on input line 100.
+ [64]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 99.
+               Default added (so using `tbp') on input line 102.
 
-
-LaTeX Warning: Marginpar on page 64 moved.
-
-
-LaTeX Warning: Marginpar on page 64 moved.
-
-Package cleveref Info: loaded `english' language definitions on input line 324.
-[64]
-Package cleveref Info: loaded `english' language definitions on input line 324.
- [65]
-Package cleveref Info: loaded `english' language definitions on input line 401.
+Package cleveref Info: loaded `english' language definitions on input line 244.
+[65]
+Package cleveref Info: loaded `english' language definitions on input line 337.
  [66]
-Package cleveref Info: loaded `english' language definitions on input line 490.
+Package cleveref Info: loaded `english' language definitions on input line 441.
  [67]
-Overfull \hbox (6.46292pt too wide) in paragraph at lines 531--532
+Package cleveref Info: loaded `english' language definitions on input line 528.
+ [68]
+Overfull \hbox (6.46292pt too wide) in paragraph at lines 537--538
 []\T1/ppl/b/n/10.95 Theorem 4.2 \T1/ppl/m/n/10.95 (Equiv-a-lence of Cri-te-ria)\T1/ppl/b/n/10.95 . []\T1/ppl/m/it/10.95 When the cur-rent graph is [][] ([]Def-i-ni-tion 2.19[]),
  []
 
@@ -2317,177 +2340,200 @@ Overfull \hbox (6.46292pt too wide) in paragraph at lines 531--532
 pdfTeX warning (ext4): destination with the same identifier (name{definition.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.559 \begin{definition}
+l.565 \begin{definition}
                         [Optimized \ac{DSPG} Synthesis Criteria]
-Package cleveref Info: loaded `english' language definitions on input line 559.
- [68]
-Package cleveref Info: loaded `english' language definitions on input line 641.
+Package cleveref Info: loaded `english' language definitions on input line 582.
  [69]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 703.
+Package cleveref Info: loaded `english' language definitions on input line 647.
+ [70]
+Package cleveref Info: loaded `english' language definitions on input line 704.
+ [71]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 715.
 
-Overfull \hbox (33.03679pt too wide) in paragraph at lines 720--721
+Overfull \hbox (33.03679pt too wide) in paragraph at lines 732--733
 [] \T1/ppl/m/n/10.95 UpdatePNPS($\OML/zplm/m/it/10.95 nodesToPNPS$\T1/ppl/m/n/10.95 , $\OML/zplm/m/it/10.95 check\OT1/ppl/m/n/10.95 .\OML/zplm/m/it/10.95 intermediateNodes$\T1/ppl/m/n/10.95 ,$\OML/zplm/m/it/10.95 branch\OT1/ppl/m/n/10.95 .\OML/zplm/m/it/10.95 intermediateNodes$\T1/ppl/m/n/10.95 ,
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 726.
-[70]
-Overfull \hbox (10.9615pt too wide) in paragraph at lines 765--766
+
+Overfull \hbox (10.9615pt too wide) in paragraph at lines 777--778
 [] $\OML/zplm/m/it/10.95 nodesToPNPS\OT1/zplm/m/n/10.95 [\OML/zplm/m/it/10.95 v\OT1/zplm/m/n/10.95 ] \OMS/zplm/m/n/10.95   \OML/zplm/m/it/10.95 smallerPNPS\OT1/zplm/m/n/10.95 ((\OML/zplm/m/it/10.95 nodeSource\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 nodeTarget\OT1/zplm/m/n/10.95 )\OT1/ppl/m/n/10.95 ,  \OML/zplm/m/it/10.95 nodesToPNPS\OT1/zplm/m/n/10.95 [\OML/zplm/m/it/10.95 v\OT1/zplm/m/n/10.95 ])$ 
  []
 
 
-Overfull \hbox (31.66805pt too wide) in paragraph at lines 769--770
+Overfull \hbox (31.66805pt too wide) in paragraph at lines 781--782
 [] $\OML/zplm/m/it/10.95 nodesToPNPS\OT1/zplm/m/n/10.95 [\OML/zplm/m/it/10.95 v\OT1/zplm/m/n/10.95 ] \OMS/zplm/m/n/10.95   \OML/zplm/m/it/10.95 moreNestedPNPS\OT1/zplm/m/n/10.95 ((\OML/zplm/m/it/10.95 nodeSource\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 nodeTarget\OT1/zplm/m/n/10.95 )\OT1/ppl/m/n/10.95 ,  \OML/zplm/m/it/10.95 nodesToPNPS\OT1/zplm/m/n/10.95 [\OML/zplm/m/it/10.95 v\OT1/zplm/m/n/10.95 ])$ 
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 780.
-[71]
-Package cleveref Info: loaded `english' language definitions on input line 841.
- [72]
-Overfull \hbox (12.33038pt too wide) in paragraph at lines 842--850
+Package cleveref Info: loaded `english' language definitions on input line 790.
+[72]
+Overfull \hbox (0.25482pt too wide) in paragraph at lines 797--798
+\T1/ppl/m/n/10.95 can-di-date branch from $\OML/zplm/m/it/10.95 A$ \T1/ppl/m/n/10.95 to $\OML/zplm/m/it/10.95 E$ \T1/ppl/m/n/10.95 whose only in-ter-me-di-ate node is $\OML/zplm/m/it/10.95 D$\T1/ppl/m/n/10.95 . \T1/cmtt/m/n/10.95 DSPGChecker
+ []
+
+
+Overfull \hbox (5.10274pt too wide) in paragraph at lines 798--799
+\T1/ppl/m/n/10.95 me-di-ate node $\OMS/zplm/m/n/10.95 f\OML/zplm/m/it/10.95 C\OMS/zplm/m/n/10.95 g$\T1/ppl/m/n/10.95 ); the con-tain-ment con-di-tions hold be-cause $[]\OT1/zplm/m/n/10.95 [\OML/zplm/m/it/10.95 B\OT1/zplm/m/n/10.95 ] =
+ []
+
+Package cleveref Info: loaded `english' language definitions on input line 799.
+[73]
+Overfull \hbox (12.33038pt too wide) in paragraph at lines 862--870
 \OML/zplm/m/it/10.95 A$ \T1/ppl/m/n/10.95 to $\OML/zplm/m/it/10.95 B$ \T1/ppl/m/n/10.95 may al-ready be-long to a more nested PNPS. For these nodes, $\OML/zplm/m/it/10.95 nodesToPNPS$
  []
 
-
-Overfull \hbox (2.10239pt too wide) in paragraph at lines 892--893
+Package cleveref Info: loaded `english' language definitions on input line 876.
+[74]
+Overfull \hbox (2.10239pt too wide) in paragraph at lines 912--913
 []\T1/ppl/m/n/10.95 Each branch ver-i-fi-ca-tion is con-stant time as-sum-ing $\OML/zplm/m/it/10.95 nodesToPNPS$ \T1/ppl/m/n/10.95 is main-tained
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 905.
-[73]
+Package cleveref Info: loaded `english' language definitions on input line 932.
+[75]
 pdfTeX warning (ext4): destination with the same identifier (name{definition.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.914 \begin{definition}
+l.933 \begin{definition}
                         [ \ac{PNPS} Reduction]
-Overfull \hbox (12.71265pt too wide) in paragraph at lines 933--935
+Overfull \hbox (12.71265pt too wide) in paragraph at lines 952--954
 []\T1/ppl/b/n/10.95 Theorem 4.10. []\T1/ppl/m/it/10.95 Con-sider a [][] and two PNPSs, $\OML/zplm/m/it/10.95 pnps[]$ \T1/ppl/m/it/10.95 and $\OML/zplm/m/it/10.95 pnps[]$\T1/ppl/m/it/10.95 , such that $\OML/zplm/m/it/10.95 NL\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 pnps[]\OT1/zplm/m/n/10.95 ) \OML/zplm/m/it/10.95 >
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 937.
-[74]
-<img/dspg/newsynth.pdf, id=3135, 402.3833pt x 460.65099pt>
+Package cleveref Info: loaded `english' language definitions on input line 967.
+[76]
+<img/dspg/newsynth.pdf, id=3278, 402.3833pt x 460.65099pt>
 File: img/dspg/newsynth.pdf Graphic file (type pdf)
 <use img/dspg/newsynth.pdf>
-Package pdftex.def Info: img/dspg/newsynth.pdf  used on input line 957.
+Package pdftex.def Info: img/dspg/newsynth.pdf  used on input line 976.
 (pdftex.def)             Requested size: 202.01454pt x 231.2668pt.
-Package cleveref Info: loaded `english' language definitions on input line 969.
- [75 <./img/dspg/newsynth.pdf>]
-Package cleveref Info: loaded `english' language definitions on input line 1004.
- [76]
-<img/discount/rs2.png, id=3194, 613.29124pt x 131.49126pt>
+Package cleveref Info: loaded `english' language definitions on input line 990.
+ [77 <./img/dspg/newsynth.pdf>]
+Package cleveref Info: loaded `english' language definitions on input line 1025.
+ [78]
+<img/discount/rs2.png, id=3374, 613.29124pt x 131.49126pt>
 File: img/discount/rs2.png Graphic file (type png)
 <use img/discount/rs2.png>
-Package pdftex.def Info: img/discount/rs2.png  used on input line 1012.
+Package pdftex.def Info: img/discount/rs2.png  used on input line 1035.
 (pdftex.def)             Requested size: 202.01454pt x 43.31198pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{definition.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1020 \begin{definition}
+l.1043 \begin{definition}
                          [Referral-Edges Trust Discounting]
-Package cleveref Info: loaded `english' language definitions on input line 1047.
- [77 <./img/discount/rs2.png>]
-<img/discount/rs1.pdf, id=3211, 302.32951pt x 79.497pt>
+Package cleveref Info: loaded `english' language definitions on input line 1048.
+ [79 <./img/discount/rs2.png>]
+<img/discount/rs1.pdf, id=3388, 302.32951pt x 79.497pt>
 File: img/discount/rs1.pdf Graphic file (type pdf)
 <use img/discount/rs1.pdf>
-Package pdftex.def Info: img/discount/rs1.pdf  used on input line 1099.
+Package pdftex.def Info: img/discount/rs1.pdf  used on input line 1122.
 (pdftex.def)             Requested size: 141.41264pt x 37.18405pt.
-Package cleveref Info: loaded `english' language definitions on input line 1115.
- [78 <./img/discount/rs1.pdf>]
-<img/discount/tdisr.pdf, id=3245, 489.02701pt x 91.54199pt>
+Package cleveref Info: loaded `english' language definitions on input line 1126.
+ [80]
+<img/discount/tdisr.pdf, id=3401, 489.02701pt x 91.54199pt>
 File: img/discount/tdisr.pdf Graphic file (type pdf)
 <use img/discount/tdisr.pdf>
-Package pdftex.def Info: img/discount/tdisr.pdf  used on input line 1119.
+Package pdftex.def Info: img/discount/tdisr.pdf  used on input line 1142.
 (pdftex.def)             Requested size: 323.22449pt x 60.5073pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1138--1140
+Underfull \hbox (badness 10000) in paragraph at lines 1161--1163
 
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 1163.
-[79 <./img/discount/tdisr.pdf>]
-<img/dspg/evalCum.pdf, id=3285, 439.8194pt x 334.32352pt>
+Package cleveref Info: loaded `english' language definitions on input line 1174.
+[81 <./img/discount/rs1.pdf> <./img/discount/tdisr.pdf
+
+pdfTeX warning: pdflatex (file ./img/discount/tdisr.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>]
+<img/dspg/evalCum.pdf, id=3463, 361.35pt x 274.626pt>
 File: img/dspg/evalCum.pdf Graphic file (type pdf)
 <use img/dspg/evalCum.pdf>
-Package pdftex.def Info: img/dspg/evalCum.pdf  used on input line 1217.
-(pdftex.def)             Requested size: 181.81184pt x 138.20093pt.
-<img/dspg/evalAvg.pdf, id=3286, 439.8194pt x 328.22261pt>
+Package pdftex.def Info: img/dspg/evalCum.pdf  used on input line 1242.
+(pdftex.def)             Requested size: 181.81184pt x 138.17589pt.
+<img/dspg/evalAvg.pdf, id=3464, 361.35pt x 274.626pt>
 File: img/dspg/evalAvg.pdf Graphic file (type pdf)
 <use img/dspg/evalAvg.pdf>
-Package pdftex.def Info: img/dspg/evalAvg.pdf  used on input line 1222.
-(pdftex.def)             Requested size: 181.81184pt x 135.67896pt.
-Package cleveref Info: loaded `english' language definitions on input line 1235.
- [80 <./img/dspg/evalCum.pdf> <./img/dspg/evalAvg.pdf>]
-Overfull \hbox (3.54564pt too wide) in paragraph at lines 1242--1243
+Package pdftex.def Info: img/dspg/evalAvg.pdf  used on input line 1247.
+(pdftex.def)             Requested size: 181.81184pt x 138.17589pt.
+Package cleveref Info: loaded `english' language definitions on input line 1257.
+ [82]
+Overfull \hbox (3.54564pt too wide) in paragraph at lines 1267--1268
 \T1/ppl/m/n/10.95 The pre-vi-ous sec-tion es-tab-lished that the op-ti-mized syn-the-sis cri-te-ria pre-serve strictly
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 1252.
-[81]
-<img/dspg/eval/retention_vs_size.pdf, id=3425, 433.62pt x 289.08pt>
+Package cleveref Info: loaded `english' language definitions on input line 1271.
+[83 <./img/dspg/evalCum.pdf> <./img/dspg/evalAvg.pdf>]
+<img/dspg/eval/retention_vs_size.pdf, id=3605, 433.62pt x 289.08pt>
 File: img/dspg/eval/retention_vs_size.pdf Graphic file (type pdf)
 <use img/dspg/eval/retention_vs_size.pdf>
-Package pdftex.def Info: img/dspg/eval/retention_vs_size.pdf  used on input line 1255.
+Package pdftex.def Info: img/dspg/eval/retention_vs_size.pdf  used on input line 1280.
 (pdftex.def)             Requested size: 262.61642pt x 175.08582pt.
-<img/dspg/eval/time_breakdown.pdf, id=3436, 794.97pt x 289.08pt>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (4.9541pt too wide) in paragraph at lines 1288--1289
+[]\T1/ppl/m/n/10.95 The \T1/ppl/m/it/10.95 syn-the-sis \T1/ppl/m/n/10.95 phase (left panel) shows a clear ad-van-tage for the op-ti-mized method-
+ []
+
+
+Overfull \hbox (6.2098pt too wide) in paragraph at lines 1288--1289
+\T1/ppl/m/n/10.95 tirely by main-tain-ing the \T1/cmtt/m/n/10.95 nodesToPNPS \T1/ppl/m/n/10.95 map-ping in-cre-men-tally. Each can-di-date branch
+ []
+
+Package cleveref Info: loaded `english' language definitions on input line 1289.
+[84]
+<img/dspg/eval/time_breakdown.pdf, id=3625, 794.97pt x 289.08pt>
 File: img/dspg/eval/time_breakdown.pdf Graphic file (type pdf)
 <use img/dspg/eval/time_breakdown.pdf>
-Package pdftex.def Info: img/dspg/eval/time_breakdown.pdf  used on input line 1270.
+Package pdftex.def Info: img/dspg/eval/time_breakdown.pdf  used on input line 1294.
 (pdftex.def)             Requested size: 404.02908pt x 146.92157pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-Package cleveref Info: loaded `english' language definitions on input line 1278.
-[82 <./img/dspg/eval/retention_vs_size.pdf>]
-<img/dspg/eval/analysis_only_time.pdf, id=3517, 794.97pt x 289.08pt>
+Package cleveref Info: loaded `english' language definitions on input line 1307.
+[85 <./img/dspg/eval/retention_vs_size.pdf>]
+<img/dspg/eval/analysis_only_time.pdf, id=3702, 794.97pt x 289.08pt>
 File: img/dspg/eval/analysis_only_time.pdf Graphic file (type pdf)
 <use img/dspg/eval/analysis_only_time.pdf>
-Package pdftex.def Info: img/dspg/eval/analysis_only_time.pdf  used on input line 1284.
+Package pdftex.def Info: img/dspg/eval/analysis_only_time.pdf  used on input line 1310.
 (pdftex.def)             Requested size: 404.02908pt x 146.92157pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<img/dspg/eval/Figure_1.pdf, id=3538, 738.59943pt x 333.16472pt>
+Package cleveref Info: loaded `english' language definitions on input line 1318.
+ [86 <./img/dspg/eval/time_breakdown.pdf> <./img/dspg/eval/analysis_only_time.pdf>]
+<img/dspg/eval/Figure_1.pdf, id=3836, 738.59943pt x 333.16472pt>
 File: img/dspg/eval/Figure_1.pdf Graphic file (type pdf)
 <use img/dspg/eval/Figure_1.pdf>
-Package pdftex.def Info: img/dspg/eval/Figure_1.pdf  used on input line 1295.
+Package pdftex.def Info: img/dspg/eval/Figure_1.pdf  used on input line 1321.
 (pdftex.def)             Requested size: 404.02908pt x 182.24475pt.
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Overfull \hbox (7.5575pt too wide) in paragraph at lines 1310--1311
+Overfull \hbox (7.5575pt too wide) in paragraph at lines 1336--1337
 \T1/ppl/m/n/10.95 for-ma-tion re-ten-tion across all tested graph sizes. Sec-ond, the in-cre-men-tal \T1/cmtt/m/n/10.95 nodesToPNPS
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 1311.
-[83 <./img/dspg/eval/time_breakdown.pdf>]
-<img/discount/eval.pdf, id=3617, 936.6192pt x 573.07202pt>
+<img/discount/eval.pdf, id=3856, 936.6192pt x 573.07202pt>
 File: img/discount/eval.pdf Graphic file (type pdf)
 <use img/discount/eval.pdf>
-Package pdftex.def Info: img/discount/eval.pdf  used on input line 1317.
+Package pdftex.def Info: img/discount/eval.pdf  used on input line 1343.
 (pdftex.def)             Requested size: 282.81912pt x 173.0422pt.
 Package cleveref Info: loaded `english' language definitions on input line 1353.
- [84 <./img/dspg/eval/analysis_only_time.pdf>]
-Package cleveref Info: loaded `english' language definitions on input line 1396.
- [85 <./img/dspg/eval/Figure_1.pdf>]
-Package cleveref Info: loaded `english' language definitions on input line 1409.
- [86 <./img/discount/eval.pdf>])
+[87 <./img/dspg/eval/Figure_1.pdf>]
+Package cleveref Info: loaded `english' language definitions on input line 1399.
+ [88 <./img/discount/eval.pdf>]
+Package cleveref Info: loaded `english' language definitions on input line 1435.
+ [89])
 Package cleveref Info: loaded `english' language definitions on input line 363.
- [87]
+ [90]
 \openout2 = `Chapters/patasovl.aux'.
 
- (./Chapters/patasovl.tex [88
+ (./Chapters/patasovl.tex
+Chapter 5.
+[91
 
 
 
 
 ]
-Chapter 5.
-[89]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@ac' on input line 26.
@@ -2498,58 +2544,57 @@ Overfull \hbox (3.70015pt too wide) in paragraph at lines 28--29
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 40.
-[90]
+[92]
 Underfull \hbox (badness 10000) in paragraph at lines 43--43
 []\T1/ppl/m/n/10.95 Workflow
  []
 
-
-LaTeX Warning: Marginpar on page 91 moved.
-
-<img/patas/overviewPTAS.png, id=3947, 874.76813pt x 221.32687pt>
+<img/patas/overviewPTAS.png, id=4128, 874.76813pt x 221.32687pt>
 File: img/patas/overviewPTAS.png Graphic file (type png)
 <use img/patas/overviewPTAS.png>
 Package pdftex.def Info: img/patas/overviewPTAS.png  used on input line 54.
 (pdftex.def)             Requested size: 404.02908pt x 102.2236pt.
-<img/patas/end_to_end.png, id=3948, 524.45938pt x 181.17688pt>
+Package cleveref Info: loaded `english' language definitions on input line 61.
+[93 <./img/patas/overviewPTAS.png>]
+<img/patas/end_to_end.png, id=4145, 524.45938pt x 181.17688pt>
 File: img/patas/end_to_end.png Graphic file (type png)
 <use img/patas/end_to_end.png>
-Package pdftex.def Info: img/patas/end_to_end.png  used on input line 64.
+Package pdftex.def Info: img/patas/end_to_end.png  used on input line 65.
 (pdftex.def)             Requested size: 404.02908pt x 139.57849pt.
-Package cleveref Info: loaded `english' language definitions on input line 73.
-[91 <./img/patas/overviewPTAS.png>]
-Package cleveref Info: loaded `english' language definitions on input line 83.
- [92 <./img/patas/end_to_end.png>])
-Overfull \hbox (1.92644pt too wide) in paragraph at lines 93--365
+Package cleveref Info: loaded `english' language definitions on input line 75.
+ [94 <./img/patas/end_to_end.png>]
+Package cleveref Info: loaded `english' language definitions on input line 93.
+ [95])
+Overfull \hbox (1.92644pt too wide) in paragraph at lines 94--365
 \T1/ppl/m/n/10.95 rea-son-ing mech-a-nisms in-tro-duced pre-vi-ously, for-mal-iz-ing first the as-sess-ment mech-
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 365.
-[93]
+[96]
 \openout2 = `Chapters/Datatrust.aux'.
 
- (./Chapters/Datatrust.tex [94
+ (./Chapters/Datatrust.tex
+Chapter 6.
+Package acronym Info: Label `acro:COMPAS' newly defined as it shall be overridden
+although it is yet undefined on input line 33.
+[97
 
 
 
 
 ]
-Chapter 6.
-Package acronym Info: Label `acro:COMPAS' newly defined as it shall be overridden
-although it is yet undefined on input line 33.
-[95]
 Overfull \hbox (7.02808pt too wide) in paragraph at lines 51--52
 \T1/ppl/m/n/10.95 con-tri-bu-tion of in-di-vid-ual com-po-nents to the over-all re-li-a-bil-ity can-not be cleanly
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 59.
-[96]
+[98]
 Overfull \hbox (0.17343pt too wide) in paragraph at lines 70--71
  []\T1/ppl/b/n/10.95 System com-plex-ity.[] \T1/ppl/m/n/10.95 A dataset typ-i-cally re-sults from mul-ti-ple in-ter-act-ing pro-cesses,
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 74.
-[97]
+[99]
 Overfull \hbox (3.50099pt too wide) in paragraph at lines 90--90
 []\T1/ppl/b/n/14.4 A Method-ol-ogy for Trust As-sess-ment of Train-ing Datasets 
  []
@@ -2560,7 +2605,7 @@ Overfull \hbox (0.10817pt too wide) in paragraph at lines 93--97
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 130.
-[98]
+[100]
 Package mdframed Info: mdframed works in twoside mode on input line 134.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
@@ -2568,14 +2613,14 @@ Package mdframed Info: mdframed detected package amsthm
 Package acronym Info: Label `acro:IAA' newly defined as it shall be overridden
 although it is yet undefined on input line 137.
 Package cleveref Info: loaded `english' language definitions on input line 156.
- [99]
+ [101]
 Overfull \hbox (3.39455pt too wide) in paragraph at lines 218--220
 []\T1/ppl/b/n/10.95 Baseline-Prior Quan-tifi-ca-tion ([])[], \T1/ppl/m/n/10.95 un-cer-tainty de-creases as the to-tal amount
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 227.
-[100]
-<img/data/framework.pdf, id=4092, 1329.76805pt x 455.30101pt>
+[102]
+<img/data/framework.pdf, id=4282, 1329.76805pt x 455.30101pt>
 File: img/data/framework.pdf Graphic file (type pdf)
 <use img/data/framework.pdf>
 Package pdftex.def Info: img/data/framework.pdf  used on input line 266.
@@ -2586,15 +2631,15 @@ Overfull \hbox (49.38663pt too wide) in paragraph at lines 277--323
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 335.
-[101]
+[103]
 Package mdframed Info: mdframed works in twoside mode on input line 345.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 345.
 Package cleveref Info: loaded `english' language definitions on input line 359.
- [102 <./img/data/framework.pdf>]
+ [104 <./img/data/framework.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 393.
- [103]
+ [105]
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
 (Font)              scaled to size 12.50409pt on input line 397.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
@@ -2605,7 +2650,7 @@ Overfull \hbox (9.7229pt too wide) in paragraph at lines 400--401
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 447.
-[104]
+[106]
 Overfull \hbox (3.99097pt too wide) in paragraph at lines 470--504
  [][] 
  []
@@ -2623,7 +2668,7 @@ Overfull \hbox (12.91731pt too wide) in paragraph at lines 509--510
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 516.
-[105]
+[107]
 Package acronym Info: Label `acro:GTSRB' overridden on input line 530.
 Package mdframed Info: mdframed works in twoside mode on input line 533.
 Package mdframed Info: mdframed detected package amsthm 
@@ -2631,7 +2676,7 @@ Package mdframed Info: mdframed detected package amsthm
 (mdframed)              on input line 533.
 Package acronym Info: Label `acro:GTSRB' overridden on input line 543.
 Package cleveref Info: loaded `english' language definitions on input line 556.
- [106]
+ [108]
 Overfull \hbox (3.18611pt too wide) in paragraph at lines 557--559
 \OT1/ppl/m/n/10.95 5200$\T1/ppl/m/n/10.95 , $\OML/zplm/m/it/10.95 K \OT1/zplm/m/n/10.95 = \OT1/ppl/m/n/10.95 6$\T1/ppl/m/n/10.95 ): an im-bal-anced dataset with class counts $\OT1/zplm/m/n/10.95 [\OT1/ppl/m/n/10.95 100, 100, 1000, 1000, 1000, 2000\OT1/zplm/m/n/10.95 ]$
  []
@@ -2641,18 +2686,18 @@ Overfull \hbox (5.61697pt too wide) in paragraph at lines 557--559
 \T1/ppl/m/n/10.95 anced case shows a broader prob-a-bil-ity spread; the bal-anced case con-cen-trates around
  []
 
-<img/data/imbalanced.pdf, id=4212, 646.18115pt x 390.03217pt>
+<img/data/imbalanced.pdf, id=4402, 646.18115pt x 390.03217pt>
 File: img/data/imbalanced.pdf Graphic file (type pdf)
 <use img/data/imbalanced.pdf>
 Package pdftex.def Info: img/data/imbalanced.pdf  used on input line 564.
 (pdftex.def)             Requested size: 172.72069pt x 104.25073pt.
-<img/data/balanced.pdf, id=4213, 657.67705pt x 390.03217pt>
+<img/data/balanced.pdf, id=4403, 657.67705pt x 390.03217pt>
 File: img/data/balanced.pdf Graphic file (type pdf)
 <use img/data/balanced.pdf>
 Package pdftex.def Info: img/data/balanced.pdf  used on input line 569.
 (pdftex.def)             Requested size: 172.72069pt x 102.42961pt.
 Package cleveref Info: loaded `english' language definitions on input line 601.
-[107 <./img/data/imbalanced.pdf> <./img/data/balanced.pdf>]
+[109 <./img/data/imbalanced.pdf> <./img/data/balanced.pdf>]
 Overfull \hbox (13.1992pt too wide) in paragraph at lines 602--605
 []\T1/ppl/m/n/10.95 Following Haus-sler et al. [[]117[]], the sam-ple com-plex-ity re-quired for PAC-learnability
  []
@@ -2665,7 +2710,7 @@ Overfull \hbox (29.77084pt too wide) in paragraph at lines 617--618
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 637.
-[108]
+[110]
 Package acronym Info: Label `acro:CNN' newly defined as it shall be overridden
 although it is yet undefined on input line 643.
 
@@ -2683,66 +2728,66 @@ Overfull \hbox (4.56418pt too wide) in paragraph at lines 652--653
 \T1/ppl/m/n/10.95 SMOTE flat-tens the class dis-tri-bu-tion and con-cen-trates the prob-a-bil-ity den-sity around
  []
 
-<img/data/evalDist/or.pdf, id=4332, 614.295pt x 325.215pt>
+<img/data/evalDist/or.pdf, id=4521, 614.295pt x 325.215pt>
 File: img/data/evalDist/or.pdf Graphic file (type pdf)
 <use img/data/evalDist/or.pdf>
 Package pdftex.def Info: img/data/evalDist/or.pdf  used on input line 660.
 (pdftex.def)             Requested size: 134.34157pt x 71.12074pt.
-<img/data/evalDist/aug.pdf, id=4333, 614.295pt x 325.215pt>
+<img/data/evalDist/aug.pdf, id=4522, 614.295pt x 325.215pt>
 File: img/data/evalDist/aug.pdf Graphic file (type pdf)
 <use img/data/evalDist/aug.pdf>
 Package pdftex.def Info: img/data/evalDist/aug.pdf  used on input line 665.
 (pdftex.def)             Requested size: 134.34157pt x 71.12074pt.
-<img/data/evalDist/orp.pdf, id=4334, 657.67741pt x 417.16101pt>
+<img/data/evalDist/orp.pdf, id=4523, 657.67741pt x 417.16101pt>
 File: img/data/evalDist/orp.pdf Graphic file (type pdf)
 <use img/data/evalDist/orp.pdf>
 Package pdftex.def Info: img/data/evalDist/orp.pdf  used on input line 670.
 (pdftex.def)             Requested size: 134.34157pt x 85.20665pt.
-<img/data/evalDist/augp.pdf, id=4335, 646.18134pt x 417.16101pt>
+<img/data/evalDist/augp.pdf, id=4524, 646.18134pt x 417.16101pt>
 File: img/data/evalDist/augp.pdf Graphic file (type pdf)
 <use img/data/evalDist/augp.pdf>
 Package pdftex.def Info: img/data/evalDist/augp.pdf  used on input line 675.
 (pdftex.def)             Requested size: 134.34157pt x 86.72797pt.
 
-Underfull \hbox (badness 1337) in paragraph at lines 676--676
- []\T1/ppl/m/sc/9 (d) |\T1/ppl/m/n/9 Prob-a-bil-ity dis-tri-bu-tion, aug- 
+Underfull \hbox (badness 1173) in paragraph at lines 676--676
+ []\T1/ppl/m/n/10 (d) |\T1/ppl/m/n/9 Prob-a-bil-ity dis-tri-bu-tion, aug- 
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 705.
-[109]
-<img/data/res/acc.pdf, id=4354, 409.6223pt x 328.88132pt>
+[111]
+<img/data/res/acc.pdf, id=4544, 409.6223pt x 328.88132pt>
 File: img/data/res/acc.pdf Graphic file (type pdf)
 <use img/data/res/acc.pdf>
 Package pdftex.def Info: img/data/res/acc.pdf  used on input line 712.
 (pdftex.def)             Requested size: 134.34157pt x 107.86372pt.
-<img/data/res/diff.pdf, id=4355, 409.6223pt x 328.88132pt>
+<img/data/res/diff.pdf, id=4545, 409.6223pt x 328.88132pt>
 File: img/data/res/diff.pdf Graphic file (type pdf)
 <use img/data/res/diff.pdf>
 Package pdftex.def Info: img/data/res/diff.pdf  used on input line 716.
 (pdftex.def)             Requested size: 134.34157pt x 107.86372pt.
-<img/data/res/meth1-100.pdf, id=4356, 409.6223pt x 328.88132pt>
+<img/data/res/meth1-100.pdf, id=4546, 409.6223pt x 328.88132pt>
 File: img/data/res/meth1-100.pdf Graphic file (type pdf)
 <use img/data/res/meth1-100.pdf>
 Package pdftex.def Info: img/data/res/meth1-100.pdf  used on input line 728.
 (pdftex.def)             Requested size: 134.34157pt x 107.86372pt.
-<img/data/res/meth2-100.pdf, id=4357, 409.6223pt x 328.88132pt>
+<img/data/res/meth2-100.pdf, id=4547, 409.6223pt x 328.88132pt>
 File: img/data/res/meth2-100.pdf Graphic file (type pdf)
 <use img/data/res/meth2-100.pdf>
 Package pdftex.def Info: img/data/res/meth2-100.pdf  used on input line 732.
 (pdftex.def)             Requested size: 134.34157pt x 107.86372pt.
-<img/data/res/meth1-10.pdf, id=4358, 408.67178pt x 328.88132pt>
+<img/data/res/meth1-10.pdf, id=4548, 408.67178pt x 328.88132pt>
 File: img/data/res/meth1-10.pdf Graphic file (type pdf)
 <use img/data/res/meth1-10.pdf>
 Package pdftex.def Info: img/data/res/meth1-10.pdf  used on input line 736.
 (pdftex.def)             Requested size: 134.34157pt x 108.11464pt.
-<img/data/res/meth2-10.pdf, id=4359, 408.67178pt x 328.88132pt>
+<img/data/res/meth2-10.pdf, id=4549, 408.67178pt x 328.88132pt>
 File: img/data/res/meth2-10.pdf Graphic file (type pdf)
 <use img/data/res/meth2-10.pdf>
 Package pdftex.def Info: img/data/res/meth2-10.pdf  used on input line 740.
 (pdftex.def)             Requested size: 134.34157pt x 108.11464pt.
 Package cleveref Info: loaded `english' language definitions on input line 753.
- [110 <./img/data/evalDist/or.pdf> <./img/data/evalDist/aug.pdf> <./img/data/evalDist/orp.pdf> <./img/data/evalDist/augp.pdf> <./img/data/res/acc.pdf> <./img/data/res/diff.pdf>]
-<img/data/eta.pdf, id=4522, 668.26978pt x 327.57957pt>
+ [112 <./img/data/evalDist/or.pdf> <./img/data/evalDist/aug.pdf> <./img/data/evalDist/orp.pdf> <./img/data/evalDist/augp.pdf> <./img/data/res/acc.pdf> <./img/data/res/diff.pdf>]
+<img/data/eta.pdf, id=4713, 668.26978pt x 327.57957pt>
 File: img/data/eta.pdf Graphic file (type pdf)
 <use img/data/eta.pdf>
 Package pdftex.def Info: img/data/eta.pdf  used on input line 756.
@@ -2753,13 +2798,13 @@ Overfull \hbox (13.97672pt too wide) in paragraph at lines 773--774
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 774.
-[111 <./img/data/res/meth1-100.pdf> <./img/data/res/meth2-100.pdf> <./img/data/res/meth1-10.pdf> <./img/data/res/meth2-10.pdf>]
+[113 <./img/data/res/meth1-100.pdf> <./img/data/res/meth2-100.pdf> <./img/data/res/meth1-10.pdf> <./img/data/res/meth2-10.pdf>]
 Package mdframed Info: mdframed works in twoside mode on input line 780.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 780.
 Package cleveref Info: loaded `english' language definitions on input line 794.
- [112 <./img/data/eta.pdf>]
+ [114 <./img/data/eta.pdf>]
 Package acronym Info: Label `acro:KL' newly defined as it shall be overridden
 although it is yet undefined on input line 798.
 
@@ -2781,15 +2826,15 @@ Package scrlayer-scrpage Warning: \headheight to low.
 
 Overfull \vbox (8.34636pt too high) has occurred while \output is active []
 
- [113]
+ [115]
 Package cleveref Info: loaded `english' language definitions on input line 861.
- [114]
-<img/data/CIFAR_10H.pdf, id=4731, 445.19826pt x 331.18607pt>
+ [116]
+<img/data/CIFAR_10H.pdf, id=4920, 445.19826pt x 331.18607pt>
 File: img/data/CIFAR_10H.pdf Graphic file (type pdf)
 <use img/data/CIFAR_10H.pdf>
 Package pdftex.def Info: img/data/CIFAR_10H.pdf  used on input line 866.
 (pdftex.def)             Requested size: 197.97646pt x 147.2788pt.
-<img/data/CIFAR_10H_Cropped.pdf, id=4732, 445.24341pt x 331.18607pt>
+<img/data/CIFAR_10H_Cropped.pdf, id=4921, 445.24341pt x 331.18607pt>
 File: img/data/CIFAR_10H_Cropped.pdf Graphic file (type pdf)
 <use img/data/CIFAR_10H_Cropped.pdf>
 Package pdftex.def Info: img/data/CIFAR_10H_Cropped.pdf  used on input line 872.
@@ -2800,18 +2845,18 @@ Overfull \hbox (4.52159pt too wide) in paragraph at lines 922--923
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 923.
-[115 <./img/data/CIFAR_10H.pdf> <./img/data/CIFAR_10H_Cropped.pdf>]
+[117 <./img/data/CIFAR_10H.pdf> <./img/data/CIFAR_10H_Cropped.pdf>]
 Overfull \hbox (1.108pt too wide) in paragraph at lines 926--927
 \T1/ppl/m/n/10.95 level opin-ion $\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 t\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 d\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 u\OT1/zplm/m/n/10.95 )$ \T1/ppl/m/n/10.95 dis-tin-guishes sup-port-ing ev-i-dence, con-tra-dict-ing ev-i-dence, and
  []
 
 )
 Package cleveref Info: loaded `english' language definitions on input line 366.
- [116]
-Package cleveref Info: loaded `english' language definitions on input line 366.
- [117]
-Package cleveref Info: loaded `english' language definitions on input line 366.
  [118]
+Package cleveref Info: loaded `english' language definitions on input line 366.
+ [119]
+Package cleveref Info: loaded `english' language definitions on input line 366.
+ [120]
 \openout2 = `Chapters/ptas.aux'.
 
  (./Chapters/ptas.tex
@@ -2830,7 +2875,7 @@ Package mdframed Info: mdframed works in twoside mode on input line 7.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 7.
-[119
+[121
 
 
 
@@ -2843,7 +2888,7 @@ Overfull \hbox (7.04042pt too wide) in paragraph at lines 15--16
 Package acronym Info: Label `acro:IPTA' newly defined as it shall be overridden
 although it is yet undefined on input line 19.
 Package cleveref Info: loaded `english' language definitions on input line 20.
-[120]
+[122]
 Package acronym Info: Label `acro:GenIPTA' newly defined as it shall be overridden
 although it is yet undefined on input line 21.
 
@@ -2852,7 +2897,7 @@ Overfull \hbox (1.51001pt too wide) in paragraph at lines 37--38
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 42.
-[121]
+[123]
 pdfTeX warning (ext4): destination with the same identifier (name{definition.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
@@ -2865,13 +2910,13 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package acronym Info: Label `acro:TNN' newly defined as it shall be overridden
 although it is yet undefined on input line 74.
 Package cleveref Info: loaded `english' language definitions on input line 75.
-[122]
-<img/patas/highPaTAS.png, id=4948, 347.49825pt x 196.93575pt>
+[124]
+<img/patas/highPaTAS.png, id=5138, 347.49825pt x 196.93575pt>
 File: img/patas/highPaTAS.png Graphic file (type png)
 <use img/patas/highPaTAS.png>
 Package pdftex.def Info: img/patas/highPaTAS.png  used on input line 79.
 (pdftex.def)             Requested size: 202.01454pt x 114.49023pt.
-<img/patas/operations.png, id=4951, 578.66188pt x 207.77625pt>
+<img/patas/operations.png, id=5141, 578.66188pt x 207.77625pt>
 File: img/patas/operations.png Graphic file (type png)
 <use img/patas/operations.png>
 Package pdftex.def Info: img/patas/operations.png  used on input line 86.
@@ -2902,9 +2947,9 @@ Overfull \hbox (6.17496pt too wide) in paragraph at lines 105--106
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 109.
-[123 <./img/patas/highPaTAS.png>]
+[125 <./img/patas/highPaTAS.png>]
 Package cleveref Info: loaded `english' language definitions on input line 109.
- [124 <./img/patas/operations.png>]
+ [126 <./img/patas/operations.png>]
 Overfull \hbox (18.8337pt too wide) in paragraph at lines 112--113
  []\T1/ppl/b/n/10.95 Inference Path Trust As-sess-ment Gen-er-a-tion ([])[][] \T1/ppl/m/n/10.95 The pur-pose of the [][]
  []
@@ -2915,26 +2960,26 @@ Overfull \hbox (2.76923pt too wide) in paragraph at lines 119--120
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 133.
-[125]
-<img/patas/NN1.png, id=5018, 322.70563pt x 104.39pt>
+[127]
+<img/patas/NN1.png, id=5207, 322.70563pt x 104.39pt>
 File: img/patas/NN1.png Graphic file (type png)
 <use img/patas/NN1.png>
 Package pdftex.def Info: img/patas/NN1.png  used on input line 144.
 (pdftex.def)             Requested size: 177.77377pt x 57.50705pt.
-<img/patas/NN1S.png, id=5021, 467.24562pt x 173.14688pt>
+<img/patas/NN1S.png, id=5210, 467.24562pt x 173.14688pt>
 File: img/patas/NN1S.png Graphic file (type png)
 <use img/patas/NN1S.png>
 Package pdftex.def Info: img/patas/NN1S.png  used on input line 149.
 (pdftex.def)             Requested size: 222.21722pt x 82.34601pt.
 Package cleveref Info: loaded `english' language definitions on input line 183.
- [126 <./img/patas/NN1.png> <./img/patas/NN1S.png>]
-<img/patas/multprob2.png, id=5036, 465.74pt x 167.62625pt>
+ [128 <./img/patas/NN1.png> <./img/patas/NN1S.png>]
+<img/patas/multprob2.png, id=5226, 465.74pt x 167.62625pt>
 File: img/patas/multprob2.png Graphic file (type png)
 <use img/patas/multprob2.png>
 Package pdftex.def Info: img/patas/multprob2.png  used on input line 196.
 (pdftex.def)             Requested size: 161.60916pt x 58.16362pt.
 Package cleveref Info: loaded `english' language definitions on input line 223.
- [127 <./img/patas/multprob2.png (PNG copy)>]
+ [129 <./img/patas/multprob2.png (PNG copy)>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@acp' on input line 226.
@@ -2945,46 +2990,46 @@ pdfTeX warning (ext4): destination with the same identifier (name{definition.3})
                    \relax 
 l.250 \begin{definition}
                         [Trust Function]\label{def:trustfunc}
-<img/patas/trust_node/neuron.png, id=5059, 227.04825pt x 178.86826pt>
+<img/patas/trust_node/neuron.png, id=5250, 227.04825pt x 178.86826pt>
 File: img/patas/trust_node/neuron.png Graphic file (type png)
 <use img/patas/trust_node/neuron.png>
 Package pdftex.def Info: img/patas/trust_node/neuron.png  used on input line 271.
 (pdftex.def)             Requested size: 80.80458pt x 63.65561pt.
 
-Underfull \hbox (badness 2644) in paragraph at lines 272--272
- []\T1/ppl/m/sc/9 (a) |\T1/ppl/m/n/9 Struc-ture of a 
+Underfull \hbox (badness 3029) in paragraph at lines 272--272
+ []\T1/ppl/m/n/10 (a) |\T1/ppl/m/n/9 Struc-ture of a 
  []
 
-<img/patas/trust_node/trustnode.png, id=5060, 244.5135pt x 178.86826pt>
+<img/patas/trust_node/trustnode.png, id=5251, 244.5135pt x 178.86826pt>
 File: img/patas/trust_node/trustnode.png Graphic file (type png)
 <use img/patas/trust_node/trustnode.png>
 Package pdftex.def Info: img/patas/trust_node/trustnode.png  used on input line 276.
 (pdftex.def)             Requested size: 80.80458pt x 59.11131pt.
 
-Underfull \hbox (badness 2600) in paragraph at lines 277--277
- []\T1/ppl/m/sc/9 (b) |\T1/ppl/m/n/9 Mir-rored Trust 
+Underfull \hbox (badness 1675) in paragraph at lines 277--277
+ []\T1/ppl/m/n/10 (b) |\T1/ppl/m/n/9 Mir-rored Trust 
  []
 
-<img/patas/trust_node/neurop.png, id=5061, 863.225pt x 283.0575pt>
+<img/patas/trust_node/neurop.png, id=5252, 863.225pt x 283.0575pt>
 File: img/patas/trust_node/neurop.png Graphic file (type png)
 <use img/patas/trust_node/neurop.png>
 Package pdftex.def Info: img/patas/trust_node/neurop.png  used on input line 282.
 (pdftex.def)             Requested size: 181.81184pt x 59.61658pt.
-<img/patas/trust_node/tnop.png, id=5062, 821.0675pt x 294.09875pt>
+<img/patas/trust_node/tnop.png, id=5253, 821.0675pt x 294.09875pt>
 File: img/patas/trust_node/tnop.png Graphic file (type png)
 <use img/patas/trust_node/tnop.png>
 Package pdftex.def Info: img/patas/trust_node/tnop.png  used on input line 287.
 (pdftex.def)             Requested size: 181.81184pt x 65.11926pt.
 Package cleveref Info: loaded `english' language definitions on input line 294.
-[128]
+[130]
 Package cleveref Info: loaded `english' language definitions on input line 358.
- [129 <./img/patas/trust_node/neuron.png> <./img/patas/trust_node/trustnode.png> <./img/patas/trust_node/neurop.png (PNG copy)> <./img/patas/trust_node/tnop.png (PNG copy)>]
+ [131 <./img/patas/trust_node/neuron.png> <./img/patas/trust_node/trustnode.png> <./img/patas/trust_node/neurop.png (PNG copy)> <./img/patas/trust_node/tnop.png (PNG copy)>]
 Package cleveref Info: loaded `english' language definitions on input line 436.
- [130]
-Package cleveref Info: loaded `english' language definitions on input line 436.
- [131]
-Package cleveref Info: loaded `english' language definitions on input line 473.
  [132]
+Package cleveref Info: loaded `english' language definitions on input line 436.
+ [133]
+Package cleveref Info: loaded `english' language definitions on input line 473.
+ [134]
 Overfull \hbox (11.78343pt too wide) in paragraph at lines 473--475
 \T1/ppl/m/n/10.95 where $\OMS/zplm/m/n/10.95 C[]$ \T1/ppl/m/n/10.95 de-notes the com-mu-ni-ca-tion over-head be-tween the [][] and the [][].
  []
@@ -3015,7 +3060,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{theorem.2}) ha
 l.503 \begin{theorem}
                      [\ac{PaTAS-TP} Inference on Vacuous Input Yields Vacuou...
 Package cleveref Info: loaded `english' language definitions on input line 505.
- [133]
+ [135]
 pdfTeX warning (ext4): destination with the same identifier (name{definition.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
@@ -3027,7 +3072,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{theorem.3}) ha
 l.522 \begin{theorem}
                      [Symmetric Inference under \ac{PaTAS-TP}]\label{thm:sym}
 Package cleveref Info: loaded `english' language definitions on input line 554.
- [134]
+ [136]
 Overfull \hbox (6.54712pt too wide) in paragraph at lines 554--555
 []\T1/ppl/m/it/10.95 Breast Can-cer Clas-si-fi-ca-tion\T1/ppl/m/n/10.95 , to as-sess be-hav-ior on a small, tab-u-lar med-i-cal dataset. 
  []
@@ -3038,7 +3083,7 @@ Overfull \hbox (0.3554pt too wide) in paragraph at lines 568--569
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 595.
-[135]
+[137]
 
 LaTeX Warning: The counter will not be printed.
              The label is: \roman *. on input line 596.
@@ -3049,37 +3094,37 @@ Overfull \hbox (4.66325pt too wide) in paragraph at lines 604--605
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 621.
-[136]
-<img/patas/plot_ptas-128-t-t-ps4.pdf, id=5220, 465.81027pt x 247.55487pt>
+[138]
+<img/patas/plot_ptas-128-t-t-ps4.pdf, id=5409, 465.81027pt x 247.55487pt>
 File: img/patas/plot_ptas-128-t-t-ps4.pdf Graphic file (type pdf)
 <use img/patas/plot_ptas-128-t-t-ps4.pdf>
 Package pdftex.def Info: img/patas/plot_ptas-128-t-t-ps4.pdf  used on input line 633.
 (pdftex.def)             Requested size: 181.81184pt x 96.62532pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf, id=5221, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf, id=5410, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf  used on input line 637.
 (pdftex.def)             Requested size: 181.81184pt x 108.32867pt.
 Package cleveref Info: loaded `english' language definitions on input line 655.
- [137 <./img/patas/plot_ptas-128-t-t-ps4.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf>]
+ [139 <./img/patas/plot_ptas-128-t-t-ps4.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 701.
- [138]
+ [140]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 Package cleveref Info: loaded `english' language definitions on input line 756.
-[139]
+[141]
 Overfull \hbox (1.88899pt too wide) in paragraph at lines 791--792
 []\T1/ppl/m/n/10.95 When fea-tures and la-bels are vac-u-ous, ac-cu-racy im-proves as model size in-creases,
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 794.
-[140]
+[142]
 Overfull \hbox (2.80731pt too wide) in paragraph at lines 795--796
 []\T1/ppl/m/n/10.95 The trusted eval-u-a-tion pro-vides the clear-est con-trast. Ar-chi-tec-ture 16 with trusted
  []
 
-<latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf, id=5364, 794.97pt x 361.35pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf, id=5555, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf  used on input line 833.
@@ -3088,9 +3133,9 @@ Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_t
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 Package cleveref Info: loaded `english' language definitions on input line 858.
-[141]
+[143]
 Package cleveref Info: loaded `english' language definitions on input line 872.
- [142 <./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf>]
+ [144 <./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@ac' on input line 894.
@@ -3099,20 +3144,20 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 Package cleveref Info: loaded `english' language definitions on input line 923.
-[143]
+[145]
 Package acronym Info: Label `acro:Adam' newly defined as it shall be overridden
 although it is yet undefined on input line 932.
 Package cleveref Info: loaded `english' language definitions on input line 933.
- [144]
-<latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf, id=5468, 794.97pt x 361.35pt>
+ [146]
+<latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf, id=5657, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf  used on input line 942.
 (pdftex.def)             Requested size: 323.22449pt x 146.9249pt.
 Package cleveref Info: loaded `english' language definitions on input line 967.
- [145])
+ [147])
 Package cleveref Info: loaded `english' language definitions on input line 367.
- [146 <./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf>]
+ [148 <./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf>]
 \openout2 = `Chapters/nncalibration.aux'.
 
  (./Chapters/nncalibration.tex
@@ -3121,7 +3166,7 @@ Chapter 8.
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@acp' on input line 1.
 
-[147
+[149
 
 
 
@@ -3137,102 +3182,102 @@ Overfull \hbox (13.49524pt too wide) in paragraph at lines 112--113
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 115.
-[148]
+[150]
 Package cleveref Info: loaded `english' language definitions on input line 153.
- [149]
-Package cleveref Info: loaded `english' language definitions on input line 177.
- [150]
-Package cleveref Info: loaded `english' language definitions on input line 191.
  [151]
-<img/cal/MNIST_OV.pdf, id=5609, 1110.06725pt x 666.61847pt>
+Package cleveref Info: loaded `english' language definitions on input line 177.
+ [152]
+Package cleveref Info: loaded `english' language definitions on input line 191.
+ [153]
+<img/cal/MNIST_OV.pdf, id=5799, 1110.06725pt x 666.61847pt>
 File: img/cal/MNIST_OV.pdf Graphic file (type pdf)
 <use img/cal/MNIST_OV.pdf>
 Package pdftex.def Info: img/cal/MNIST_OV.pdf  used on input line 202.
 (pdftex.def)             Requested size: 197.97646pt x 118.88759pt.
-<img/cal/CIFAR_OV.pdf, id=5610, 1110.06725pt x 666.61847pt>
+<img/cal/CIFAR_OV.pdf, id=5800, 1110.06725pt x 666.61847pt>
 File: img/cal/CIFAR_OV.pdf Graphic file (type pdf)
 <use img/cal/CIFAR_OV.pdf>
 Package pdftex.def Info: img/cal/CIFAR_OV.pdf  used on input line 209.
 (pdftex.def)             Requested size: 197.97646pt x 118.88759pt.
 Package cleveref Info: loaded `english' language definitions on input line 221.
- [152 <./img/cal/MNIST_OV.pdf> <./img/cal/CIFAR_OV.pdf>]
-<img/cal/MNIST_ECE.pdf, id=5692, 1007.85028pt x 398.65437pt>
+ [154 <./img/cal/MNIST_OV.pdf> <./img/cal/CIFAR_OV.pdf>]
+<img/cal/MNIST_ECE.pdf, id=5882, 1007.85028pt x 398.65437pt>
 File: img/cal/MNIST_ECE.pdf Graphic file (type pdf)
 <use img/cal/MNIST_ECE.pdf>
 Package pdftex.def Info: img/cal/MNIST_ECE.pdf  used on input line 231.
 (pdftex.def)             Requested size: 404.02908pt x 159.81174pt.
-<img/cal/CIFAR_ECE.pdf, id=5695, 1007.85028pt x 398.65437pt>
+<img/cal/CIFAR_ECE.pdf, id=5885, 1007.85028pt x 398.65437pt>
 File: img/cal/CIFAR_ECE.pdf Graphic file (type pdf)
 <use img/cal/CIFAR_ECE.pdf>
 Package pdftex.def Info: img/cal/CIFAR_ECE.pdf  used on input line 241.
 (pdftex.def)             Requested size: 404.02908pt x 159.81174pt.
-<img/cal/MNIST_clusters.pdf, id=5698, 675.2265pt x 318.60638pt>
+<img/cal/MNIST_clusters.pdf, id=5888, 675.2265pt x 318.60638pt>
 File: img/cal/MNIST_clusters.pdf Graphic file (type pdf)
 <use img/cal/MNIST_clusters.pdf>
 Package pdftex.def Info: img/cal/MNIST_clusters.pdf  used on input line 251.
 (pdftex.def)             Requested size: 363.6237pt x 171.5733pt.
-<img/cal/CIFAR_clusters.pdf, id=5699, 675.2265pt x 318.60638pt>
+<img/cal/CIFAR_clusters.pdf, id=5889, 675.2265pt x 318.60638pt>
 File: img/cal/CIFAR_clusters.pdf Graphic file (type pdf)
 <use img/cal/CIFAR_clusters.pdf>
 Package pdftex.def Info: img/cal/CIFAR_clusters.pdf  used on input line 260.
 (pdftex.def)             Requested size: 363.6237pt x 171.5733pt.
-<img/cal/MNIST_dynamic.pdf, id=5700, 953.9299pt x 614.70651pt>
+<img/cal/MNIST_dynamic.pdf, id=5890, 953.9299pt x 614.70651pt>
 File: img/cal/MNIST_dynamic.pdf Graphic file (type pdf)
 <use img/cal/MNIST_dynamic.pdf>
 Package pdftex.def Info: img/cal/MNIST_dynamic.pdf  used on input line 267.
 (pdftex.def)             Requested size: 404.02908pt x 260.35104pt.
-<img/cal/CIFAR_dynamic.pdf, id=5701, 953.9299pt x 614.70651pt>
+<img/cal/CIFAR_dynamic.pdf, id=5891, 953.9299pt x 614.70651pt>
 File: img/cal/CIFAR_dynamic.pdf Graphic file (type pdf)
 <use img/cal/CIFAR_dynamic.pdf>
 Package pdftex.def Info: img/cal/CIFAR_dynamic.pdf  used on input line 275.
 (pdftex.def)             Requested size: 404.02908pt x 260.35104pt.
-<img/cal/MNIST_dynamic_class0.pdf, id=5702, 953.9299pt x 614.70651pt>
+<img/cal/MNIST_dynamic_class0.pdf, id=5892, 953.9299pt x 614.70651pt>
 File: img/cal/MNIST_dynamic_class0.pdf Graphic file (type pdf)
 <use img/cal/MNIST_dynamic_class0.pdf>
 Package pdftex.def Info: img/cal/MNIST_dynamic_class0.pdf  used on input line 282.
 (pdftex.def)             Requested size: 404.02908pt x 260.35104pt.
-<img/cal/CIFAR_dynamic_class0.pdf, id=5703, 953.9299pt x 614.70651pt>
+<img/cal/CIFAR_dynamic_class0.pdf, id=5893, 953.9299pt x 614.70651pt>
 File: img/cal/CIFAR_dynamic_class0.pdf Graphic file (type pdf)
 <use img/cal/CIFAR_dynamic_class0.pdf>
 Package pdftex.def Info: img/cal/CIFAR_dynamic_class0.pdf  used on input line 289.
 (pdftex.def)             Requested size: 404.02908pt x 260.35104pt.
 Package cleveref Info: loaded `english' language definitions on input line 300.
- [153 <./img/cal/MNIST_ECE.pdf>]
+ [155 <./img/cal/MNIST_ECE.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 320.
- [154 <./img/cal/CIFAR_ECE.pdf> <./img/cal/MNIST_clusters.pdf>]
+ [156 <./img/cal/CIFAR_ECE.pdf> <./img/cal/MNIST_clusters.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 332.
- [155 <./img/cal/CIFAR_clusters.pdf>]
+ [157 <./img/cal/CIFAR_clusters.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 338.
- [156 <./img/cal/MNIST_dynamic.pdf>]
+ [158 <./img/cal/MNIST_dynamic.pdf>]
 Overfull \hbox (4.81732pt too wide) in paragraph at lines 339--340
 \T1/ppl/m/n/10.95 range, with $\OT1/ppl/m/n/10.95 9 911$ \T1/ppl/m/n/10.95 of the $\OT1/ppl/m/n/10.95 10 000$ \T1/ppl/m/n/10.95 test pre-dic-tions con-cen-trated in the high-est bin $\OT1/zplm/m/n/10.95 [\OT1/ppl/m/n/10.95 0.9, 1.0\OT1/zplm/m/n/10.95 ]$\T1/ppl/m/n/10.95 ,
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 344.
-[157 <./img/cal/CIFAR_dynamic.pdf>]
+[159 <./img/cal/CIFAR_dynamic.pdf>]
 Overfull \hbox (0.8366pt too wide) in paragraph at lines 348--349
 []\T1/ppl/m/n/10.95 First, be-lief now rises con-sis-tently with pre-dicted con-fi-dence across the full range,
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 354.
-[158 <./img/cal/MNIST_dynamic_class0.pdf>]
+[160 <./img/cal/MNIST_dynamic_class0.pdf>]
 Overfull \hbox (0.52515pt too wide) in paragraph at lines 359--360
  []\T1/ppl/b/n/10.95 CIFAR-10 - Af-ter Cal-i-bra-tion.[] \T1/ppl/m/n/10.95 Af-ter tem-per-a-ture scal-ing, pre-dic-tions spread across
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 365.
-[159 <./img/cal/CIFAR_dynamic_class0.pdf>]
+[161 <./img/cal/CIFAR_dynamic_class0.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 375.
- [160]
-Package cleveref Info: loaded `english' language definitions on input line 389.
- [161])
-Package cleveref Info: loaded `english' language definitions on input line 369.
  [162]
+Package cleveref Info: loaded `english' language definitions on input line 389.
+ [163])
+Package cleveref Info: loaded `english' language definitions on input line 369.
+ [164]
 \openout2 = `Chapters/usecase.aux'.
 
  (./Chapters/usecase.tex
 Chapter 9.
-[163
+[165
 
 
 
@@ -3273,13 +3318,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 53--53
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 69.
-[164]
+[166]
 Package acronym Info: Label `acro:MLP' newly defined as it shall be overridden
 although it is yet undefined on input line 76.
 Package acronym Info: Label `acro:LSTM' newly defined as it shall be overridden
 although it is yet undefined on input line 76.
 Package cleveref Info: loaded `english' language definitions on input line 96.
- [165]
+ [167]
 Overfull \hbox (42.61674pt too wide) in paragraph at lines 106--107
 []\T1/ppl/b/n/10.95 Feature trust. \T1/ppl/m/n/10.95 Each train-ing sam-ple $\OML/zplm/m/it/10.95 i$ \T1/ppl/m/n/10.95 has its trust opin-ion com-puted as $[]\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 ^^[[]\OT1/zplm/m/n/10.95 )$\T1/ppl/m/n/10.95 ,
  []
@@ -3295,16 +3340,16 @@ Overfull \hbox (11.39139pt too wide) in paragraph at lines 128--129
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 143.
-[166]
+[168]
 Package cleveref Info: loaded `english' language definitions on input line 188.
- [167]
-<img/usecase/trust_mapping.pdf, id=6480, 643.64342pt x 235.86871pt>
+ [169]
+<img/usecase/trust_mapping.pdf, id=6669, 643.64342pt x 235.86871pt>
 File: img/usecase/trust_mapping.pdf Graphic file (type pdf)
 <use img/usecase/trust_mapping.pdf>
 Package pdftex.def Info: img/usecase/trust_mapping.pdf  used on input line 196.
 (pdftex.def)             Requested size: 404.02908pt x 148.06181pt.
 Package cleveref Info: loaded `english' language definitions on input line 201.
- [168 <./img/usecase/trust_mapping.pdf>]
+ [170 <./img/usecase/trust_mapping.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@ac' on input line 206.
@@ -3312,9 +3357,9 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package acronym Info: Label `acro:ReLU' newly defined as it shall be overridden
 although it is yet undefined on input line 228.
 Package cleveref Info: loaded `english' language definitions on input line 235.
-[169]
+[171]
 Package cleveref Info: loaded `english' language definitions on input line 262.
- [170]
+ [172]
 Package acronym Info: Label `acro:TCP' newly defined as it shall be overridden
 although it is yet undefined on input line 267.
 
@@ -3337,18 +3382,18 @@ Overfull \hbox (7.67503pt too wide) in paragraph at lines 286--287
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 287.
-[171]
-<img/usecase/feature_noise_accuracy.pdf, id=6619, 417.69301pt x 272.58186pt>
+[173]
+<img/usecase/feature_noise_accuracy.pdf, id=6808, 417.69301pt x 272.58186pt>
 File: img/usecase/feature_noise_accuracy.pdf Graphic file (type pdf)
 <use img/usecase/feature_noise_accuracy.pdf>
 Package pdftex.def Info: img/usecase/feature_noise_accuracy.pdf  used on input line 293.
 (pdftex.def)             Requested size: 129.29225pt x 84.37473pt.
-<img/usecase/label_noise_accuracy.pdf, id=6620, 417.69301pt x 272.0037pt>
+<img/usecase/label_noise_accuracy.pdf, id=6809, 417.69301pt x 272.0037pt>
 File: img/usecase/label_noise_accuracy.pdf Graphic file (type pdf)
 <use img/usecase/label_noise_accuracy.pdf>
 Package pdftex.def Info: img/usecase/label_noise_accuracy.pdf  used on input line 299.
 (pdftex.def)             Requested size: 129.29225pt x 84.19576pt.
-<img/usecase/combined_accuracy.pdf, id=6621, 489.49706pt x 273.3688pt>
+<img/usecase/combined_accuracy.pdf, id=6810, 489.49706pt x 273.3688pt>
 File: img/usecase/combined_accuracy.pdf Graphic file (type pdf)
 <use img/usecase/combined_accuracy.pdf>
 Package pdftex.def Info: img/usecase/combined_accuracy.pdf  used on input line 305.
@@ -3364,17 +3409,17 @@ Overfull \hbox (58.56027pt too wide) in paragraph at lines 320--321
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 329.
-[172 <./img/usecase/feature_noise_accuracy.pdf> <./img/usecase/label_noise_accuracy.pdf> <./img/usecase/combined_accuracy.pdf>]
-<img/usecase/patas_effectiveness_agg.pdf, id=6765, 1068.29803pt x 494.81049pt>
+[174 <./img/usecase/feature_noise_accuracy.pdf> <./img/usecase/label_noise_accuracy.pdf> <./img/usecase/combined_accuracy.pdf>]
+<img/usecase/patas_effectiveness_agg.pdf, id=6955, 1068.29803pt x 494.81049pt>
 File: img/usecase/patas_effectiveness_agg.pdf Graphic file (type pdf)
 <use img/usecase/patas_effectiveness_agg.pdf>
 Package pdftex.def Info: img/usecase/patas_effectiveness_agg.pdf  used on input line 337.
 (pdftex.def)             Requested size: 404.02908pt x 187.139pt.
 Package cleveref Info: loaded `english' language definitions on input line 354.
- [173 <./img/usecase/patas_effectiveness_agg.pdf>]
+ [175 <./img/usecase/patas_effectiveness_agg.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 396.
- [174]
-<img/usecase/coverage_accuracy_feature.pdf, id=6884, 1573.18674pt x 318.01497pt>
+ [176]
+<img/usecase/coverage_accuracy_feature.pdf, id=7073, 1573.18674pt x 318.01497pt>
 File: img/usecase/coverage_accuracy_feature.pdf Graphic file (type pdf)
 <use img/usecase/coverage_accuracy_feature.pdf>
 Package pdftex.def Info: img/usecase/coverage_accuracy_feature.pdf  used on input line 399.
@@ -3389,65 +3434,65 @@ Underfull \hbox (badness 3128) in paragraph at lines 400--400
  \T1/ppl/m/n/10 Each panel cor-re-sponds to a train-ing noise level $\OML/zplm/m/it/10 ^^[[] \OMS/zplm/m/n/10 2 
  []
 
-<img/usecase/coverage_accuracy_label.pdf, id=6894, 1573.18674pt x 318.01497pt>
+<img/usecase/coverage_accuracy_label.pdf, id=7083, 1573.18674pt x 318.01497pt>
 File: img/usecase/coverage_accuracy_label.pdf Graphic file (type pdf)
 <use img/usecase/coverage_accuracy_label.pdf>
 Package pdftex.def Info: img/usecase/coverage_accuracy_label.pdf  used on input line 411.
 (pdftex.def)             Requested size: 404.02908pt x 81.6726pt.
 Package cleveref Info: loaded `english' language definitions on input line 420.
-[175 <./img/usecase/coverage_accuracy_feature.pdf> <./img/usecase/coverage_accuracy_label.pdf>]
-<img/usecase/coverage_accuracy_combined.pdf, id=7049, 1573.18674pt x 318.01497pt>
+[177 <./img/usecase/coverage_accuracy_feature.pdf> <./img/usecase/coverage_accuracy_label.pdf>]
+<img/usecase/coverage_accuracy_combined.pdf, id=7239, 1573.18674pt x 318.01497pt>
 File: img/usecase/coverage_accuracy_combined.pdf Graphic file (type pdf)
 <use img/usecase/coverage_accuracy_combined.pdf>
 Package pdftex.def Info: img/usecase/coverage_accuracy_combined.pdf  used on input line 424.
 (pdftex.def)             Requested size: 404.02908pt x 81.6726pt.
 Package cleveref Info: loaded `english' language definitions on input line 442.
- [176 <./img/usecase/coverage_accuracy_combined.pdf>]
+ [178 <./img/usecase/coverage_accuracy_combined.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 463.
- [177]
-<img/usecase/calibration_trust.pdf, id=7158, 1063.90785pt x 492.72519pt>
+ [179]
+<img/usecase/calibration_trust.pdf, id=7347, 1063.90785pt x 492.72519pt>
 File: img/usecase/calibration_trust.pdf Graphic file (type pdf)
 <use img/usecase/calibration_trust.pdf>
 Package pdftex.def Info: img/usecase/calibration_trust.pdf  used on input line 487.
 (pdftex.def)             Requested size: 404.02908pt x 187.11722pt.
 Package cleveref Info: loaded `english' language definitions on input line 494.
- [178 <./img/usecase/calibration_trust.pdf>]
+ [180 <./img/usecase/calibration_trust.pdf>]
 Overfull \hbox (11.55252pt too wide) in paragraph at lines 497--498
  []\T1/ppl/b/n/10.95 Label flip-ping causes sub-stan-tial mis-cal-i-bra-tion.[] \T1/ppl/m/n/10.95 La-bel flip-ping has a much stronger
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 512.
-[179]
-<img/usecase/dynamic_trust_feature.pdf, id=7267, 826.01898pt x 846.33487pt>
+[181]
+<img/usecase/dynamic_trust_feature.pdf, id=7456, 826.01898pt x 846.33487pt>
 File: img/usecase/dynamic_trust_feature.pdf Graphic file (type pdf)
 <use img/usecase/dynamic_trust_feature.pdf>
 Package pdftex.def Info: img/usecase/dynamic_trust_feature.pdf  used on input line 515.
 (pdftex.def)             Requested size: 363.6237pt x 372.56929pt.
 Package cleveref Info: loaded `english' language definitions on input line 526.
- [180 <./img/usecase/dynamic_trust_feature.pdf>]
+ [182 <./img/usecase/dynamic_trust_feature.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 546.
- [181]
-<img/usecase/dynamic_trust_label.pdf, id=7376, 823.69028pt x 847.11783pt>
+ [183]
+<img/usecase/dynamic_trust_label.pdf, id=7567, 823.69028pt x 847.11783pt>
 File: img/usecase/dynamic_trust_label.pdf Graphic file (type pdf)
 <use img/usecase/dynamic_trust_label.pdf>
 Package pdftex.def Info: img/usecase/dynamic_trust_label.pdf  used on input line 549.
 (pdftex.def)             Requested size: 363.6237pt x 373.96097pt.
 Package cleveref Info: loaded `english' language definitions on input line 574.
- [182 <./img/usecase/dynamic_trust_label.pdf>]
+ [184 <./img/usecase/dynamic_trust_label.pdf>]
 Overfull \hbox (3.32808pt too wide) in paragraph at lines 580--581
 \T1/ppl/m/n/10.95 with $\OML/zplm/m/it/10.95 ^^[[]$ \T1/ppl/m/n/10.95 and the dis-crim-i-na-tive gap be-tween cor-rect and wrong pre-dic-tions is sharpest.
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 593.
-[183]
-<img/usecase/latency.pdf, id=7494, 490.10979pt x 318.17432pt>
+[185]
+<img/usecase/latency.pdf, id=7683, 490.10979pt x 318.17432pt>
 File: img/usecase/latency.pdf Graphic file (type pdf)
 <use img/usecase/latency.pdf>
 Package pdftex.def Info: img/usecase/latency.pdf  used on input line 603.
 (pdftex.def)             Requested size: 242.4199pt x 157.37782pt.
 Package acronym Info: Label `acro:TCP' overridden on input line 608.
 Package cleveref Info: loaded `english' language definitions on input line 615.
- [184 <./img/usecase/latency.pdf>]
+ [186 <./img/usecase/latency.pdf>]
 Overfull \hbox (5.01456pt too wide) in paragraph at lines 629--630
 []\T1/ppl/b/n/10.95 Label flip rate avail-abil-ity. \T1/ppl/m/n/10.95 The la-bel trust quan-tifi-ca-tion func-tion $[]\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 p\OT1/zplm/m/n/10.95 )$
  []
@@ -3458,18 +3503,18 @@ Overfull \hbox (9.07738pt too wide) in paragraph at lines 631--632
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 635.
-[185]
+[187]
 Package cleveref Info: loaded `english' language definitions on input line 659.
- [186]
-Package cleveref Info: loaded `english' language definitions on input line 692.
- [187])
-Package cleveref Info: loaded `english' language definitions on input line 371.
  [188]
+Package cleveref Info: loaded `english' language definitions on input line 692.
+ [189])
+Package cleveref Info: loaded `english' language definitions on input line 371.
+ [190]
 \openout2 = `Chapters/conclusion.aux'.
 
  (./Chapters/conclusion.tex
 Chapter 10.
-[189
+[191
 
 
 
@@ -3485,168 +3530,153 @@ Overfull \hbox (20.38222pt too wide) in paragraph at lines 28--29
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 40.
-[190]
+[192]
 Package acronym Info: Label `acro:LLM' newly defined as it shall be overridden
 although it is yet undefined on input line 40.
 Package cleveref Info: loaded `english' language definitions on input line 53.
- [191]
+ [193]
 Package cleveref Info: loaded `english' language definitions on input line 66.
- [192])
+ [194])
 Package cleveref Info: loaded `english' language definitions on input line 372.
- [193] [194
+ [195] [196
 
 
 
 ]
-Overfull \hbox (12.34436pt too wide) in paragraph at lines 382--382
+Overfull \hbox (1.39438pt too wide) in paragraph at lines 382--382
 []\T1/ppl/m/n/10.95 Koffi Is-mael Ouat-tara et al. ^^P  As-sess-ing Trust-wor-thi-ness of AI Train-ing Dataset
  []
 
 
-Overfull \hbox (24.60512pt too wide) in paragraph at lines 382--382
+Overfull \hbox (11.73215pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/n/10.95 land, 2026, pp. 260^^U276. \T1/ppl/m/sc/10.95 isbn\T1/ppl/m/n/10.95 : 978-3-032-19096-3. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 https : / / link . springer .
+ []
+
+
+Overfull \hbox (13.65514pt too wide) in paragraph at lines 382--382
 \T1/ppl/m/it/10.95 ence on In-for-ma-tion Fu-sion (FU-SION)\T1/ppl/m/n/10.95 . 2025, pp. 1^^U8. \T1/ppl/m/sc/10.95 doi\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 10 . 23919 / FUSION65864 .
  []
 
-[195]
-Overfull \hbox (10.16414pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Shahin Atak-ishiyev et al. ^^P  Ex-plain-able Ar-ti-fi-cial In-tel-li-gence for Au-tonomous
- []
-
-
-Overfull \hbox (0.99962pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/it/10.95 ACM Com-put. Surv. \T1/ppl/m/n/10.95 55.2 (Jan. 2022). \T1/ppl/m/sc/10.95 issn\T1/ppl/m/n/10.95 : 0360-0300. \T1/ppl/m/sc/10.95 doi\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 10 . 1145 / 3491209$[]\T1/ppl/m/n/10.95 .
- []
-
-
-Overfull \hbox (0.82271pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 gan-isms from Un-re-li-able Com-po-nents^^Q. In: \T1/ppl/m/it/10.95 Au-tomata Stud-ies\T1/ppl/m/n/10.95 . Ed. by Claude
- []
-
-Package cleveref Info: loaded `english' language definitions on input line 381.
-[196]
-Overfull \hbox (0.60284pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Andrew Gel-man et al. \T1/ppl/m/it/10.95 Bayesian Data Anal-y-sis\T1/ppl/m/n/10.95 . Third. Chap-man & Hall/CRC
- []
-
-
-Overfull \hbox (11.78506pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 Texts in Sta-tis-ti-cal Sci-ence Se-ries. CRC, 2013. \T1/ppl/m/sc/10.95 isbn\T1/ppl/m/n/10.95 : 9781439840955 1439840954.
- []
-
-
-Overfull \hbox (11.12871pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Huadong Wu et al. ^^P  Sen-sor fu-sion us-ing Dempster-Shafer the-ory [for context-
- []
-
-Package cleveref Info: loaded `english' language definitions on input line 381.
 [197]
-Overfull \hbox (4.47229pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/it/10.95 nal of Un-cer-tainty, Fuzzi-ness and Knowledge-Based Sys-tems \T1/ppl/m/n/10.95 9.03 (2001), pp. 279^^U
+Overfull \hbox (1.01003pt too wide) in paragraph at lines 382--382
+[]\T1/ppl/m/n/10.95 Davinder Kaur et al. ^^P  Trust-wor-thy Ar-ti-fi-cial In-tel-li-gence: A Re-view^^Q. In: \T1/ppl/m/it/10.95 ACM
  []
 
 
-Overfull \hbox (3.85129pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/it/10.95 Source Fu-sion Op-er-a-tions in Sub-jec-tive Logic\T1/ppl/m/n/10.95 . 2018. arXiv: []$\T1/cmtt/m/n/10.95 1805 . 01388$ [cs.AI][]\T1/ppl/m/n/10.95 .
- []
-
-
-Overfull \hbox (1.04796pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Audun Jøsang, Stephen Marsh, and Si-mon Pope. ^^P  Ex-plor-ing dif-fer-ent types
- []
-
-
-Overfull \hbox (20.4971pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 of trust prop-a-ga-tion^^Q. In: \T1/ppl/m/it/10.95 In-ter-na-tional Con-fer-ence on Trust Man-age-ment\T1/ppl/m/n/10.95 . Springer.
- []
-
-
-Overfull \hbox (28.18825pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Kakan Chan-dra Dey et al. ^^P  Vehicle-to-vehicle (V2V) and vehicle-to-infrastructure
- []
-
-
-Overfull \hbox (8.79172pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 eval-u-a-tion^^Q. In: \T1/ppl/m/it/10.95 Trans-porta-tion Re-search Part C: Emerg-ing Tech-nolo-gies \T1/ppl/m/n/10.95 68 (2016),
+Overfull \hbox (8.47752pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/n/10.95 E. Shan-non and John Mc-Carthy. Vol. 34. An-nals of Math-e-mat-ics Stud-ies. Prince-
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 381.
 [198]
-Overfull \hbox (5.44965pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 ing Rep-re-sen-ta-tions by Back-Propagating Er-rors^^Q. In: \T1/ppl/m/it/10.95 Na-ture \T1/ppl/m/n/10.95 323.6088 (1986),
+Overfull \hbox (0.83508pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/n/10.95 Texts in Sta-tis-ti-cal Sci-ence Se-ries. CRC, 2013. \T1/ppl/m/sc/10.95 isbn\T1/ppl/m/n/10.95 : 9781439840955 1439840954.
  []
 
 
-Overfull \hbox (0.31151pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 works^^Q. In: \T1/ppl/m/it/10.95 Ar-ti-fi-cial In-tel-li-gence Re-view \T1/ppl/m/n/10.95 56.1 (Oct. 2023), pp. 1513^^U1589. \T1/ppl/m/sc/10.95 issn\T1/ppl/m/n/10.95 :
+Overfull \hbox (12.48686pt too wide) in paragraph at lines 382--382
+[]$\T1/cmtt/m/n/10.95 https : / / www . sciencedirect . com / science / article / pii / S1566253502000532$[]\T1/ppl/m/n/10.95 . 
  []
 
 
-Overfull \hbox (11.36703pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 ing: Tech-niques, ap-pli-ca-tions and chal-lenges^^Q. In: \T1/ppl/m/it/10.95 In-for-ma-tion Fu-sion \T1/ppl/m/n/10.95 76 (2021),
+Overfull \hbox (1.76616pt too wide) in paragraph at lines 382--382
+[]\T1/ppl/m/n/10.95 KARI SENTZ and SCOTT FER-SON. \T1/ppl/m/it/10.95 Com-bi-na-tion of Ev-i-dence in Dempster-Shafer
  []
 
 
-Overfull \hbox (0.48064pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 Lec-ture Notes in Statis-tics. Springer Book Archive; eBook ISBN: 978-1-4612-
+Overfull \hbox (0.17873pt too wide) in paragraph at lines 382--382
+[]\T1/ppl/m/n/10.95 Huadong Wu et al. ^^P  Sen-sor fu-sion us-ing Dempster-Shafer the-ory [for context-
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 381.
 [199]
+Overfull \hbox (9.54712pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/n/10.95 of trust prop-a-ga-tion^^Q. In: \T1/ppl/m/it/10.95 In-ter-na-tional Con-fer-ence on Trust Man-age-ment\T1/ppl/m/n/10.95 . Springer.
+ []
+
+
+Overfull \hbox (17.23827pt too wide) in paragraph at lines 382--382
+[]\T1/ppl/m/n/10.95 Kakan Chan-dra Dey et al. ^^P  Vehicle-to-vehicle (V2V) and vehicle-to-infrastructure
+ []
+
+
+Overfull \hbox (2.1895pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/n/10.95 (V2I) com-mu-ni-ca-tion in a het-ero-ge-neous wire-less network--Performance eval-
+ []
+
+Package cleveref Info: loaded `english' language definitions on input line 381.
+[200]
+Overfull \hbox (17.15504pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/it/10.95 Out-of-Distribution Ex-am-ples in Neu-ral Net-works\T1/ppl/m/n/10.95 . 2018. arXiv: []$\T1/cmtt/m/n/10.95 1610 . 02136$ [cs.NE][]\T1/ppl/m/n/10.95 .
+ []
+
+
+Overfull \hbox (11.52177pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/it/10.95 re-sent-ing Model Un-cer-tainty in Deep Learn-ing\T1/ppl/m/n/10.95 . 2016. arXiv: []$\T1/cmtt/m/n/10.95 1506 . 02142$ [stat.ML][]\T1/ppl/m/n/10.95 .
+ []
+
 
 Package biblatex Warning: Month out of range
 (biblatex)                at entry 'pmlr-v202-monchot23a' on input line 381.
 
 
-Overfull \hbox (3.543pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 Mul-ti-layer Per-cep-trons for Ro-bust Au-to-matic Speech Recog-ni-tion.^^Q In: Aug.
- []
-
-Package cleveref Info: loaded `english' language definitions on input line 381.
-[200]
-Overfull \hbox (3.60466pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 CNN Ar-chi-tec-tures^^Q. In: ed. by Sarath Chan-dar, Raz-van Pas-canu, and Doina
- []
-
-
-Overfull \hbox (2.34294pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Tribhuvanesh Orekondy, Bernt Schiele, and Mario Fritz. \T1/ppl/m/it/10.95 Knock-off Nets: Steal-
+Overfull \hbox (6.89441pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/n/10.95 Re-search. PMLR, 23--29 Jul 2023, pp. 25140^^U25173. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 https : / / proceedings .
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 381.
 [201]
-Overfull \hbox (1.10918pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Frank Kargl et al. ^^P  Se-cur-ing Co-op-er-a-tive In-ter-sec-tion Man-age-ment through
+Overfull \hbox (0.21175pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/it/10.95 Service, 2004. EEE '04. 2004\T1/ppl/m/n/10.95 . 2004, pp. 83^^U97. \T1/ppl/m/sc/10.95 doi\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 10 . 1109 / EEE . 2004 . 1287293$[]\T1/ppl/m/n/10.95 . 
  []
 
 
-Overfull \hbox (24.61604pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/it/10.95 ence (VTC2023-Spring)\T1/ppl/m/n/10.95 . June 2023, pp. 1^^U7. \T1/ppl/m/sc/10.95 doi\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 10 . 1109 / VTC2023 -[] Spring57618 .
+Overfull \hbox (0.58394pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/it/10.95 COLING 2024)\T1/ppl/m/n/10.95 . Ed. by Nico-letta Cal-zo-lari et al. Torino, Italia: ELRA and ICCL,
+ []
+
+
+Overfull \hbox (1.40536pt too wide) in paragraph at lines 382--382
+[]\T1/ppl/m/n/10.95 Mingxi Cheng. ^^P  Trust-wor-thi-ness Eval-u-a-tion and Trust-Aware De-sign of CNN
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 381.
 [202]
-Overfull \hbox (0.2295pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Scott Rose et al. ^^P  Zero trust ar-chi-tec-ture^^Q. In: \T1/ppl/m/it/10.95 NIST spe-cial pub-li-ca-tion \T1/ppl/m/n/10.95 800.207
- []
-
-
-Overfull \hbox (2.35802pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Audun Jøsang and Touhid Bhuiyan. ^^P  Op-ti-mal Trust Net-work Anal-y-sis with
- []
-
-
-Overfull \hbox (8.79066pt too wide) in paragraph at lines 382--382
-[]\T1/ppl/m/n/10.95 Mahima Pushkarna, An-drew Zal-divar, and Oddur Kjar-tans-son. ^^P  Data Cards:
+Overfull \hbox (10.21257pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/it/10.95 Har-ness-ing Ad-ver-sar-ial Ex-am-ples\T1/ppl/m/n/10.95 . 2015. arXiv: []$\T1/cmtt/m/n/10.95 1412 . 6572$ [stat.ML][]\T1/ppl/m/n/10.95 . \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 https :
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 381.
 [203]
-Overfull \hbox (1.86491pt too wide) in paragraph at lines 382--382
-\T1/ppl/m/n/10.95 2026-05-18. Hug-ging Face, 2026. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 https : / / huggingface . co / datasets /
+Overfull \hbox (0.17036pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/it/10.95 ety. Se-ries C (Ap-plied Statis-tics) \T1/ppl/m/n/10.95 28.1 (1979), pp. 20^^U28. \T1/ppl/m/sc/10.95 issn\T1/ppl/m/n/10.95 : 00359254, 14679876.
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 388.
+
+Overfull \hbox (6.60199pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/n/10.95 pu-ta-tional Lin-guis-tics, June 2013, pp. 1120^^U1130. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 https : / / aclanthology .
+ []
+
+Package cleveref Info: loaded `english' language definitions on input line 381.
 [204]
+Overfull \hbox (11.53313pt too wide) in paragraph at lines 382--382
+\T1/ppl/m/it/10.95 parency \T1/ppl/m/n/10.95 (2022). \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 https : / / api . semanticscholar . org / CorpusID : 247940068$[]\T1/ppl/m/n/10.95 . 
+ []
+
+
+Overfull \hbox (1.58453pt too wide) in paragraph at lines 382--382
+[]\T1/ppl/m/it/10.95 German Traf-fic Sign Recog-ni-tion Bench-mark (GT-SRB) Dataset\T1/ppl/m/n/10.95 . On-line. \T1/ppl/m/sc/10.95 url\T1/ppl/m/n/10.95 : []$\T1/cmtt/m/n/10.95 http :
+ []
+
+
+Overfull \hbox (2.08113pt too wide) in paragraph at lines 382--382
+[]\T1/ppl/m/n/10.95 Sergey Zagoruyko and Nikos Ko-modakis. \T1/ppl/m/it/10.95 Wide Resid-ual Net-works\T1/ppl/m/n/10.95 . 2017. arXiv:
+ []
+
+Package cleveref Info: loaded `english' language definitions on input line 381.
+[205]
+Package cleveref Info: loaded `english' language definitions on input line 388.
+ [206]
 \openout2 = `Appendices/Patas_thm.aux'.
 
  (./Appendices/Patas_thm.tex
@@ -3669,21 +3699,21 @@ pdfTeX warning (ext4): destination with the same identifier (name{theorem.2}) ha
 <to be read again> 
                    \relax 
 l.47 \begin{theorem}
-                    [Convergence of Subjective Logic Geometric Sequence]\lab... [205
+                    [Convergence of Subjective Logic Geometric Sequence]\lab... [207
 
 
 ]
 Package cleveref Info: loaded `english' language definitions on input line 109.
- [206]
+ [208]
 Package cleveref Info: loaded `english' language definitions on input line 167.
- [207]
-Package cleveref Info: loaded `english' language definitions on input line 212.
- [208])
-Package cleveref Info: loaded `english' language definitions on input line 388.
  [209]
+Package cleveref Info: loaded `english' language definitions on input line 212.
+ [210])
+Package cleveref Info: loaded `english' language definitions on input line 388.
+ [211]
 \openout2 = `Appendices/filelist.aux'.
 
- (./Appendices/filelist.tex [210
+ (./Appendices/filelist.tex [212
 
 
 
@@ -3716,73 +3746,73 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@ac' on input line 57.
 
-<latex/NN_Train_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_PathSize_None__accuracy_evolution.pdf, id=8050, 715.00879pt x 426.0605pt>
+<latex/NN_Train_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_PathSize_None__accuracy_evolution.pdf, id=8236, 715.00879pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_PathSize_None__accuracy_evolution.pdf  used on input line 65.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_PathSize_None__accuracy_evolution.pdf, id=8051, 715.03949pt x 426.0605pt>
+<latex/NN_Train_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_PathSize_None__accuracy_evolution.pdf, id=8237, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_PathSize_None__accuracy_evolution.pdf  used on input line 68.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_distrust_distrust_PathSize_None__accuracy_evolution.pdf, id=8052, 715.00879pt x 426.0605pt>
+<latex/NN_Train_cancer_16_distrust_distrust_PathSize_None__accuracy_evolution.pdf, id=8238, 715.00879pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_distrust_distrust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_distrust_distrust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_distrust_distrust_PathSize_None__accuracy_evolution.pdf  used on input line 71.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_distrust_trust_PathSize_None__accuracy_evolution.pdf, id=8053, 715.00879pt x 426.0605pt>
+<latex/NN_Train_cancer_16_distrust_trust_PathSize_None__accuracy_evolution.pdf, id=8239, 715.00879pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_distrust_trust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_distrust_trust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_distrust_trust_PathSize_None__accuracy_evolution.pdf  used on input line 75.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_distrust_vacuous_PathSize_None__accuracy_evolution.pdf, id=8054, 715.03949pt x 426.0605pt>
+<latex/NN_Train_cancer_16_distrust_vacuous_PathSize_None__accuracy_evolution.pdf, id=8240, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_distrust_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_distrust_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_distrust_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 78.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_trust_distrust_PathSize_None__accuracy_evolution.pdf, id=8055, 715.03949pt x 426.0605pt>
+<latex/NN_Train_cancer_16_trust_distrust_PathSize_None__accuracy_evolution.pdf, id=8241, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_trust_distrust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_trust_distrust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_trust_distrust_PathSize_None__accuracy_evolution.pdf  used on input line 81.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_trust_trust_PathSize_None__accuracy_evolution.pdf, id=8056, 715.00879pt x 426.0605pt>
+<latex/NN_Train_cancer_16_trust_trust_PathSize_None__accuracy_evolution.pdf, id=8242, 715.00879pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_trust_trust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_trust_trust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_trust_trust_PathSize_None__accuracy_evolution.pdf  used on input line 85.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_trust_vacuous_PathSize_None__accuracy_evolution.pdf, id=8057, 714.97804pt x 426.0605pt>
+<latex/NN_Train_cancer_16_trust_vacuous_PathSize_None__accuracy_evolution.pdf, id=8243, 714.97804pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_trust_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_trust_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_trust_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 88.
 (pdftex.def)             Requested size: 121.20995pt x 72.22778pt.
-<latex/NN_Train_cancer_16_vacuous_distrust_PathSize_None__accuracy_evolution.pdf, id=8058, 715.03949pt x 426.0605pt>
+<latex/NN_Train_cancer_16_vacuous_distrust_PathSize_None__accuracy_evolution.pdf, id=8244, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_vacuous_distrust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_vacuous_distrust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_vacuous_distrust_PathSize_None__accuracy_evolution.pdf  used on input line 91.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-[211]
-<latex/NN_Train_cancer_16_vacuous_trust_PathSize_None__accuracy_evolution.pdf, id=8065, 715.03949pt x 426.0605pt>
+[213]
+<latex/NN_Train_cancer_16_vacuous_trust_PathSize_None__accuracy_evolution.pdf, id=8252, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_vacuous_trust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_vacuous_trust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_vacuous_trust_PathSize_None__accuracy_evolution.pdf  used on input line 103.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_cancer_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8066, 715.03949pt x 426.0605pt>
+<latex/NN_Train_cancer_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8253, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_cancer_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_cancer_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_cancer_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 106.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_1__accuracy_evolution.pdf, id=8067, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_1__accuracy_evolution.pdf, id=8254, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_1__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_1__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_1__accuracy_evolution.pdf  used on input line 109.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_10__accuracy_evolution.pdf, id=8068, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_10__accuracy_evolution.pdf, id=8255, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_10__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_10__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_10__accuracy_evolution.pdf  used on input line 113.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_27__accuracy_evolution.pdf, id=8069, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_27__accuracy_evolution.pdf, id=8256, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_27__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_27__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_27__accuracy_evolution.pdf  used on input line 116.
@@ -3791,367 +3821,367 @@ File: latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf Gr
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_4__accuracy_evolution.pdf  used on input line 119.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_128_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8070, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_128_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8257, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_128_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 123.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_16_16_trust_trust_PathSize_None__accuracy_evolution.pdf, id=8071, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_16_16_trust_trust_PathSize_None__accuracy_evolution.pdf, id=8258, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_16_16_trust_trust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_16_16_trust_trust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_16_16_trust_trust_PathSize_None__accuracy_evolution.pdf  used on input line 126.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8072, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8259, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 129.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
 Package cleveref Info: loaded `english' language definitions on input line 134.
- [212 <./latex/NN_Train_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_distrust_distrust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_distrust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_distrust_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_trust_distrust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_trust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_trust_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_vacuous_distrust_PathSize_None__accuracy_evolution.pdf>]
-<latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf, id=8374, 715.03949pt x 426.0605pt>
+ [214 <./latex/NN_Train_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_distrust_distrust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_distrust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_distrust_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_trust_distrust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_trust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_trust_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_vacuous_distrust_PathSize_None__accuracy_evolution.pdf>]
+<latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf, id=8562, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf  used on input line 141.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8375, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8563, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 144.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_32_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8376, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_32_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8564, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_32_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_32_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_32_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 147.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/NN_Train_mnist_64_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8377, 715.03949pt x 426.0605pt>
+<latex/NN_Train_mnist_64_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf, id=8565, 715.03949pt x 426.0605pt>
 File: latex/NN_Train_mnist_64_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_64_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_64_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf  used on input line 151.
 (pdftex.def)             Requested size: 121.20995pt x 72.22128pt.
-<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.001_PathSize_None__plot_ptas.pdf, id=8379, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.001_PathSize_None__plot_ptas.pdf, id=8567, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 163.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 166.
- [213 <./latex/NN_Train_cancer_16_vacuous_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_1__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_10__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_27__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_16_trust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_32_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_64_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>]
-<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.01_PathSize_None__plot_ptas.pdf, id=8824, 1445.4pt x 794.97pt>
+ [215 <./latex/NN_Train_cancer_16_vacuous_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_cancer_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_1__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_10__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_27__accuracy_evolution.pdf> <./latex/NN_Train_mnist_128_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_16_trust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_32_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf> <./latex/NN_Train_mnist_64_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf>]
+<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.01_PathSize_None__plot_ptas.pdf, id=9010, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 169.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.1_PathSize_None__plot_ptas.pdf, id=8825, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.1_PathSize_None__plot_ptas.pdf, id=9011, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 175.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 178.
- [214 <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.01_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_1_PathSize_None__plot_ptas.pdf, id=8906, 1445.4pt x 794.97pt>
+ [216 <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.01_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_1_PathSize_None__plot_ptas.pdf, id=9092, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_1_PathSize_None__plot_ptas.pdf  used on input line 181.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.001_PathSize_None__plot_ptas.pdf, id=8907, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.001_PathSize_None__plot_ptas.pdf, id=9093, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 188.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.01_PathSize_None__plot_ptas.pdf, id=8908, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.01_PathSize_None__plot_ptas.pdf, id=9094, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 194.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 197.
- [215 <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.001_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.1_PathSize_None__plot_ptas.pdf, id=9028, 1445.4pt x 794.97pt>
+ [217 <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.0_0.75_0.25_0.0_0.75_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.001_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.1_PathSize_None__plot_ptas.pdf, id=9215, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 200.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_1_PathSize_None__plot_ptas.pdf, id=9029, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_1_PathSize_None__plot_ptas.pdf, id=9216, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_1_PathSize_None__plot_ptas.pdf  used on input line 206.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9030, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9217, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 214.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 217.
- [216 <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_1_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9149, 1445.4pt x 794.97pt>
+ [218 <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_0.25_0.25_0.5_0.25_0.25_0.5_eps_1_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9335, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 220.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9150, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9336, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 226.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_1_PathSize_None__plot_ptas.pdf, id=9151, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_distrust_eps_1_PathSize_None__plot_ptas.pdf, id=9337, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_distrust_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_distrust_eps_1_PathSize_None__plot_ptas.pdf  used on input line 232.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 235.
- [217 <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9268, 1445.4pt x 794.97pt>
+ [219 <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9455, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 240.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9269, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9456, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 246.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9270, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9457, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 252.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 255.
- [218 <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.01_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_distrust_trust_eps_1_PathSize_None__plot_ptas.pdf, id=9387, 1445.4pt x 794.97pt>
+ [220 <./latex/PTAS_Eval_cancer_16_distrust_distrust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.01_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_distrust_trust_eps_1_PathSize_None__plot_ptas.pdf, id=9574, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_trust_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_trust_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_trust_eps_1_PathSize_None__plot_ptas.pdf  used on input line 258.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf, id=9388, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf, id=9575, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 266.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf, id=9389, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf, id=9576, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 272.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 275.
- [219 <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf, id=9507, 1445.4pt x 794.97pt>
+ [221 <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_trust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf, id=9694, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 278.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_1_PathSize_None__plot_ptas.pdf, id=9508, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_1_PathSize_None__plot_ptas.pdf, id=9695, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_1_PathSize_None__plot_ptas.pdf  used on input line 284.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9509, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9696, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 292.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 295.
- [220 <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_1_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9626, 1445.4pt x 794.97pt>
+ [222 <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_distrust_vacuous_eps_1_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9813, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 298.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9627, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9814, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 304.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_distrust_eps_1_PathSize_None__plot_ptas.pdf, id=9628, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_distrust_eps_1_PathSize_None__plot_ptas.pdf, id=9815, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_distrust_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_distrust_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_distrust_eps_1_PathSize_None__plot_ptas.pdf  used on input line 310.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 313.
- [221 <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_trust_trust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9746, 1445.4pt x 794.97pt>
+ [223 <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_trust_trust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9932, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_trust_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_trust_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_trust_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 318.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_trust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9747, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_trust_eps_0.01_PathSize_None__plot_ptas.pdf, id=9933, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_trust_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_trust_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_trust_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 324.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_trust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9748, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_trust_eps_0.1_PathSize_None__plot_ptas.pdf, id=9934, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_trust_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_trust_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_trust_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 330.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 333.
- [222 <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_trust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_trust_eps_0.01_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_trust_trust_eps_1_PathSize_None__plot_ptas.pdf, id=9867, 1445.4pt x 794.97pt>
+ [224 <./latex/PTAS_Eval_cancer_16_trust_distrust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_trust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_trust_eps_0.01_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_trust_trust_eps_1_PathSize_None__plot_ptas.pdf, id=10053, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_trust_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_trust_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_trust_eps_1_PathSize_None__plot_ptas.pdf  used on input line 336.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf, id=9868, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf, id=10054, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 344.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf, id=9869, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf, id=10055, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 350.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 353.
- [223 <./latex/PTAS_Eval_cancer_16_trust_trust_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_trust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf, id=9990, 1445.4pt x 794.97pt>
+ [225 <./latex/PTAS_Eval_cancer_16_trust_trust_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_trust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf, id=10177, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 356.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_1_PathSize_None__plot_ptas.pdf, id=9991, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_trust_vacuous_eps_1_PathSize_None__plot_ptas.pdf, id=10178, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_trust_vacuous_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_trust_vacuous_eps_1_PathSize_None__plot_ptas.pdf  used on input line 362.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.001_PathSize_None__plot_ptas.pdf, id=9992, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.001_PathSize_None__plot_ptas.pdf, id=10179, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 370.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 373.
- [224 <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_1_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.01_PathSize_None__plot_ptas.pdf, id=10111, 1445.4pt x 794.97pt>
+ [226 <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_trust_vacuous_eps_1_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.01_PathSize_None__plot_ptas.pdf, id=10299, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 376.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.1_PathSize_None__plot_ptas.pdf, id=10112, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.1_PathSize_None__plot_ptas.pdf, id=10300, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 382.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_1_PathSize_None__plot_ptas.pdf, id=10113, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_1_PathSize_None__plot_ptas.pdf, id=10301, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_1_PathSize_None__plot_ptas.pdf  used on input line 388.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 391.
- [225 <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.001_PathSize_None__plot_ptas.pdf, id=10232, 1445.4pt x 794.97pt>
+ [227 <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_0.1_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.001_PathSize_None__plot_ptas.pdf, id=10418, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 395.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.01_PathSize_None__plot_ptas.pdf, id=10233, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.01_PathSize_None__plot_ptas.pdf, id=10419, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 401.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.1_PathSize_None__plot_ptas.pdf, id=10234, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.1_PathSize_None__plot_ptas.pdf, id=10420, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 407.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 410.
- [226 <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.01_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_1_PathSize_None__plot_ptas.pdf, id=10354, 1445.4pt x 794.97pt>
+ [228 <./latex/PTAS_Eval_cancer_16_vacuous_distrust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.001_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.01_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_vacuous_trust_eps_1_PathSize_None__plot_ptas.pdf, id=10540, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_trust_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_trust_eps_1_PathSize_None__plot_ptas.pdf  used on input line 413.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf, id=10355, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf, id=10541, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf  used on input line 420.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf, id=10356, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf, id=10542, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf  used on input line 426.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 429.
- [227 <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf, id=10475, 1445.4pt x 794.97pt>
+ [229 <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_trust_eps_1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.001_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf, id=10661, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf  used on input line 432.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_1_PathSize_None__plot_ptas.pdf, id=10476, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_1_PathSize_None__plot_ptas.pdf, id=10662, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_1_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_1_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_1_PathSize_None__plot_ptas.pdf  used on input line 438.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_1__plot_ptas.pdf, id=10477, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_1__plot_ptas.pdf, id=10663, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_1__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_1__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_1__plot_ptas.pdf  used on input line 447.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 450.
- [228 <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_1_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_10__plot_ptas.pdf, id=10599, 1445.4pt x 794.97pt>
+ [230 <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.01_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_0.1_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_cancer_16_vacuous_vacuous_eps_1_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_10__plot_ptas.pdf, id=10786, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_10__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_10__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_10__plot_ptas.pdf  used on input line 453.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_27__plot_ptas.pdf, id=10600, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_27__plot_ptas.pdf, id=10787, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_27__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_27__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_27__plot_ptas.pdf  used on input line 459.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_4__plot_ptas.pdf, id=10601, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_4__plot_ptas.pdf, id=10788, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_4__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_4__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_4__plot_ptas.pdf  used on input line 465.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 468.
- [229 <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_1__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_10__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_27__plot_ptas.pdf>]
-<latex/PTAS_Eval_mnist_16_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf, id=10725, 1445.4pt x 794.97pt>
+ [231 <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_1__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_10__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_27__plot_ptas.pdf>]
+<latex/PTAS_Eval_mnist_16_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf, id=10913, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_16_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_16_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_16_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf  used on input line 471.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_mnist_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf, id=10726, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_mnist_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf, id=10914, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf  used on input line 477.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_mnist_128_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=10727, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_mnist_128_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=10915, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_128_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_128_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_128_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf  used on input line 485.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 488.
- [230 <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_4__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_mnist_16_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=10851, 1445.4pt x 794.97pt>
+ [232 <./latex/PTAS_Eval_mnist_128_trust_trust_eps_0.05_PathSize_4__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_trust_trust_eps_0.05_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_mnist_16_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=11038, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_16_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_16_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_16_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf  used on input line 491.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_mnist_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=10852, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_mnist_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=11039, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf  used on input line 497.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/PTAS_Eval_mnist_32_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=10853, 1445.4pt x 794.97pt>
+<latex/PTAS_Eval_mnist_32_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=11040, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_32_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_32_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_32_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf  used on input line 503.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
 Package cleveref Info: loaded `english' language definitions on input line 506.
- [231 <./latex/PTAS_Eval_mnist_128_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>]
-<latex/PTAS_Eval_mnist_64_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=10978, 1445.4pt x 794.97pt>
+ [233 <./latex/PTAS_Eval_mnist_128_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_16_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>]
+<latex/PTAS_Eval_mnist_64_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf, id=11164, 1445.4pt x 794.97pt>
 File: latex/PTAS_Eval_mnist_64_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf Graphic file (type pdf)
 <use latex/PTAS_Eval_mnist_64_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>
 Package pdftex.def Info: latex/PTAS_Eval_mnist_64_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf  used on input line 509.
 (pdftex.def)             Requested size: 323.22449pt x 177.7688pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_table2a.pdf, id=10980, 794.97pt x 361.35pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_table2a.pdf, id=11166, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_table2a.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_table2a.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_table2a.pdf  used on input line 519.
 (pdftex.def)             Requested size: 202.01454pt x 91.82599pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_table2a.pdf, id=10981, 794.97pt x 361.35pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_table2a.pdf, id=11167, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_table2a.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_table2a.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_table2a.pdf  used on input line 522.
 (pdftex.def)             Requested size: 202.01454pt x 91.82599pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_table2a.pdf, id=10982, 794.97pt x 361.35pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_table2a.pdf, id=11168, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_table2a.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_table2a.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_table2a.pdf  used on input line 526.
@@ -4161,18 +4191,18 @@ File: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf Graphic 
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf  used on input line 529.
 (pdftex.def)             Requested size: 202.01454pt x 91.82599pt.
 Package cleveref Info: loaded `english' language definitions on input line 532.
- [232 <./latex/PTAS_Eval_mnist_32_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_64_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>]
-<latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_trust_2a_vs_2c.pdf, id=11066, 794.97pt x 361.35pt>
+ [234 <./latex/PTAS_Eval_mnist_32_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf> <./latex/PTAS_Eval_mnist_64_vacuous_vacuous_eps_0.05_PathSize_None__plot_ptas.pdf>]
+<latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_trust_2a_vs_2c.pdf, id=11252, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_trust_2a_vs_2c.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_trust_2a_vs_2c.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_trust_2a_vs_2c.pdf  used on input line 538.
 (pdftex.def)             Requested size: 202.01454pt x 91.82599pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_trust_2a_vs_2c.pdf, id=11067, 794.97pt x 361.35pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_trust_2a_vs_2c.pdf, id=11253, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_trust_2a_vs_2c.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_trust_2a_vs_2c.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_trust_2a_vs_2c.pdf  used on input line 541.
 (pdftex.def)             Requested size: 202.01454pt x 91.82599pt.
-<latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_trust_2a_vs_2c.pdf, id=11068, 794.97pt x 361.35pt>
+<latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_trust_2a_vs_2c.pdf, id=11254, 794.97pt x 361.35pt>
 File: latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_trust_2a_vs_2c.pdf Graphic file (type pdf)
 <use latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_trust_2a_vs_2c.pdf>
 Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_trust_2a_vs_2c.pdf  used on input line 545.
@@ -4183,17 +4213,17 @@ Package pdftex.def Info: latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_t
 (pdftex.def)             Requested size: 202.01454pt x 91.82599pt.
 )
 Package cleveref Info: loaded `english' language definitions on input line 389.
- [233 <./latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_table2a.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_table2a.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_table2a.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_trust_2a_vs_2c.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_trust_2a_vs_2c.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_trust_2a_vs_2c.pdf>]
+ [235 <./latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_table2a.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_table2a.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_table2a.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_1__ipta_trust_2a_vs_2c.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_10__ipta_trust_2a_vs_2c.pdf> <./latex/NN_Train_mnist_128_trust_trust_PathSize_27__ipta_trust_2a_vs_2c.pdf>]
 \openout2 = `Appendices/appendices_usecase.aux'.
 
- (./Appendices/appendices_usecase.tex [234
+ (./Appendices/appendices_usecase.tex [236
 
 
 
 
 ]
 Appendix C.
-<img/usecase/patas_effectiveness_agg_per_sample.pdf, id=11360, 1068.29803pt x 494.81049pt>
+<img/usecase/patas_effectiveness_agg_per_sample.pdf, id=11547, 1068.29803pt x 494.81049pt>
 File: img/usecase/patas_effectiveness_agg_per_sample.pdf Graphic file (type pdf)
 <use img/usecase/patas_effectiveness_agg_per_sample.pdf>
 Package pdftex.def Info: img/usecase/patas_effectiveness_agg_per_sample.pdf  used on input line 21.
@@ -4203,8 +4233,8 @@ Overfull \hbox (3.9862pt too wide) in paragraph at lines 59--64
  []\T1/ppl/b/n/10.95 The com-bined noise re-sults show non-zero dis-be-lief gaps.[] \T1/ppl/m/n/10.95 Un-der com-bined noise,
  []
 
-[235]
-<img/usecase/app/coverage_accuracy_feature.pdf, id=11380, 1572.98334pt x 636.91325pt>
+[237]
+<img/usecase/app/coverage_accuracy_feature.pdf, id=11567, 1572.98334pt x 636.91325pt>
 File: img/usecase/app/coverage_accuracy_feature.pdf Graphic file (type pdf)
 <use img/usecase/app/coverage_accuracy_feature.pdf>
 Package pdftex.def Info: img/usecase/app/coverage_accuracy_feature.pdf  used on input line 93.
@@ -4213,7 +4243,7 @@ Package pdftex.def Info: img/usecase/app/coverage_accuracy_feature.pdf  used on 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<img/usecase/app/coverage_accuracy_label.pdf, id=11389, 1572.98334pt x 636.91325pt>
+<img/usecase/app/coverage_accuracy_label.pdf, id=11576, 1572.98334pt x 636.91325pt>
 File: img/usecase/app/coverage_accuracy_label.pdf Graphic file (type pdf)
 <use img/usecase/app/coverage_accuracy_label.pdf>
 Package pdftex.def Info: img/usecase/app/coverage_accuracy_label.pdf  used on input line 121.
@@ -4221,7 +4251,7 @@ Package pdftex.def Info: img/usecase/app/coverage_accuracy_label.pdf  used on in
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<img/usecase/app/coverage_accuracy_combined.pdf, id=11397, 1572.98334pt x 636.91325pt>
+<img/usecase/app/coverage_accuracy_combined.pdf, id=11584, 1572.98334pt x 636.91325pt>
 File: img/usecase/app/coverage_accuracy_combined.pdf Graphic file (type pdf)
 <use img/usecase/app/coverage_accuracy_combined.pdf>
 Package pdftex.def Info: img/usecase/app/coverage_accuracy_combined.pdf  used on input line 146.
@@ -4250,13 +4280,13 @@ Overfull \hbox (12.43784pt too wide) in paragraph at lines 155--179
  []
 
 Package cleveref Info: loaded `english' language definitions on input line 179.
-[236])
+[238])
 Package cleveref Info: loaded `english' language definitions on input line 390.
- [237]
+ [239]
 Package cleveref Info: loaded `english' language definitions on input line 390.
- [238 <./img/usecase/patas_effectiveness_agg_per_sample.pdf> <./img/usecase/app/coverage_accuracy_feature.pdf>]
+ [240 <./img/usecase/patas_effectiveness_agg_per_sample.pdf> <./img/usecase/app/coverage_accuracy_feature.pdf>]
 Package cleveref Info: loaded `english' language definitions on input line 390.
- [239 <./img/usecase/app/coverage_accuracy_label.pdf> <./img/usecase/app/coverage_accuracy_combined.pdf>] (./main.aux
+ [241 <./img/usecase/app/coverage_accuracy_label.pdf> <./img/usecase/app/coverage_accuracy_combined.pdf>] (./main.aux
 Package cleveref Info: loaded `english' language definitions on input line 42.
  (./Chapters/publications.aux) (./Chapters/Introduction.aux) (./Chapters/rw.aux) (./Chapters/methodology.aux) (./Chapters/sltheory.aux) (./Chapters/patasovl.aux) (./Chapters/Datatrust.aux) (./Chapters/ptas.aux) (./Chapters/nncalibration.aux) (./Chapters/usecase.aux) (./Chapters/conclusion.aux) (./Appendices/Patas_thm.aux) (./Appendices/filelist.aux) (./Appendices/appendices_usecase.aux))
  ***********
@@ -4277,21 +4307,21 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 70246 strings out of 467525
- 1764665 string characters out of 5418982
- 3314599 words of memory out of 5000000
- 96772 multiletter control sequences out of 15000+600000
- 747543 words of font info for 294 fonts, out of 8000000 for 9000
+ 69773 strings out of 467525
+ 1725459 string characters out of 5418982
+ 2784901 words of memory out of 5000000
+ 96303 multiletter control sequences out of 15000+600000
+ 747494 words of font info for 295 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 108i,21n,111p,2442b,3243s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 108i,21n,111p,2410b,3243s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{Hfootnote.11} has been referenced but does not exist, replaced by a fixed one
 
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/mathpazo/fplmb.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/mathpazo/fplmbi.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfss1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfss1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplbi8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb>
-Output written on main.pdf (261 pages, 23711953 bytes).
+Output written on main.pdf (263 pages, 23728010 bytes).
 PDF statistics:
- 12124 PDF objects out of 12825 (max. 8388607)
- 6276 compressed objects within 63 object streams
- 1259 named destinations out of 1440 (max. 500000)
+ 12311 PDF objects out of 12825 (max. 8388607)
+ 6407 compressed objects within 65 object streams
+ 1255 named destinations out of 1440 (max. 500000)
  1629 words of extra memory for PDF output out of 10000 (max. 10000000)
 

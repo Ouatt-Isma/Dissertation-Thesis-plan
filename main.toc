@@ -70,217 +70,220 @@
 \contentsline {chapter}{\numberline {4}Optimized \aclu {TNA-SL}}{61}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Introduction}{61}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Parallel Non-Intersecting Path Subnetworks}{64}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Optimized \acs {DSPG} Synthesis Criteria}{64}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Optimized \acs {DSPG} Synthesis Algorithm}{70}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Optimized \acs {DSPG} Analysis and \acs {PNPS}-Based Reduction}{74}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Trust Discounting for Referral Paths}{77}{section.4.6}%
-\contentsline {paragraph}{Method 1---Trust Discounting with Multi-Edge Path}{78}{section*.127}%
-\contentsline {paragraph}{Method 2---Trust Discounting with Referral-Edge Path (our new discounting operator) + Two-Edge Path}{79}{section*.129}%
-\contentsline {section}{\numberline {4.7}Evaluation}{79}{section.4.7}%
-\contentsline {subsection}{\numberline {4.7.1}Evaluation of Optimized \acs {DSPG} Synthesis}{79}{subsection.4.7.1}%
-\contentsline {paragraph}{Experimental Setup}{80}{section*.131}%
-\contentsline {paragraph}{Cumulative Fusion.}{80}{section*.133}%
-\contentsline {paragraph}{Averaging Fusion.}{81}{section*.134}%
-\contentsline {subsection}{\numberline {4.7.2}Evaluation of \acs {DSPG} Synthesis and Analysis Computational Time}{81}{subsection.4.7.2}%
-\contentsline {paragraph}{Experimental Setup\footnote {Experiments are conducted on a Huawei laptop running Windows 11 Pro (Build 26100), equipped with a 13th Gen Intel Core i7-1360P CPU (12 cores, 16 threads) and 16\,GB RAM.}}{81}{section*.135}%
-\contentsline {paragraph}{Information Retention}{82}{section*.137}%
-\contentsline {paragraph}{End-to-end Computation Time}{82}{section*.140}%
-\contentsline {paragraph}{Analysis-only Comparison on Identical \acp {DSPG}}{83}{section*.143}%
-\contentsline {paragraph}{Qualitative Illustration}{83}{section*.145}%
-\contentsline {paragraph}{Summary}{83}{section*.147}%
-\contentsline {subsection}{\numberline {4.7.3}Evaluation of Referral-Edge Trust Discounting}{84}{subsection.4.7.3}%
-\contentsline {section}{\numberline {4.8}Summary \& Conclusions}{86}{section.4.8}%
-\contentsline {chapter}{\numberline {5}\acf {PaTAS}}{89}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Introduction}{89}{section.5.1}%
-\contentsline {section}{\numberline {5.2}\ac {PaTAS} General Description}{90}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Functionalities}{91}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Core Components}{91}{subsection.5.3.1}%
-\contentsline {paragraph}{Trust Assessment Module}{92}{section*.156}%
-\contentsline {paragraph}{Trust Propagation Module}{92}{section*.157}%
-\contentsline {subsection}{\numberline {5.3.2}Operational Phases}{92}{subsection.5.3.2}%
-\contentsline {section}{\numberline {5.4}Summary \& Conclusions}{93}{section.5.4}%
-\contentsline {chapter}{\numberline {6}Assessment of AI Training Datasets Trustworthiness}{95}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Introduction}{95}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Sources of Uncertainty in Training Datasets Assessment}{96}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Fundamental Sources of Uncertainty}{96}{subsection.6.2.1}%
-\contentsline {subsubsection}{Uncertainty Addressable by Classical Probability Theory}{97}{section*.159}%
-\contentsline {subsubsection}{Uncertainty Requiring Evidence-Based Modeling}{97}{section*.160}%
-\contentsline {paragraph}{System complexity.}{97}{section*.161}%
-\contentsline {paragraph}{Conflicting and incomplete evidence.}{97}{section*.162}%
-\contentsline {section}{\numberline {6.3}A Methodology for Trust Assessment of Training Datasets}{98}{section.6.3}%
-\contentsline {subsection}{\numberline {6.3.1}The Three-Axis Design Space}{98}{subsection.6.3.1}%
-\contentsline {subsection}{\numberline {6.3.2}Specializing the General Methodology to Datasets}{99}{subsection.6.3.2}%
-\contentsline {paragraph}{Phase~I --- Expression generation.}{99}{section*.164}%
-\contentsline {paragraph}{Phase~II --- ATO quantification.}{100}{section*.165}%
-\contentsline {paragraph}{Phase~III --- Expression evaluation.}{101}{section*.167}%
-\contentsline {paragraph}{On intermediate decomposition by risk category.}{101}{section*.168}%
-\contentsline {subsection}{\numberline {6.3.3}Cross-granularity composition of trust sources}{101}{subsection.6.3.3}%
-\contentsline {section}{\numberline {6.4}Multi-stage Assessment: COMPAS}{102}{section.6.4}%
-\contentsline {subsection}{\numberline {6.4.1}Trust Opinion from Trust Sources metric}{103}{subsection.6.4.1}%
-\contentsline {subsection}{\numberline {6.4.2}Stage quantification on COMPAS\footnote {The raw metric values reported in this section are computed from the COMPAS dataset using the implementation developed for this chapter, available at \url {https://github.com/Ouatt-Isma/-Trustworthiness-of-AI-Training-Dataset}. This section focuses on the mapping from raw values to trust opinions; the metric definitions and computation details are documented in the repository.}}{104}{subsection.6.4.2}%
-\contentsline {paragraph}{Sampling stage.}{104}{section*.171}%
-\contentsline {subparagraph}{Step~1: Normalizing the metrics.}{104}{section*.172}%
-\contentsline {subparagraph}{Step~2: Converting to evidence.}{104}{section*.173}%
-\contentsline {subparagraph}{Step~3: Applying \ac {BPQ}.}{105}{section*.174}%
-\contentsline {subparagraph}{Interpretation.}{105}{section*.175}%
-\contentsline {paragraph}{Collection stage.}{105}{section*.177}%
-\contentsline {paragraph}{Annotation stage.}{105}{section*.179}%
-\contentsline {paragraph}{Processing stage.}{105}{section*.180}%
-\contentsline {paragraph}{Cross-stage rollup.}{106}{section*.181}%
-\contentsline {section}{\numberline {6.5}Sampling Stage, Dataset Level: Representativeness on \acs {GTSRB}}{106}{section.6.5}%
-\contentsline {paragraph}{Trust proposition.}{106}{section*.184}%
-\contentsline {subsection}{\numberline {6.5.1}Trust source --- Method 1: class-probabilities-based quantification}{107}{subsection.6.5.1}%
-\contentsline {paragraph}{Quantification scheme: \ac {CUQ}.}{107}{section*.186}%
-\contentsline {subsection}{\numberline {6.5.2}Trust source --- Method 2: entropy-based quantification}{108}{subsection.6.5.2}%
-\contentsline {paragraph}{Entropy as a balance proxy.}{108}{section*.188}%
-\contentsline {paragraph}{Quantification scheme: \ac {BPQ}.}{108}{section*.189}%
-\contentsline {subsection}{\numberline {6.5.3}Experimental evaluation}{109}{subsection.6.5.3}%
-\contentsline {paragraph}{Scenario~1: original vs.\ augmented dataset.}{109}{section*.191}%
-\contentsline {paragraph}{Scenario~2: collaborative dataset with $M$ contributors.}{109}{section*.194}%
-\contentsline {paragraph}{Sensitivity to the tolerance $\eta $.}{111}{section*.197}%
-\contentsline {subsection}{\numberline {6.5.4}Summary}{111}{subsection.6.5.4}%
-\contentsline {section}{\numberline {6.6}Annotation Stage, Entry Level: Labeling accuracy on \\CIFAR-10H}{112}{section.6.6}%
-\contentsline {paragraph}{Trust proposition.}{113}{section*.199}%
-\contentsline {subsection}{\numberline {6.6.1}Trust source: divergence to the decision label}{113}{subsection.6.6.1}%
-\contentsline {paragraph}{Quantification schemes: \ac {BPQ} and \ac {EWQ}.}{113}{section*.201}%
-\contentsline {paragraph}{Worked example.}{114}{section*.202}%
-\contentsline {paragraph}{Annotator-level extension}{114}{section*.203}%
-\contentsline {subsection}{\numberline {6.6.2}Experimental evaluation}{114}{subsection.6.6.2}%
-\contentsline {subsection}{\numberline {6.6.3}Summary}{115}{subsection.6.6.3}%
-\contentsline {section}{\numberline {6.7}Summary \& Conclusions}{115}{section.6.7}%
-\contentsline {chapter}{\numberline {7}Trust Propagation in \aclu {NN}}{119}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Introduction}{119}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Foundations of Trust Propagation in \aclu {NN}s}{121}{section.7.2}%
-\contentsline {subsection}{\numberline {7.2.1}Trust Representation in \aclu {NN}}{121}{subsection.7.2.1}%
-\contentsline {subsection}{\numberline {7.2.2}Parallel Trust Function}{122}{subsection.7.2.2}%
-\contentsline {section}{\numberline {7.3}\ac {PaTAS-TP}: Architecture Overview}{123}{section.7.3}%
-\contentsline {paragraph}{Trust Feedforward}{123}{section*.211}%
-\contentsline {paragraph}{Output-Trust Aggregation}{123}{section*.212}%
-\contentsline {paragraph}{\acf {GenIPTA}}{125}{section*.213}%
-\contentsline {paragraph}{Parameter-Trust Update}{125}{section*.214}%
-\contentsline {section}{\numberline {7.4}Trust Feedforward in a Simple Model: The Perceptron Case}{125}{section.7.4}%
-\contentsline {paragraph}{Trust Propagation from Inputs}{126}{figure.caption.216}%
-\contentsline {paragraph}{Incorporating Parameter Trust}{127}{section*.217}%
-\contentsline {section}{\numberline {7.5}Generalization to Deep \acp {NN}}{128}{section.7.5}%
-\contentsline {section}{\numberline {7.6}Parameter-Trust Update}{130}{section.7.6}%
-\contentsline {section}{\numberline {7.7}Theoretical Properties of \ac {PaTAS-TP}}{133}{section.7.7}%
-\contentsline {subsection}{\numberline {7.7.1}Convergence of \ac {PaTAS-TP}}{133}{subsection.7.7.1}%
-\contentsline {subsection}{\numberline {7.7.2}Symmetry and Invariance Properties of \ac {PaTAS-TP}}{134}{subsection.7.7.2}%
-\contentsline {section}{\numberline {7.8}Evaluation and Results}{134}{section.7.8}%
-\contentsline {subsection}{\numberline {7.8.1}Experimental Setup }{135}{subsection.7.8.1}%
-\contentsline {subsubsection}{Experiment 1 - Breast Cancer Classification}{135}{section*.221}%
-\contentsline {subsubsection}{Experiment 2 - MNIST}{136}{section*.222}%
-\contentsline {subsubsection}{Experiment 3 - Poisoned MNIST}{136}{section*.223}%
-\contentsline {subsection}{\numberline {7.8.2}Results and Analysis}{137}{subsection.7.8.2}%
-\contentsline {section}{\numberline {7.9}Discussion of \ac {PaTAS-TP} Findings}{143}{section.7.9}%
-\contentsline {section}{\numberline {7.10}Summary \& Conclusions}{145}{section.7.10}%
-\contentsline {chapter}{\numberline {8}Calibration-Based Trust Assessment of \acp {NN}}{147}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Introduction}{147}{section.8.1}%
-\contentsline {section}{\numberline {8.2}\acs {SL}-Based Methodology for Calibration Trust Assessment}{148}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Calibration Evidence}{149}{subsection.8.2.1}%
-\contentsline {subsection}{\numberline {8.2.2}Construction of Calibration Trust Opinions}{151}{subsection.8.2.2}%
-\contentsline {paragraph}{Evidence Count}{151}{section*.239}%
-\contentsline {paragraph}{From Static to Dynamic}{151}{section*.240}%
-\contentsline {section}{\numberline {8.3}Experimental Evaluation}{152}{section.8.3}%
-\contentsline {subsection}{\numberline {8.3.1}Experimental Setup}{152}{subsection.8.3.1}%
-\contentsline {subsection}{\numberline {8.3.2}Trust Opinion Dynamics During Training}{153}{subsection.8.3.2}%
-\contentsline {subsection}{\numberline {8.3.3}Sensitivity to the Number of Clusters}{155}{subsection.8.3.3}%
-\contentsline {subsection}{\numberline {8.3.4}Dynamic Per-Prediction Trust at Inference}{156}{subsection.8.3.4}%
-\contentsline {paragraph}{MNIST - Before Calibration.}{157}{section*.251}%
-\contentsline {paragraph}{MNIST - After Calibration.}{158}{section*.252}%
-\contentsline {paragraph}{CIFAR-10 - Before Calibration.}{158}{section*.253}%
-\contentsline {paragraph}{CIFAR-10 - After Calibration.}{159}{section*.254}%
-\contentsline {paragraph}{Cross-cutting observations.}{160}{section*.255}%
-\contentsline {subsection}{\numberline {8.3.5}Practical deployment implications.}{160}{subsection.8.3.5}%
-\contentsline {section}{\numberline {8.4}Summary \& Conclusions}{161}{section.8.4}%
-\contentsline {chapter}{\numberline {9}Use Case: \acs {PaTAS} Applied to 5G Network Energy Management}{163}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Introduction and Motivation}{163}{section.9.1}%
-\contentsline {section}{\numberline {9.2}Dataset and Experimental Setup}{164}{section.9.2}%
-\contentsline {subsection}{\numberline {9.2.1}The 5G Energy Dataset}{164}{subsection.9.2.1}%
-\contentsline {subsubsection}{Data Structure and Collection}{164}{section*.258}%
-\contentsline {subsubsection}{Feature Engineering and Label Definition}{164}{section*.260}%
-\contentsline {subsection}{\numberline {9.2.2}Model Configuration}{165}{subsection.9.2.2}%
-\contentsline {subsection}{\numberline {9.2.3}Noise Injection Strategy}{165}{subsection.9.2.3}%
-\contentsline {subsection}{\numberline {9.2.4}Experimental Configurations and Baselines}{166}{subsection.9.2.4}%
-\contentsline {subsection}{\numberline {9.2.5}Experiments, Training and Evaluation Protocol}{166}{subsection.9.2.5}%
-\contentsline {paragraph}{Training loop.}{166}{section*.263}%
-\contentsline {section}{\numberline {9.3}Trust Assessment: Assigning Opinions to Data}{166}{section.9.3}%
-\contentsline {subsection}{\numberline {9.3.1}Feature Trust Quantification}{167}{subsection.9.3.1}%
-\contentsline {subsection}{\numberline {9.3.2}Label Trust Quantification}{167}{subsection.9.3.2}%
-\contentsline {paragraph}{Comparison of Feature and Label Trust Quantification}{168}{section*.264}%
-\contentsline {subsection}{\numberline {9.3.3}Trust Opinion Mapping and Propagation Behavior}{168}{subsection.9.3.3}%
-\contentsline {section}{\numberline {9.4}Trust Propagation: How Opinions Evolve During Training in \ac {PaTAS}}{169}{section.9.4}%
-\contentsline {subsection}{\numberline {9.4.1}Trust Discounting and Fusion for Forward Propagation}{169}{subsection.9.4.1}%
-\contentsline {subsection}{\numberline {9.4.2}Deduction and Fusion for Parameter Updates}{170}{subsection.9.4.2}%
-\contentsline {subsection}{\numberline {9.4.3}Implementation Details}{171}{subsection.9.4.3}%
-\contentsline {section}{\numberline {9.5}Noise Robustness: \ac {PaTAS} as a Confidence Signal Under Data Quality Variation}{171}{section.9.5}%
-\contentsline {subsection}{\numberline {9.5.1}Baseline Neural Network Performance}{171}{subsection.9.5.1}%
-\contentsline {subsection}{\numberline {9.5.2}\ac {PaTAS} as a Discriminator of Correct Predictions}{172}{subsection.9.5.2}%
-\contentsline {paragraph}{Feature Noise.}{173}{section*.270}%
-\contentsline {paragraph}{Label Flipping.}{174}{section*.271}%
-\contentsline {paragraph}{Combined Feature noise and Label flipping}{174}{section*.272}%
-\contentsline {subsection}{\numberline {9.5.3}Coverage versus Accuracy: \ac {PaTAS} versus Softmax Filtering}{174}{subsection.9.5.3}%
-\contentsline {paragraph}{Feature noise (\Cref {fig:coverage_accuracy_feature}).}{175}{section*.275}%
-\contentsline {paragraph}{Label flipping (\Cref {fig:coverage_accuracy_label}).}{175}{section*.277}%
-\contentsline {paragraph}{Combined noise (\Cref {fig:coverage_accuracy_combined}).}{176}{section*.279}%
-\contentsline {paragraph}{Summary.}{176}{section*.280}%
-\contentsline {subsection}{\numberline {9.5.4}Summary of Robustness Findings}{176}{subsection.9.5.4}%
-\contentsline {section}{\numberline {9.6}Calibration Quantification using Subjective Logic}{177}{section.9.6}%
-\contentsline {subsection}{\numberline {9.6.1}Methodology Recap}{177}{subsection.9.6.1}%
-\contentsline {subsection}{\numberline {9.6.2}Calibration Trust Across Noise Conditions}{178}{subsection.9.6.2}%
-\contentsline {paragraph}{Feature noise has limited impact on calibration.}{178}{section*.282}%
-\contentsline {paragraph}{Label flipping causes substantial miscalibration.}{179}{section*.283}%
-\contentsline {paragraph}{Combined noise compounds the effect.}{179}{section*.284}%
-\contentsline {paragraph}{Uncertainty remains negligible.}{179}{section*.285}%
-\contentsline {subsection}{\numberline {9.6.3}Dynamic Calibration Trust Assessment Under Feature Noise}{179}{subsection.9.6.3}%
-\contentsline {paragraph}{Calibration belief increases monotonically with softmax confidence at low noise.}{179}{section*.286}%
-\contentsline {paragraph}{The model becomes less confident as noise increases.}{180}{section*.288}%
-\contentsline {paragraph}{At moderate noise, miscalibration emerges at mid-confidence bins.}{181}{section*.289}%
-\contentsline {paragraph}{At high noise, calibration trust decouples from softmax confidence across the full spectrum.}{181}{section*.290}%
-\contentsline {subsection}{\numberline {9.6.4}Dynamic Calibration Trust Assessment Under Label Noise}{181}{subsection.9.6.4}%
-\contentsline {paragraph}{Label noise shifts the confidence distribution leftward more aggressively than feature noise.}{181}{section*.291}%
-\contentsline {paragraph}{Calibration belief is elevated but flat across most confidence bins, reflecting systematic miscalibration.}{181}{section*.292}%
-\contentsline {paragraph}{At high label noise, the highest confidence predictions become the most miscalibrated.}{181}{section*.293}%
-\contentsline {subsection}{\numberline {9.6.5}Comparison: Per-Prediction Trust vs.\ Calibration Trust}{183}{subsection.9.6.5}%
-\contentsline {section}{\numberline {9.7}Discussion}{183}{section.9.7}%
-\contentsline {subsection}{\numberline {9.7.1}What \ac {PaTAS} Adds Beyond Softmax Confidence}{183}{subsection.9.7.1}%
-\contentsline {subsection}{\numberline {9.7.2}Computational Cost}{184}{subsection.9.7.2}%
-\contentsline {paragraph}{Absolute latency.}{184}{section*.298}%
-\contentsline {paragraph}{Overhead ratio.}{185}{section*.299}%
-\contentsline {paragraph}{Implications for deployment.}{185}{section*.300}%
-\contentsline {subsection}{\numberline {9.7.3}Limitations}{185}{subsection.9.7.3}%
-\contentsline {subsection}{\numberline {9.7.4}Connection to the Broader Thesis}{186}{subsection.9.7.4}%
-\contentsline {section}{\numberline {9.8}Summary \& Conclusions}{187}{section.9.8}%
-\contentsline {chapter}{\numberline {10}Conclusion and Future Work}{189}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Synthesis of Contributions}{189}{section.10.1}%
-\contentsline {section}{\numberline {10.2}What This Thesis Does and Does Not Address}{191}{section.10.2}%
-\contentsline {section}{\numberline {10.3}Limitations and Directions for Future Work}{191}{section.10.3}%
-\contentsline {paragraph}{From classification to generative and sequential models.}{191}{section*.307}%
-\contentsline {paragraph}{Toward explainability and accountability.}{191}{section*.308}%
-\contentsline {paragraph}{Robustness, adversarial settings, and privacy.}{192}{section*.309}%
-\contentsline {paragraph}{Standardization and operational deployment.}{192}{section*.310}%
-\contentsline {paragraph}{Toward learned trust propagation.}{192}{section*.311}%
-\contentsline {paragraph}{Closing the loop: trust-informed training.}{193}{section*.312}%
-\contentsline {section}{\numberline {10.4}Closing Remarks}{193}{section.10.4}%
-\contentsline {chapter}{Bibliography}{194}{section.10.4}%
-\contentsline {chapter}{\numberline {A}\ac {PaTAS-TP} Theorems and Proofs (\cref {sec:ptastheory})}{205}{appendix.A}%
-\contentsline {subsection}{\numberline {A.0.1}Key theorems}{205}{subsection.A.0.1}%
-\contentsline {subsection}{\numberline {A.0.2}Proof for Theorem~\ref {thm:convergence}}{206}{subsection.A.0.2}%
-\contentsline {subsection}{\numberline {A.0.3}Proof for Theorem~\ref {thm:infvac}}{207}{subsection.A.0.3}%
-\contentsline {subsection}{\numberline {A.0.4}Proof for Theorem~\ref {thm:sym}}{208}{subsection.A.0.4}%
-\contentsline {chapter}{\numberline {B}All Plots for \cref {chap:patas}}{211}{appendix.B}%
-\contentsline {section}{\numberline {B.1}Accuracy plots during \ac {NN} Training}{212}{section.B.1}%
-\contentsline {section}{\numberline {B.2}\acs {PaTAS} Evaluation Results}{214}{section.B.2}%
-\contentsline {subsection}{\numberline {B.2.1}Cancer Dataset}{214}{subsection.B.2.1}%
-\contentsline {subsection}{\numberline {B.2.2}MNIST Dataset}{229}{subsection.B.2.2}%
-\contentsline {subsubsection}{vacuous -- vacuous}{231}{section*.369}%
-\contentsline {subsection}{\numberline {B.2.3}\ac {IPTA}}{233}{subsection.B.2.3}%
-\contentsline {chapter}{\numberline {C}More results from usecase chapter}{235}{appendix.C}%
-\contentsline {section}{\numberline {C.1}PaTAS Confidence Signal: Per-Sample Input Trust Feedforward}{235}{section.C.1}%
-\contentsline {paragraph}{Disbelief is no longer zero under feature noise.}{235}{section*.378}%
-\contentsline {paragraph}{The discriminative gap $\Delta b$ is larger than in the fully-trusted case.}{235}{section*.379}%
-\contentsline {paragraph}{The combined noise results show non-zero disbelief gaps.}{235}{section*.380}%
-\contentsline {section}{\numberline {C.2}Extended Coverage--Accuracy and ROC Analysis for Selective Prediction}{236}{section.C.2}%
-\contentsline {subsection}{\numberline {C.2.1}Feature Noise}{236}{subsection.C.2.1}%
-\contentsline {subsection}{\numberline {C.2.2}Label Flipping}{236}{subsection.C.2.2}%
-\contentsline {subsection}{\numberline {C.2.3}Combined Noise}{236}{subsection.C.2.3}%
+\contentsline {section}{\numberline {4.3}Optimized \acs {DSPG} Synthesis Criteria}{66}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Optimized \acs {DSPG} Synthesis Algorithm}{71}{section.4.4}%
+\contentsline {paragraph}{Running Example (Synthesis)}{73}{section*.115}%
+\contentsline {section}{\numberline {4.5}Optimized \acs {DSPG} Analysis and \acs {PNPS}-Based Reduction}{75}{section.4.5}%
+\contentsline {paragraph}{Running Example (Analysis)}{78}{section*.117}%
+\contentsline {section}{\numberline {4.6}Trust Discounting for Referral Paths}{79}{section.4.6}%
+\contentsline {paragraph}{Method 1---Trust Discounting with Multi-Edge Path}{81}{section*.120}%
+\contentsline {paragraph}{Method 2---Trust Discounting with Referral-Edge Path (our new discounting operator) + Two-Edge Path}{81}{section*.122}%
+\contentsline {section}{\numberline {4.7}Evaluation}{82}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Evaluation of Optimized \acs {DSPG} Synthesis}{82}{subsection.4.7.1}%
+\contentsline {paragraph}{Experimental Setup}{82}{section*.123}%
+\contentsline {paragraph}{Cumulative Fusion.}{82}{section*.125}%
+\contentsline {paragraph}{Averaging Fusion.}{83}{section*.126}%
+\contentsline {subsection}{\numberline {4.7.2}Evaluation of \acs {DSPG} Synthesis and Analysis Computational Time}{83}{subsection.4.7.2}%
+\contentsline {paragraph}{Experimental Setup\footnote {Experiments are conducted on a Huawei laptop running Windows 11 Pro (Build 26100), equipped with a 13th Gen Intel Core i7-1360P CPU (12 cores, 16 threads) and 16\,GB RAM.}}{83}{section*.127}%
+\contentsline {paragraph}{Information Retention}{84}{section*.128}%
+\contentsline {paragraph}{End-to-end Computation Time}{84}{section*.130}%
+\contentsline {paragraph}{Analysis-only Comparison on Identical \acp {DSPG}}{85}{section*.132}%
+\contentsline {paragraph}{Qualitative Illustration}{87}{section*.134}%
+\contentsline {paragraph}{Summary}{87}{section*.136}%
+\contentsline {subsection}{\numberline {4.7.3}Evaluation of Referral-Edge Trust Discounting}{87}{subsection.4.7.3}%
+\contentsline {section}{\numberline {4.8}Summary \& Conclusions}{89}{section.4.8}%
+\contentsline {chapter}{\numberline {5}\acf {PaTAS}}{91}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Introduction}{91}{section.5.1}%
+\contentsline {section}{\numberline {5.2}\ac {PaTAS} General Description}{92}{section.5.2}%
+\contentsline {paragraph}{Illustrative Example}{93}{section*.139}%
+\contentsline {section}{\numberline {5.3}Functionalities}{94}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Core Components}{94}{subsection.5.3.1}%
+\contentsline {paragraph}{Trust Assessment Module}{94}{section*.141}%
+\contentsline {paragraph}{Trust Propagation Module}{95}{section*.142}%
+\contentsline {subsection}{\numberline {5.3.2}Operational Phases}{95}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Summary \& Conclusions}{95}{section.5.4}%
+\contentsline {chapter}{\numberline {6}Assessment of AI Training Datasets Trustworthiness}{97}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Introduction}{97}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Sources of Uncertainty in Training Datasets Assessment}{98}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Fundamental Sources of Uncertainty}{98}{subsection.6.2.1}%
+\contentsline {subsubsection}{Uncertainty Addressable by Classical Probability Theory}{99}{section*.144}%
+\contentsline {subsubsection}{Uncertainty Requiring Evidence-Based Modeling}{99}{section*.145}%
+\contentsline {paragraph}{System complexity.}{99}{section*.146}%
+\contentsline {paragraph}{Conflicting and incomplete evidence.}{99}{section*.147}%
+\contentsline {section}{\numberline {6.3}A Methodology for Trust Assessment of Training Datasets}{100}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}The Three-Axis Design Space}{100}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}Specializing the General Methodology to Datasets}{101}{subsection.6.3.2}%
+\contentsline {paragraph}{Phase~I --- Expression generation.}{101}{section*.149}%
+\contentsline {paragraph}{Phase~II --- ATO quantification.}{102}{section*.150}%
+\contentsline {paragraph}{Phase~III --- Expression evaluation.}{103}{section*.152}%
+\contentsline {paragraph}{On intermediate decomposition by risk category.}{103}{section*.153}%
+\contentsline {subsection}{\numberline {6.3.3}Cross-granularity composition of trust sources}{103}{subsection.6.3.3}%
+\contentsline {section}{\numberline {6.4}Multi-stage Assessment: COMPAS}{104}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Trust Opinion from Trust Sources metric}{105}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Stage quantification on COMPAS\footnote {The raw metric values reported in this section are computed from the COMPAS dataset using the implementation developed for this chapter, available at \url {https://github.com/Ouatt-Isma/-Trustworthiness-of-AI-Training-Dataset}. This section focuses on the mapping from raw values to trust opinions; the metric definitions and computation details are documented in the repository.}}{106}{subsection.6.4.2}%
+\contentsline {paragraph}{Sampling stage.}{106}{section*.156}%
+\contentsline {subparagraph}{Step~1: Normalizing the metrics.}{106}{section*.157}%
+\contentsline {subparagraph}{Step~2: Converting to evidence.}{106}{section*.158}%
+\contentsline {subparagraph}{Step~3: Applying \ac {BPQ}.}{107}{section*.159}%
+\contentsline {subparagraph}{Interpretation.}{107}{section*.160}%
+\contentsline {paragraph}{Collection stage.}{107}{section*.162}%
+\contentsline {paragraph}{Annotation stage.}{107}{section*.164}%
+\contentsline {paragraph}{Processing stage.}{107}{section*.165}%
+\contentsline {paragraph}{Cross-stage rollup.}{108}{section*.166}%
+\contentsline {section}{\numberline {6.5}Sampling Stage, Dataset Level: Representativeness on \acs {GTSRB}}{108}{section.6.5}%
+\contentsline {paragraph}{Trust proposition.}{108}{section*.169}%
+\contentsline {subsection}{\numberline {6.5.1}Trust source --- Method 1: class-probabilities-based quantification}{109}{subsection.6.5.1}%
+\contentsline {paragraph}{Quantification scheme: \ac {CUQ}.}{109}{section*.171}%
+\contentsline {subsection}{\numberline {6.5.2}Trust source --- Method 2: entropy-based quantification}{110}{subsection.6.5.2}%
+\contentsline {paragraph}{Entropy as a balance proxy.}{110}{section*.173}%
+\contentsline {paragraph}{Quantification scheme: \ac {BPQ}.}{110}{section*.174}%
+\contentsline {subsection}{\numberline {6.5.3}Experimental evaluation}{111}{subsection.6.5.3}%
+\contentsline {paragraph}{Scenario~1: original vs.\ augmented dataset.}{111}{section*.176}%
+\contentsline {paragraph}{Scenario~2: collaborative dataset with $M$ contributors.}{111}{section*.179}%
+\contentsline {paragraph}{Sensitivity to the tolerance $\eta $.}{113}{section*.182}%
+\contentsline {subsection}{\numberline {6.5.4}Summary}{113}{subsection.6.5.4}%
+\contentsline {section}{\numberline {6.6}Annotation Stage, Entry Level: Labeling accuracy on \\CIFAR-10H}{114}{section.6.6}%
+\contentsline {paragraph}{Trust proposition.}{115}{section*.184}%
+\contentsline {subsection}{\numberline {6.6.1}Trust source: divergence to the decision label}{115}{subsection.6.6.1}%
+\contentsline {paragraph}{Quantification schemes: \ac {BPQ} and \ac {EWQ}.}{115}{section*.186}%
+\contentsline {paragraph}{Worked example.}{116}{section*.187}%
+\contentsline {paragraph}{Annotator-level extension}{116}{section*.188}%
+\contentsline {subsection}{\numberline {6.6.2}Experimental evaluation}{116}{subsection.6.6.2}%
+\contentsline {subsection}{\numberline {6.6.3}Summary}{117}{subsection.6.6.3}%
+\contentsline {section}{\numberline {6.7}Summary \& Conclusions}{117}{section.6.7}%
+\contentsline {chapter}{\numberline {7}Trust Propagation in \aclu {NN}}{121}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Introduction}{121}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Foundations of Trust Propagation in \aclu {NN}s}{123}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Trust Representation in \aclu {NN}}{123}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Parallel Trust Function}{124}{subsection.7.2.2}%
+\contentsline {section}{\numberline {7.3}\ac {PaTAS-TP}: Architecture Overview}{125}{section.7.3}%
+\contentsline {paragraph}{Trust Feedforward}{125}{section*.196}%
+\contentsline {paragraph}{Output-Trust Aggregation}{125}{section*.197}%
+\contentsline {paragraph}{\acf {GenIPTA}}{127}{section*.198}%
+\contentsline {paragraph}{Parameter-Trust Update}{127}{section*.199}%
+\contentsline {section}{\numberline {7.4}Trust Feedforward in a Simple Model: The Perceptron Case}{127}{section.7.4}%
+\contentsline {paragraph}{Trust Propagation from Inputs}{128}{figure.caption.201}%
+\contentsline {paragraph}{Incorporating Parameter Trust}{129}{section*.202}%
+\contentsline {section}{\numberline {7.5}Generalization to Deep \acp {NN}}{130}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Parameter-Trust Update}{132}{section.7.6}%
+\contentsline {section}{\numberline {7.7}Theoretical Properties of \ac {PaTAS-TP}}{135}{section.7.7}%
+\contentsline {subsection}{\numberline {7.7.1}Convergence of \ac {PaTAS-TP}}{135}{subsection.7.7.1}%
+\contentsline {subsection}{\numberline {7.7.2}Symmetry and Invariance Properties of \ac {PaTAS-TP}}{136}{subsection.7.7.2}%
+\contentsline {section}{\numberline {7.8}Evaluation and Results}{136}{section.7.8}%
+\contentsline {subsection}{\numberline {7.8.1}Experimental Setup }{137}{subsection.7.8.1}%
+\contentsline {subsubsection}{Experiment 1 - Breast Cancer Classification}{137}{section*.206}%
+\contentsline {subsubsection}{Experiment 2 - MNIST}{138}{section*.207}%
+\contentsline {subsubsection}{Experiment 3 - Poisoned MNIST}{138}{section*.208}%
+\contentsline {subsection}{\numberline {7.8.2}Results and Analysis}{139}{subsection.7.8.2}%
+\contentsline {section}{\numberline {7.9}Discussion of \ac {PaTAS-TP} Findings}{145}{section.7.9}%
+\contentsline {section}{\numberline {7.10}Summary \& Conclusions}{147}{section.7.10}%
+\contentsline {chapter}{\numberline {8}Calibration-Based Trust Assessment of \acp {NN}}{149}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Introduction}{149}{section.8.1}%
+\contentsline {section}{\numberline {8.2}\acs {SL}-Based Methodology for Calibration Trust Assessment}{150}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Calibration Evidence}{151}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Construction of Calibration Trust Opinions}{153}{subsection.8.2.2}%
+\contentsline {paragraph}{Evidence Count}{153}{section*.224}%
+\contentsline {paragraph}{From Static to Dynamic}{153}{section*.225}%
+\contentsline {section}{\numberline {8.3}Experimental Evaluation}{154}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Experimental Setup}{154}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.3.2}Trust Opinion Dynamics During Training}{155}{subsection.8.3.2}%
+\contentsline {subsection}{\numberline {8.3.3}Sensitivity to the Number of Clusters}{157}{subsection.8.3.3}%
+\contentsline {subsection}{\numberline {8.3.4}Dynamic Per-Prediction Trust at Inference}{158}{subsection.8.3.4}%
+\contentsline {paragraph}{MNIST - Before Calibration.}{159}{section*.236}%
+\contentsline {paragraph}{MNIST - After Calibration.}{160}{section*.237}%
+\contentsline {paragraph}{CIFAR-10 - Before Calibration.}{160}{section*.238}%
+\contentsline {paragraph}{CIFAR-10 - After Calibration.}{161}{section*.239}%
+\contentsline {paragraph}{Cross-cutting observations.}{162}{section*.240}%
+\contentsline {subsection}{\numberline {8.3.5}Practical deployment implications.}{162}{subsection.8.3.5}%
+\contentsline {section}{\numberline {8.4}Summary \& Conclusions}{163}{section.8.4}%
+\contentsline {chapter}{\numberline {9}Use Case: \acs {PaTAS} Applied to 5G Network Energy Management}{165}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Introduction and Motivation}{165}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Dataset and Experimental Setup}{166}{section.9.2}%
+\contentsline {subsection}{\numberline {9.2.1}The 5G Energy Dataset}{166}{subsection.9.2.1}%
+\contentsline {subsubsection}{Data Structure and Collection}{166}{section*.243}%
+\contentsline {subsubsection}{Feature Engineering and Label Definition}{166}{section*.245}%
+\contentsline {subsection}{\numberline {9.2.2}Model Configuration}{167}{subsection.9.2.2}%
+\contentsline {subsection}{\numberline {9.2.3}Noise Injection Strategy}{167}{subsection.9.2.3}%
+\contentsline {subsection}{\numberline {9.2.4}Experimental Configurations and Baselines}{168}{subsection.9.2.4}%
+\contentsline {subsection}{\numberline {9.2.5}Experiments, Training and Evaluation Protocol}{168}{subsection.9.2.5}%
+\contentsline {paragraph}{Training loop.}{168}{section*.248}%
+\contentsline {section}{\numberline {9.3}Trust Assessment: Assigning Opinions to Data}{168}{section.9.3}%
+\contentsline {subsection}{\numberline {9.3.1}Feature Trust Quantification}{169}{subsection.9.3.1}%
+\contentsline {subsection}{\numberline {9.3.2}Label Trust Quantification}{169}{subsection.9.3.2}%
+\contentsline {paragraph}{Comparison of Feature and Label Trust Quantification}{170}{section*.249}%
+\contentsline {subsection}{\numberline {9.3.3}Trust Opinion Mapping and Propagation Behavior}{170}{subsection.9.3.3}%
+\contentsline {section}{\numberline {9.4}Trust Propagation: How Opinions Evolve During Training in \ac {PaTAS}}{171}{section.9.4}%
+\contentsline {subsection}{\numberline {9.4.1}Trust Discounting and Fusion for Forward Propagation}{171}{subsection.9.4.1}%
+\contentsline {subsection}{\numberline {9.4.2}Deduction and Fusion for Parameter Updates}{172}{subsection.9.4.2}%
+\contentsline {subsection}{\numberline {9.4.3}Implementation Details}{173}{subsection.9.4.3}%
+\contentsline {section}{\numberline {9.5}Noise Robustness: \ac {PaTAS} as a Confidence Signal Under Data Quality Variation}{173}{section.9.5}%
+\contentsline {subsection}{\numberline {9.5.1}Baseline Neural Network Performance}{173}{subsection.9.5.1}%
+\contentsline {subsection}{\numberline {9.5.2}\ac {PaTAS} as a Discriminator of Correct Predictions}{174}{subsection.9.5.2}%
+\contentsline {paragraph}{Feature Noise.}{175}{section*.255}%
+\contentsline {paragraph}{Label Flipping.}{176}{section*.256}%
+\contentsline {paragraph}{Combined Feature noise and Label flipping}{176}{section*.257}%
+\contentsline {subsection}{\numberline {9.5.3}Coverage versus Accuracy: \ac {PaTAS} versus Softmax Filtering}{176}{subsection.9.5.3}%
+\contentsline {paragraph}{Feature noise (\Cref {fig:coverage_accuracy_feature}).}{177}{section*.260}%
+\contentsline {paragraph}{Label flipping (\Cref {fig:coverage_accuracy_label}).}{177}{section*.262}%
+\contentsline {paragraph}{Combined noise (\Cref {fig:coverage_accuracy_combined}).}{178}{section*.264}%
+\contentsline {paragraph}{Summary.}{178}{section*.265}%
+\contentsline {subsection}{\numberline {9.5.4}Summary of Robustness Findings}{178}{subsection.9.5.4}%
+\contentsline {section}{\numberline {9.6}Calibration Quantification using Subjective Logic}{179}{section.9.6}%
+\contentsline {subsection}{\numberline {9.6.1}Methodology Recap}{179}{subsection.9.6.1}%
+\contentsline {subsection}{\numberline {9.6.2}Calibration Trust Across Noise Conditions}{180}{subsection.9.6.2}%
+\contentsline {paragraph}{Feature noise has limited impact on calibration.}{180}{section*.267}%
+\contentsline {paragraph}{Label flipping causes substantial miscalibration.}{181}{section*.268}%
+\contentsline {paragraph}{Combined noise compounds the effect.}{181}{section*.269}%
+\contentsline {paragraph}{Uncertainty remains negligible.}{181}{section*.270}%
+\contentsline {subsection}{\numberline {9.6.3}Dynamic Calibration Trust Assessment Under Feature Noise}{181}{subsection.9.6.3}%
+\contentsline {paragraph}{Calibration belief increases monotonically with softmax confidence at low noise.}{181}{section*.271}%
+\contentsline {paragraph}{The model becomes less confident as noise increases.}{182}{section*.273}%
+\contentsline {paragraph}{At moderate noise, miscalibration emerges at mid-confidence bins.}{183}{section*.274}%
+\contentsline {paragraph}{At high noise, calibration trust decouples from softmax confidence across the full spectrum.}{183}{section*.275}%
+\contentsline {subsection}{\numberline {9.6.4}Dynamic Calibration Trust Assessment Under Label Noise}{183}{subsection.9.6.4}%
+\contentsline {paragraph}{Label noise shifts the confidence distribution leftward more aggressively than feature noise.}{183}{section*.276}%
+\contentsline {paragraph}{Calibration belief is elevated but flat across most confidence bins, reflecting systematic miscalibration.}{183}{section*.277}%
+\contentsline {paragraph}{At high label noise, the highest confidence predictions become the most miscalibrated.}{183}{section*.278}%
+\contentsline {subsection}{\numberline {9.6.5}Comparison: Per-Prediction Trust vs.\ Calibration Trust}{185}{subsection.9.6.5}%
+\contentsline {section}{\numberline {9.7}Discussion}{185}{section.9.7}%
+\contentsline {subsection}{\numberline {9.7.1}What \ac {PaTAS} Adds Beyond Softmax Confidence}{185}{subsection.9.7.1}%
+\contentsline {subsection}{\numberline {9.7.2}Computational Cost}{186}{subsection.9.7.2}%
+\contentsline {paragraph}{Absolute latency.}{186}{section*.283}%
+\contentsline {paragraph}{Overhead ratio.}{187}{section*.284}%
+\contentsline {paragraph}{Implications for deployment.}{187}{section*.285}%
+\contentsline {subsection}{\numberline {9.7.3}Limitations}{187}{subsection.9.7.3}%
+\contentsline {subsection}{\numberline {9.7.4}Connection to the Broader Thesis}{188}{subsection.9.7.4}%
+\contentsline {section}{\numberline {9.8}Summary \& Conclusions}{189}{section.9.8}%
+\contentsline {chapter}{\numberline {10}Conclusion and Future Work}{191}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Synthesis of Contributions}{191}{section.10.1}%
+\contentsline {section}{\numberline {10.2}What This Thesis Does and Does Not Address}{193}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Limitations and Directions for Future Work}{193}{section.10.3}%
+\contentsline {paragraph}{From classification to generative and sequential models.}{193}{section*.292}%
+\contentsline {paragraph}{Toward explainability and accountability.}{193}{section*.293}%
+\contentsline {paragraph}{Robustness, adversarial settings, and privacy.}{194}{section*.294}%
+\contentsline {paragraph}{Standardization and operational deployment.}{194}{section*.295}%
+\contentsline {paragraph}{Toward learned trust propagation.}{194}{section*.296}%
+\contentsline {paragraph}{Closing the loop: trust-informed training.}{195}{section*.297}%
+\contentsline {section}{\numberline {10.4}Closing Remarks}{195}{section.10.4}%
+\contentsline {chapter}{Bibliography}{196}{section.10.4}%
+\contentsline {chapter}{\numberline {A}\ac {PaTAS-TP} Theorems and Proofs (\cref {sec:ptastheory})}{207}{appendix.A}%
+\contentsline {subsection}{\numberline {A.0.1}Key theorems}{207}{subsection.A.0.1}%
+\contentsline {subsection}{\numberline {A.0.2}Proof for Theorem~\ref {thm:convergence}}{208}{subsection.A.0.2}%
+\contentsline {subsection}{\numberline {A.0.3}Proof for Theorem~\ref {thm:infvac}}{209}{subsection.A.0.3}%
+\contentsline {subsection}{\numberline {A.0.4}Proof for Theorem~\ref {thm:sym}}{210}{subsection.A.0.4}%
+\contentsline {chapter}{\numberline {B}All Plots for \cref {chap:patas}}{213}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Accuracy plots during \ac {NN} Training}{214}{section.B.1}%
+\contentsline {section}{\numberline {B.2}\acs {PaTAS} Evaluation Results}{216}{section.B.2}%
+\contentsline {subsection}{\numberline {B.2.1}Cancer Dataset}{216}{subsection.B.2.1}%
+\contentsline {subsection}{\numberline {B.2.2}MNIST Dataset}{231}{subsection.B.2.2}%
+\contentsline {subsubsection}{vacuous -- vacuous}{233}{section*.354}%
+\contentsline {subsection}{\numberline {B.2.3}\ac {IPTA}}{235}{subsection.B.2.3}%
+\contentsline {chapter}{\numberline {C}More results from usecase chapter}{237}{appendix.C}%
+\contentsline {section}{\numberline {C.1}PaTAS Confidence Signal: Per-Sample Input Trust Feedforward}{237}{section.C.1}%
+\contentsline {paragraph}{Disbelief is no longer zero under feature noise.}{237}{section*.363}%
+\contentsline {paragraph}{The discriminative gap $\Delta b$ is larger than in the fully-trusted case.}{237}{section*.364}%
+\contentsline {paragraph}{The combined noise results show non-zero disbelief gaps.}{237}{section*.365}%
+\contentsline {section}{\numberline {C.2}Extended Coverage--Accuracy and ROC Analysis for Selective Prediction}{238}{section.C.2}%
+\contentsline {subsection}{\numberline {C.2.1}Feature Noise}{238}{subsection.C.2.1}%
+\contentsline {subsection}{\numberline {C.2.2}Label Flipping}{238}{subsection.C.2.2}%
+\contentsline {subsection}{\numberline {C.2.3}Combined Noise}{238}{subsection.C.2.3}%

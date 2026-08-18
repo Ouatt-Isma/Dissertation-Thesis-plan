@@ -911,7 +911,6 @@ INPUT ./img/rw/illustration.png
 INPUT ./img/rw/illustration.png
 INPUT ./img/rw/illustration.png
 INPUT ./img/rw/illustration.png
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplrc8t.tfm
 INPUT ./img/rw/beta_dist_map.pdf
 INPUT ./img/rw/beta_dist_map.pdf
 INPUT ./img/rw/beta_dist_map.pdf
@@ -921,8 +920,6 @@ INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplr8c.tfm
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplrc8t.vf
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplr8c.vf
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/public/mathpazo/zplmr7m.vf
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/mathpazo/fplmri.tfm
@@ -1034,7 +1031,11 @@ INPUT ./Chapters/sltheory.tex
 INPUT ./Chapters/sltheory.tex
 INPUT Chapters/sltheory.tex
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri8t.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplri8t.vf
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri8t.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri8t.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/ectt0800.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/ectt0800.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplbi8t.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplbi8t.vf
 INPUT ./img/dspg/newsynth.pdf
@@ -1084,7 +1085,6 @@ INPUT ./img/dspg/eval/analysis_only_time.pdf
 INPUT ./img/dspg/eval/analysis_only_time.pdf
 INPUT ./img/dspg/eval/analysis_only_time.pdf
 INPUT ./img/dspg/eval/analysis_only_time.pdf
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri8t.tfm
 INPUT ./img/dspg/eval/Figure_1.pdf
 INPUT ./img/dspg/eval/Figure_1.pdf
 INPUT ./img/dspg/eval/Figure_1.pdf
@@ -1095,7 +1095,6 @@ INPUT ./img/discount/eval.pdf
 INPUT ./img/discount/eval.pdf
 INPUT ./img/discount/eval.pdf
 INPUT ./img/discount/eval.pdf
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplri8t.vf
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/ectt0900.tfm
 INPUT ./Chapters/patasovl.tex
 INPUT ./Chapters/patasovl.tex
@@ -1278,6 +1277,9 @@ INPUT ./img/patas/trust_node/tnop.png
 INPUT ./img/patas/trust_node/tnop.png
 INPUT ./img/patas/trust_node/tnop.png
 INPUT ./img/patas/trust_node/tnop.png
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplrc8t.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplrc8t.vf
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
 INPUT ./img/patas/plot_ptas-128-t-t-ps4.pdf
 INPUT ./img/patas/plot_ptas-128-t-t-ps4.pdf
 INPUT ./img/patas/plot_ptas-128-t-t-ps4.pdf
@@ -1533,8 +1535,6 @@ INPUT ./latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolu
 INPUT ./latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf
 INPUT ./latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf
 INPUT ./latex/NN_Train_mnist_16_16_vacuous_vacuous_PathSize_None__accuracy_evolution.pdf
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplrc8t.vf
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
 INPUT ./latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf
 INPUT ./latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf
 INPUT ./latex/NN_Train_mnist_16_trust_trust_PathSize_None__accuracy_evolution.pdf
