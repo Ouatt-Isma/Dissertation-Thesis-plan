@@ -1,0 +1,421 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Masters/Doctoral Thesis 
+% LaTeX Template
+% Version 2.5 (27/8/17)
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Version 2.x major modifications by:
+% Vel (vel@latextemplates.com)
+%
+% This template is based on a template by:
+% Steve Gunn (http://users.ecs.soton.ac.uk/srg/softwaretools/document/templates/)
+% Sunil Patel (http://www.sunilpatel.co.uk/thesis-template/)
+%
+% Template license:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+11pt, % The default document font size, options: 10pt, 11pt, 12pt
+%oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
+english, % ngerman for German
+singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
+%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
+%nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
+%liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
+%toctotoc, % Uncomment to add the main table of contents to the table of contents
+%parskip, % Uncomment to add space between paragraphs
+%nohyperref, % Uncomment to not load the hyperref package
+headsepline, % Uncomment to get a line under the header
+%chapterinoneline, % Uncomment to place the chapter title next to the number on one line
+%consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
+]{MastersDoctoralThesis} % The class file specifying the document structure
+
+\input{packages}
+\input{macros}
+
+
+\newcounter{rq}
+\renewcommand{\therq}{\ac{RQ}\arabic{rq}}
+\newtcolorbox{rqbox}[1]{
+colback=white,
+colframe=black,
+boxrule=0.8pt,
+arc=3mm,
+title={\refstepcounter{rq}\therq: #1}
+}
+%----------------------------------------------------------------------------------------
+%	MARGIN SETTINGS
+%----------------------------------------------------------------------------------------
+
+\geometry{
+	paper=a4paper, % Change to letterpaper for US letter
+	inner=2.5cm, % Inner margin
+	outer=3.8cm, % Outer margin
+	bindingoffset=.5cm, % Binding offset
+	top=1.5cm, % Top margin
+	bottom=1.5cm, % Bottom margin
+	%showframe, % Uncomment to show how the type block is set on the page
+}
+
+%----------------------------------------------------------------------------------------
+%	THESIS INFORMATION
+%----------------------------------------------------------------------------------------
+% \newcommand{\ttitle}{Foundations of Subjective Logic for Trust Assessment and Propagation in AI Pipelines Across the Lifecycle}
+% \newcommand{\authorname}{Koffi Ismael Ouattara}
+% \newcommand{\supname}{Frank Kargl \\ Theo Dimitakos \\ Houda Labiod}
+% \newcommand{\degreename}{Dr.\ rer.\ nat.}
+% \newcommand{\groupname}{Distributed Systems Group (VS)}
+% \newcommand{\deptname}{Institut für Verteilte Systeme}
+% \newcommand{\univname}{Universität Ulm}
+% \newcommand{\keywordnames}{Subjective Logic, Neural Networks, Uncertainty Quantification, Trust Propagation, Trustworthy AI}
+% Dynamic Trust Assessment and Enforcement for Enhanced Neural Network Trustworthiness: An Evidence-Based Theory and Neuro-Symbolic Approach
+\thesistitle{Trust Assessment and Propagation in Classifier Neural Network Pipelines based on Subjective Logic}
+\supervisor{Frank Kargl \\ Theo Dimitrakos \\ Houda Labiod} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
+\examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
+\degree{Dr. rer nat.}
+\author{Koffi Ismael Ouattara} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
+\addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
+\subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
+\keywords{Subjective Logic,
+Neural Networks, Uncertainty Quantification, Trust Propagation, Trustworthy AI} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
+\university{\href{https://www.uni-ulm.de/}{Universität Ulm}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
+\department{\href{https://www.uni-ulm.de/in/vs/}{Institut für Verteilte Systeme}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\group{\href{https://www.uni-ulm.de/in/vs/}{Distributed Systems Group (VS)}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\faculty{\href{http://faculty.university.com}{}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
+
+% \AtBeginDocument{
+% \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
+% \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
+% % \hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
+% }
+
+
+% \includeonly{Chapters/Introduction,ovvw}
+% \includeonly{Chapters/Introduction,Chapters/rw,Chapters/publications}
+% \includeonly{Chapters/Datatrust}
+% \includeonly{Chapters/patasovl,Chapters/Datatrust,Chapters/ptas}
+% \includeonly{Chapters/usecase}
+
+
+%---------------- latexdiff markup (delta build only) ----------------
+\RequirePackage[normalem]{ulem}
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1}
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}}
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}}
+\providecommand{\DIFaddbegin}{}
+\providecommand{\DIFaddend}{}
+\providecommand{\DIFdelbegin}{}
+\providecommand{\DIFdelend}{}
+\providecommand{\DIFmodbegin}{}
+\providecommand{\DIFmodend}{}
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}}
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}}
+\providecommand{\DIFaddbeginFL}{}
+\providecommand{\DIFaddendFL}{}
+\providecommand{\DIFdelbeginFL}{}
+\providecommand{\DIFdelendFL}{}
+\includeonly{Chapters/ptas_delta}
+%---------------------------------------------------------------------
+
+\begin{document}
+\nocite{5gaa_trust4cav_2025,connect_d31_taf,10.1007/978-3-032-08887-1_4,10706345,10.1007/978-3-032-19096-3_17,trust-aidatatrust,patas,11124121,fotos2025actions,snn}
+
+
+\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+
+\pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+
+\AddToShipoutPictureBG*{%
+        \transparent{0.2}%
+        \includegraphics[scale=2]{phd_cover_background.pdf}%
+    }
+\begin{center}
+
+\vspace*{.06\textheight}
+{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
+\textsc{\Large Doctoral Thesis}\\[0.5cm] % Thesis type
+
+\HRule \\[0.4cm] % Horizontal line
+{\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
+\HRule \\[1.5cm] % Horizontal line
+ 
+% \begin{minipage}[t]{0.4\textwidth}
+% \begin{flushleft} \large
+% \emph{Author:}\\
+% \href{http://www.johnsmith.com}{\authorname} % Author name - remove the \href bracket to remove the link
+% \end{flushleft}
+% \end{minipage}
+% \begin{minipage}[t]{0.4\textwidth}
+% \begin{flushright} \large
+% \emph{Supervisor:} \\
+% \href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+% \end{flushright}
+% \end{minipage}
+
+\begin{minipage}[t]{0.45\textwidth}
+\begin{flushleft} \large
+\textbf{Author}\\
+\authorname
+\end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{flushright} \large
+\textbf{Supervisors}\\
+\supname
+\end{flushright}
+\end{minipage}
+
+\vspace{1.5cm}
+
+\begin{center}
+\large
+\textbf{Reviewers}\\
+Prof.\ Frank Kargl\\
+Prof.\ Konrad Rieck
+\end{center}
+
+ 
+\vfill
+
+\large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
+\textit{in the}\\[0.4cm]
+\groupname\\\deptname\\[2cm] % Research group name and department name
+ 
+\vfill
+
+{\large \today}\\[4cm] % Date
+%\includegraphics{Logo} % University/department logo - uncomment to place it
+ 
+\vfill
+\end{center}
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	DECLARATION PAGE
+%----------------------------------------------------------------------------------------
+
+% \begin{declaration}
+% \addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
+% \noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
+
+% \begin{itemize} 
+% \item This work was done wholly or mainly while in candidature for a research degree at this University.
+% \item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
+% \item Where I have consulted the published work of others, this is always clearly attributed.
+% \item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
+% \item I have acknowledged all main sources of help.
+% \item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
+% \end{itemize}
+ 
+% \noindent Signed:\\
+% \rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
+ 
+% \noindent Date:\\
+% \rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+% \end{declaration}
+
+\begin{declaration}
+\noindent I, \authorname, declare that this thesis titled:
+
+\begin{center}
+    {\bfseries \ttitle}
+\end{center}
+
+\noindent is the product of my own independent work and that I have used no sources 
+or materials other than those specified. The passages taken from other works, 
+either verbatim or paraphrased in the spirit of the original quote, are identified 
+in each individual case by indicating the source.
+
+\noindent I further declare that all my academic work was written in line with the principles 
+of proper academic research according to the official ``Satzung der Universität 
+Ulm zur Sicherung guter wissenschaftlicher Praxis'' (University Statute for the 
+Safeguarding of Proper Academic Practice).
+
+\vspace{3cm}
+
+Munich, \hfill \rule{5cm}{0.4pt}
+
+\hfill {\small \authorname, student number}
+
+\end{declaration}
+
+
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+\begin{acknowledgements}
+\addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
+This dissertation would not have been possible without the support of many people to whom I owe a great deal of gratitude.
+
+First of all, I would like to thank my family. My father and mother have supported me since the very first days of my life, long before this PhD was even a distant thought, and their unwavering belief in me has been a quiet but constant source of strength throughout this journey. I also would like to express my deepest gratitude to my wife, Flan Ermine, whose patience, encouragement, and love have meant more than words can express. Having her by my side during the most demanding moments of this work made all the difference.
+
+I am deeply grateful to my supervisors, Prof. Frank Kargl, Prof. Theo Dimitrakos, and Prof. Houda Labiod, for their guidance, availability, and trust throughout this research. Each of them brought a distinct and complementary perspective that shaped the direction and depth of this work in meaningful ways. I would also like to extend special thanks to Dr. Ioannis Krontiris, who, though not formally listed as a supervisor, was fully present in that role. His advice, feedback, and engagement were invaluable, and this dissertation is richer for his involvement. Beyond the scope of this PhD, Ioannis also took the time to share life advice that helped me grow as a person, and for that I am especially grateful.
+
+Among my colleagues, I owe particular thanks to Hussein Joumaa, the best friend I had at the office. Our conversations about everything and nothing were a constant source of relaxation and perspective. I am also grateful to Dr. Ana Petrovska, who helped me improve my writing and collaborated with me on several internal projects and publications, and to Gabriele Gelardi, for the many insightful technical discussions on Subjective Logic and neural networks.
+
+I also acknowledge the collaborators from outside Huawei, particularly from the University of Luxembourg: Prof. Gabriele Lenzini and Hüseyin Demirci, whose contributions enriched this work.
+
+Finally, I am grateful to the friends who supported me both technically and morally throughout this PhD. Dr. Hugues Kouakou, Dro Sigui, and Adou Seka were fellow PhD students with whom it was invaluable to share the experience and realize we were all facing the same challenges. Alex N'guettia was always available and helped me with many tasks both personal and academic. Camara Yoane also helped with many personal matters and gave me the space to focus on this work. David Kragbe and Oumar Ouattara supported me since the very beginning of this journey.
+
+
+\begin{comment}
+    \begin{itemize}
+    \item Family: Dad, Mom, who supported since my first days at school. at the really begining of my life/ and my Wife Flan Ermine now
+    \item Supervisors: Frank Kargl, Theo Dimitrakos, Houda Labiod
+    \item Yannis who was also a supervisor even unformally
+    \item Colleague: Hussein Joumaa (The best friend I had at the office, talking about everything and any thing, help to relax and change my mind), Ana Petrovska  (helped me to improve my writings and collaborated with me on several works internally and papers) , Gabriele (very insighfull technical discussion on subjective logic and neural networks)
+    \item Collaborators from outside huawei especially the university of luxembourg: Gabriele Lenzini, Hüseyin Demirci
+    \item Friends who supported me, both technically and morally: Hugues Kouakou, Dro Sigui and Adou Seka another phd students with whom it was really useful to discuss and see that we are facing the same problem as phd student, Alex N'guettia gave me useful and helped me for many personal tasks and was always available to help, Camara Yoane helped me for many personal tasks. 
+    \item All the other friends namely david, Cheick .. who also supported me since the begining of my Phd. 
+\end{itemize}
+
+\end{comment}
+
+\end{acknowledgements}
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+\noindent\enquote{\itshape There are no facts, only interpretations.}\bigbreak
+\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
+\hfill Friedrich Nietzsche
+\\
+\\
+\acfp{NN} are increasingly deployed in high-stakes domains where the reliability of predictions has direct consequences. However most evaluation practices focus on aggregate performance metrics, which neither distinguish sources of uncertainty nor capture how trustworthiness propagates across the stages of a learning pipeline. This thesis addresses this gap by developing a formal, interpretable, and operational methodology for trust assessment in classifier neural network pipelines, grounded in Subjective Logic (SL). The thesis comprises four contributions. First, a General Trust Assessment Methodology formalizes trust evaluation as a three-phase process (expression generation, \aclu{ATO}s quantification, and expression evaluation), and an optimized Trust Network Analysis algorithm ensures computational efficiency and consistency of SL inference over complex graph. Second, the \acf{PaTAS} operationalizes trust assessment across the full \acf{ML} pipeline: a trust assessment module quantifies reliability of the training dataset, and a trust propagation module mirrors neural network computations to carry trust from training dataset to parameters and from inputs through parameters to predictions, without modifying the underlying model. Third, a calibration-based trust formulation enables trust assessment in black-box settings using only observable model inputs and outputs. Fourth, an end-to-end evaluation on a 5G network energy classification task demonstrates that PaTAS trust opinions consistently discriminate between correct and incorrect predictions under controlled data quality variation, and produce signals coherent with the complementary calibration-trust view. Together, these contributions establish trust as a first-class, auditable object in neural network systems, and provide both the theoretical foundations and practical tools for its representation, quantification, and propagation.
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	LIST OF CONTENTS/FIGURES/TABLES PAGES
+%----------------------------------------------------------------------------------------
+
+\setcounter{tocdepth}{1}
+% \setcounter{tocdepth}{1}
+\tableofcontents % Prints the main table of contents
+
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+
+\chapter*{List of Acronyms}
+\addcontentsline{toc}{chapter}{List of Acronyms}
+
+
+\input{acronyms}
+%----------------------------------------------------------------------------------------
+%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
+%----------------------------------------------------------------------------------------
+
+% \begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
+
+% % The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
+
+% Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
+% %Constant Name & $Symbol$ & $Constant Value$ with units\\
+
+% \end{constants}
+
+%----------------------------------------------------------------------------------------
+%	SYMBOLS
+%----------------------------------------------------------------------------------------
+\chapter*{List of Symbols and Notation}
+\addcontentsline{toc}{chapter}{List of Symbols and Notation}
+
+
+\input{symbols}
+
+\include{Chapters/publications}
+
+% \chapter*{List of Definition}
+% \listoftheorems[ignoreall,show={definition}]
+%----------------------------------------------------------------------------------------
+%	DEDICATION
+%----------------------------------------------------------------------------------------
+
+% \dedicatory{For/Dedicated to/To my\ldots} 
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - CHAPTERS
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+
+\pagestyle{thesis} % Return the page headers back to the "thesis" style
+
+% Include the chapters of the thesis as separate files from the Chapters folder
+% Uncomment the lines as you write the chapters
+
+
+% \part{Introduction and Background}
+% \label{part:intro}
+\include{Chapters/Introduction}
+
+
+\include{Chapters/rw}
+% \part{Methodology, Analysis, Implementation, and Results}
+% \chapter*{Enhances Trust Analysis with Subjective Logic}
+% \label{part:tnasl}
+% \addcontentsline{toc}{chapter}{Enhances Trust Analysis with Subjective Logic}
+% \include{Chapters/referral}
+
+% \chapter*{Assessing Neural Network Trustworthiness}
+% \label{part:nntrust}
+% \addcontentsline{toc}{chapter}{Assessing Neural Network Trustworthiness}
+
+\include{Chapters/methodology}
+\include{Chapters/sltheory}
+
+\include{Chapters/patasovl}
+\include{Chapters/Datatrust}
+\include{Chapters/ptas_delta}
+
+\include{Chapters/nncalibration}
+
+\include{Chapters/usecase}
+\include{Chapters/conclusion}
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - APPENDICES
+%----------------------------------------------------------------------------------------
+% \include{ovvw}
+
+
+
+\addchaptertocentry{Bibliography}
+\printbibliography
+
+\appendix % Cue to tell LaTeX that the following "chapters" are Appendices
+
+% Include the appendices of the thesis as separate files from the Appendices folder
+% Uncomment the lines as you write the Appendices
+
+\include{Appendices/Patas_thm}
+\include{Appendices/filelist}
+\include{Appendices/appendices_usecase}
+
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+
+\end{document}  
