@@ -5818,6 +5818,170 @@
       \field{pages}{2278\bibrangedash 2324}
       \range{pages}{47}
     \endentry
+    \entry{lee2018mahalanobis}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=a74a7d6a839e48de367e41b7ec29d456}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Kimin},
+           giveni={K\bibinitperiod}}}%
+        {{hash=8044f34173b6a1b90718dcfeca1ea2d1}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Kibok},
+           giveni={K\bibinitperiod}}}%
+        {{hash=d09ea8631bf43468107b5ef02c5195aa}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Honglak},
+           giveni={H\bibinitperiod}}}%
+        {{hash=fee800f0aca3527e8b4b88969a2f9ac3}{%
+           family={Shin},
+           familyi={S\bibinitperiod},
+           given={Jinwoo},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{de639877fdc1a27c1516df7f3a147041}
+      \strng{fullhash}{e6d64a50919ba4827d40aab3ac532ffd}
+      \strng{fullhashraw}{e6d64a50919ba4827d40aab3ac532ffd}
+      \strng{bibnamehash}{de639877fdc1a27c1516df7f3a147041}
+      \strng{authorbibnamehash}{de639877fdc1a27c1516df7f3a147041}
+      \strng{authornamehash}{de639877fdc1a27c1516df7f3a147041}
+      \strng{authorfullhash}{e6d64a50919ba4827d40aab3ac532ffd}
+      \strng{authorfullhashraw}{e6d64a50919ba4827d40aab3ac532ffd}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in Neural Information Processing Systems}
+      \field{title}{A Simple Unified Framework for Detecting Out-of-Distribution Samples and Adversarial Attacks}
+      \field{volume}{31}
+      \field{year}{2018}
+    \endentry
+    \entry{sun2022knnood}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=5a43afb8b2967cab16c36ee1210af35a}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Yiyou},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=afdc44c102c4ca6ff163b048d2a99431}{%
+           family={Ming},
+           familyi={M\bibinitperiod},
+           given={Yifei},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=c0589c96d31566f50f3aa4f931a33357}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Xiaojin},
+           giveni={X\bibinitperiod}}}%
+        {{hash=06f816641758a5f532df3e6f297cfc97}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yixuan},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{78da6fa81d1dd52fad79c584605829c7}
+      \strng{fullhash}{9bd7e4d2bd45453107ddb911a8ac0ade}
+      \strng{fullhashraw}{9bd7e4d2bd45453107ddb911a8ac0ade}
+      \strng{bibnamehash}{78da6fa81d1dd52fad79c584605829c7}
+      \strng{authorbibnamehash}{78da6fa81d1dd52fad79c584605829c7}
+      \strng{authornamehash}{78da6fa81d1dd52fad79c584605829c7}
+      \strng{authorfullhash}{9bd7e4d2bd45453107ddb911a8ac0ade}
+      \strng{authorfullhashraw}{9bd7e4d2bd45453107ddb911a8ac0ade}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{International Conference on Machine Learning}
+      \field{title}{Out-of-Distribution Detection with Deep Nearest Neighbors}
+      \field{year}{2022}
+    \endentry
+    \entry{liu2020energy}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=bf0937c984897f61535a42273f8ef503}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Weitang},
+           giveni={W\bibinitperiod}}}%
+        {{hash=8654ac1693c7a0253e3fdaaa40942110}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Xiaoyun},
+           giveni={X\bibinitperiod}}}%
+        {{hash=3abd271e57ac317eba30410ddecb9dbb}{%
+           family={Owens},
+           familyi={O\bibinitperiod},
+           given={John\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=06f816641758a5f532df3e6f297cfc97}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yixuan},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{baadbf323e875b5af2abf53ec6b9bb41}
+      \strng{fullhash}{95fab732be4e320e341c10f789c3b180}
+      \strng{fullhashraw}{95fab732be4e320e341c10f789c3b180}
+      \strng{bibnamehash}{baadbf323e875b5af2abf53ec6b9bb41}
+      \strng{authorbibnamehash}{baadbf323e875b5af2abf53ec6b9bb41}
+      \strng{authornamehash}{baadbf323e875b5af2abf53ec6b9bb41}
+      \strng{authorfullhash}{95fab732be4e320e341c10f789c3b180}
+      \strng{authorfullhashraw}{95fab732be4e320e341c10f789c3b180}
+      \field{extraname}{3}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in Neural Information Processing Systems}
+      \field{title}{Energy-based Out-of-Distribution Detection}
+      \field{volume}{33}
+      \field{year}{2020}
+    \endentry
+    \entry{xiao2017fashionmnist}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=1af11a48cd2fa4be0cc93269e719b54c}{%
+           family={Xiao},
+           familyi={X\bibinitperiod},
+           given={Han},
+           giveni={H\bibinitperiod}}}%
+        {{hash=3c17107e356e9e329a5b82ae2f7cd441}{%
+           family={Rasul},
+           familyi={R\bibinitperiod},
+           given={Kashif},
+           giveni={K\bibinitperiod}}}%
+        {{hash=626b3b250f5889797be5d59aab9e0ac5}{%
+           family={Vollgraf},
+           familyi={V\bibinitperiod},
+           given={Roland},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{5290b4700ff446de9ce062ea732ebd9a}
+      \strng{fullhash}{5290b4700ff446de9ce062ea732ebd9a}
+      \strng{fullhashraw}{5290b4700ff446de9ce062ea732ebd9a}
+      \strng{bibnamehash}{5290b4700ff446de9ce062ea732ebd9a}
+      \strng{authorbibnamehash}{5290b4700ff446de9ce062ea732ebd9a}
+      \strng{authornamehash}{5290b4700ff446de9ce062ea732ebd9a}
+      \strng{authorfullhash}{5290b4700ff446de9ce062ea732ebd9a}
+      \strng{authorfullhashraw}{5290b4700ff446de9ce062ea732ebd9a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{title}{Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine Learning Algorithms}
+      \field{year}{2017}
+      \verb{eprint}
+      \verb 1708.07747
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/1708.07747
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/1708.07747
+      \endverb
+    \endentry
     \entry{feng2019trustyoucalibrationprobabilistic}{misc}{}{}
       \name{author}{5}{}{%
         {{hash=e6ec3d81d22c567a8091eb542e01d4ba}{%

@@ -2,7 +2,7 @@ PWD /Users/koffiismael/Documents/PhD/PaTAS/Dissertation-Thesis-plan
 INPUT /usr/local/texlive/2026/texmf.cnf
 INPUT /usr/local/texlive/2026/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/koffiismael/Documents/PhD/PaTAS/Dissertation-Thesis-plan/main.tex
+INPUT main.tex
 OUTPUT main.log
 INPUT ./MastersDoctoralThesis.cls
 INPUT MastersDoctoralThesis.cls
@@ -1246,7 +1246,6 @@ INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplri7t.vf
 INPUT ./img/patas/multprob2.png
 INPUT ./img/patas/multprob2.png
 INPUT ./img/patas/multprob2.png
@@ -1257,6 +1256,7 @@ INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplr8t.vf
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/vf/adobe/palatino/pplri7t.vf
 INPUT ./img/patas/trust_node/neuron.png
 INPUT ./img/patas/trust_node/neuron.png
 INPUT ./img/patas/trust_node/neuron.png
@@ -1295,6 +1295,8 @@ INPUT ./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf
 INPUT ./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf
 INPUT ./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf
 INPUT ./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_table2a.pdf
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplb8t.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/palatino/pplb8t.tfm
 INPUT ./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf
 INPUT ./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf
 INPUT ./latex/NN_Train_mnist_128_trust_trust_PathSize_4__ipta_trust_2a_vs_2c.pdf
