@@ -5641,6 +5641,137 @@
       \verb https://api.semanticscholar.org/CorpusID:247940068
       \endverb
     \endentry
+    \entry{angwin2016machine}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=48c46dd28c4e658ea1ad97ba6caec416}{%
+           family={Angwin},
+           familyi={A\bibinitperiod},
+           given={Julia},
+           giveni={J\bibinitperiod}}}%
+        {{hash=d6cdd970807360d93b4b80fb5eaf286c}{%
+           family={Larson},
+           familyi={L\bibinitperiod},
+           given={Jeff},
+           giveni={J\bibinitperiod}}}%
+        {{hash=c38031bb93ecf7c704bd8e91fcf7d68e}{%
+           family={Mattu},
+           familyi={M\bibinitperiod},
+           given={Surya},
+           giveni={S\bibinitperiod}}}%
+        {{hash=2839b86b8666c075c9d0a7fa27fcada6}{%
+           family={Kirchner},
+           familyi={K\bibinitperiod},
+           given={Lauren},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{8c0250e5b24818fda5232cc9a6d1cbfd}
+      \strng{fullhash}{71c3b7d7cbdf49ec4615c3ec0c0d76bb}
+      \strng{fullhashraw}{71c3b7d7cbdf49ec4615c3ec0c0d76bb}
+      \strng{bibnamehash}{8c0250e5b24818fda5232cc9a6d1cbfd}
+      \strng{authorbibnamehash}{8c0250e5b24818fda5232cc9a6d1cbfd}
+      \strng{authornamehash}{8c0250e5b24818fda5232cc9a6d1cbfd}
+      \strng{authorfullhash}{71c3b7d7cbdf49ec4615c3ec0c0d76bb}
+      \strng{authorfullhashraw}{71c3b7d7cbdf49ec4615c3ec0c0d76bb}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{ProPublica}
+      \field{title}{Machine Bias: There's software used across the country to predict future criminals. And it's biased against blacks}
+      \field{year}{2016}
+      \verb{urlraw}
+      \verb https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing
+      \endverb
+      \verb{url}
+      \verb https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing
+      \endverb
+    \endentry
+    \entry{stallkamp2012man}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=d7288bf0b47a9c60f30d376ad3fa7231}{%
+           family={Stallkamp},
+           familyi={S\bibinitperiod},
+           given={Johannes},
+           giveni={J\bibinitperiod}}}%
+        {{hash=d01b904ab87151c4aa7d962f5ec15923}{%
+           family={Schlipsing},
+           familyi={S\bibinitperiod},
+           given={Marc},
+           giveni={M\bibinitperiod}}}%
+        {{hash=bf69c144e563da1258d40c053d12dfb9}{%
+           family={Salmen},
+           familyi={S\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=7848f2716625f371de810c3dbdf1d904}{%
+           family={Igel},
+           familyi={I\bibinitperiod},
+           given={Christian},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{4b587fb849ed4a535eb2cb08750d0058}
+      \strng{fullhash}{f9adfe79a3cacc69a1f328f65c2747e3}
+      \strng{fullhashraw}{f9adfe79a3cacc69a1f328f65c2747e3}
+      \strng{bibnamehash}{4b587fb849ed4a535eb2cb08750d0058}
+      \strng{authorbibnamehash}{4b587fb849ed4a535eb2cb08750d0058}
+      \strng{authornamehash}{4b587fb849ed4a535eb2cb08750d0058}
+      \strng{authorfullhash}{f9adfe79a3cacc69a1f328f65c2747e3}
+      \strng{authorfullhashraw}{f9adfe79a3cacc69a1f328f65c2747e3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neural Networks}
+      \field{title}{Man vs. computer: Benchmarking machine learning algorithms for traffic sign recognition}
+      \field{volume}{32}
+      \field{year}{2012}
+      \field{pages}{323\bibrangedash 332}
+      \range{pages}{10}
+    \endentry
+    \entry{GTSRB}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Online}
+      \field{title}{German Traffic Sign Recognition Benchmark (GTSRB) Dataset}
+      \verb{urlraw}
+      \verb http://benchmark.ini.rub.de/
+      \endverb
+      \verb{url}
+      \verb http://benchmark.ini.rub.de/
+      \endverb
+    \endentry
+    \entry{valiant1984theory}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=5f6de757ace433a38a527a005db316f1}{%
+           family={Valiant},
+           familyi={V\bibinitperiod},
+           given={Leslie\bibnamedelima G.},
+           giveni={L\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \strng{namehash}{5f6de757ace433a38a527a005db316f1}
+      \strng{fullhash}{5f6de757ace433a38a527a005db316f1}
+      \strng{fullhashraw}{5f6de757ace433a38a527a005db316f1}
+      \strng{bibnamehash}{5f6de757ace433a38a527a005db316f1}
+      \strng{authorbibnamehash}{5f6de757ace433a38a527a005db316f1}
+      \strng{authornamehash}{5f6de757ace433a38a527a005db316f1}
+      \strng{authorfullhash}{5f6de757ace433a38a527a005db316f1}
+      \strng{authorfullhashraw}{5f6de757ace433a38a527a005db316f1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Communications of the ACM}
+      \field{number}{11}
+      \field{title}{A theory of the learnable}
+      \field{volume}{27}
+      \field{year}{1984}
+      \field{pages}{1134\bibrangedash 1142}
+      \range{pages}{9}
+    \endentry
     \entry{HAUSSLER1994248}{article}{}{}
       \name{author}{3}{}{%
         {{hash=b2ab6c3825f7511e8096e515df23c7e7}{%
@@ -5681,19 +5812,6 @@
       \field{year}{1994}
       \field{pages}{248\bibrangedash 292}
       \range{pages}{45}
-    \endentry
-    \entry{GTSRB}{misc}{}{}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labeltitlesource}{title}
-      \field{howpublished}{Online}
-      \field{title}{German Traffic Sign Recognition Benchmark (GTSRB) Dataset}
-      \verb{urlraw}
-      \verb http://benchmark.ini.rub.de/
-      \endverb
-      \verb{url}
-      \verb http://benchmark.ini.rub.de/
-      \endverb
     \endentry
     \entry{DBLP:journals/corr/abs-1106-1813}{article}{}{}
       \name{author}{4}{}{%
@@ -5737,6 +5855,92 @@
       \field{pages}{321\bibrangedash 357}
       \range{pages}{37}
     \endentry
+    \entry{peterson2019human}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=da56be2e50c23d3816149c77115f4dec}{%
+           family={Peterson},
+           familyi={P\bibinitperiod},
+           given={Joshua\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=56b343f9044bfe44e2bb46fdd4940969}{%
+           family={Battleday},
+           familyi={B\bibinitperiod},
+           given={Ruairidh\bibnamedelima M.},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=15f19cfb916ba0b8afb494f250ea80a2}{%
+           family={Griffiths},
+           familyi={G\bibinitperiod},
+           given={Thomas\bibnamedelima L.},
+           giveni={T\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=2a74ec28b731b015747e2af5f0b519e1}{%
+           family={Russakovsky},
+           familyi={R\bibinitperiod},
+           given={Olga},
+           giveni={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d3ded63f4cc61cb1c7e5e9e5d79e725b}
+      \strng{fullhash}{6b6b4a2034207cef2430da03e4a64c0e}
+      \strng{fullhashraw}{6b6b4a2034207cef2430da03e4a64c0e}
+      \strng{bibnamehash}{d3ded63f4cc61cb1c7e5e9e5d79e725b}
+      \strng{authorbibnamehash}{d3ded63f4cc61cb1c7e5e9e5d79e725b}
+      \strng{authornamehash}{d3ded63f4cc61cb1c7e5e9e5d79e725b}
+      \strng{authorfullhash}{6b6b4a2034207cef2430da03e4a64c0e}
+      \strng{authorfullhashraw}{6b6b4a2034207cef2430da03e4a64c0e}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)}
+      \field{title}{Human uncertainty makes classification more robust}
+      \field{year}{2019}
+      \field{pages}{9617\bibrangedash 9626}
+      \range{pages}{10}
+    \endentry
+    \entry{krizhevsky2009learningcifar}{report}{}{}
+      \name{author}{2}{}{%
+        {{hash=c5e3a676e2ac1164b3afcd539c131fc9}{%
+           family={Krizhevsky},
+           familyi={K\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9a8750ccdb2a4cf14d2655face1ce016}{%
+           family={Hinton},
+           familyi={H\bibinitperiod},
+           given={Geoffrey},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {University of Toronto}%
+      }
+      \list{location}{1}{%
+        {Toronto, Ontario}%
+      }
+      \list{publisher}{1}{%
+        {Technical report, University of Toronto}%
+      }
+      \strng{namehash}{db1738a0374d10d152a785eb2a94ce8c}
+      \strng{fullhash}{db1738a0374d10d152a785eb2a94ce8c}
+      \strng{fullhashraw}{db1738a0374d10d152a785eb2a94ce8c}
+      \strng{bibnamehash}{db1738a0374d10d152a785eb2a94ce8c}
+      \strng{authorbibnamehash}{db1738a0374d10d152a785eb2a94ce8c}
+      \strng{authornamehash}{db1738a0374d10d152a785eb2a94ce8c}
+      \strng{authorfullhash}{db1738a0374d10d152a785eb2a94ce8c}
+      \strng{authorfullhashraw}{db1738a0374d10d152a785eb2a94ce8c}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{0}
+      \field{title}{Learning multiple layers of features from tiny images}
+      \field{type}{techreport}
+      \field{year}{2009}
+      \verb{urlraw}
+      \verb https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf
+      \endverb
+    \endentry
     \entry{breastcancer-wisconsin}{misc}{}{}
       \name{author}{3}{}{%
         {{hash=e2eac4fa49f07739e1ece35a79138246}{%
@@ -5763,8 +5967,8 @@
       \strng{authornamehash}{88a1fa3d593088aeee7afc3f374f974c}
       \strng{authorfullhash}{88a1fa3d593088aeee7afc3f374f974c}
       \strng{authorfullhashraw}{88a1fa3d593088aeee7afc3f374f974c}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{\url{https://archive.ics.uci.edu/ml/datasets/breast+cancer+wisconsin+(diagnostic)}}
@@ -5806,8 +6010,8 @@
       \strng{authornamehash}{9e4c6012409dc8dd9b2aa198a2059804}
       \strng{authorfullhash}{c397b2e6efe8e5c6ca906410fc9e0ff9}
       \strng{authorfullhashraw}{c397b2e6efe8e5c6ca906410fc9e0ff9}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Proceedings of the IEEE}
@@ -6034,51 +6238,6 @@
       \endverb
       \verb{url}
       \verb https://arxiv.org/abs/1909.12358
-      \endverb
-    \endentry
-    \entry{krizhevsky2009learningcifar}{report}{}{}
-      \name{author}{2}{}{%
-        {{hash=c5e3a676e2ac1164b3afcd539c131fc9}{%
-           family={Krizhevsky},
-           familyi={K\bibinitperiod},
-           given={Alex},
-           giveni={A\bibinitperiod}}}%
-        {{hash=9a8750ccdb2a4cf14d2655face1ce016}{%
-           family={Hinton},
-           familyi={H\bibinitperiod},
-           given={Geoffrey},
-           giveni={G\bibinitperiod}}}%
-      }
-      \list{institution}{1}{%
-        {University of Toronto}%
-      }
-      \list{location}{1}{%
-        {Toronto, Ontario}%
-      }
-      \list{publisher}{1}{%
-        {Technical report, University of Toronto}%
-      }
-      \strng{namehash}{db1738a0374d10d152a785eb2a94ce8c}
-      \strng{fullhash}{db1738a0374d10d152a785eb2a94ce8c}
-      \strng{fullhashraw}{db1738a0374d10d152a785eb2a94ce8c}
-      \strng{bibnamehash}{db1738a0374d10d152a785eb2a94ce8c}
-      \strng{authorbibnamehash}{db1738a0374d10d152a785eb2a94ce8c}
-      \strng{authornamehash}{db1738a0374d10d152a785eb2a94ce8c}
-      \strng{authorfullhash}{db1738a0374d10d152a785eb2a94ce8c}
-      \strng{authorfullhashraw}{db1738a0374d10d152a785eb2a94ce8c}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{number}{0}
-      \field{title}{Learning multiple layers of features from tiny images}
-      \field{type}{techreport}
-      \field{year}{2009}
-      \verb{urlraw}
-      \verb https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf
-      \endverb
-      \verb{url}
-      \verb https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf
       \endverb
     \endentry
     \entry{zagoruyko2017wideresidualnetworks}{misc}{}{}

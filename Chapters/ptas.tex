@@ -16,9 +16,9 @@ Existing approaches to trust and uncertainty propagation in \acp{NN}, reviewed i
 
 This chapter provides a formal and operational answer to \ac{RQ}~3 by introducing a principled framework for trust propagation in \acp{NN}. Building on the foundations of \ac{SL} and the optimized trust inference mechanisms introduced in \cref{chap:tnasl}, we model trust as a transitive, structure-aware, and evidence-driven quantity that propagates through the network in parallel with standard \ac{NN} computation. The proposed framework integrates two complementary sources of trust: (i) the reliability of input features at inference time, and (ii) the reliability of model parameters, which themselves are derived from the trustworthiness of the training dataset. Importantly, this propagation is performed without modifying the underlying \ac{NN}, thereby preserving compatibility with existing architectures. Methodologically, \ac{PaTAS-TP} is a \emph{white-box} framework: it exploits the internal structure of the \ac{NN}, namely its layer topology, parameters, and activation paths, to compute trust at each intermediate computation rather than treating the model as an opaque input--output mapping. This places \ac{PaTAS-TP} in direct contrast with the black-box calibration approach of \cref{chap:bb}.
 
-More specifically, this chapter introduces the following contributions. First, we define a parallel trust computation mechanism based on Trust Nodes and Trust Functions, which mirror the structure of \ac{NN} computations and enable consistent trust propagation using \ac{SL} operators such as fusion and discounting. Second, we propose a parameter-trust update mechanism that estimates the reliability of learned parameters during training by leveraging gradient information, features trust, and label trust, thereby aligning parameter trust with the learning dynamics; the gradient-stability threshold it relies on is given a scale-tied, task-relative formulation that removes its only tuning burden. Third, we introduce the \ac{IPTA}, a context-aware mechanism that computes instance-specific trust scores by exploiting the activation paths involved in the prediction, and generalize it to convolutional architectures through activity-weighted path conditioning. Fourth, we instantiate the input-trust route with a conformity-based construction that derives per-feature opinions from training-data statistics, and compose it with the path trust into a single per-sample score. Finally, we demonstrate through empirical evaluation, including a comparative battery against established uncertainty and detection baselines and a test-data-free training-quality audit, that the proposed framework produces interpretable, consistent, and convergent trust estimates that reveal reliability gaps not captured by standard performance metrics.
+More specifically, this chapter introduces the following contributions. First, we define a parallel trust computation mechanism based on Trust Nodes and Trust Functions, which mirror the structure of \ac{NN} computations and enable consistent trust propagation using \ac{SL} operators such as fusion and discounting. Second, we propose a parameter-trust update mechanism that estimates the reliability of learned parameters during training by leveraging gradient information, features trust, and label trust, thereby aligning parameter trust with the learning dynamics; the gradient-stability threshold it relies on is given a scale-tied, task-relative formulation that removes its only tuning burden. Third, we introduce the \ac{IPTA}, a context-aware mechanism that computes instance-specific trust scores by exploiting the activation paths involved in the prediction, and generalize it to convolutional architectures through activity-weighted path conditioning. Fourth, we instantiate the input-trust route with a conformity-based construction that derives per-feature opinions from training-data statistics, and compose it with the path trust into a single per-sample score. Finally, we evaluate the framework empirically, on controlled degradations of three datasets and in a comparative battery against established uncertainty and detection baselines. The evaluation is designed to attribute rather than to aggregate. It shows that the detection of inputs which violate the training distribution is carried by the input-side conformity opinions, which on their own match or exceed the composed per-sample score on most detection tasks; that trust propagation adds detection signal mainly for corruptions that preserve the input marginals; and that the contribution unique to the propagation mechanism is on the model side, namely the class-level localisation of training-data poisoning and a training-quality signal that requires no test data. The trust estimates are stable under training and consistent with the theoretical properties established here, within two expressiveness limits that are stated up front in \cref{sec:dnn_trust}: the trust functions do not see the sign or magnitude of weights and activations, and output disbelief can only originate from input disbelief.
 
-The remainder of this chapter is organized as follows. \Cref{sec:trust_foundations} introduces the formal foundations of trust-aware \ac{NN} computation and defines the parallel trust function. \Cref{sec:tp_arch_ovvw} presents the \ac{PaTAS-TP} architecture, decomposing it into four functional modules: Trust Feedforward, Output-Trust Aggregation, \ac{GenIPTA}, and Parameter-Trust Update. \Cref{sec:perceptron} illustrates the core mechanisms of the Trust Feedforward through a simple perceptron example. \Cref{sec:dnn_trust} generalizes these mechanisms to deep \acp{NN} by introducing the Trust Function and layer-wise propagation, and discusses how \ac{DSPG} structure ensures the soundness of trust operators in non-sequential architectures. \Cref{sec:param_update} details the Parameter-Trust Update mechanism that refines trust in learned parameters during training. \Cref{sec:ptastheory} establishes theoretical properties of the framework, including convergence guarantees. \Cref{sec:inference-trust} instantiates the per-sample trust assessment used at inference time: the conformity-based input-trust construction, its a-priori applicability diagnostics, and the composed trust score. \Cref{sec:patas-tp-evaluation} provides comprehensive experimental validation of increasing complexity, from controlled degradations on three datasets to a comparative evaluation against uncertainty and detection baselines. Finally, \cref{sec:patas-discussion} discusses key findings and practical implications, and \cref{sec:patas-tp-conclusion} concludes the chapter.
+The remainder of this chapter is organized as follows. \Cref{sec:trust_foundations} introduces the formal foundations of trust-aware \ac{NN} computation and defines the parallel trust function. \Cref{sec:tp_arch_ovvw} presents the \ac{PaTAS-TP} architecture, decomposing it into four functional modules: Trust Feedforward, Output-Trust Aggregation, \ac{GenIPTA}, and Parameter-Trust Update. \Cref{sec:perceptron} illustrates the core mechanisms of the Trust Feedforward through a simple perceptron example. \Cref{sec:dnn_trust} generalizes these mechanisms to deep \acp{NN} by introducing the Trust Function and layer-wise propagation. The propagation is defined neuron by neuron and each step only needs the incoming opinions of one neuron, so it is well defined for any architecture and does not rely on the \ac{DSPG} property; the \ac{DSPG}-based analysis of \cref{chap:tnasl} remains relevant for alternative designs that build a single trust network across paths of neurons, and for the dataset trust assessment of \cref{chap:dataset-trust}. The same section states the independence assumption behind the fusion step, the fusion operator actually used, and the expressiveness limits of the trust functions. \Cref{sec:param_update} details the Parameter-Trust Update mechanism that refines trust in learned parameters during training. \Cref{sec:ptastheory} establishes theoretical properties of the framework, including the stability of the parameter-trust update and its operator-specific limits. \Cref{sec:inference-trust} instantiates the per-sample trust assessment used at inference time: the conformity-based input-trust construction, its a-priori applicability diagnostics, and the composed trust score. \Cref{sec:patas-tp-evaluation} provides comprehensive experimental validation of increasing complexity, from controlled degradations on three datasets to a comparative evaluation against uncertainty and detection baselines. Finally, \cref{sec:patas-discussion} discusses key findings and practical implications, and \cref{sec:patas-tp-conclusion} concludes the chapter.
 
 \section{Foundations of Trust Propagation in \aclu{NN}s}
 \label{sec:trust_foundations}
@@ -164,7 +164,7 @@ $$
 Let $\omega_x^s$ be the trust opinion on $x$ based on $s$ and  $\omega_x^{n_r}$ the trust opinion on $x$ based on $n_r$. Since the output neuron $N_3$ computes \cref{eq:smodel}, we associate this computation with two agents: $\theta_1 N_1$ from the context of computing \(\theta_1\cdot s\) and $\theta_2 N_2$ from the context of computing \(\theta_2\cdot n_r\). The trust opinion of the output neuron \(N_3\) on \(x\) is then: 
 \(\omega_x^{N_3} = \mathit{fusion}(\omega_x^{\theta_1 N_1}, \omega_x^{\theta_2 N_2})\). 
 
-The choice of the fusion operator (that we will later denote by \(\oplus\) ) depends on the semantics of \(s\) and \(n_r\) (see \cref{sec:fusion}). In this example, since $s$ and $n_r$ represent independent evidence, the fusion operator to use is cumulative fusion.
+The choice of the fusion operator (that we will later denote by \(\oplus\)) depends on the semantics of \(s\) and \(n_r\) (see \cref{sec:fusion}). In this two-feature example, $s$ and $n_r$ are independent measurements, so cumulative fusion, which accumulates the evidence of independent sources, would be semantically admissible. This independence does not survive the generalization to deep networks: from the second layer on, the opinions entering a neuron are computed from shared upstream inputs and parameters, and cumulative fusion would count the same evidence several times. \Cref{sec:fusion_choice} therefore instantiates $\oplus$ as an averaging fusion, and the perceptron example should be read with $\oplus$ as a generic fusion operator.
 
 Assuming full trust in the parameters \(\theta_1\) and \(\theta_2\), we have:
 \begin{align}
@@ -194,7 +194,7 @@ We now consider the general case where parameters are not assumed to be fully re
 \begin{figure}
     \centering
     \includegraphics[width=0.4\linewidth]{img/patas/multprob2.png}
-    \caption{Trust-propagation Trust Network with parameter trust\protect\footnote{The construction in our work based on the concept of Trust Node is local: it applies to a single neuron and models how the trust of one parameter modulates the trust contribution of one input. Extending this design across a path of neurons would yield a larger network whose graph structure may not satisfy the \ac{DSPG} property, as illustrated in \cref{fig:on_dspg_NN}.}.}
+    \caption{Trust-propagation Trust Network with parameter trust.}
     \label{fig:multprob2l}
 \end{figure}
 As depicted in \cref{fig:multprob2l}, we model this as a small \aclu{STN}. therefore:
@@ -212,6 +212,8 @@ Finally, the resulting output trust \(\omega_{y\prime}^{N_3}\) is calculated by 
 \end{pmatrix}) =  (T_{\theta_1}\otimes T_s)\oplus (T_{\theta_2}\otimes T_{n_r})
 \end{equation}
 Thus, we adjust the trust in the network output based on the trust in both the parameters and the features, ensuring that the trust propagation takes into account the trust in the parameters.
+
+\paragraph*{Locality of the construction.} The \ac{STN} of \cref{fig:multprob2l} is local: it applies to a single neuron and models how the trust in one parameter modulates the trust contribution of one input. The trust computation of a whole network is obtained by applying this local rule neuron by neuron (\cref{sec:dnn_trust}), and each application only needs the incoming opinions of the neuron at hand. The construction therefore does not require the \ac{DSPG} property of \cref{chap:tnasl}. An alternative design that builds a single trust network across a path of neurons, with one edge per parameter and one node per intermediate activation, yields a graph that in general is not a \ac{DSPG} (\cref{fig:on_dspg_NN}); for such designs, and for the dataset trust assessment of \cref{chap:dataset-trust}, the \ac{DSPG} synthesis and analysis of \cref{chap:tnasl} remain the relevant tools.
 
 This expression highlights two key mechanisms:
 \begin{itemize}
@@ -264,6 +266,18 @@ T_{x^{(l+1)}} = T_{\phi^{(l)}}(T_{z^{(l)}}),
     \item \( T_{\phi}^{(l)} \) is the trust-equivalent of the activation function. In this work, we set it to identity function as we use ReLU as activation function.
 \end{itemize}
 \end{definition}
+
+\paragraph*{Instantiation of the operators.} Throughout this thesis, $\otimes$ is the probability-sensitive trust discounting operator of \ac{SL}~\cite{josang2016subjective}: with $P_\theta = b_\theta + a\,u_\theta$ the projected probability of the parameter opinion,
+\(
+T_\theta \otimes T_x = \big(P_\theta\, b_x,\; P_\theta\, d_x,\; 1 - P_\theta (b_x + d_x)\big).
+\)
+The fusion $\bigoplus$ over the $d$ contributions entering a neuron is instantiated as an \emph{averaging} fusion: the fused opinion is the component-wise mean of the discounted opinions,
+\[
+\bigoplus_{i=1}^{d} \omega_i = \Big(\tfrac{1}{d}\textstyle\sum_i b_i,\; \tfrac{1}{d}\sum_i d_i,\; \tfrac{1}{d}\sum_i u_i\Big).
+\]
+This is the multi-source averaging belief fusion of van der Heijden et al.~\cite{vanderheijden2018multisourcefusionoperationssubjective} for sources of equal uncertainty; when the uncertainties differ, the general operator additionally weights every source by the product of the uncertainties of the other sources, whereas the implementation keeps equal weights, so that a layer reduces to a matrix product over projected probabilities and scales to wide layers. Both forms share the properties that matter here. They fuse all incoming opinions of a neuron at once, so the result does not depend on a pairwise grouping (averaging fusion is not associative). They are idempotent, so an opinion that reaches a neuron several times does not inflate the evidence. And they preserve zero belief and zero disbelief: if no input carries disbelief, the fused opinion carries none. Cumulative fusion, which the perceptron example of \cref{sec:perceptron} motivates for independent measurements, is deliberately not used; \cref{sec:fusion_choice} explains why.
+
+\paragraph*{Expressiveness limits.} Two restrictions of the trust functions should be stated before they are used, because they bound what the propagated opinions can express. First, the trust functions see only the opinions attached to the quantities entering a computation, not the quantities themselves: the sign and magnitude of a weight and the value of an activation do not enter \cref{def:trustfunc}, and the trust counterpart of the ReLU activation is the identity. An input that the network effectively ignores therefore contributes to the output opinion exactly as an input that dominates the decision, unless the inference path is restricted to the active neurons, as the \ac{IPTA} does (\cref{sec:tp_arch_ovvw}), or weighted by activity (\cref{sec:conv_trust}). Second, discounting scales belief and disbelief by the same factor $P_\theta$ and moves the remainder to uncertainty, and averaging fusion cannot create disbelief from opinions that carry none. Output disbelief can therefore only originate from disbelief in the input: untrustworthy parameters manifest as output uncertainty, never as output disbelief (\cref{thm:infvac} and \cref{rem:directional}). In particular, every experiment of \cref{sec:patas-tp-evaluation} that feeds a fully trusted input obtains $d = 0$ at the output by construction, and the informative quantity in those experiments is the split of the remaining mass between belief and uncertainty.
 
 \begin{figure}[htbp]
 \centering
@@ -353,9 +367,17 @@ T_{x^{(l+1)}} = T_{\phi^{(l)}}(T_{z^{(l)}}),
 \label{alg:trustff}
 \end{algorithm}
 
+\subsection{Dependence between Fused Opinions and the Choice of the Fusion Operator}
+\label{sec:fusion_choice}
+The fusion step of \cref{def:trustfunc} combines the discounted contributions $T_{\theta_i} \otimes T_{x_i}$ that enter a neuron. In the perceptron of \cref{sec:perceptron}, these contributions come from distinct input features and can be treated as independent evidence. The first layer is the only place where this assumption can hold. From the second layer on, all incoming opinions of a neuron are computed from the same set of upstream inputs and parameters, so the same evidence reaches the neuron through several paths, and a fusion operator that accumulates evidence counts it several times. Under cumulative fusion the output uncertainty would shrink with the width of the network alone: with two inputs carrying the opinion $(0.5, 0, 0.5)$, fully trusted parameters, no bias terms and one hidden layer of width $n$, the output opinion is $(0.8, 0, 0.2)$ for $n = 2$ and $(0.996, 0, 0.004)$ for $n = 128$, although no evidence has been added. The averaging fusion adopted above returns $(0.5, 0, 0.5)$ for every $n$: duplicated opinions do not inflate the evidence, and the operator is an equal-weight simplification of the one \ac{SL} prescribes for dependent sources (\cref{sec:fusion}).
+
+Averaging fusion removes the double counting of identical opinions, but it does not model the correlation between opinions that are dependent without being identical, and nested averaging across layers weights an input by the number of paths through which it reaches the output rather than treating it as one source. Consider an input $x_1$ with opinion $(0.5, 0, 0.5)$ that feeds two hidden neurons and a vacuous input $x_2$ that feeds only one of them, a situation that arises after \ac{IPTA} pruning. With fully trusted parameters and no bias terms, the output opinion is $(0.375, 0, 0.625)$, whereas averaging $x_1$ and $x_2$ directly as two sources gives $(0.25, 0, 0.75)$. The propagated opinion is thus a path-weighted rather than a source-weighted aggregate. This is a limitation of the design that the experiments of \cref{sec:patas-tp-evaluation} do not remove, and it is one reason why absolute trust values are only comparable within one architecture, as discussed in \cref{sec:patas-discussion}. The same argument applies to residual connections (\cref{sec:conv_trust}): the input and output opinions of a residual block are not independent, the output being computed from the input, so a skip connection is mapped to averaging rather than cumulative fusion.
+
+Because the local rule of \cref{def:trustfunc} is applied neuron by neuron, the properties established in \cref{sec:ptassyminv} use only properties of the operators themselves, namely the discounting of a vacuous opinion, the symmetry of discounting and fusion in belief and disbelief, and the preservation of zero belief or zero disbelief under fusion. They therefore hold for any architecture to which the rule is applied, independently of the graph structure.
+
 \subsection{Extension to Convolutional Architectures}
 \label{sec:conv_trust}
-The construction above is stated for fully connected layers, but nothing in it is specific to them; what changes in a \ac{CNN} is weight sharing. \ac{PaTAS-TP} mirrors a convolutional layer with $c_{\mathrm{in}}$ input channels, $c_{\mathrm{out}}$ output channels, and kernel size $k$ by one opinion matrix of shape $(c_{\mathrm{in}} k^2 + 1) \times c_{\mathrm{out}}$, exactly the flattened kernel matrix that also carries the layer's gradients, so the Parameter-Trust Update of \cref{sec:param_update} applies unchanged. For the feedforward, the input pixel opinions are fused into per-channel opinions and the layer is applied as the standard dense discount-fusion rule on the flattened kernel matrix; this \emph{uniform-trust reduction} is exact whenever the input trust is spatially uniform (the trusted, vacuous, and distrusted profiles used throughout) and an approximation otherwise. ReLU and pooling remain identity in opinion space, and a residual skip connection is mapped to averaging fusion of the block's input and output opinions.
+The construction above is stated for fully connected layers, but nothing in it is specific to them; what changes in a \ac{CNN} is weight sharing. \ac{PaTAS-TP} mirrors a convolutional layer with $c_{\mathrm{in}}$ input channels, $c_{\mathrm{out}}$ output channels, and kernel size $k$ by one opinion matrix of shape $(c_{\mathrm{in}} k^2 + 1) \times c_{\mathrm{out}}$, exactly the flattened kernel matrix that also carries the layer's gradients, so the Parameter-Trust Update of \cref{sec:param_update} applies unchanged. For the feedforward, the input pixel opinions are fused into per-channel opinions and the layer is applied as the standard dense discount-fusion rule on the flattened kernel matrix; this \emph{uniform-trust reduction} is exact whenever the input trust is spatially uniform (the trusted, vacuous, and distrusted profiles used throughout) and an approximation otherwise. ReLU and pooling remain identity in opinion space, and a residual skip connection is mapped to averaging fusion of the block's input and output opinions: the two opinions are dependent, the output of the block being computed from its input, so cumulative fusion would count the input's evidence twice (\cref{sec:fusion_choice}).
 
 The \ac{IPTA} generalizes as well, with one conceptual change. In a fully connected network an inference path selects \emph{weights}: inactive neurons remove their rows from the trust computation. Under weight sharing a path cannot select weights, only \emph{applications} of a filter, since the same kernel is applied at every spatial position. The convolutional \ac{IPTA} therefore weights each channel's contribution by its \emph{participation degree}: the fraction of spatial positions at which the channel's post-ReLU output is positive for the given input. Formally, the discount-fusion step becomes a weighted fusion in which row $j$ of the opinion matrix enters with weight $w_j$ equal to the producing channel's participation (bias rows keep weight $1$). For binary participation this reduces \emph{exactly} to the row-pruned computation of the fully connected \ac{IPTA}, so the convolutional variant is a strict generalization: channels the forward pass never activated contribute nothing, and partially active channels contribute in proportion to their actual involvement in the decision.
 
@@ -385,48 +407,47 @@ In particular, \cref{eq:gd2} shows that gradients factor into an error term and 
 \caption{Parameter-Trust Update Algorithm}
 \begin{algorithmic}[1]
 
-    \Function{ParameterTrustUpdate}{$g, T_y, \epsilon$}
-        \State \textbf{Summary:} Revises and updates the trust parameters of the Trust Nodes by combining gradient evidence, label trust, and neuron input trust, under mini-batch training.
-
-        \State \textbf{Step 1:} Compute the aggregated trust in the labels
-        \State $T_{y_\text{batch}}  \longleftarrow  \bigwedge_{y \in y_\text{batch}} T_y$
-        
+    \Function{ParameterTrustUpdate}{$g, T_y, T_{lr}, \epsilon$}
+        \Statex \hspace{\algorithmicindent}\textbf{Summary:} Revises and updates the trust parameters of the Trust Nodes by combining gradient evidence, label trust, and neuron input trust, under mini-batch training.
+        \Statex \hspace{\algorithmicindent}\textbf{Step 1:} Compute the batch label opinion (component-wise mean over the batch)
+        \State $T_{y_\text{batch}}  \longleftarrow  \frac{1}{|y_\text{batch}|}\sum_{y \in y_\text{batch}} T_y$ \label{alg:l:ybatch}
         \For{each layer $l$}
             \For{each neuron $n_i^{(l)}$}
-                \State \textbf{Step 2:} Gather gradient $g$ for neuron $n_i^{(l)}$
-                \State $g^{(l)}_i  \longleftarrow  \{\, g^{(l)}_{i,j} \;|\; j \in \mathcal{N}(i)\,\}$
-
-                \State \textbf{Step 3:} Compute trust for neuron $n_i^{(l)}$
-                \State $T_{n_i \mid y_\text{batch}}  \longleftarrow $ \Call{NodeTrust}{$g^{(l)}_i, T_{y_\text{batch}}, \epsilon$}
-
-                \State \textbf{Step 4:} Deduce overall trust in neuron $n_i^{(l)}$ 
-                \State $T_{n_i \parallel Y_\text{batch}}  \longleftarrow $ \Call{DeduceTrust}{$T_{n_i \mid y_\text{batch}}, T_{n_i \mid \overline{y_\text{batch}}}, T_{y_\text{batch}}$}
-                
+                \Statex \hspace{3\dimexpr\algorithmicindent\relax}\textbf{Step 2:} Gather gradient $g$ for neuron $n_i^{(l)}$
+                \State $g^{(l)}_i  \longleftarrow  \{\, g^{(l)}_{i,j} \;|\; j \in \mathcal{N}(i)\,\}$ \label{alg:l:grad}
+                \Statex \hspace{3\dimexpr\algorithmicindent\relax}\textbf{Step 3:} Compute trust for neuron $n_i^{(l)}$
+                \State $T_{n_i \mid y_\text{batch}}  \longleftarrow $ \Call{NodeTrust}{$g^{(l)}_i, T_{y_\text{batch}}, \epsilon$} \label{alg:l:nodetrust}
+                \Statex \hspace{3\dimexpr\algorithmicindent\relax}\textbf{Step 4:} Deduce overall trust in neuron $n_i^{(l)}$
+                \State $T_{n_i \parallel Y_\text{batch}}  \longleftarrow $ \Call{DeduceTrust}{$T_{n_i \mid y_\text{batch}}, T_{n_i \mid \lnot y_\text{batch}}, T_{y_\text{batch}}$} \label{alg:l:deduce}
                 \For{each incoming edge $j$ to $n_i^{(l)}$}
-                    \State \textbf{Step 5:} Revise parameter trust with node trust
-                    \State $T_{\theta_{i,j}^{(l)}}  \longleftarrow $ \Call{Revise}{$T_{\theta_{i,j}^{(l)}}, T_{n_i \parallel Y_\text{batch}}$}
-                    
-                    \State \textbf{Step 6:} Update parameter trust with auxiliary factors
-                    \State $T_{\theta_{i,j}^{(l)}} \longleftarrow $ \Call{Update}{$T_{\theta_{i,j}^{(l)}}, T_{x^{(l-1)}_j}, T_{y_\text{batch}}$}
+                    \Statex \hspace{4\dimexpr\algorithmicindent\relax}\textbf{Step 5:} Revise parameter trust with node trust
+                    \State $T_{\theta_{i,j}^{(l)}}  \longleftarrow $ \Call{Revise}{$T_{\theta_{i,j}^{(l)}}, T_{n_i \parallel Y_\text{batch}}$} \label{alg:l:revise}
+                    \Statex \hspace{4\dimexpr\algorithmicindent\relax}\textbf{Step 6:} Update parameter trust with auxiliary factors
+                    \State $T_{\theta_{i,j}^{(l)}} \longleftarrow $ \Call{Update}{$T_{\theta_{i,j}^{(l)}}, T_{x^{(l-1)}_j}, T_{y_\text{batch}}, T_{lr}$} \label{alg:l:update}
                 \EndFor
             \EndFor
         \EndFor
     \EndFunction
 
     \Function{NodeTrust}{$g^{(l)}_i, T_{y_\text{batch}}, \epsilon$}
-        \State Count $r$: \#edges with $|g^{(l)}_{i,j}| < \epsilon$ 
-        \State Count $s$: \#edges with $|g^{(l)}_{i,j}| \geq \epsilon$ 
+        \State Count $r$: \#edges with $|g^{(l)}_{i,j}| < \epsilon$
+        \State Count $s$: \#edges with $|g^{(l)}_{i,j}| \geq \epsilon$
         \State Map $(r,s)$ into a binomial opinion using Baseline-Prior Quantification
         \State \Return $T_{n_i \mid y_\text{batch}}$
     \EndFunction
 
-    \Function{DeduceTrust}{$T_{n_i \mid y_\text{batch}}, T_{n_i \mid \overline{y_\text{batch}}}, T_{y_\text{batch}}$}
-        \State $T_{n_i \mid \overline{y_\text{batch}}}  \longleftarrow  (0,0,1)$
-        \State \Return $T_{n_i \parallel Y_\text{batch}} = T_{y_\text{batch}} \circledcirc (T_{n_i \mid y_\text{batch}}, T_{n_i \mid \overline{y_\text{batch}}})$
+    \Function{DeduceTrust}{$T_{n_i \mid y_\text{batch}}, T_{n_i \mid \lnot y_\text{batch}}, T_{y_\text{batch}}$}
+        \State $T_{n_i \mid \lnot y_\text{batch}}  \longleftarrow  (0,0,1)$
+        \State \Return $T_{n_i \parallel Y_\text{batch}} = T_{y_\text{batch}} \circledcirc (T_{n_i \mid y_\text{batch}}, T_{n_i \mid \lnot y_\text{batch}})$
     \EndFunction
 
     \Function{Revise}{$T_{\theta_{i,j}^{(l)}}, T_{n_i \parallel Y_\text{batch}}$}
-        \State \Return $T_{\theta_{i,j}^{(l)}} \circleddash T_{n_i \parallel Y_\text{batch}}$
+        \State \Return $T_{\theta_{i,j}^{(l)}} \circleddash T_{n_i \parallel Y_\text{batch}}$ \Comment{$\circleddash$ instantiated as averaging fusion}
+    \EndFunction
+
+    \Function{Update}{$T_{\theta}, T_{x}, T_{y_\text{batch}}, T_{lr}$}
+        \State $T_{\theta} \longleftarrow T_{\theta} \circleddash (T_{\theta} \odot T_{lr})$ \Comment{learning-rate adjustment} \label{alg:l:lr}
+        \State \Return $T_{\theta} \odot (T_{x} \oslash T_{y_\text{batch}})$ \label{alg:l:aux}
     \EndFunction
 
 \end{algorithmic}
@@ -434,41 +455,45 @@ In particular, \cref{eq:gd2} shows that gradients factor into an error term and 
 \end{algorithm}
 The procedure described in \cref{alg:trustupdate} operates at the level of mini-batches and iterates over all layers and neurons of the network. For each neuron, it first derives a trust assessment based on gradient evidence and the reliability of the training labels, and then propagates this information to update the trust associated with its incoming parameters. More specifically, the update process can be decomposed into three main stages: (i) aggregation of label trust at the batch level, (ii) estimation of neuron-level trust using gradient information, and (iii) revision and adjustment of parameter trust using both inferred neuron trust and auxiliary factors such as input trust. We now describe these steps in detail.
 
-The algorithm runs once per batch and begins by computing a combined trust opinion over all labels in the current batch (Line 3):
+The algorithm runs once per batch and begins by computing a single label opinion for the batch (Line~\ref{alg:l:ybatch}):
 \(
-T_{y_\text{batch}} = \bigwedge_{y \in y_\text{batch}} T_y
-\).
-
-This combined opinion serves as a foundation for conditioning the trust in each parameter.
+T_{y_\text{batch}} = \frac{1}{|y_\text{batch}|}\sum_{y \in y_\text{batch}} T_y ,
+\)
+the component-wise mean of the label opinions of the batch, computed separately for each output class in the output layer. This is the averaging fusion of \cref{sec:fusion_choice} applied to the label opinions, and it serves as the conditioning opinion for every parameter update of the batch. A conjunction of the label opinions, which would express that \emph{all} labels of the batch are correct, is not appropriate here: the projected probability is multiplicative under \ac{SL} multiplication, so a batch of 64 labels with projected probability $0.95$ each would receive a batch opinion with projected probability $0.95^{64} \approx 0.04$, and the batch opinion would measure the batch size rather than the label quality. The mean opinion is idempotent, so a batch of identical label opinions carries that label opinion unchanged, and its expectation does not depend on the batch size. The remaining dependence of the parameter trust on the batch size enters through the gradient evidence and is quantified in \cref{sec:patas-tp-evaluation}.
 
 For each neuron \(n_i^{(l)}\) at index \(i\) in layer \(l\), we compute:
 \begin{itemize}
-    \item \( T_{n_{i}^{(l)} \mid y_\text{batch}} \) (Line 9), the trust conditioned on the current batch labels. This is inferred by checking each incoming weight gradient \( g^{(l)}_{i,j} \): if \( |g^{(l)}_{i,j}| < \epsilon\)\footnote{The threshold $\epsilon$ is not a tuned hyperparameter but a sensitivity parameter used only in the \textsc{NodeTrust} function to distinguish weak from strong gradients. Its value can be chosen in different reasonable ways depending on the desired sensitivity.}
- it is counted as positive evidence \( r \), otherwise as negative evidence \( s \). These counts are then mapped into a binomial opinion using the Baseline-Prior Quantification model.
-    \item \( T_{n_{i}^{(l)} \mid \overline{y_\text{batch}}} \), the trust when the true batch labels are not \( y_\text{batch} \). Since no concrete evidence is available for this case, it is initialized to a vacuous opinion: \( (0, 0, 1) \).
-    \item A deduced trust \( T_{n_{i}^{(l)} \parallel Y_\text{batch}} \) (Line 11) using the inferential deduction operator \( \circledcirc \), combining the two conditional opinions with \( T_{y_\text{batch}} \).
+    \item \( T_{n_{i}^{(l)} \mid y_\text{batch}} \) (Line~\ref{alg:l:nodetrust}), the trust conditioned on the current batch labels. This is inferred by checking each incoming weight gradient \( g^{(l)}_{i,j} \): if \( |g^{(l)}_{i,j}| < \epsilon\)\footnote{The threshold $\epsilon$ is used only in the \textsc{NodeTrust} function, to separate weak from strong gradients. It is a sensitivity parameter that has to be set relative to the gradient scale of the task: Experiment~1 compares four values and retains $\epsilon = 0.1$ for the breast-cancer task, the MNIST experiments use $\epsilon = 0.05$, and the scale-tied rule introduced below removes the choice altogether.}
+ it is counted as positive evidence \( r \), otherwise as negative evidence \( s \). These counts are then mapped into a binomial opinion using the Baseline-Prior Quantification model with prior weight $W = 2$, so that the uncertainty of this opinion, $u = W / (|\mathcal{N}(i)| + W)$, depends only on the number of incoming edges of the neuron.
+    \item \( T_{n_{i}^{(l)} \mid \lnot y_\text{batch}} \), the trust when the true batch labels are not \( y_\text{batch} \). Since no concrete evidence is available for this case, it is initialized to a vacuous opinion: \( (0, 0, 1) \).
+    \item A deduced trust \( T_{n_{i}^{(l)} \parallel Y_\text{batch}} \) (Line~\ref{alg:l:deduce}) using the inferential deduction operator \( \circledcirc \), combining the two conditional opinions with \( T_{y_\text{batch}} \).
 \end{itemize}
 
 Then for each incoming edge \( j\) of neuron \( i \), the parameter trust \( T_{\theta_{i,j}^{(l)}} \) is updated in two stages:
 \begin{enumerate}
-    \item Revision with deduced trust using fusion (Line 14):
+    \item Revision with the deduced trust (Line~\ref{alg:l:revise}), using the trust-revision operator $\circleddash$ of \cref{tab:symbols}:
     \[
-    T_{\theta_{i,j}^{(l)}} \leftarrow T_{\theta_{i,j}^{(l)}} \circleddash T_{n_{i}^{(l)} \parallel Y_\text{batch}}
+    T_{\theta_{i,j}^{(l)}} \leftarrow T_{\theta_{i,j}^{(l)}} \circleddash T_{n_{i}^{(l)} \parallel Y_\text{batch}} .
     \]
-    \item Adjustment with auxiliary factors (Line 16):
-    During training, the update of parameter $\theta_{i,j}^{(l)}$ depends not only on its current value but also on auxiliary factors such as the input $x^{(l-1)}_{j}$, and the label $y_\text{batch}$ (see \cref{eq:gd1,eq:gd2}).  
-To reflect this, we adjust parameter trust using:
+    Throughout this thesis $\circleddash$ is instantiated as the two-source averaging belief fusion $\underline{\oplus}$ (\cref{sec:fusion}); the consequences of this choice, and of the alternatives, are analysed in \cref{sec:ptas_convergence}.
+    \item Adjustment with auxiliary factors (Line~\ref{alg:l:update}):
+    During training, the update of parameter $\theta_{i,j}^{(l)}$ depends not only on its current value but also on auxiliary factors such as the input $x^{(l-1)}_{j}$, the label $y_\text{batch}$ and the learning rate (see \cref{eq:gd1,eq:gd2}).
+To reflect this, the parameter trust is first adjusted with the learning-rate opinion $T_{lr}$ (Line~\ref{alg:l:lr}),
+\[
+    T_{\theta_{i,j}^{(l)}} \longleftarrow T_{\theta_{i,j}^{(l)}} \circleddash \big(T_{\theta_{i,j}^{(l)}} \odot T_{lr}\big),
+\]
+and then with the input and label opinions (Line~\ref{alg:l:aux}):
 \[
     T_{\theta_{i,j}^{(l)}} \longleftarrow T_{\theta_{i,j}^{(l)}} \odot (T_{x_j^{(l-1)}} \oslash T_{y_\text{batch}}).
 \]
-Here, $\odot$ is the binomial multiplication operator and $\oslash$ is defined as:
+Here, $\odot$ is the binomial multiplication operator, evaluated with the base rate $a = 1/2$ used throughout this chapter, and $\oslash$ is defined as:
 \begin{align}
     (b,d,u) &= (b_1, d_1, u_1) \oslash (b_2, d_2, u_2), \\
     b &= \min(b_1, b_2), \notag \\
     d &= \max(d_1, d_2), \notag \\
     u &= 1 - (b+d). \notag
 \end{align}
-This formulation reflects the fact that both unreliable features and mislabeled data can strongly bias parameter updates. The use of min and max provides a conservative aggregation: trust cannot exceed the weakest evidence, and distrust must reflect the strongest warning. It ensures that trust in both input features and labels is explicitly propagated into the parameter trust.
+This formulation reflects the fact that both unreliable features and mislabeled data can strongly bias parameter updates. The use of min and max provides a conservative aggregation: trust cannot exceed the weakest evidence, and distrust must reflect the strongest warning. It ensures that trust in both input features and labels is explicitly propagated into the parameter trust. In all experiments of this chapter the learning-rate opinion is fully trusted, $T_{lr} = (1,0,0)$. With base rate $1/2$, multiplication by a dogmatic opinion is not the identity: $(b,d,u) \odot (1,0,0) = (b + u/3,\; d,\; 2u/3)$ moves one third of the uncertainty mass to belief, and $(b,d,u) \odot (0,0,1) = (b/3,\; d,\; 1 - b/3 - d)$ moves two thirds of the belief mass to uncertainty. The two multiplication sub-steps therefore contract the parameter uncertainty at every batch under trusted data and expand it under vacuous data; \cref{sec:ptas_convergence} shows how this interacts with the averaging revision.
 \end{enumerate}
 
 \paragraph*{Scale-Tied Threshold.}
@@ -476,31 +501,31 @@ The threshold $\epsilon$ used by \textsc{NodeTrust} separates weak from strong g
 
 
 \paragraph*{Computational Overhead during \ac{NN} training.}
-The proposed \ac{PaTAS-TP} operates in parallel with the primary \ac{NN} and mirrors its computational flow using subjective opinions. As a result, the overall execution time cost can be roughly expressed as:
+The proposed \ac{PaTAS-TP} operates in parallel with the primary \ac{NN} and mirrors its computational flow using subjective opinions. When the two computations run on separate hardware and exchange gradients asynchronously, the execution time cost is bounded by
 \[
 \mathcal{C}_{\text{with \ac{PaTAS-TP}}} \approx \mathcal{C}_{\text{comm}} + \max(\mathcal{C}_{\text{PaTAS-TP}}, \mathcal{C}_{\text{NN}}),
 \]
-where \(\mathcal{C}_{\text{comm}}\) denotes the communication overhead between the \ac{NN} and the \ac{PaTAS-TP}. Each \ac{PaTAS-TP} operation is performed over subjective opinions represented by three stored components (trust, distrust, uncertainty; the base rate is a shared constant), giving an analytical estimate of roughly \(\mathcal{C}_{\text{PaTAS-TP}} \approx 3 \times \mathcal{C}_{\text{NN}}\) for the propagation arithmetic and a threefold memory overhead for the opinion parameters. Measured costs on an A100 GPU (784-512-10 architecture) are consistent with this estimate at inference time: trust propagation costs $0.43$\,ms per batch, amortizing from $14.8\times$ overhead at batch size 1 to $3.7\times$ at batch size 512. During training, wall-clock time is instead dominated by the synchronous gradient stream and revision when \ac{PaTAS-TP} is attached in-process (roughly $7$ versus $2200$ optimization steps per second unattached), an engineering bottleneck of the socket-based prototype rather than of the method; since training requires no value from \ac{PaTAS-TP}, the revision can equally run as an offline replay of the recorded gradient stream after training, which is how all cached experiments in this chapter were produced. The parallel design thus ensures that trust propagation does not interfere with the execution of the primary model, making the approach suitable for monitoring scenarios where interpretability and reliability are critical.
+where \(\mathcal{C}_{\text{comm}}\) denotes the communication overhead between the \ac{NN} and the \ac{PaTAS-TP}. Each \ac{PaTAS-TP} operation is performed over subjective opinions represented by three stored components (belief, disbelief, uncertainty; the base rate is a shared constant), giving an analytical estimate of roughly \(\mathcal{C}_{\text{PaTAS-TP}} \approx 3 \times \mathcal{C}_{\text{NN}}\) for the propagation arithmetic and a threefold memory overhead for the opinion parameters. Measured costs on an A100 GPU (784-512-10 architecture) are consistent with this estimate at inference time: trust propagation costs $0.43$\,ms per batch, amortizing from $14.8\times$ overhead at batch size 1 to $3.7\times$ at batch size 512. The prototype used in this chapter does not realise the parallel bound during training: the \ac{NN} and \ac{PaTAS-TP} are synchronised batch by batch through a socket, so the training loop advances at the pace of the slower side, roughly $7$ optimization steps per second with \ac{PaTAS-TP} attached against $2200$ unattached for the same architecture on the same GPU. This is an engineering bottleneck of the socket-based prototype rather than of the method, and it affects wall-clock time only: training never consumes a value produced by \ac{PaTAS-TP}, so the learned parameters are identical with and without it. The training results of this chapter were obtained with \ac{PaTAS-TP} attached to the training loop in this synchronous mode, the revision consuming the gradient stream of the run; when several \ac{PaTAS-TP} configurations were compared for one trained model, the prototype regenerated the gradient stream by re-running the training loop from the cached model, and the replications reported in \cref{sec:patas-tp-evaluation} avoid this shortcut by attaching \ac{PaTAS-TP} to a fresh training run for every configuration. Since the revision does not feed back into training, it could equally be computed after training from a recorded gradient stream, which is the deployment mode described by the parallel bound above. The parallel design thus ensures that trust propagation does not interfere with the execution of the primary model, making the approach suitable for monitoring scenarios where interpretability and reliability are critical.
 
 
 
 \section{Theoretical Properties of \ac{PaTAS-TP}}\label{sec:ptastheory}
 To ensure that \ac{PaTAS-TP} provides reliable and interpretable trust assessments, we first establish several fundamental theoretical properties describing its stability and consistency.
-\subsection{Convergence of \ac{PaTAS-TP}}
+\subsection{Stability of the Parameter-Trust Update}
 \label{sec:ptas_convergence}
 
-The convergence of the \ac{PaTAS-TP} is governed by the stability of its inputs and the structure of its recursive Parameter-Trust Update process. During training, \ac{PaTAS-TP} updates the internal trust opinions associated with network parameters using trust opinions on the inputs, labels, hyperparameters, and gradient information. This update mechanism is outlined in \cref{alg:trustupdate}. 
-\begin{theorem}[Convergence of \ac{PaTAS-TP} Creation\footnote{All proofs of the theorems in this section are provided in the \appp (\cref{app:proof}).}]\label{thm:convergence}
-Let a \ac{NN} be trained until convergence, and let its associated \ac{PaTAS-TP} operate with:
-\begin{itemize}
-    \item a stable input trust assessment $T_x$,
-    \item a stable label trust assessment $T_y$,
-    % \item a stable hyperparameter trust $T_{lr}$,
-    % \item and converging back propagation gradients $g$.
-\end{itemize}
+The stability of \ac{PaTAS-TP} is governed by the stability of its inputs and by the structure of its recursive Parameter-Trust Update. During training, \ac{PaTAS-TP} updates the internal trust opinions associated with network parameters using trust opinions on the inputs, labels and learning rate, and gradient information, as outlined in \cref{alg:trustupdate}. The update is a composition of three maps applied once per batch: the revision $T_\theta \circleddash q_n$ with the deduced node opinion $q_n = T_{n_i \parallel Y_\text{batch}}$, the learning-rate adjustment $T_\theta \circleddash (T_\theta \odot T_{lr})$, and the auxiliary adjustment $T_\theta \odot (T_x \oslash T_{y_\text{batch}})$. Two facts shape its behaviour. First, the node opinion $q_n$ is computed from thresholded mini-batch gradients, so its belief and disbelief change from batch to batch even after the network has converged, because stochastic gradient descent does not make the gradients constant; only its uncertainty $u_q = W / (|\mathcal{N}(i)| + W)$ is the same at every step. Second, none of the \ac{SL} fusion operators forms a group with the set of opinions: cumulative and belief constraint fusion have the vacuous opinion as identity but no inverses, since evidence cannot be negative; averaging fusion has no identity and is not associative; weighted fusion is not associative; and averaging and weighted fusion are idempotent, which in a group only the identity can be. The behaviour of the revision therefore has to be established operator by operator rather than from group structure, and the limit, when it exists, is not the same for all operators.
 
-Let $T_\theta^{(n)}$ denote the trust opinion at iteration $n$ for parameter $\theta$. If the revision of the trust in the weights is performed as specified in \cref{alg:trustupdate}, then the \ac{PaTAS-TP} parameter will converge. Specifically, if the revision operator $\circleddash$ is a fusion operator, the sequence converges to the update opinion $q$ (or remains at $\omega_0$ if $q$ is vacuous, as established in \cref{thm:arithm}); if $\circleddash$ is the binomial multiplication operator $\odot$, the sequence converges componentwise, with disbelief accumulating toward $1$ when $d_q > 0$ and belief decaying toward $0$ when the projected probability $p_q < 1$, as established in \cref{thm:geo}.
+\begin{theorem}[Stability of the Parameter-Trust Update\footnote{All proofs of the theorems in this section are provided in the \appp (\cref{app:proof}).}]\label{thm:convergence}
+Let $T_\theta^{(n)} = (b^{(n)}, d^{(n)}, u^{(n)})$ denote the opinion on a parameter $\theta$ after $n$ applications of \cref{alg:trustupdate} with base rate $a = 1/2$ and learning-rate opinion $T_{lr} = (1,0,0)$, and let $q_n$ be the node opinion fused at step $n$, with constant uncertainty $u_q$.
+\begin{enumerate}
+    \item \emph{Constant evidence, revision only.} If $q_n = q$ for all $n$ and the two adjustment sub-steps are omitted, the sequence $\omega_{n+1} = \omega_n \circleddash q$ converges, with a limit that depends on the operator. For a non-vacuous $q$: to $q$ under averaging and weighted fusion, geometrically; to the dogmatic opinion $(b_q, d_q, 0)/(b_q + d_q)$ under cumulative fusion, the uncertainty decaying like $1/n$; and, under belief constraint fusion, to the vertex $(1,0,0)$ if $b_q > d_q$, to $(0,1,0)$ if $d_q > b_q$, and to a dogmatic opinion whose ratio is fixed by $\omega_0$ if $b_q = d_q$. For a vacuous $q$, averaging fusion drives the sequence to the vacuous opinion, while cumulative, weighted and belief constraint fusion leave $\omega_0$ unchanged (\cref{thm:abf,thm:cbf,thm:bcf}).
+    \item \emph{Implemented update, trusted data.} With averaging revision and a fully trusted conditioning factor $T_x \oslash T_{y_\text{batch}} = (1,0,0)$, as holds for the first layer under trusted data, the full update is a contraction of the parameter uncertainty: $u^{(n)}$ converges to $u^* = u_q / 15$ from any initial opinion, whatever the sequence $(q_n)$. Once $u^{(n)}$ has reached $u^*$, the parameter disbelief obeys $d^{(n+1)} = \tfrac{15}{16}\, d^{(n)} + \tfrac{1}{16}\, d_{q_n}$ and $b^{(n)} = 1 - d^{(n)} - u^*$. Hence, if the batch evidence converges, $d_{q_n} \to d_q$, then $T_\theta^{(n)} \to (1 - d_q - u_q/15,\; d_q,\; u_q/15)$; if the batch evidence is stationary but fluctuating, $T_\theta^{(n)}$ does not converge but is an exponential moving average of the recent batch evidence with an effective window of $16$ batches, and its fluctuations are bounded by those of the evidence (\cref{thm:implemented}).
+    \item \emph{Multiplicative revision.} If $\circleddash$ is replaced by the binomial multiplication $\odot$ and $q_n = q$, the sequence converges componentwise: to $(0, 1, 0)$ if $d_q > 0$, and to $\big(b^*, d_0, 1 - b^* - d_0\big)$ with $b^* = (1 - d_0)\, b_q / (2 - b_q)$ if $d_q = 0$ (\cref{thm:geo}).
+\end{enumerate}
 \end{theorem}
+
+\paragraph*{What parameter uncertainty means under each operator.} \Cref{thm:convergence} makes explicit which operator is compatible with the intended reading of parameter trust. Under cumulative or belief constraint revision, the uncertainty of every parameter opinion would go to zero over a long training run whatever the quality of the data, so parameter uncertainty would carry no information and only the belief-to-disbelief ratio would remain. Under averaging or weighted revision alone, the opposite problem arises: each revision gives the new batch opinion a weight of one half (averaging) or of at least $c_q/(1 + c_q)$ with $c_q = 1 - u_q$ (weighted), so the parameter trust would reflect only the last few batches. The implemented update sits between these extremes because the two multiplication sub-steps, by contracting the uncertainty, reduce the weight of each new batch to $1/16$ under trusted data: the parameter disbelief is a running mean of the fraction of strong gradients over roughly the last sixteen batches, not an accumulation over the whole training. This is the reading adopted in the rest of the chapter: the parameter trust tracks the \emph{recent} stability of the gradients of a parameter, and it converges exactly when that stability does. Under vacuous input or label opinions the auxiliary sub-step multiplies by a vacuous opinion, which removes belief instead of uncertainty; the parameter uncertainty then settles at a high level (about $0.8$ in the worked example of \cref{app:proof}), and it is in this regime that parameter uncertainty carries the data-trust information. The empirical consequences of the choice of operator, including the parameter opinions obtained under each operator, are reported in \cref{sec:patas-tp-evaluation}.
 
 
 \subsection{Symmetry and Invariance Properties of \ac{PaTAS-TP}}\label{sec:ptassyminv}
@@ -539,7 +564,7 @@ and the belief in one output equals the disbelief in the other:
 b_y = d_{\bar{y}}, \quad d_y = b_{\bar{y}}.
 \)
 \end{theorem}
-\begin{remark}
+\begin{remark}\label{rem:directional}
 For a fully trusted input $x = (1,0,0)$, the discounting operator yields $\omega_\theta \otimes x = (P, 0, 1-P)$, which has zero disbelief. Since fusion preserves zero disbelief across inputs, the output satisfies $d_y = 0$. By the same argument applied to $\bar{x} = (0,1,0)$, which produces zero belief after discounting, the output satisfies $b_{\bar{y}} = 0$. 
 
 In other words, a fully trusted input $x = (1,0,0)$ yields an output with $d_y = 0$, and a fully distrusted input $\bar{x} = (0,1,0)$ yields an output with $b_{\bar{y}} = 0$. 
@@ -578,12 +603,14 @@ s(x) = P(x)\, \hat{p}(x) + \big(1 - P(x)\big)/K,
 \]
 with $K$ the number of classes: when trust is full the score is the model's confidence, and as trust vanishes the score falls to the uninformed prior $1/K$ rather than to an arbitrary zero. An alternative, fully propagated variant pushes the per-feature opinions through the \ac{IPTA} feedforward instead of composing at the output; the averaging fusion inside the opinion product compresses the per-sample input signal, so serial composition is used as the default and the propagated variant is kept as an ablation.
 
+\paragraph*{Relation to the score used in \cref{chap:usecase}.} Three per-sample scores appear in this thesis and they should not be confused. The path trust $P_{\mathrm{model}}(x)$ and the trust factor $P(x)$ are projected probabilities of opinions produced by the propagation. The score $s(x)$ combines $P(x)$ with the model's confidence and is used only where a selective-prediction score has to be compared with confidence-type baselines, as in Experiment~4. \Cref{chap:usecase} uses the per-sample input opinions during training, where they shape the parameter opinions, but its main results feed a \emph{fully trusted} input opinion for every test sample through the full network; the output opinion of the predicted class is then reweighted by the softmax score $\hat{p}$ of that class, $(b, d, u) \mapsto (\hat{p}\, b,\; (1 - \hat{p})\, d,\; \hat{p}(1 - \hat{p})\, u)$ up to normalisation, and the filtering score is the projected probability $\pi = b + u/2$ of the reweighted opinion. Only the complementary experiment of \cref{sec:per_sample} propagates per-sample input opinions, which corresponds to the fully propagated variant mentioned above. The scores are therefore related as follows. Before reweighting, the opinion behind $\pi$ is the model-side quantity of this chapter, the output opinion under a fully trusted input, computed over the full network rather than over the activation path of the \ac{IPTA}; the softmax reweighting plays the role that the confidence factor plays in $s(x)$, with a different combination rule; and $P(x)$ adds the input-conformity factor that \cref{chap:usecase} does not use at test time. Which score is appropriate depends on whether the deployment needs a trust factor (gate) or a ranking score among trusted inputs.
+
 \paragraph*{Deployment Semantics.}
 The composed score is a trust-weighted confidence, not a replacement for confidence. Confidence ranks correctness \emph{within} the training distribution; trust flags inputs and parameters that \emph{leave} it. The operational reading is therefore two-stage: gate on the trust factor (and on the applicability diagnostics), then rank by confidence among trusted inputs. The evaluation below makes this division of labor explicit and quantifies each factor's contribution separately.
 
 \section{Evaluation and Results}\label{sec:patas-tp-evaluation}
 
-The goal of our evaluation is to validate the \ac{PaTAS-TP} both theoretically and empirically. Specifically, we aim to demonstrate that \ac{PaTAS-TP} produces interpretable trust estimates that (i) converge during training under specific conditions, (ii) respect symmetry and invariance properties, and (iii) are able to provide interpretable assessments under realistic conditions such as noisy features, corrupted labels, or adversarial perturbations, and (iv) provide per-sample and model-level signals whose value against established uncertainty-quantification and detection baselines can be attributed to identifiable mechanisms.  
+The goal of our evaluation is to validate the \ac{PaTAS-TP} both theoretically and empirically. Specifically, we aim to demonstrate that \ac{PaTAS-TP} produces interpretable trust estimates that (i) stabilise during training in the sense of \cref{thm:convergence}, (ii) respect symmetry and invariance properties, (iii) respond to degradations such as noisy features, corrupted labels, or adversarial perturbations in a way that is consistent with the trust profiles assigned to the data, and (iv) provide per-sample and model-level signals whose value against established uncertainty-quantification and detection baselines can be attributed to identifiable mechanisms.  
 
 Our evaluation approach combines controlled synthetic degradations with real-world datasets. We vary the trustworthiness of inputs ranging from fully trusted, fully uncertain, to fully distrusted, and observe how the created \ac{PaTAS-TP} propagates these trust assessments through the network. For each scenario, we track three complementary metrics: trust mass (belief), uncertainty mass, and distrust mass (disbelief) of the trust opinion output by \ac{PaTAS-TP}. We also compare these values against standard model accuracy (after training) to understand how input trust affects output reliability. We conduct four experiments of increasing complexity:  
 \begin{enumerate}
@@ -598,7 +625,7 @@ Our evaluation approach combines controlled synthetic degradations with real-wor
 \subsection{Experimental Setup }
 \subsubsection{Experiment 1 - Breast Cancer Classification}\label{exp:1}
 We use the \href{https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic}{Breast Cancer Wisconsin (Diagnostic) Dataset}~\cite{breastcancer-wisconsin}, containing 569 samples with 30 numeric features (e.g., radius, area, symmetry) derived from breast mass fine needle aspirates. The \ac{NN} classifies the tumors into benign or malignant categories.
-The \ac{NN} architecture consists of 30 input neurons, 16 hidden neurons, and 2 output neurons, with ReLU activation in the hidden layer and Softmax in the output. The model is trained for 15 epochs with a batch size of 64 and a learning rate of 0.2, achieving 98\% accuracy when the data are not modified.
+The \ac{NN} architecture consists of 30 input neurons, 16 hidden neurons, and 2 output neurons, with ReLU activation in the hidden layer and Softmax in the output. The model is trained for 15 epochs with a batch size of 64 and a learning rate of 0.2, and reaches a test accuracy of about $97\%$ when the data are not modified (\cref{tab:cancer_results}).
 
 For the evaluation, we degrade the training data in controlled ways and assign corresponding Subjective Logic trust assessments. We consider three extreme trust profiles (fully trusted \((1,0,0)\), fully distrusted \((0,1,0)\), and fully uncertain \((0,0,1)\)) for both input features and label. These are combined (for inputs and label assessment) to form nine combinations. These dogmatic and vacuous opinions serve as canonical boundary cases in Subjective Logic: they express maximal trust, maximal distrust, and maximal uncertainty, respectively. We additionally include two intermediate scenarios, introduced below, to illustrate how \ac{PaTAS-TP} behaves under partial trust and partial distrust.
 
@@ -628,6 +655,8 @@ x' \sim U\left(\min\left(\text{features}\right), \max\left(\text{features}\right
 \]
  
 \noindent Label degradation is modeled analogously: uncertainty is introduced via random label noise, while full distrust is represented by a complete replacement of the labels.
+
+\paragraph*{Joint assignment of profiles and degradations.} The trust profile and the degradation are assigned jointly: a \emph{distrusted} label opinion is always paired with replaced labels, a \emph{vacuous} opinion with random noise, and a \emph{trusted} opinion with unmodified data. The experiment therefore does not test whether \ac{PaTAS-TP} detects a degradation from the data; the opinions are inputs, and the experiment tests how the propagated trust behaves when the opinions are correct. Some outcomes are then guaranteed by the calculus rather than found empirically. A fully distrusted feature or label opinion enters the update of every parameter through the auxiliary sub-step of \cref{alg:trustupdate} (Line~\ref{alg:l:aux}), where multiplication by an opinion with disbelief one forces the parameter disbelief to one, so that the output trust mass is zero whatever the model has learned. The informative part of the experiment lies in the trusted, vacuous and intermediate profiles, where the outcome is not fixed in advance, and in the relation between trust mass and accuracy across those profiles.
 
 Finally, to complement the boundary cases, we evaluate two intermediate trust scenarios: 
 \begin{enumerate}[\roman*.]
@@ -665,7 +694,7 @@ We compare the composed per-sample \ac{PaTAS-TP} score against maximum softmax p
 Primary datasets are MNIST and Fashion-MNIST~\cite{xiao2017fashionmnist} (784-512-10, 20 epochs); GTSRB~\cite{GTSRB} (1024-128-43, train-standardized) serves as an applicability-boundary case flagged in advance by the diagnostics of \cref{sec:conformity}. The battery is additionally run on convolutional networks with the conv \ac{IPTA} of \cref{sec:conv_trust}: residual \acp{CNN} on MNIST and Fashion-MNIST ($99.3\%$ and $88.7\%$ test accuracy) and a deeper residual \ac{CNN} on CIFAR-10 ($84.5\% \pm 0.8$); the networks use no normalization layers, so trust propagation covers every parameter. Every method is evaluated identically on clean test data, under Bernoulli-uniform feature corruption, on mixed batches pooling clean and corrupted inputs 1:1, and as an \ac{OOD} detector (Fashion-MNIST for MNIST and vice versa, identical preprocessing). Beyond uniform noise, two harder paired corruptions probe the conformity model at its declared blind spots: a random circular translation of up to two pixels (marginal-preserving) and a low-amplitude trigger alpha-blended into the image center (an adaptive adversary staying within the feature range). Post-hoc isotonic calibration is fit per method on a held-out clean split; reported detection metrics are the area under the ROC curve (AUROC) for separating the relevant classes of inputs, as mean over three evaluation seeds (seed dispersion at most $\pm 0.005$ unless stated). The training-quality audit trains the MNIST network under increasing label-flip rates and reads the model-side trust with no test data; it is complemented by a dead-unit confound check and by single-channel poisoning controls (label flip only, trigger patch only) for Experiment~3's combined corruption.
 
 \paragraph*{Implementation Details for All Experiments}
-During inference, multiplication operations in the feedforward phase are implemented using SL trust discounting, while addition operations employ a generalized SL averaging fusion operator to support summations over multiple inputs (see \cref{def:trustfunc}). Trust revision uses the same averaging fusion. The \ac{PaTAS-TP} framework and \ac{NN} were implemented in Python 3.13 using NumPy. Two main modules were developed: \texttt{PrimaryNN}, which handles \ac{NN} structure, training, and inference, and \texttt{PaTAS-TP}, which implements  propagation functions defined in the operational flow (\cref{fig:ptasoperation}). These modules interact to dynamically evaluate and update trust during feedforward and backpropagation. The comparative battery of Experiment~4 additionally implements the baseline methods in PyTorch within the same repository, sharing data loading, preprocessing, and evaluation code across all methods. The full implementation, including all modules, dependencies, and experiment scripts, is available on \href{https://github.com/Ouatt-Isma/PaTAS-Subjective-Logic-Neural-Networks-Trust-Assessment}{github}, with detailed instructions for reproducing all experiments.
+During inference, multiplication operations in the feedforward phase are implemented using \ac{SL} trust discounting, while addition operations employ the averaging fusion of \cref{sec:dnn_trust}, the component-wise mean of the discounted opinions, which handles summations over any number of inputs and coincides with the multi-source averaging fusion of van der Heijden et al.~\cite{vanderheijden2018multisourcefusionoperationssubjective} for sources of equal uncertainty. Trust revision (\cref{alg:trustupdate}) uses the two-source averaging belief fusion, and the batch label opinion is the component-wise mean of the label opinions of the batch. After every operator application the opinion is renormalised so that $b + d + u = 1$; this is immaterial for the operators used here but would be required if belief constraint fusion were iterated, since its naive iteration in floating point lets the mass sum drift (\cref{app:proof}). The base rate is $a = 1/2$ throughout. Two implementations of \ac{PaTAS-TP} were used during this work: the original prototype, with which Experiments~1 to~3 were first run, and the released implementation, which vectorises the same operators and with which Experiment~4, the replications and the ablations reported below were produced. Where a quantity is reported from both, the text states which implementation it comes from. The \ac{PaTAS-TP} framework and \ac{NN} were implemented in Python 3.13 using NumPy. Two main modules were developed: \texttt{PrimaryNN}, which handles \ac{NN} structure, training, and inference, and \texttt{PaTAS-TP}, which implements  propagation functions defined in the operational flow (\cref{fig:ptasoperation}). These modules interact to dynamically evaluate and update trust during feedforward and backpropagation. The comparative battery of Experiment~4 additionally implements the baseline methods in PyTorch within the same repository, sharing data loading, preprocessing, and evaluation code across all methods. The full implementation, including all modules, dependencies, and experiment scripts, is available on \href{https://github.com/Ouatt-Isma/PaTAS-Subjective-Logic-Neural-Networks-Trust-Assessment}{github}, with detailed instructions for reproducing all experiments.
 
 \subsection{Results and Analysis}
 
@@ -704,7 +733,7 @@ All the results are depicted in Figures in the \appp and summarized in \cref{tab
 
 
 \begin{itemize}
-\item \emph{Convergence of Trust Assessment}: when accuracy converges, trust assessment converges as expected.
+\item \emph{Stability of the trust assessment}: once the gradients of the network have stabilised, the trust assessment stabilises as well, as \cref{thm:convergence} predicts; it keeps fluctuating slightly with the mini-batch evidence.
 \item \emph{Inference on fully uncertain input yields fully uncertain output}: a fully uncertain input always produces a fully uncertain output.
 \item \emph{Symmetric Inference}: when input trust assessments are symmetric, the inference results remain symmetric.
 \end{itemize}
@@ -735,11 +764,11 @@ distrust & distrust & 0.00 & 0.00 & 0.00 & 0.00 & 65.49 & 40.35 \\
 \hline
 \end{tabular}%
 }
-\caption{Summary of final trust mass across four values of $\epsilon$ and corresponding train/test accuracies for the Breast Cancer Classification Experiment.}
+\caption{Summary of final trust mass across four values of $\epsilon$ and corresponding train/test accuracies for the Breast Cancer Classification Experiment (original prototype, one run per cell; a five-seed replication with the released implementation is given in \cref{tab:cancer_seeds}).}
 \label{tab:cancer_results}
 \end{table}
 
-The results for this experiment are summarized in \cref{tab:cancer_results}. When both features and labels are clean, the model steadily improves and achieves high accuracy (98.68\% training, 97.69\% test), and \ac{PaTAS-TP} produces the highest trust mass across all conditions (0.88 for $\epsilon=0.1$). Clean features with corrupted labels cause test accuracy to collapse to 2.63\%, even while training accuracy remains artificially high at 99.12\%; the model learns the wrong mapping but does so confidently. Correspondingly, trust mass falls to zero regardless of $\epsilon$, correctly signaling the unreliability of the learned parameters. With vacuous labels, performance degrades moderately (65.71\% train, 74.56\% test) and trust mass remains low (0.29). Corrupted features eliminate the ability to learn in any combination: trust mass is zero in all distrust-$X$ rows and test accuracy never exceeds 43.86\%. 
+The results for this experiment are summarized in \cref{tab:cancer_results}. When both features and labels are clean, the model steadily improves and achieves high accuracy (98.68\% training, 96.49\% test), and \ac{PaTAS-TP} produces the highest trust mass across all conditions (0.88 for $\epsilon=0.1$). Clean features with corrupted labels cause test accuracy to collapse to 2.63\%, even while training accuracy remains artificially high at 99.12\%; the model learns the wrong mapping but does so confidently. Correspondingly, trust mass falls to zero regardless of $\epsilon$, correctly signaling the unreliability of the learned parameters. With vacuous labels, performance degrades moderately (65.71\% train, 74.56\% test) and trust mass remains low (0.29). Corrupted features eliminate the ability to learn in any combination: trust mass is zero in all distrust-$X$ rows and test accuracy never exceeds 43.86\%. 
 
 The mild-degradation scenario $(0.25, 0, 0.75)$ for features and labels is the only intermediate case and behaves as expected: with only 15\% of features perturbed and no distrust component, trust mass reaches 0.38 for $\epsilon=0.1$, outperforming every row that uses a fully vacuous opinion for either features or labels. This suggests that an analyst who can bound the degradation and express it as a partial-trust opinion, rather than defaulting to full uncertainty, obtains a more optimistic trust assessment.
 
@@ -777,10 +806,64 @@ vacuous  & 0.34 & 0.30 & 0.27 & 0.18 \\
 \end{table}
 
 
+\paragraph*{Replication across seeds.} \Cref{tab:cancer_results} reports one run per cell, obtained with the original prototype. \Cref{tab:cancer_seeds} repeats the whole grid with the released implementation over five seeds, each seed changing the network initialisation, the batch order and the draw of the degradation, with \ac{PaTAS-TP} attached to a fresh training run for every cell. The replication reproduces every qualitative statement made above and bounds their variability. At $\epsilon = 1$ the trust mass has no variance at all, because every gradient falls below the threshold and the evidence is the same in every batch. At $\epsilon = 0.1$ the trusted configuration gives $0.867 \pm 0.023$ (four of the five seeds give $0.877$ to $0.879$ and one gives $0.820$), the vacuous-feature/trusted-label configuration gives $0.339$ in every seed, and the trusted-feature/vacuous-label configuration gives $0.270 \pm 0.013$. The ordering behind F1.1 holds in all five seeds; so do the reversal between these two rows at $\epsilon = 1$ and the ordering of the vacuous/vacuous row above the trusted/vacuous row at $\epsilon \le 0.1$, and the relative gaps of \cref{tab:epsilon_gap} are reproduced ($69\%$ and $13\%$ at $\epsilon = 0.1$, $81\%$ and $29\%$ at $\epsilon = 0.01$). The mixed opinion $(0.25, 0.25, 0.5)$ lowers the trust mass from $0.295 \pm 0.008$ to $0.113 \pm 0.003$ at identical accuracy (F1.2), and the mild-degradation opinion gives $0.347 \pm 0.025$, above every fully vacuous row but only marginally above the vacuous-feature/trusted-label row. The largest variability is in the test accuracy of the degraded-label and distrusted-feature configurations, where the seed decides which wrong mapping the model learns; the trust mass of those configurations is zero in every seed, as the calculus prescribes.
+
+\begin{table}[ht]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccc}
+\hline
+X Trust & Y Trust & $\epsilon=1$ & $\epsilon=0.1$ & $\epsilon=0.01$ & $\epsilon=0.001$ & Train (\%) & Test (\%) \\
+\hline
+trust & trust & 0.879 $\pm$ 0.000 & 0.867 $\pm$ 0.023 & 0.604 $\pm$ 0.116 & 0.145 $\pm$ 0.063 & 98.6 $\pm$ 0.4 & 97.5 $\pm$ 0.7 \\
+trust & vacuous & 0.324 $\pm$ 0.000 & 0.270 $\pm$ 0.013 & 0.116 $\pm$ 0.006 & 0.072 $\pm$ 0.005 & 67.2 $\pm$ 3.7 & 76.0 $\pm$ 12.7 \\
+trust & distrust & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 98.5 $\pm$ 0.3 & 2.6 $\pm$ 1.0 \\
+vacuous & trust & 0.339 $\pm$ 0.000 & 0.339 $\pm$ 0.000 & 0.252 $\pm$ 0.042 & 0.076 $\pm$ 0.015 & 96.7 $\pm$ 0.4 & 95.4 $\pm$ 0.4 \\
+vacuous & vacuous & 0.305 $\pm$ 0.000 & 0.295 $\pm$ 0.008 & 0.179 $\pm$ 0.022 & 0.112 $\pm$ 0.008 & 69.9 $\pm$ 3.0 & 90.7 $\pm$ 3.4 \\
+vacuous & distrust & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 96.6 $\pm$ 0.4 & 4.0 $\pm$ 0.4 \\
+distrust & trust & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 63.4 $\pm$ 0.5 & 51.6 $\pm$ 11.3 \\
+distrust & vacuous & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 57.8 $\pm$ 1.1 & 54.9 $\pm$ 17.7 \\
+distrust & distrust & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 63.5 $\pm$ 1.2 & 64.4 $\pm$ 13.9 \\
+\hline
+\multicolumn{8}{c}{\textit{Extra scenarios}} \\
+\hline
+(0.25, 0.25, 0.5) & (0.25, 0.25, 0.5) & 0.117 $\pm$ 0.000 & 0.113 $\pm$ 0.003 & 0.063 $\pm$ 0.008 & 0.030 $\pm$ 0.002 & 69.9 $\pm$ 3.0 & 90.7 $\pm$ 3.4 \\
+(0.25, 0.0, 0.75) & (0.25, 0.0, 0.75) & 0.381 $\pm$ 0.000 & 0.347 $\pm$ 0.025 & 0.197 $\pm$ 0.038 & 0.102 $\pm$ 0.016 & 81.9 $\pm$ 0.9 & 94.6 $\pm$ 1.0 \\
+\hline
+\end{tabular}%
+}
+\caption{Five-seed replication of \cref{tab:cancer_results} with the released implementation (mean $\pm$ standard deviation over five seeds; each seed changes the initialisation, the batch order and the degradation draw, and the network is retrained for every cell). Accuracies do not depend on $\epsilon$.}
+\label{tab:cancer_seeds}
+\end{table}
+
+\paragraph*{Sensitivity to the batch size.} Since the batch label opinion of \cref{alg:trustupdate} is a mean, the batch size affects the parameter trust only through the gradient evidence: the number of revision steps per epoch and the gradient noise both change with the batch size, and so does the count of gradients below $\epsilon$. \Cref{tab:cancer_batch} reports the trust mass and the mean parameter opinion of the first layer for batch sizes from 8 to 256 (released implementation, $\epsilon = 0.1$, three seeds). Under trusted data the trust mass is flat, between $0.876$ and $0.879$ for every batch size, except for one of the three seeds at batch size 64, which yields $0.820$ (the same run appears in \cref{tab:cancer_seeds}); the mean parameter uncertainty of the first layer stays close to the fixed point of \cref{thm:convergence} ($u_q/15 = 0.004$ for $31$ incoming edges; measured $0.005$). Under vacuous data the trust mass varies by $0.023$ (from $0.282$ to $0.305$) across a 32-fold range of batch sizes, and with trusted features and vacuous labels by $0.05$, the largest batches giving the highest trust mass because batch-averaged gradients are smoother and more often fall below $\epsilon$. The batch size is therefore a second-order factor, and the values of \cref{tab:cancer_results} are reported for the batch size of 64 used in training.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{crrrr}
+\hline
+Batch size & \multicolumn{2}{c}{trust / trust} & vacuous / vacuous & trust / vacuous \\
+ & Trust mass & $(b, d, u)$ of layer 1 & Trust mass & Trust mass \\
+\hline
+8   & $0.876 \pm 0.002$ & $(0.993, 0.002, 0.005)$ & $0.285 \pm 0.007$ & $0.278 \pm 0.028$ \\
+16  & $0.877 \pm 0.002$ & $(0.994, 0.001, 0.005)$ & $0.282 \pm 0.009$ & $0.272 \pm 0.018$ \\
+32  & $0.878 \pm 0.001$ & $(0.995, 0.000, 0.005)$ & $0.287 \pm 0.006$ & $0.269 \pm 0.027$ \\
+64  & $0.859 \pm 0.027$ & $(0.994, 0.001, 0.005)$ & $0.291 \pm 0.008$ & $0.276 \pm 0.011$ \\
+128 & $0.879 \pm 0.000$ & $(0.995, 0.000, 0.005)$ & $0.305 \pm 0.000$ & $0.315 \pm 0.006$ \\
+256 & $0.877 \pm 0.000$ & $(0.993, 0.000, 0.006)$ & $0.305 \pm 0.000$ & $0.322 \pm 0.003$ \\
+\hline
+\end{tabular}
+\caption{Sensitivity of the trust mass to the training batch size on the breast-cancer task (released implementation, $\epsilon = 0.1$, 15 epochs, mean $\pm$ standard deviation over three seeds). The $(b, d, u)$ column is the mean parameter opinion of the first layer under trusted data.}
+\label{tab:cancer_batch}
+\end{table}
+
 \begin{tcolorbox}[title=Key findings -- Experiment 1, colback=gray!5, colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt, top=4pt, bottom=4pt]
-\textbf{F1.1 Label trust matters more than feature trust.} Setting $X$ as vacuous
+\textbf{F1.1 Label trust matters more than feature trust on this task.} Setting $X$ as vacuous
 while keeping $Y$ trusted yields a higher trust mass (0.34) than the reverse
-(0.29 for trusted $X$, uncertain $Y$).
+(0.29 for trusted $X$, uncertain $Y$); the ordering holds in all five seeds of the
+replication (\cref{tab:cancer_seeds}). It is a statement about one dataset and about
+degradations assigned jointly with the opinions, not a general law: the label opinion
+enters the auxiliary sub-step of every layer, whereas the feature opinion enters the
+first layer directly and the deeper layers only through propagation.
 
 \medskip
 \textbf{F1.2 Distrust is more damaging than uncertainty.} Replacing a fully
@@ -825,16 +908,37 @@ Architecture & X Trust & Y Trust & Trust Mass & Train Acc (\%) & Test Acc (\%) \
 16-16 & trust & trust & 0.7077 & 96.83 & 95.84 \\
 \hline
 \end{tabular}
-\caption{Summary of final trust mass for the MNIST Classification Experiment.}
+\caption{Summary of final trust mass for the MNIST Classification Experiment (original prototype, one run per row; a three-seed replication with the released implementation is given in \cref{tab:mnist_seeds}).}
 \label{tab:mnist}
 \end{table}
 In this experiment, \ac{PaTAS-TP} produces ten output trust opinions, one for each class. However, they are almost identical across classes, so we record only the aggregated trust mass in \cref{tab:mnist}.
 
-When features and labels are vacuous, accuracy improves as model size increases, from 73.96\% (architecture 16) to 92.05\% (architecture 128). Test accuracy consistently exceeds training accuracy across all architectures, suggesting that training under vacuous trust makes the model underestimate its own learning progress. Trust mass follows the same upward trend with model size (0.3087, 0.3224, 0.3306, 0.3359), though the gains become progressively smaller, indicating diminishing returns from added capacity under uncertain data.
+When features and labels are vacuous, accuracy improves as model size increases, from 73.96\% (architecture 16) to 92.05\% (architecture 128). Test accuracy exceeds training accuracy in every vacuous row. This is not an effect of \ac{PaTAS-TP}, which never modifies the training: the vacuous profile is realised by injecting feature and label noise into the training set only, so the training accuracy is measured on degraded samples and partly corrupted labels, while the test set is clean. Trust mass follows the same upward trend with model size (0.3087, 0.3224, 0.3306, 0.3359), though the gains become progressively smaller, indicating diminishing returns from added capacity under uncertain data.
 
-The two-layer architecture (16-16) is a notable exception. Despite having more parameter count than the single-layer 16-hidden neurons network, it yields a trust mass of only 0.1628 under vacuous inputs and 0.7077 under trusted inputs, both consistently lower than the single-layer 16-neuron counterpart (0.3087 and 0.8620 respectively). This is not an artifact but a meaningful property of the framework: each additional layer introduces an extra round of trust discounting, which attenuates the trust signal propagating through the network. A deeper architecture therefore inherits less trust from its inputs, even when those inputs are reliable. This behavior is consistent with \ac{PaTAS-TP} design, since a deeper inference path involves more parameters, each contributing uncertainty, and the framework correctly reflects that the output trust depends on the full chain of parameter reliability. A secondary factor is convergence speed: deeper networks require more epochs to stabilize their gradients, so the parameter trust opinions accumulate evidence more slowly and remain closer to their vacuous initialization at the end of training.
+The two-layer architecture (16-16) is a notable exception. Despite having more parameter count than the single-layer 16-hidden neurons network, it yields a trust mass of only 0.1628 under vacuous inputs and 0.7077 under trusted inputs, both consistently lower than the single-layer 16-neuron counterpart (0.3087 and 0.8620 respectively). This is not an artifact but a meaningful property of the framework: each additional layer introduces an extra round of trust discounting, which attenuates the trust signal propagating through the network. A deeper architecture therefore inherits less trust from its inputs, even when those inputs are reliable. This behavior is consistent with \ac{PaTAS-TP} design, since a deeper inference path involves more parameters, each contributing uncertainty, and the framework correctly reflects that the output trust depends on the full chain of parameter reliability. A secondary factor is convergence speed: the gradients of the deeper network stabilise later, and since the parameter trust is a running mean of the recent gradient evidence (\cref{thm:convergence}), it is still moving when training stops.
 
-The trusted evaluation provides the clearest contrast. Architecture 16 with trusted features and labels reaches a trust mass of 0.8620, far exceeding any vacuous-data configuration regardless of architecture size. Even the deeper 16-16 architecture achieves 0.7077 under trusted inputs, outperforming the largest single-layer architecture (128, trust mass 0.3359) trained under vacuous data by a wide margin. This confirms that data quality has a far greater impact on the resulting trust assessment than model capacity.
+The trusted evaluation provides the clearest contrast. Architecture 16 with trusted features and labels reaches a trust mass of 0.8620, far exceeding any vacuous-data configuration regardless of architecture size. Even the deeper 16-16 architecture achieves 0.7077 under trusted inputs, outperforming the largest single-layer architecture (128, trust mass 0.3359) trained under vacuous data by a wide margin. On this dataset, data quality thus has a far greater impact on the resulting trust assessment than model capacity; part of this ordering is designed in, since the vacuous profile also degrades the data the model learns from.
+
+\paragraph*{Replication across seeds.} \Cref{tab:mnist} reports one run per row, obtained with the original prototype. \Cref{tab:mnist_seeds} repeats the seven configurations with the released implementation over three seeds, each seed changing the initialisation, the batch order and the noise draw, with \ac{PaTAS-TP} attached to a fresh training run. The trust masses of the vacuous rows are reproduced to within $0.01$ of \cref{tab:mnist}, the trusted rows to within $0.05$ (the released implementation gives $0.842 \pm 0.011$ for the 16-neuron network and $0.696 \pm 0.028$ for the 16-16 network under trusted data). The width ordering of F2.1 holds in every seed, with a total gain from 16 to 128 neurons of $0.030 \pm 0.004$ that exceeds the seed dispersion of every row. The depth penalty of F2.2 holds in every seed under both profiles ($0.162 \pm 0.003$ against $0.306 \pm 0.004$ under vacuous data, $0.696 \pm 0.028$ against $0.842 \pm 0.011$ under trusted data). The test accuracy exceeds the training accuracy in every vacuous run, for the reason given above, and it is the quantity with the largest seed dispersion.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{cccccc}
+\hline
+Architecture & X Trust & Y Trust & Trust Mass & Train Acc (\%) & Test Acc (\%) \\
+\hline
+16 & vacuous & vacuous & $0.3057 \pm 0.0038$ & $65.66 \pm 0.19$ & $79.53 \pm 6.51$ \\
+32 & vacuous & vacuous & $0.3217 \pm 0.0028$ & $67.09 \pm 0.13$ & $82.83 \pm 3.43$ \\
+64 & vacuous & vacuous & $0.3309 \pm 0.0013$ & $67.89 \pm 0.13$ & $88.75 \pm 1.55$ \\
+128 & vacuous & vacuous & $0.3355 \pm 0.0007$ & $68.38 \pm 0.15$ & $91.96 \pm 1.56$ \\
+16-16 & vacuous & vacuous & $0.1618 \pm 0.0033$ & $66.32 \pm 0.33$ & $80.70 \pm 4.04$ \\
+16 & trust & trust & $0.8416 \pm 0.0106$ & $96.60 \pm 0.19$ & $95.62 \pm 0.14$ \\
+16-16 & trust & trust & $0.6964 \pm 0.0284$ & $96.79 \pm 0.13$ & $95.24 \pm 0.17$ \\
+\hline
+\end{tabular}
+\caption{Three-seed replication of \cref{tab:mnist} with the released implementation ($\epsilon = 0.05$; mean $\pm$ standard deviation over three seeds; each seed changes the initialisation, the batch order and the noise draw).}
+\label{tab:mnist_seeds}
+\end{table}
 
 \begin{tcolorbox}[title=Key findings -- Experiment 2, colback=gray!5,
 colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt,
@@ -846,7 +950,7 @@ top=4pt, bottom=4pt]
 \textbf{F2.2 Depth penalises trust due to discounting accumulation.} The 16-16 architecture consistently yields lower trust than the single-layer 16-neuron network under both vacuous (0.1628 vs.\ 0.3087) and trusted (0.7077 vs.\ 0.8620) inputs. Each additional layer introduces an extra discounting step, so deeper networks attenuate the trust signal regardless of their predictive accuracy.
 
 \medskip
-\textbf{F2.3 Data quality dominates model capacity for trust.} Training the smallest architecture on trusted data (trust mass 0.8620) far exceeds training the largest architecture on vacuous data (trust mass 0.3359). Investing in data quality is therefore more beneficial for trust than scaling the model.
+\textbf{F2.3 Data quality dominates model capacity for trust on this benchmark.} Training the smallest architecture on trusted data (trust mass 0.8620) far exceeds training the largest architecture on vacuous data (trust mass 0.3359). The comparison is confined to one dataset and to trust profiles that are assigned jointly with the degradations, so it should be read as a property of the calculus under correct opinions rather than as a general empirical law.
 \end{tcolorbox}
 
 
@@ -910,11 +1014,34 @@ while the other collapses to 0\%, producing the 0\% accuracy observed for both
 patched digits 3 and 6. This extreme case is included only to illustrate the
 boundary behavior of the framework.
 
-To evaluate the \ac{IPTA}, \cref{fig:mnistpoisipta} reports accuracy and the full trust opinion $(t, d, u)$ for clean and patched samples, obtained by feedforwarding a fully trusted opinion through the \ac{IPTA} instantiated from the respective inference path in the $4\times 4$ patch model. As established in \cref{thm:infvac} (Remark~7.1), feedforwarding a fully trusted input $(1, 0, 0)$ through any \ac{PaTAS-TP} configuration yields an output with zero distrust mass, since the discounting operator maps a fully trusted input to an opinion with $d=0$, and fusion preserves this zero mass. This is confirmed across all rows using a trusted $T_x$: distrust remains exactly 0 in every case.
+To evaluate the \ac{IPTA}, \cref{fig:mnistpoisipta} reports accuracy and the full trust opinion $(t, d, u)$ for clean and patched samples, obtained by feedforwarding a fully trusted opinion through the \ac{IPTA} instantiated from the respective inference path in the $4\times 4$ patch model. As established in \cref{thm:infvac} (\cref{rem:directional}), feedforwarding a fully trusted input $(1, 0, 0)$ through any \ac{PaTAS-TP} configuration yields an output with zero distrust mass, since the discounting operator maps a fully trusted input to an opinion with $d=0$, and fusion preserves this zero mass. This is confirmed across all rows using a trusted $T_x$: distrust remains exactly 0 in every case.
 
 Clean digit 3 achieves the strongest trust profile (0.811 trust, 0.189 uncertainty), consistent with high accuracy (98.02\%). Clean digit 6 already exhibits markedly higher uncertainty (0.570) despite comparable accuracy (97.70\%), reflecting that the parameters on the digit-6 inference path were exposed to poisoned training samples and are therefore less trusted.
 
-For patched samples, the degradation is clear. Patched digit 6 accuracy collapses to 0.84\% and trust drops to 0.408, with uncertainty dominating at 0.592, providing a warning signal unavailable from accuracy alone. For patched digit 3, accuracy falls to 19.80\% yet trust remains relatively higher at 0.738, reflecting that the digit-3 inference path passes through less poisoned parameters. A ten-training replication of this setup under the released implementation, with only the evaluation seed varied, confirms the gap is robust: mean \ac{IPTA} trust $0.884 \pm 0.001$ for the clean class against $0.503 \pm 0.035$ for the poisoned class. Two assumptions of this experiment, the oracle knowledge of the patch location in the trust assignment and the joint application of patch and label flip, are removed in Experiment~4, which detects the same poisoning with estimated input opinions and separates the two corruption channels. 
+For patched samples, the degradation is clear. Patched digit 6 accuracy collapses to 0.84\% and trust drops to 0.408, with uncertainty dominating at 0.592, providing a warning signal unavailable from accuracy alone. For patched digit 3, accuracy falls to 19.80\% yet trust remains relatively higher at 0.738, reflecting that the digit-3 inference path passes through less poisoned parameters. A replication of this setup with the released implementation, ten independent trainings with different seeds, confirms that the gap is robust: mean \ac{IPTA} belief $0.884 \pm 0.001$ for the clean class against $0.503 \pm 0.036$ for the poisoned class (\cref{tab:pois_provenance}). This experiment relies on two simplifying assumptions: the patch location is known when the trust opinions are assigned, and the patch and the label flip are always applied together. Experiment~4 revisits the same poisoning without either assumption; it estimates the input opinions from the data and separates the two corruption channels.
+
+\paragraph*{Provenance of the poisoned-MNIST trust values.} The clean-class and poisoned-class trust values quoted for this setup differ across the chapter because they come from two implementations, two ways of feeding the input, and two metrics. \Cref{tab:pois_provenance} lists them; all refer to the $4\times4$ patch and the 784-128-10 architecture. The values agree once the metric and the input route are taken into account: the projected probability of \cref{tab:diss-classtrust} ($0.947$ and $0.756$) approximately equals $b + u/2$ of the corresponding replication opinion ($0.884 + 0.116/2 = 0.942$ and $0.503 + 0.497/2 = 0.752$), the small difference coming from the input route, since \cref{tab:diss-classtrust} feeds the full network whereas the replication feeds the \ac{IPTA} path of each sample.
+
+\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllcc}
+\hline
+Reported in & Implementation & Input opinion & Metric & Clean class (3) & Poisoned class (6) \\
+\hline
+\cref{tab:mnistpois} & original prototype, one run & fully trusted, full network & belief $b$ of the class output opinion & 0.833 & 0.439 \\
+\cref{fig:mnistpoisipta} & original prototype, one run & fully trusted, \ac{IPTA} of the sample's path & belief $b$ & 0.811 & 0.430 \\
+Replication (text above) & released, 10 trainings & fully trusted, \ac{IPTA} of the sample's path & belief $b$, mean $\pm$ std & $0.884 \pm 0.001$ & $0.503 \pm 0.036$ \\
+Experiment~4 & released, one run & fully trusted, \ac{IPTA} of the sample's path & belief $b$, mean over 400 clean samples & 0.886 & 0.508 \\
+Experiment~4 & released, one run & conformity opinions, \ac{IPTA} & belief $b$, mean over 400 clean samples & 0.779 & 0.444 \\
+Experiment~4 & released, one run & oracle patch-distrust opinions, \ac{IPTA} & belief $b$, mean over 400 clean samples & 0.870 & 0.498 \\
+\cref{tab:diss-classtrust} & released, one run & fully trusted, full network & projected probability $b + u/2$ & 0.947 & 0.756 \\
+\hline
+\end{tabular}%
+}
+\caption{Provenance of the trust values reported for the $4\times4$ poisoned MNIST setup (784-128-10; $\epsilon = 0.05$ for the released implementation). Class~6 is one of the two flipped classes; \cref{tab:diss-classtrust} reports both flipped classes.}
+\label{tab:pois_provenance}
+\end{table}
 
 \begin{tcolorbox}[title=Key findings -- Experiment 3, colback=gray!5,
 colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt,
@@ -959,7 +1086,7 @@ MC Dropout & 0.936 & 0.621 & 0.545 & 0.834 & 0.747 & 0.574 \\
 \hline
 \end{tabular}%
 }
-\caption{Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac{OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), an honest limit of all ten scores against an adversary that stays inside the per-feature range.}
+\caption{Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac{OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), a limit shared by all ten scores against an adversary that stays inside the per-feature range.}
 \label{tab:diss-detection}
 \end{table}
 
@@ -985,10 +1112,10 @@ CIFAR-10 (gray) & 0.23 & 1.1 & 0.11 & 0.00 & -- \\
 \end{table}
 
 \paragraph*{Poisoning without an oracle.}
-The conformity opinions remove the oracle assumption of Experiment~3. Fed unchanged into the poisoned model's \ac{IPTA}, they flag patched inputs with no knowledge of the trigger: the input trust alone separates clean from patched inputs at AUROC $1.000$ for both classes, because the patch violates the near-constant border features the conformity model weights most, and the parameter-side gap between the clean and poisoned class persists under these estimated opinions (trust $0.780$ vs.\ $0.499$; oracle assignment $0.871$ vs.\ $0.559$). The remaining assumption, a clean feature source for the conformity fit, degrades gracefully: fitting on the poisoned training set itself still detects the trigger at $0.73$ and $0.67$ per class, while a naive robust fit (median and MAD) does not recover ($0.65$), since MNIST pixel marginals are zero-inflated; contamination-aware conformity fits are explicit future work.
+The conformity opinions remove the oracle assumption of Experiment~3. Fed unchanged into the poisoned model's \ac{IPTA}, they flag patched inputs with no knowledge of the trigger: the input trust alone separates clean from patched inputs at AUROC $1.000$ for both classes, because the patch violates the near-constant border features the conformity model weights most, and the parameter-side gap between the clean and the poisoned class persists under these estimated opinions: the mean belief of the true-class output opinion over 400 clean test samples per class is $0.779$ for the clean class against $0.444$ for the poisoned class under the conformity opinions, $0.870$ against $0.498$ under the oracle patch-distrust assignment, and $0.886$ against $0.508$ under a fully trusted input (\cref{tab:pois_provenance}). These are the values of the stored evaluation run of the released implementation on one trained poisoned model; the poisoned-class values move by a few hundredths between trainings of the same setup, within the seed dispersion of the replication ($\pm 0.036$), while the gap to the clean class does not. The remaining assumption, a clean feature source for the conformity fit, degrades gracefully: fitting on the poisoned training set itself still detects the trigger at $0.73$ and $0.67$ per class, while a naive robust fit (median and MAD) does not recover ($0.65$), since MNIST pixel marginals are zero-inflated; contamination-aware conformity fits are explicit future work.
 
 \paragraph*{Separating the corruption channels.}
-Experiment~3 applies patch and label flip jointly. Single-channel controls retrained at the paper's patch size separate their effects on the per-class output trust (\cref{tab:diss-classtrust}): under the full backdoor both flipped classes carry an identical trust deficit ($0.756$ for digits 6 and 9 alike, $0.19$ below the minimum of the eight clean classes, whose spread is below $0.001$); the label-flip-only control reproduces nearly the full drop ($0.748$), the patch-only control still produces a clearly detectable deficit ($0.788$), and the unpoisoned model shows no false alarm (both classes at the clean level $0.994$). The trust deficit is therefore pair-specific, symmetric across the flipped pair, driven primarily by the label channel, and present for a purely spurious trigger even when every label is correct.
+Experiment~3 applies patch and label flip jointly. Single-channel controls retrained with the $4\times4$ patch separate their effects on the per-class output trust (\cref{tab:diss-classtrust}): under the full backdoor both flipped classes carry an identical trust deficit ($0.756$ for digits 6 and 9 alike, $0.19$ below the minimum of the eight clean classes, whose spread is below $0.001$); the label-flip-only control reproduces nearly the full drop ($0.748$), the patch-only control still produces a clearly detectable deficit ($0.788$), and the unpoisoned model shows no false alarm (both classes at the clean level $0.994$). The trust deficit is therefore pair-specific, symmetric across the flipped pair, driven primarily by the label channel, and present for a purely spurious trigger even when every label is correct.
 
 \begin{table}[ht]
 \centering
@@ -1007,7 +1134,7 @@ Trigger patch only & 0.948 & 0.948 & 0.788 & 0.788 \\
 \end{table}
 
 \paragraph*{Training-quality audit.}
-The model-side trust provides a training-quality audit that requires no test data at all (\cref{tab:diss-audit}). Under increasing train-time label-flip rates $p$, the feedforward trust under a fully trusted input drops by $31.7\%$ relative to the clean-trained model at \emph{any} non-zero rate, including $p = 0.1$ where test accuracy moves by only three points: a corruption tripwire read from the trained trust state alone. The flat level is designed saturation, not an artifact: at $p = 0.1$ essentially every training batch already contains corrupted labels, so every batch delivers the large-gradient corrections that \textsc{NodeTrust} counts as negative evidence, and the converged trust registers \emph{that} corruption is present rather than how much. When the algorithm instead consumes rate-informed label opinions $T_y = (1{-}p, 0, p)$, the same machinery grades monotonically ($0.951 \to 0.805$): tripwire versus graded meter is a property of the label opinion's informativeness, not of the calculus. The scale-tied threshold of \cref{sec:param_update} preserves the tripwire without any tuning: at $\epsilon_{\mathrm{layer}} = 0.5 \cdot \mathrm{median}(|\delta|)$ the clean model reads $0.625$ against a flat $0.545$ to $0.550$ at every non-zero rate, a margin more than ten times the within-rate spread, while the same rule instantiates thresholds from $5 \cdot 10^{-5}$ (MNIST) to $3 \cdot 10^{-3}$ (breast cancer) across layers and tasks and preserves the trust ordering of the cancer grid. Data-centric baselines frame the comparison honestly in both directions: the fraction of training labels disagreeing with confident predictions recovers $p$ almost exactly and mean training loss grades likewise, but both require retaining the training data at audit time, and mean confidence measures severity but needs clean held-out data.
+The model-side trust provides a training-quality audit that requires no test data at all (\cref{tab:diss-audit}). Under increasing train-time label-flip rates $p$, the feedforward trust under a fully trusted input drops by $31.7\%$ relative to the clean-trained model at \emph{any} non-zero rate, including $p = 0.1$ where test accuracy moves by only three points: a corruption tripwire read from the trained trust state alone. The flat level is designed saturation, not an artifact: at $p = 0.1$ essentially every training batch already contains corrupted labels, so every batch delivers the large-gradient corrections that \textsc{NodeTrust} counts as negative evidence, and the converged trust registers \emph{that} corruption is present rather than how much. When the algorithm instead consumes rate-informed label opinions $T_y = (1{-}p, 0, p)$, the same machinery grades monotonically ($0.951 \to 0.805$): tripwire versus graded meter is a property of the label opinion's informativeness, not of the calculus. The scale-tied threshold of \cref{sec:param_update} preserves the tripwire without any tuning: at $\epsilon_{\mathrm{layer}} = 0.5 \cdot \mathrm{median}(|\delta|)$ the clean model reads $0.625$ against a flat $0.545$ to $0.550$ at every non-zero rate, a margin more than ten times the within-rate spread, while the same rule instantiates thresholds from $5 \cdot 10^{-5}$ (MNIST) to $3 \cdot 10^{-3}$ (breast cancer) across layers and tasks and preserves the trust ordering of the cancer grid. Data-centric baselines bound the comparison in both directions: the fraction of training labels disagreeing with confident predictions recovers $p$ almost exactly and mean training loss grades likewise, but both require retaining the training data at audit time, and mean confidence measures severity but needs clean held-out data.
 
 A dead-unit confound check completes the audit's validation. At every flip rate, no hidden unit is inactive on more than $99\%$ of inputs (dead-unit fraction $0.0\%$), the mean trust of active units itself drops from $0.9999$ to $0.626$ at any non-zero rate, an activity-weighted variant of the audit that removes low-activity units' contribution by construction reproduces the standard audit to within $0.001$ at every rate, and the correlation between unit activation frequency and unit trust is essentially zero. The audit signal lives in the live paths of the network; it does not measure network degeneration.
 
@@ -1028,7 +1155,7 @@ $p$ & Acc.\ (\%) & Conf. & Trust & Trust$_{\mathrm{inf}}$ & Trust$_{\mathrm{auto
 \end{table}
 
 \paragraph*{Convolutional architectures.}
-The battery transfers to \acp{CNN} through the activity-weighted conv \ac{IPTA} of \cref{sec:conv_trust}; per-sample scoring never failed across all runs (\cref{tab:diss-conv}). On the $99.3\%$ MNIST \ac{CNN} the composed score matches the softmax filter on clean correct-versus-incorrect ranking ($0.986$ for both) while dominating detection (corruption $0.988$ vs.\ $0.662$; \ac{OOD} $0.991$ vs.\ $0.967$): on this architecture the composition pays no in-distribution price at all. \ac{EDL}, weak on the MLPs, becomes the best in-distribution ranker on the \ac{CNN} (clean AUROC $0.996$) yet stays blind to violations (corruption $0.527$): the complementarity of confidence-type and trust-type signals is architecture-independent. On CIFAR-10, where corruption genuinely reduces accuracy, the composed score is the strongest corruption detector outright ($0.732$, above its conformity factor alone at $0.723$), and the model-side audit transfers: the label-noise-trained CIFAR model carries path trust $0.521$ against $0.697$ clean-trained, a $25\%$ relative drop. One honest caveat: in the subset-direction \ac{OOD} task the Fashion \ac{CNN}'s composed score becomes anti-correlated ($0.201$), because sparse digit inputs activate few channels and short, well-trained paths read as trusted. An ablation normalizing each layer's activity vector to mean one leaves the inversion unchanged ($0.205$; MNIST \ac{CNN} likewise unchanged), ruling out the global activity level as the mechanism: the inversion sits in the participation pattern itself, and notably the softmax inverts on the same task as well ($0.281$), so it is a property of the model under subset-direction inputs rather than an artifact of trust propagation. Operationally, the composed score must not be used as an \ac{OOD} filter in this direction; the diagnostics of \cref{tab:diss-diagnostics} provide the gate.
+The battery transfers to \acp{CNN} through the activity-weighted conv \ac{IPTA} of \cref{sec:conv_trust}; per-sample scoring never failed across all runs (\cref{tab:diss-conv}). On the $99.3\%$ MNIST \ac{CNN} the composed score matches the softmax filter on clean correct-versus-incorrect ranking ($0.986$ for both) while dominating detection (corruption $0.988$ vs.\ $0.662$; \ac{OOD} $0.991$ vs.\ $0.967$): on this architecture the composition pays no in-distribution price at all. \ac{EDL}, weak on the MLPs, becomes the best in-distribution ranker on the \ac{CNN} (clean AUROC $0.996$) yet stays blind to violations (corruption $0.527$): the complementarity of confidence-type and trust-type signals is architecture-independent. On CIFAR-10, where corruption genuinely reduces accuracy, the composed score is the strongest corruption detector outright ($0.732$, above its conformity factor alone at $0.723$), and the model-side audit transfers: the label-noise-trained CIFAR model carries path trust $0.521$ against $0.697$ clean-trained, a $25\%$ relative drop. A limitation has to be recorded: in the subset-direction \ac{OOD} task the Fashion \ac{CNN}'s composed score becomes anti-correlated ($0.201$), because sparse digit inputs activate few channels and short, well-trained paths read as trusted. An ablation normalizing each layer's activity vector to mean one leaves the inversion unchanged ($0.205$; MNIST \ac{CNN} likewise unchanged), ruling out the global activity level as the mechanism: the inversion sits in the participation pattern itself, and notably the softmax inverts on the same task as well ($0.281$), so it is a property of the model under subset-direction inputs rather than an artifact of trust propagation. Operationally, the composed score must not be used as an \ac{OOD} filter in this direction; the diagnostics of \cref{tab:diss-diagnostics} provide the gate.
 
 \begin{table}[ht]
 \centering
@@ -1049,7 +1176,31 @@ MC Dropout & $0.605$ & $0.978$ & $0.616$ & $\textbf{0.712}$ & $0.622$ \\
 \end{table}
 
 \paragraph*{Sensitivity.}
-Three ablations bound the framework's sensitivity to its own choices. The trust-revision fusion operator is immaterial: averaging, cumulative, and weighted fusion agree on the converged trust mass and every downstream metric to within $0.002$. The gradient-evidence threshold exhibits a broad plateau: trust mass and selective-prediction metrics are constant for $\epsilon \in [0.05, 1]$ on MNIST and degrade only at degenerate-small values, and the width ordering of Experiment~2 is invariant across $\epsilon \in \{0.02, 0.05, 0.1\}$; together with the scale-tied rule, this bounds the tuning burden to a single dimensionless constant. Finally, the per-sample scores are stable across evaluation seeds (dispersion at most $\pm 0.005$ throughout).
+Three ablations bound the framework's sensitivity to its own choices. The first concerns the trust-revision operator. A previous version of this ablation reused, for the alternative operators, a gradient stream regenerated from the cached model, and found averaging, cumulative and weighted revision to agree within $0.002$; the agreement was an artefact of that stream, whose gradients are those of an already converged model. \Cref{tab:fusion_ops} reports the ablation with \ac{PaTAS-TP} attached to a fresh training run for every operator, together with the mean parameter opinion of the first layer, on the breast-cancer task and on the MNIST 784-128-10 network of the original ablation. Averaging and weighted revision agree on both tasks, as \cref{thm:convergence} predicts for two operators that both act as running means. On MNIST under trusted data all four operators agree within $0.015$, because the first layer has $785$ incoming edges and its fixed-point uncertainty $u_q/15 \approx 2 \cdot 10^{-4}$ is dogmatic for practical purposes under every operator; the earlier agreement was therefore not only an artefact of the regenerated stream, but it is a property of wide input layers under trusted data and does not generalise. On the breast-cancer task, whose first layer has $31$ incoming edges, cumulative revision drives the parameter uncertainty to numerically zero within the first batches (the implementation does not clip small uncertainties; the value settles at the rounding floor of the single-precision normalisation, about $10^{-8}$), after which the effectively dogmatic parameter opinions can no longer be revised (\cref{thm:cbf}), and it lowers the trust mass under trusted data by $0.10$; belief constraint revision is unstable across seeds on the same task (standard deviation $0.42$), because a slight majority of belief or disbelief in the first batches is amplified to a vertex (\cref{thm:bcf}). Under vacuous data every operator keeps a large parameter uncertainty and the trust masses differ by up to $0.09$ on both tasks, cumulative and belief constraint revision giving the highest values because they accumulate or amplify the sparse evidence that vacuous conditioning leaves. The revision operator is therefore not immaterial. Averaging fusion is retained because it is the only one of the four that keeps the parameter uncertainty informative under trusted data without freezing or amplifying the opinions; weighted fusion behaves in the same way, both being short-memory running means, and the two agree closely without coinciding (they coincide only for opinions of equal uncertainty, and \cref{tab:fusion_ops} shows slightly different first-layer uncertainties). The second ablation concerns the gradient-evidence threshold, which exhibits a broad plateau: trust mass and selective-prediction metrics are constant for $\epsilon \in [0.05, 1]$ on MNIST and degrade only at degenerate-small values, and the width ordering of Experiment~2 is invariant across $\epsilon \in \{0.02, 0.05, 0.1\}$; together with the scale-tied rule, this bounds the tuning burden to a single dimensionless constant. The third concerns the seeds: the per-sample scores are stable across evaluation seeds (dispersion at most $\pm 0.005$ throughout), and the training-seed variance of the trust masses of Experiments~1 and~2 is reported in \cref{tab:cancer_seeds,tab:mnist_seeds}.
+
+\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrr}
+\hline
+Task & Revision operator & \multicolumn{2}{c}{trust / trust} & vacuous / vacuous & trust / vacuous \\
+ & & Trust mass & $(b, d, u)$ of layer 1 & Trust mass & Trust mass \\
+\hline
+Breast cancer & averaging (ABF) & $0.859 \pm 0.027$ & $(0.994, 0.001, 0.005)$ & $0.291 \pm 0.008$ & $0.276 \pm 0.011$ \\
+(3 seeds) & weighted (WBF) & $0.861 \pm 0.026$ & $(0.997, 0.001, 0.002)$ & $0.299 \pm 0.010$ & $0.276 \pm 0.015$ \\
+ & cumulative (CBF) & $0.755 \pm 0.079$ & $(0.879, 0.121, 0.000)$ & $0.325 \pm 0.016$ & $0.246 \pm 0.012$ \\
+ & belief constraint (BCF) & $0.601 \pm 0.425$ & $(0.917, 0.083, 0.000)$ & $0.370 \pm 0.010$ & $0.109 \pm 0.154$ \\
+\hline
+MNIST 784-128-10 & averaging (ABF) & $0.988$ & $(0.9998, 0.0000, 0.0002)$ & $0.335$ & -- \\
+(1 seed) & weighted (WBF) & $0.988$ & $(0.9998, 0.0000, 0.0002)$ & $0.347$ & -- \\
+ & cumulative (CBF) & $0.976$ & $(0.9893, 0.0107, 0.0000)$ & $0.392$ & -- \\
+ & belief constraint (BCF) & $0.991$ & $(1.0000, 0.0000, 0.0000)$ & $0.421$ & -- \\
+\hline
+\end{tabular}%
+}
+\caption{Ablation of the trust-revision operator with \ac{PaTAS-TP} attached to a fresh training run for every operator (released implementation; breast cancer: $\epsilon = 0.1$, 15 epochs, mean $\pm$ standard deviation over three seeds; MNIST 784-128-10: $\epsilon = 0.05$, 20 epochs, one seed). The $(b, d, u)$ column is the mean parameter opinion of the first layer under trusted data. On the breast-cancer task, cumulative and belief constraint revision make every first-layer parameter opinion dogmatic ($u < 10^{-3}$); on MNIST all four operators do, the fixed point $u_q/15$ being $2 \cdot 10^{-4}$ for $785$ incoming edges.}
+\label{tab:fusion_ops}
+\end{table}
 
 \begin{tcolorbox}[title=Key findings -- Experiment 4, colback=gray!5,
 colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt,
@@ -1132,20 +1283,33 @@ This distinction motivates the use of a softmax-weighted aggregation $\sum_i p_i
 
 
 This chapter presented \ac{PaTAS-TP}, a framework for propagating trust through
-\acp{NN} in parallel with standard computation. The results are encouraging: trust
-assessments converge alongside model training, respect theoretical symmetry and
-invariance properties, and provide interpretable signals that complement accuracy
-in all four experimental settings. The comparative evaluation makes the framework's
-value attributable rather than aggregate: input-space conformity carries violation
-detection and composes with path trust into a per-sample score that fails safely,
-the propagation itself contributes detection signal where input marginals are
-silent, and the model-side trust yields per-class poisoning localization and a
-test-data-free training-quality audit that no input-space or output-only baseline
-expresses. The evaluation now covers residual convolutional networks at accuracies
-defensible for their domains ($99.3\%$ MNIST, $88.7\%$ Fashion-MNIST, $84.5\%$
-CIFAR-10) through the activity-weighted conv \ac{IPTA}; extending trust functions
-to transformer components and normalization layers, and scaling the evaluation to
-top-tier training pipelines, remain natural directions for future work.
+\acp{NN} in parallel with standard computation. The trust assessments stabilise
+alongside model training in the sense of \cref{thm:convergence}, respect the
+symmetry and invariance properties of \cref{sec:ptassyminv}, and respond to the
+trust profiles assigned to the data in the four experimental settings. The
+comparative evaluation makes the framework's value attributable rather than
+aggregate, and the attribution is not flattering to propagation alone. The
+detection of inputs that violate the training distribution is carried by the
+input-side conformity opinions: on their own they reach AUROC $1.000$ on
+\ac{OOD} detection from MNIST to Fashion-MNIST and on corruption detection on
+MNIST, and $0.994$ on Fashion-MNIST, where the composed score reaches $0.975$,
+$0.972$ and $0.835$. Propagation adds detection signal mainly under the
+marginal-preserving translation ($0.781$ against $0.678$ for conformity alone),
+and even there a feature-space nearest-neighbour detector is stronger ($0.801$).
+The training-quality audit read from the trained trust state flags the presence
+of label corruption at every non-zero flip rate, but at a saturated level
+($0.682$ at every rate) that does not recover the corruption rate, whereas the
+data-side disagreement baseline does. The contribution that no input-space or
+output-only baseline expresses is therefore narrower than the aggregate numbers
+suggest, and it is on the model side: the class-level localisation of
+training-data poisoning, which separates the two flipped classes from every
+clean class, distinguishes the label and trigger channels, and survives the
+dead-unit and threshold checks. The evaluation also covers residual
+convolutional networks at accuracies defensible for their domains ($99.3\%$
+MNIST, $88.7\%$ Fashion-MNIST, $84.5\%$ CIFAR-10) through the activity-weighted
+conv \ac{IPTA}; extending trust functions to transformer components and
+normalization layers, and scaling the evaluation to top-tier training
+pipelines, remain natural directions for future work.
 
 A known limitation of the current design is that it structurally penalizes deeper
 architectures. Each additional layer introduces an extra discounting step that
@@ -1171,7 +1335,10 @@ through the same quantification is the natural \ac{SL} remedy.
 A second limitation concerns the directional preservation of evidence established
 in \cref{thm:infvac} and its Remark. While theoretically sound, this property implies that \ac{PaTAS-TP} cannot generate a non-zero distrust mass at the output when the input carries no distrust, that is, when $d_x = 0$, even if the model parameters are highly unreliable. In other words, parameter unreliability manifests as increased uncertainty rather than explicit distrust in the output opinion. This is a genuine
 restriction in safety-critical settings where a positive distrust signal would be
-more actionable than a high uncertainty mass. Relaxing this constraint, for
+more actionable than a high uncertainty mass. Every experiment of this chapter that feeds a fully trusted input therefore
+reports $d = 0$ by construction, and the split between belief and uncertainty is
+the only informative quantity there; this is stated together with the other
+expressiveness limit in \cref{sec:dnn_trust}. Relaxing this constraint, for
 instance by allowing parameter distrust to directly contribute a distrust component
 to the output, is another avenue for future work.
 
