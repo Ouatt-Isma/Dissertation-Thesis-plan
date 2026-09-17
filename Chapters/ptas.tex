@@ -16,7 +16,7 @@ Existing approaches to trust and uncertainty propagation in \acp{NN}, reviewed i
 
 This chapter provides a formal and operational answer to \ac{RQ}~3 by introducing a principled framework for trust propagation in \acp{NN}. Building on the foundations of \ac{SL} and the optimized trust inference mechanisms introduced in \cref{chap:tnasl}, we model trust as a transitive, structure-aware, and evidence-driven quantity that propagates through the network in parallel with standard \ac{NN} computation. The proposed framework integrates two complementary sources of trust: (i) the reliability of input features at inference time, and (ii) the reliability of model parameters, which themselves are derived from the trustworthiness of the training dataset. Importantly, this propagation is performed without modifying the underlying \ac{NN}, thereby preserving compatibility with existing architectures. Methodologically, \ac{PaTAS-TP} is a \emph{white-box} framework: it exploits the internal structure of the \ac{NN}, namely its layer topology, parameters, and activation paths, to compute trust at each intermediate computation rather than treating the model as an opaque input--output mapping. This places \ac{PaTAS-TP} in direct contrast with the black-box calibration approach of \cref{chap:bb}.
 
-More specifically, this chapter introduces the following contributions. First, we define a parallel trust computation mechanism based on Trust Nodes and Trust Functions, which mirror the structure of \ac{NN} computations and enable consistent trust propagation using \ac{SL} operators such as fusion and discounting. Second, we propose a parameter-trust update mechanism that estimates the reliability of learned parameters during training by leveraging gradient information, features trust, and label trust, thereby aligning parameter trust with the learning dynamics; the gradient-stability threshold it relies on is given a scale-tied, task-relative formulation that removes its only tuning burden. Third, we introduce the \ac{IPTA}, a context-aware mechanism that computes instance-specific trust scores by exploiting the activation paths involved in the prediction, and generalize it to convolutional architectures through activity-weighted path conditioning. Fourth, we instantiate the input-trust route with a conformity-based construction that derives per-feature opinions from training-data statistics, and compose it with the path trust into a single per-sample score. Finally, we evaluate the framework empirically, on controlled degradations of three datasets and in a comparative battery against established uncertainty and detection baselines. The evaluation is designed to attribute rather than to aggregate. It shows that the detection of inputs which violate the training distribution is carried by the input-side conformity opinions, which on their own match or exceed the composed per-sample score on most detection tasks; that trust propagation adds detection signal mainly for corruptions that preserve the input marginals; and that the contribution unique to the propagation mechanism is on the model side, namely the class-level localisation of training-data poisoning and a training-quality signal that requires no test data. The trust estimates are stable under training and consistent with the theoretical properties established here, within two expressiveness limits that are stated up front in \cref{sec:dnn_trust}: the trust functions do not see the sign or magnitude of weights and activations, and output disbelief can only originate from input disbelief.
+More specifically, this chapter introduces the following contributions. First, we define a parallel trust computation mechanism based on Trust Nodes and Trust Functions, which mirror the structure of \ac{NN} computations and enable consistent trust propagation using \ac{SL} operators such as fusion and discounting. Second, we propose a parameter-trust update mechanism that estimates the reliability of learned parameters during training by leveraging gradient information, features trust, and label trust, thereby aligning parameter trust with the learning dynamics; the gradient-stability threshold it relies on is given a scale-tied, task-relative formulation that removes its only tuning burden. Third, we introduce the \ac{IPTA}, a context-aware mechanism that computes instance-specific trust scores by exploiting the activation paths involved in the prediction, and generalize it to convolutional architectures through activity-weighted path conditioning. Fourth, we instantiate the input-trust route with a conformity-based construction that derives per-feature opinions from training-data statistics, and compose it with the path trust into a single per-sample score. Finally, we evaluate the framework empirically, on controlled degradations of three datasets and in a comparative battery against established uncertainty and detection baselines. The central claim that the evaluation supports is that the trust in a prediction decomposes into two routes that answer different questions. The \emph{input route} carries the opinions on the query, assigned by an analyst or derived from training-data statistics, and detects inputs that violate the training distribution. The \emph{model route} carries the parameter trust learned during training and exposes what the training data did to the model; it is the part of the framework that no confidence score, uncertainty estimate or input-space detector expresses, since it localises training-data poisoning at the level of individual classes, separates the label channel from the trigger channel, and yields a training-quality signal that requires no test data. The evaluation attributes every result to one of the two routes rather than aggregating them, and the trust estimates are stable under training and consistent with the theoretical properties established here. Two expressiveness limits of the trust functions are stated up front in \cref{sec:dnn_trust}: they do not see the sign or magnitude of weights and activations, and output disbelief can only originate from input disbelief.
 
 The remainder of this chapter is organized as follows. \Cref{sec:trust_foundations} introduces the formal foundations of trust-aware \ac{NN} computation and defines the parallel trust function. \Cref{sec:tp_arch_ovvw} presents the \ac{PaTAS-TP} architecture, decomposing it into four functional modules: Trust Feedforward, Output-Trust Aggregation, \ac{GenIPTA}, and Parameter-Trust Update. \Cref{sec:perceptron} illustrates the core mechanisms of the Trust Feedforward through a simple perceptron example. \Cref{sec:dnn_trust} generalizes these mechanisms to deep \acp{NN} by introducing the Trust Function and layer-wise propagation. The propagation is defined neuron by neuron and each step only needs the incoming opinions of one neuron, so it is well defined for any architecture and does not rely on the \ac{DSPG} property; the \ac{DSPG}-based analysis of \cref{chap:tnasl} remains relevant for alternative designs that build a single trust network across paths of neurons, and for the dataset trust assessment of \cref{chap:dataset-trust}. The same section states the independence assumption behind the fusion step, the fusion operator actually used, and the expressiveness limits of the trust functions. \Cref{sec:param_update} details the Parameter-Trust Update mechanism that refines trust in learned parameters during training. \Cref{sec:ptastheory} establishes theoretical properties of the framework, including the stability of the parameter-trust update and its operator-specific limits. \Cref{sec:inference-trust} instantiates the per-sample trust assessment used at inference time: the conformity-based input-trust construction, its a-priori applicability diagnostics, and the composed trust score. \Cref{sec:patas-tp-evaluation} provides comprehensive experimental validation of increasing complexity, from controlled degradations on three datasets to a comparative evaluation against uncertainty and detection baselines. Finally, \cref{sec:patas-discussion} discusses key findings and practical implications, and \cref{sec:patas-tp-conclusion} concludes the chapter.
 
@@ -689,7 +689,7 @@ For the poisoned dataset, trust is assigned as follows:
 \noindent This setup helps the \ac{PaTAS-TP} framework focus on potentially corrupted areas, while trusting the unaffected parts of the data.
 
 \subsubsection{Experiment 4 - Comparative Trust Evaluation}\label{exp:comparative}
-We compare the composed per-sample \ac{PaTAS-TP} score against maximum softmax probability, MC~Dropout~\cite{gal2016dropoutbayesianapproximationrepresenting} ($T{=}30$, dropout $0.2$), and \ac{EDL}~\cite{sensoy2018evidentialdeeplearningquantify} (ranking metrics score its negated Dirichlet total uncertainty $1-u$ with $u = K/S$; calibration metrics its maximum expected probability), each trained with the modifications its method requires under the shared architecture, optimizer, and epoch budget. To attribute mechanisms rather than merely outperform output-only scores, we further include detector baselines in both representation spaces: the class-conditional Mahalanobis distance~\cite{lee2018mahalanobis} and the deep nearest-neighbor distance~\cite{sun2022knnood} on penultimate features, the energy score~\cite{liu2020energy} on logits, their raw-pixel counterparts (Mahalanobis with shrinkage covariance and $k$-nearest-neighbor distance fit directly on training pixels), and the conformity score $P_{\mathrm{input}}$ alone, i.e., the input opinions of \cref{sec:conformity} with all propagation removed.
+We compare the composed per-sample \ac{PaTAS-TP} score against maximum softmax probability, MC~Dropout~\cite{gal2016dropoutbayesianapproximationrepresenting} ($T{=}30$, dropout $0.2$), and \ac{EDL}~\cite{sensoy2018evidentialdeeplearningquantify} (ranking metrics score its negated Dirichlet total uncertainty $1-u$ with $u = K/S$; calibration metrics its maximum expected probability), each trained with the modifications its method requires under the shared architecture, optimizer, and epoch budget. To attribute mechanisms rather than merely outperform output-only scores, we further include detector baselines in both representation spaces: the class-conditional Mahalanobis distance~\cite{lee2018mahalanobis} and the deep nearest-neighbor distance~\cite{sun2022knnood} on penultimate features, the energy score~\cite{liu2020energy} on logits, their raw-pixel counterparts (Mahalanobis with shrinkage covariance and $k$-nearest-neighbor distance fit directly on training pixels), and, as an ablation of the framework itself, the input route of \ac{PaTAS-TP} on its own, that is, the conformity score $P_{\mathrm{input}}$ of \cref{sec:conformity} with all propagation removed. This last row is a component of \ac{PaTAS-TP}, not a competing method; comparing it with the composed score attributes each result either to the input route or to propagation.
 
 Primary datasets are MNIST and Fashion-MNIST~\cite{xiao2017fashionmnist} (784-512-10, 20 epochs); GTSRB~\cite{GTSRB} (1024-128-43, train-standardized) serves as an applicability-boundary case flagged in advance by the diagnostics of \cref{sec:conformity}. The battery is additionally run on convolutional networks with the conv \ac{IPTA} of \cref{sec:conv_trust}: residual \acp{CNN} on MNIST and Fashion-MNIST ($99.3\%$ and $88.7\%$ test accuracy) and a deeper residual \ac{CNN} on CIFAR-10 ($84.5\% \pm 0.8$); the networks use no normalization layers, so trust propagation covers every parameter. Every method is evaluated identically on clean test data, under Bernoulli-uniform feature corruption, on mixed batches pooling clean and corrupted inputs 1:1, and as an \ac{OOD} detector (Fashion-MNIST for MNIST and vice versa, identical preprocessing). Beyond uniform noise, two harder paired corruptions probe the conformity model at its declared blind spots: a random circular translation of up to two pixels (marginal-preserving) and a low-amplitude trigger alpha-blended into the image center (an adaptive adversary staying within the feature range). Post-hoc isotonic calibration is fit per method on a held-out clean split; reported detection metrics are the area under the ROC curve (AUROC) for separating the relevant classes of inputs, as mean over three evaluation seeds (seed dispersion at most $\pm 0.005$ unless stated). The training-quality audit trains the MNIST network under increasing label-flip rates and reads the model-side trust with no test data; it is complemented by a dead-unit confound check and by single-channel poisoning controls (label flip only, trigger patch only) for Experiment~3's combined corruption.
 
@@ -915,9 +915,9 @@ In this experiment, \ac{PaTAS-TP} produces ten output trust opinions, one for ea
 
 When features and labels are vacuous, accuracy improves as model size increases, from 73.96\% (architecture 16) to 92.05\% (architecture 128). Test accuracy exceeds training accuracy in every vacuous row. This is not an effect of \ac{PaTAS-TP}, which never modifies the training: the vacuous profile is realised by injecting feature and label noise into the training set only, so the training accuracy is measured on degraded samples and partly corrupted labels, while the test set is clean. Trust mass follows the same upward trend with model size (0.3087, 0.3224, 0.3306, 0.3359), though the gains become progressively smaller, indicating diminishing returns from added capacity under uncertain data.
 
-The two-layer architecture (16-16) is a notable exception. Despite having more parameter count than the single-layer 16-hidden neurons network, it yields a trust mass of only 0.1628 under vacuous inputs and 0.7077 under trusted inputs, both consistently lower than the single-layer 16-neuron counterpart (0.3087 and 0.8620 respectively). This is not an artifact but a meaningful property of the framework: each additional layer introduces an extra round of trust discounting, which attenuates the trust signal propagating through the network. A deeper architecture therefore inherits less trust from its inputs, even when those inputs are reliable. This behavior is consistent with \ac{PaTAS-TP} design, since a deeper inference path involves more parameters, each contributing uncertainty, and the framework correctly reflects that the output trust depends on the full chain of parameter reliability. A secondary factor is convergence speed: the gradients of the deeper network stabilise later, and since the parameter trust is a running mean of the recent gradient evidence (\cref{thm:convergence}), it is still moving when training stops.
+The two-layer architecture (16-16) is a notable exception. Despite having more parameter count than the single-layer 16-hidden neurons network, it yields a trust mass of only 0.1628 under vacuous inputs and 0.7077 under trusted inputs, both consistently lower than the single-layer 16-neuron counterpart (0.3087 and 0.8620 respectively). This is a direct consequence of the calculus: each additional layer applies one more round of discounting, so the trust signal decays geometrically with depth and a deeper architecture inherits less trust from its inputs even when those inputs are reliable. The raw aggregate is therefore comparable only across architectures of the same depth; the depth-normalized aggregation of \cref{sec:tp_arch_ovvw} removes the geometric component of this decay and is the readout to use when depths differ. A secondary factor is convergence speed: the gradients of the deeper network stabilise later, and since the parameter trust is a running mean of the recent gradient evidence (\cref{thm:convergence}), it is still moving when training stops.
 
-The trusted evaluation provides the clearest contrast. Architecture 16 with trusted features and labels reaches a trust mass of 0.8620, far exceeding any vacuous-data configuration regardless of architecture size. Even the deeper 16-16 architecture achieves 0.7077 under trusted inputs, outperforming the largest single-layer architecture (128, trust mass 0.3359) trained under vacuous data by a wide margin. On this dataset, data quality thus has a far greater impact on the resulting trust assessment than model capacity; part of this ordering is designed in, since the vacuous profile also degrades the data the model learns from.
+The trusted evaluation provides the clearest contrast. Architecture 16 with trusted features and labels reaches a trust mass of 0.8620, far exceeding any vacuous-data configuration regardless of architecture size. Even the deeper 16-16 architecture achieves 0.7077 under trusted inputs, outperforming the largest single-layer architecture (128, trust mass 0.3359) trained under vacuous data by a wide margin. On this dataset, data quality thus has a far greater impact on the resulting trust assessment than model capacity.
 
 \paragraph*{Replication across seeds.} \Cref{tab:mnist} reports one run per row, obtained with the original prototype. \Cref{tab:mnist_seeds} repeats the seven configurations with the released implementation over three seeds, each seed changing the initialisation, the batch order and the noise draw, with \ac{PaTAS-TP} attached to a fresh training run. The trust masses of the vacuous rows are reproduced to within $0.01$ of \cref{tab:mnist}, the trusted rows to within $0.05$ (the released implementation gives $0.842 \pm 0.011$ for the 16-neuron network and $0.696 \pm 0.028$ for the 16-16 network under trusted data). The width ordering of F2.1 holds in every seed, with a total gain from 16 to 128 neurons of $0.030 \pm 0.004$ that exceeds the seed dispersion of every row. The depth penalty of F2.2 holds in every seed under both profiles ($0.162 \pm 0.003$ against $0.306 \pm 0.004$ under vacuous data, $0.696 \pm 0.028$ against $0.842 \pm 0.011$ under trusted data). The test accuracy exceeds the training accuracy in every vacuous run, for the reason given above, and it is the quantity with the largest seed dispersion.
 
@@ -950,7 +950,7 @@ top=4pt, bottom=4pt]
 \textbf{F2.2 Depth penalises trust due to discounting accumulation.} The 16-16 architecture consistently yields lower trust than the single-layer 16-neuron network under both vacuous (0.1628 vs.\ 0.3087) and trusted (0.7077 vs.\ 0.8620) inputs. Each additional layer introduces an extra discounting step, so deeper networks attenuate the trust signal regardless of their predictive accuracy.
 
 \medskip
-\textbf{F2.3 Data quality dominates model capacity for trust on this benchmark.} Training the smallest architecture on trusted data (trust mass 0.8620) far exceeds training the largest architecture on vacuous data (trust mass 0.3359). The comparison is confined to one dataset and to trust profiles that are assigned jointly with the degradations, so it should be read as a property of the calculus under correct opinions rather than as a general empirical law.
+\textbf{F2.3 Data quality dominates model capacity for trust on this benchmark.} Training the smallest architecture on trusted data (trust mass 0.8620) far exceeds training the largest architecture on vacuous data (trust mass 0.3359). As in Experiment~1, the profiles are assigned jointly with the degradations (\cref{exp:1}), so the finding verifies the calculus under correct opinions on one dataset.
 \end{tcolorbox}
 
 
@@ -1073,8 +1073,8 @@ On clean test data the composed score matches the maximum-softmax filter on corr
  & OOD M$\to$F & Det.\ MNIST & Det.\ F-MNIST & OOD F$\to$M & Shift & Blend \\
 Method & AUROC & AUROC & AUROC & AUROC & AUROC & AUROC \\
 \hline
-PaTAS (composed) & 0.975 & 0.972 & 0.835 & 0.781 & \textbf{0.781} & 0.564 \\
-Conformity alone & \textbf{1.000} & \textbf{1.000} & \textbf{0.994} & 0.481 & 0.678 & 0.500 \\
+\ac{PaTAS-TP}, composed & 0.975 & 0.972 & 0.835 & 0.781 & \textbf{0.781} & 0.564 \\
+\ac{PaTAS-TP}, input route only & \textbf{1.000} & \textbf{1.000} & \textbf{0.994} & 0.481 & 0.678 & 0.500 \\
 Mahalanobis (pixel) & 0.997 & 0.997 & 0.944 & 0.942 & 0.716 & 0.482 \\
 kNN (pixel) & 0.965 & 0.603 & 0.707 & 0.967 & 0.749 & 0.500 \\
 Mahalanobis (feature) & 0.978 & 0.743 & 0.785 & \textbf{0.988} & 0.783 & 0.474 \\
@@ -1086,12 +1086,12 @@ MC Dropout & 0.936 & 0.621 & 0.545 & 0.834 & 0.747 & 0.574 \\
 \hline
 \end{tabular}%
 }
-\caption{Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac{OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), a limit shared by all ten scores against an adversary that stays inside the per-feature range.}
+\caption{Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac{OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), a limit shared by all ten scores against an adversary that stays inside the per-feature range. The two \ac{PaTAS-TP} rows are components of one framework: the input route is the conformity opinions scored on their own, and the composed score adds path trust and confidence to them.}
 \label{tab:diss-detection}
 \end{table}
 
 \paragraph*{Detection and attribution.}
-\Cref{tab:diss-detection} reports the violation-detection tasks. Three mechanisms are cleanly separable. First, \emph{violation detection is carried by input-space signals}: the conformity opinions are perfect or near-perfect where inputs violate the training marginals (\ac{OOD} M$\to$F $1.000$, corruption detection $1.000$ and $0.994$), the raw-pixel Mahalanobis baseline is close behind, and an ablation replacing the conformity opinions with the constant fully trusted opinion collapses the composed score to the output-only level ($0.896$ and $0.639$ on the forward tasks, single-seed). Trust propagation is not the detector; it is the carrier that turns the detection signal into an opinion composable with model trust. Second, \emph{propagation contributes exactly where the input marginals are silent}: under the marginal-preserving translation the conformity score drops to $0.678$ as predicted by its construction, while the composed score reaches $0.781$, above its own input factor, because translated inputs traverse atypical activation paths that the \ac{IPTA} reads as less trusted. Third, \emph{the directions of failure are principled}: in the subset direction (Fashion-MNIST model, MNIST digits as \ac{OOD}), digits occupy a quiet subset of the clothing marginals rather than violating them, the conformity score collapses below chance ($0.481$), and the neighborhood- and covariance-based detectors own the task ($0.988$ feature Mahalanobis, $0.942$ pixel Mahalanobis). The composition fails safely there: the confidence factor keeps the composed score at the output-baseline level ($0.781$ vs.\ $0.805$ softmax) instead of inheriting the collapse. Since the subset-direction signal demonstrably exists in input space, mapping such a detector through the same quantification into an additional input opinion is a natural \ac{SL} extension, left as future work.
+\Cref{tab:diss-detection} reports the violation-detection tasks. The two \ac{PaTAS-TP} rows are read together: the input route is the framework's own conformity opinions, the composed score adds propagation and confidence to them, and the difference between the rows measures what propagation contributes. Three mechanisms are cleanly separable. First, \emph{violation detection is carried by input-space signals}: the conformity opinions are perfect or near-perfect where inputs violate the training marginals (\ac{OOD} M$\to$F $1.000$, corruption detection $1.000$ and $0.994$), the raw-pixel Mahalanobis baseline is close behind, and an ablation replacing the conformity opinions with the constant fully trusted opinion collapses the composed score to the output-only level ($0.896$ and $0.639$ on the forward tasks, single-seed). Trust propagation is not the detector; it is the carrier that turns the detection signal into an opinion composable with model trust. Second, \emph{propagation contributes exactly where the input marginals are silent}: under the marginal-preserving translation the conformity score drops to $0.678$ as predicted by its construction, while the composed score reaches $0.781$, above its own input factor, because translated inputs traverse atypical activation paths that the \ac{IPTA} reads as less trusted. Third, \emph{the directions of failure are principled}: in the subset direction (Fashion-MNIST model, MNIST digits as \ac{OOD}), digits occupy a quiet subset of the clothing marginals rather than violating them, the conformity score collapses below chance ($0.481$), and the neighborhood- and covariance-based detectors own the task ($0.988$ feature Mahalanobis, $0.942$ pixel Mahalanobis). The composition fails safely there: the confidence factor keeps the composed score at the output-baseline level ($0.781$ vs.\ $0.805$ softmax) instead of inheriting the collapse. Since the subset-direction signal demonstrably exists in input space, mapping such a detector through the same quantification into an additional input opinion is a natural \ac{SL} extension, left as future work.
 
 On the applicability-boundary case, GTSRB, the marginal conformity model detects corruption only weakly ($0.645$; composed $0.545$), exactly as the diagnostics of \cref{sec:conformity} predict (\cref{tab:diss-diagnostics}: no witness features with $w_j \geq 4$). The pixel-space Mahalanobis baseline still reaches $0.997$ on the same task: the boundary belongs to the per-feature marginal model, not to input-space assessment as such, which sharpens the diagnostics into an actionable gate: when they flag a domain, a covariance-aware input model is required.
 
@@ -1164,8 +1164,8 @@ The battery transfers to \acp{CNN} through the activity-weighted conv \ac{IPTA} 
  & \multicolumn{2}{c}{MNIST \ac{CNN}} & \multicolumn{2}{c}{Fashion \ac{CNN}} & CIFAR-10 \\
 Method & Det. & OOD & Det. & OOD F$\to$M & Det. \\
 \hline
-PaTAS (composed) & $0.988$ & $0.991$ & $0.859$ & $0.201$ & $\textbf{0.732}$ \\
-Conformity alone & $\textbf{1.000}$ & $\textbf{1.000}$ & $\textbf{0.994}$ & $0.481$ & $0.723$ \\
+\ac{PaTAS-TP}, composed & $0.988$ & $0.991$ & $0.859$ & $0.201$ & $\textbf{0.732}$ \\
+\ac{PaTAS-TP}, input route only & $\textbf{1.000}$ & $\textbf{1.000}$ & $\textbf{0.994}$ & $0.481$ & $0.723$ \\
 Max softmax & $0.662$ & $0.967$ & $0.711$ & $0.281$ & $0.700$ \\
 MC Dropout & $0.605$ & $0.978$ & $0.616$ & $\textbf{0.712}$ & $0.622$ \\
 \ac{EDL} & $0.527$ & $0.820$ & $0.522$ & $0.608$ & $0.525$ \\
@@ -1206,7 +1206,7 @@ MNIST 784-128-10 & averaging (ABF) & $0.988$ & $(0.9998, 0.0000, 0.0002)$ & $0.3
 colframe=gray!40, fonttitle=\bfseries, left=4pt, right=4pt,
 top=4pt, bottom=4pt]
 
-\textbf{F4.1 Attribution is explicit: input-space signals carry violation detection.} The conformity opinions and the raw-pixel Mahalanobis baseline dominate every marginal-violation task, and removing the input opinions collapses the composed score to the output-only level. Trust propagation's role there is composition, not detection.
+\textbf{F4.1 Attribution is explicit: input-space signals carry violation detection.} The framework's input route (the conformity opinions) and the raw-pixel Mahalanobis baseline dominate every marginal-violation task, and removing the input opinions collapses the composed score to the output-only level. Trust propagation's role there is composition, not detection.
 
 \medskip
 \textbf{F4.2 Propagation contributes where marginals are silent.} Under marginal-preserving translation the composed score ($0.781$) beats its own input factor ($0.678$): atypical activation paths carry detection signal that no marginal input model can see.
@@ -1281,75 +1281,81 @@ This distinction motivates the use of a softmax-weighted aggregation $\sum_i p_i
 \section{Summary \& Conclusions}
 \label{sec:patas-tp-conclusion}
 
+This chapter presented \ac{PaTAS-TP}, a framework that propagates trust through
+\acp{NN} in parallel with the standard computation and without modifying the
+network. Its contribution is a decomposition of the trust in a prediction into two
+routes. The \emph{input route} carries the opinions on the query, whether assigned
+by an analyst (\cref{chap:dataset-trust}) or derived from training-data statistics
+by the conformity construction of \cref{sec:conformity}. It detects inputs that
+violate the training distribution, reaching AUROC $1.000$ on \ac{OOD} detection
+from MNIST to Fashion-MNIST and on corruption detection on MNIST, and $0.994$ on
+Fashion-MNIST, and its applicability is predicted in advance by the diagnostics of
+\cref{sec:conformity}. The \emph{model route} carries the parameter trust that the
+Parameter-Trust Update accumulates from gradient evidence, feature trust and label
+trust during training. It is the part of the framework that no confidence score,
+uncertainty estimate or input-space detector expresses. Read under a fully trusted
+input, it localises training-data poisoning at the level of individual classes,
+separating the two flipped classes from every clean class by a margin far outside
+the clean-class band, distinguishes the label channel from the trigger channel, and
+provides a training-quality tripwire that flags label corruption at every non-zero
+flip rate without any test data, robust to the dead-unit confound and to the
+threshold convention. The composed per-sample score of \cref{sec:composed} combines
+the two routes with the model's confidence; its operational reading is to gate on
+trust and on the applicability diagnostics, then rank by confidence among trusted
+inputs.
 
-This chapter presented \ac{PaTAS-TP}, a framework for propagating trust through
-\acp{NN} in parallel with standard computation. The trust assessments stabilise
-alongside model training in the sense of \cref{thm:convergence}, respect the
-symmetry and invariance properties of \cref{sec:ptassyminv}, and respond to the
-trust profiles assigned to the data in the four experimental settings. The
-comparative evaluation makes the framework's value attributable rather than
-aggregate, and the attribution is not flattering to propagation alone. The
-detection of inputs that violate the training distribution is carried by the
-input-side conformity opinions: on their own they reach AUROC $1.000$ on
-\ac{OOD} detection from MNIST to Fashion-MNIST and on corruption detection on
-MNIST, and $0.994$ on Fashion-MNIST, where the composed score reaches $0.975$,
-$0.972$ and $0.835$. Propagation adds detection signal mainly under the
-marginal-preserving translation ($0.781$ against $0.678$ for conformity alone),
-and even there a feature-space nearest-neighbour detector is stronger ($0.801$).
-The training-quality audit read from the trained trust state flags the presence
-of label corruption at every non-zero flip rate, but at a saturated level
-($0.682$ at every rate) that does not recover the corruption rate, whereas the
-data-side disagreement baseline does. The contribution that no input-space or
-output-only baseline expresses is therefore narrower than the aggregate numbers
-suggest, and it is on the model side: the class-level localisation of
-training-data poisoning, which separates the two flipped classes from every
-clean class, distinguishes the label and trigger channels, and survives the
-dead-unit and threshold checks. The evaluation also covers residual
-convolutional networks at accuracies defensible for their domains ($99.3\%$
-MNIST, $88.7\%$ Fashion-MNIST, $84.5\%$ CIFAR-10) through the activity-weighted
-conv \ac{IPTA}; extending trust functions to transformer components and
-normalization layers, and scaling the evaluation to top-tier training
-pipelines, remain natural directions for future work.
+The comparative evaluation attributes each result to one route. Where inputs
+violate the training marginals, the detection signal comes from the input route,
+and propagation acts as the carrier that turns it into an opinion composable with
+model trust. Propagation contributes detection signal of its own where the
+marginals are silent, under the marginal-preserving translation ($0.781$ against
+$0.678$ for the input route alone), although a feature-space nearest-neighbour
+detector remains stronger there ($0.801$). The tripwire saturates at a single level
+($0.682$ at every flip rate) and does not recover the corruption rate, which the
+rate-informed variant and the data-side disagreement baseline do. The theoretical
+properties of \cref{sec:ptastheory}, namely the stabilisation of the parameter
+trust with the gradients (\cref{thm:convergence}) and the symmetry and invariance
+properties of \cref{sec:ptassyminv}, are confirmed in every experiment, and the
+evaluation extends to residual convolutional networks at accuracies defensible for
+their domains ($99.3\%$ MNIST, $88.7\%$ Fashion-MNIST, $84.5\%$ CIFAR-10) through
+the activity-weighted conv \ac{IPTA}.
 
-A known limitation of the current design is that it structurally penalizes deeper
-architectures. Each additional layer introduces an extra discounting step that
-attenuates the trust signal, so deeper networks inherit less trust from their
-inputs regardless of their predictive performance. The depth-normalized
-aggregation introduced in \cref{sec:tp_arch_ovvw} compensates for the geometric
-component of this decay and makes trust values comparable across depths, and it is
-used alongside the raw aggregate in the audit of Experiment~4; a fully
-depth-invariant formulation of the propagation itself, rather than a corrected
-readout, remains future work. Two further limitations surfaced by the comparative
-evaluation deserve explicit mention. First, the trust functions combine opinions
-independently of weight and activation magnitudes: trust deliberately tracks the
-provenance and reliability of the quantities entering a computation rather than
-their functional influence, so an input the network effectively ignores can still
-contribute to the output opinion. Partial influence-aware steps exist, the
-softmax-weighted aggregation of Experiment~3 and the activity-weighted conv
-\ac{IPTA}, but fully magnitude-aware trust functions remain open. Second, the
-conformity-based input opinions detect support violations, not support subsets;
-the subset-direction \ac{OOD} failure is predicted by the a-priori diagnostics,
-and fusing a covariance- or neighborhood-based detector into the input opinion
-through the same quantification is the natural \ac{SL} remedy.
+\paragraph*{Relation to DeepTrust.} DeepTrust~\cite{10.3389/frai.2020.00054}, the
+closest prior work (\cref{sec:sl_approaches}), specifies its trust computation at
+the output layer and returns one global opinion on the model. \ac{PaTAS-TP} differs
+in three ways that the evaluation exercises. The trust computation is defined
+neuron by neuron (\cref{def:trustfunc}), so it yields an opinion for every
+intermediate activation and every output class; this is what makes the class-level
+localisation of poisoning and the \ac{IPTA} possible. The parameter trust is
+maintained per parameter and revised at every mini-batch from gradient evidence,
+feature trust and label trust (\cref{alg:trustupdate}), rather than being a single
+model-level quantity, so the model route can report which classes the training data
+affected. And the operators are chosen for the dependence structure of a layered
+computation rather than by analogy with addition and multiplication: discounting and
+averaging fusion remove the double counting that a cumulative operator would
+introduce (\cref{sec:fusion_choice}) and give the framework the invariance
+properties of \cref{sec:ptassyminv}.
 
-A second limitation concerns the directional preservation of evidence established
-in \cref{thm:infvac} and its Remark. While theoretically sound, this property implies that \ac{PaTAS-TP} cannot generate a non-zero distrust mass at the output when the input carries no distrust, that is, when $d_x = 0$, even if the model parameters are highly unreliable. In other words, parameter unreliability manifests as increased uncertainty rather than explicit distrust in the output opinion. This is a genuine
-restriction in safety-critical settings where a positive distrust signal would be
-more actionable than a high uncertainty mass. Every experiment of this chapter that feeds a fully trusted input therefore
-reports $d = 0$ by construction, and the split between belief and uncertainty is
-the only informative quantity there; this is stated together with the other
-expressiveness limit in \cref{sec:dnn_trust}. Relaxing this constraint, for
-instance by allowing parameter distrust to directly contribute a distrust component
-to the output, is another avenue for future work.
-
-Finally, the gradient-counting procedure used in \textsc{NodeTrust} fixes the
-uncertainty component of the resulting binomial opinion based on the number of
-input neurons, which may not be optimal in all cases. Adaptive quantification
-schemes, as well as richer initialisation strategies for
-$T_{n_i \mid \overline{y_\text{batch}}}$ beyond the vacuous opinion, are further
-directions for improving the framework.
-
-
-
-
-
+\paragraph*{Limitations.} Each limitation of the design has a stated remedy.
+(i) Each layer applies one round of discounting, so the raw aggregate penalises
+depth; the depth-normalized readout of \cref{sec:tp_arch_ovvw} corrects the
+geometric component, and a depth-invariant propagation rule remains open.
+(ii) The trust functions do not see weight or activation magnitudes, so an input the
+network ignores still contributes to the output opinion; the softmax-weighted
+aggregation of Experiment~3 and the activity-weighted conv \ac{IPTA} are partial,
+influence-aware steps, and fully magnitude-aware trust functions remain open.
+(iii) By \cref{thm:infvac}, output disbelief can only originate from input
+disbelief, so unreliable parameters manifest as output uncertainty rather than as
+an explicit distrust signal; every experiment that feeds a fully trusted input
+therefore reports $d = 0$ by construction, and letting parameter distrust
+contribute a distrust component to the output is a possible relaxation.
+(iv) The conformity opinions detect support violations, not support subsets; the
+diagnostics predict this failure, and fusing a covariance- or neighbourhood-based
+detector into the input opinion through the same quantification is the natural
+\ac{SL} remedy. (v) The gradient-counting rule of \textsc{NodeTrust} fixes the
+uncertainty of each parameter opinion by the fan-in and initialises
+$T_{n_i \mid \overline{y_\text{batch}}}$ to the vacuous opinion; adaptive
+quantification and richer priors are further refinements. Extending the trust
+functions to transformer components and normalization layers, and scaling the
+evaluation to larger training pipelines, are taken up in
+\cref{sec:conclusion-future}.

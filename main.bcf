@@ -2724,18 +2724,19 @@
     <bcf:citekey order="221" intorder="1">xiao2017fashionmnist</bcf:citekey>
     <bcf:citekey order="222" intorder="1">GTSRB</bcf:citekey>
     <bcf:citekey order="223" intorder="1">vanderheijden2018multisourcefusionoperationssubjective</bcf:citekey>
-    <bcf:citekey order="224" intorder="1">11124121</bcf:citekey>
-    <bcf:citekey order="225" intorder="1">feng2019trustyoucalibrationprobabilistic</bcf:citekey>
-    <bcf:citekey order="226" intorder="1">lecun1998mnist</bcf:citekey>
-    <bcf:citekey order="227" intorder="1">krizhevsky2009learningcifar</bcf:citekey>
-    <bcf:citekey order="228" intorder="1">zagoruyko2017wideresidualnetworks</bcf:citekey>
-    <bcf:citekey order="229" intorder="1">guo2017calibrationmodernneuralnetworks</bcf:citekey>
-    <bcf:citekey order="230" intorder="1">kmeans8ddb7f85-9a8c-3829-b04e-0476a67eb0fd</bcf:citekey>
-    <bcf:citekey order="231" intorder="1">netop_5g_energy_2026</bcf:citekey>
-    <bcf:citekey order="232" intorder="1">Bishop1995</bcf:citekey>
-    <bcf:citekey order="233" intorder="1">Abadi_2016</bcf:citekey>
-    <bcf:citekey order="234" intorder="1">soviany2022curriculumlearningsurvey</bcf:citekey>
-    <bcf:citekey order="235" intorder="1">ghosh2017robustlossfunctionslabel</bcf:citekey>
+    <bcf:citekey order="224" intorder="1">10.3389/frai.2020.00054</bcf:citekey>
+    <bcf:citekey order="225" intorder="1">11124121</bcf:citekey>
+    <bcf:citekey order="226" intorder="1">feng2019trustyoucalibrationprobabilistic</bcf:citekey>
+    <bcf:citekey order="227" intorder="1">lecun1998mnist</bcf:citekey>
+    <bcf:citekey order="228" intorder="1">krizhevsky2009learningcifar</bcf:citekey>
+    <bcf:citekey order="229" intorder="1">zagoruyko2017wideresidualnetworks</bcf:citekey>
+    <bcf:citekey order="230" intorder="1">guo2017calibrationmodernneuralnetworks</bcf:citekey>
+    <bcf:citekey order="231" intorder="1">kmeans8ddb7f85-9a8c-3829-b04e-0476a67eb0fd</bcf:citekey>
+    <bcf:citekey order="232" intorder="1">netop_5g_energy_2026</bcf:citekey>
+    <bcf:citekey order="233" intorder="1">Bishop1995</bcf:citekey>
+    <bcf:citekey order="234" intorder="1">Abadi_2016</bcf:citekey>
+    <bcf:citekey order="235" intorder="1">soviany2022curriculumlearningsurvey</bcf:citekey>
+    <bcf:citekey order="236" intorder="1">ghosh2017robustlossfunctionslabel</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">
