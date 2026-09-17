@@ -67,7 +67,7 @@
 \acronymused{NN}
 \@writefile{toc}{\contentsline {section}{\numberline {7.2}Foundations of Trust Propagation in \aclu {NN}s}{134}{section.7.2}\protected@file@percent }
 \newlabel{sec:trust_foundations}{{7.2}{134}{Foundations of Trust Propagation in \aclu {NN}s}{section.7.2}{}}
-\newlabel{sec:trust_foundations@cref}{{[section][2][7]7.2}{[1][133][]134}{}{}{}}
+\newlabel{sec:trust_foundations@cref}{{[section][2][7]7.2}{[1][134][]134}{}{}{}}
 \acronymused{NN}
 \acronymused{NN}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Trust Representation in \aclu {NN}}{134}{subsection.7.2.1}\protected@file@percent }
@@ -80,9 +80,9 @@
 \newlabel{acro:DAG@cref}{{[subsection][1][7,2]7.2.1}{[1][134][]134}{}{}{}}
 \acronymused{DAG}
 \acronymused{NN}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Parallel Trust Function}{134}{subsection.7.2.2}\protected@file@percent }
-\acronymused{NN}
 \acronymused{PaTAS-TP}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Parallel Trust Function}{135}{subsection.7.2.2}\protected@file@percent }
+\acronymused{NN}
 \acronymused{NN}
 \acronymused{NN}
 \acronymused{NN}
@@ -105,7 +105,6 @@
 \acronymused{NN}
 \acronymused{TNN}
 \acronymused{NN}
-\acronymused{NN}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces High-Level Overview of the Trust Propagation in \ac {NN}}}{136}{figure.caption.241}\protected@file@percent }
 \acronymused{NN}
 \newlabel{fig:highptas}{{7.1}{136}{High-Level Overview of the Trust Propagation in \ac {NN}}{figure.caption.241}{}}
@@ -123,6 +122,7 @@
 \newlabel{fig:ptasoperation}{{7.2}{136}{Functional flow of \ac {PaTAS-TP} integrated with a \ac {NN}, showing the interaction between the Trust Feedforward (TF), Parameter-Trust Update (B), and \ac {GenIPTA}/Output-Trust Aggregation (I) modules across the training and inference phases. \textbf {Feedforward (Training Phase):} The NN interface extracts trust scores from input features for all data being processed. These trust scores are passed to the \textit {Trust Feedforward} module (TF.1), which propagates them through the \textit {\ac {TNN}} in parallel with the \ac {NN} computations. During training, Trust Feedforward stores the trust scores of all intermediate computations in the NN, to be reused in backpropagation. \textbf {Backpropagation (Training Phase):} Once the NN computes gradients, the trust scores of the labels (B.1) and the gradients (B.2) are provided to the \textit {Parameter-Trust Update}. Gradients indicate how dataset labels affect parameter updates, while label trust determines whether these updates should be considered reliable. The stored intermediate trust values are also incorporated in this process. Finally, the \textit {Parameter-Trust Update} module refines the trust values of the \ac {TNN} parameters (B.3), aligning them with the evolving learning dynamics. \textbf {Inference Phase:} During operation, contextual information such as the set of activated neurons is retrieved. This information is passed to \textit {\ac {GenIPTA}} (I.1), which constructs an \textit {\ac {IPTA}} corresponding to the specific inference path (I.2). The \ac {IPTA} takes input trust scores (I.3), propagates them along the path, and produces trust scores for each NN output. These can then be passed to the \textit {Output-Trust Aggregation} (I.4) which will combine them into a single consolidated trust score representing the reliability of the prediction (I.5)}{figure.caption.242}{}}
 \newlabel{fig:ptasoperation@cref}{{[figure][2][7]7.2}{[1][135][]136}{}{}{}}
 \acronymused{PaTAS-TP}
+\acronymused{NN}
 \acronymused{TNN}
 \acronymused{NN}
 \acronymused{TNN}
@@ -137,7 +137,6 @@
 \acronymused{GenIPTA}
 \acronymused{IPTA}
 \acronymused{NN}
-\acronymused{GenIPTA}
 \acronymused{NN}
 \newlabel{fig:nn1}{{7.3a}{138}{Perceptron for \cref {eq:smodel}}{figure.caption.248}{}}
 \newlabel{fig:nn1@cref}{{[subfigure][1][7,3]7.3a}{[1][138][]138}{}{}{}}
@@ -151,6 +150,7 @@
 \newlabel{fig:solution1}{{7.3}{138}{Trust-propagation based solely on input-feature trust}{figure.caption.248}{}}
 \newlabel{fig:solution1@cref}{{[figure][3][7]7.3}{[1][138][]138}{}{}{}}
 \acronymused{GenIPTA}
+\acronymused{GenIPTA}
 \@writefile{toc}{\contentsline {paragraph}{Parameter-Trust Update}{138}{section*.246}\protected@file@percent }
 \acronymused{TNN}
 \acronymused{PaTAS-TP}
@@ -161,7 +161,7 @@
 \acronymused{NN}
 \newlabel{eq:smodel}{{7.1}{138}{Trust Feedforward in a Simple Model: The Perceptron Case}{equation.7.1}{}}
 \newlabel{eq:smodel@cref}{{[equation][1][7]7.1}{[1][138][]138}{}{}{}}
-\@writefile{toc}{\contentsline {paragraph}{Trust Propagation from Inputs}{138}{figure.caption.248}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Trust Propagation from Inputs}{139}{figure.caption.248}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Incorporating Parameter Trust}{139}{section*.249}\protected@file@percent }
 \acronymused{NN}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Trust-propagation Trust Network with parameter trust.}}{140}{figure.caption.250}\protected@file@percent }
@@ -367,6 +367,8 @@
 \newlabel{acro:EDL}{{7.9.1}{156}{Experiment 4 - Comparative Trust Evaluation}{section*.267}{}}
 \newlabel{acro:EDL@cref}{{[subsection][1][7,9]7.9.1}{[1][156][]156}{}{}{}}
 \acronymused{EDL}
+\acronymused{PaTAS-TP}
+\acronymused{PaTAS-TP}
 \acronymused{IPTA}
 \acronymused{CNN}
 \acronymused{CNN}
@@ -376,12 +378,12 @@
 \acronymused{PaTAS-TP}
 \acronymused{NN}
 \acronymused{NN}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.9.2}Results and Analysis}{157}{subsection.7.9.2}\protected@file@percent }
 \acronymused{NN}
-\acronymused{NN}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.9.2}Results and Analysis}{158}{subsection.7.9.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Evolution of trust mass for fully trusted input in the MNIST poisoned Experiment with patch size \(4\times 4\) pixels}}{158}{figure.caption.269}\protected@file@percent }
 \newlabel{fig:4x4}{{7.6}{158}{Evolution of trust mass for fully trusted input in the MNIST poisoned Experiment with patch size \(4\times 4\) pixels}{figure.caption.269}{}}
 \newlabel{fig:4x4@cref}{{[figure][6][7]7.6}{[1][157][]158}{}{}{}}
+\acronymused{NN}
 \acronymused{PaTAS-TP}
 \@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Summary of final trust mass across four values of $\epsilon $ and corresponding train/test accuracies for the Breast Cancer Classification Experiment (original prototype, one run per cell; a five-seed replication with the released implementation is given in \cref  {tab:cancer_seeds}).}}{159}{table.caption.271}\protected@file@percent }
 \newlabel{tab:cancer_results}{{7.1}{159}{Summary of final trust mass across four values of $\epsilon $ and corresponding train/test accuracies for the Breast Cancer Classification Experiment (original prototype, one run per cell; a five-seed replication with the released implementation is given in \cref {tab:cancer_seeds})}{table.caption.271}{}}
@@ -405,7 +407,6 @@
 \acronymused{PaTAS-TP}
 \acronymused{PaTAS-TP}
 \acronymused{PaTAS-TP}
-\acronymused{PaTAS-TP}
 \acronymused{NN}
 \@writefile{lot}{\contentsline {table}{\numberline {7.6}{\ignorespaces Three-seed replication of \cref  {tab:mnist} with the released implementation ($\epsilon = 0.05$; mean $\pm $ standard deviation over three seeds; each seed changes the initialisation, the batch order and the noise draw).}}{164}{table.caption.280}\protected@file@percent }
 \newlabel{tab:mnist_seeds}{{7.6}{164}{Three-seed replication of \cref {tab:mnist} with the released implementation ($\epsilon = 0.05$; mean $\pm $ standard deviation over three seeds; each seed changes the initialisation, the batch order and the noise draw)}{table.caption.280}{}}
@@ -413,16 +414,16 @@
 \@writefile{lot}{\contentsline {table}{\numberline {7.7}{\ignorespaces Summary of results for the Poisoned MNIST Classification Experiment.}}{164}{table.caption.282}\protected@file@percent }
 \newlabel{tab:mnistpois}{{7.7}{164}{Summary of results for the Poisoned MNIST Classification Experiment}{table.caption.282}{}}
 \newlabel{tab:mnistpois@cref}{{[table][7][7]7.7}{[1][164][]164}{}{}{}}
-\acronymused{PaTAS-TP}
-\acronymused{PaTAS-TP}
+\@writefile{lot}{\contentsline {table}{\numberline {7.8}{\ignorespaces Relative trust gap between clean label 3 and poisoned label 6 as a function of patch size.}}{164}{table.caption.284}\protected@file@percent }
+\newlabel{tab:reldrop}{{7.8}{164}{Relative trust gap between clean label 3 and poisoned label 6 as a function of patch size}{table.caption.284}{}}
+\newlabel{tab:reldrop@cref}{{[table][8][7]7.8}{[1][164][]164}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.7}{\ignorespaces \ac {IPTA} results for \ac {NN} trained on poisoned datasets with patch size $4 \times 4$. Results are obtained by feedforwarding a fully trusted opinion, except the patch-distrusted, where patch pixels are explicitly assigned distrust.}}{165}{figure.caption.283}\protected@file@percent }
 \acronymused{IPTA}
 \acronymused{NN}
 \newlabel{fig:mnistpoisipta}{{7.7}{165}{\ac {IPTA} results for \ac {NN} trained on poisoned datasets with patch size $4 \times 4$. Results are obtained by feedforwarding a fully trusted opinion, except the patch-distrusted, where patch pixels are explicitly assigned distrust}{figure.caption.283}{}}
 \newlabel{fig:mnistpoisipta@cref}{{[figure][7][7]7.7}{[1][164][]165}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.8}{\ignorespaces Relative trust gap between clean label 3 and poisoned label 6 as a function of patch size.}}{165}{table.caption.284}\protected@file@percent }
-\newlabel{tab:reldrop}{{7.8}{165}{Relative trust gap between clean label 3 and poisoned label 6 as a function of patch size}{table.caption.284}{}}
-\newlabel{tab:reldrop@cref}{{[table][8][7]7.8}{[1][164][]165}{}{}{}}
+\acronymused{PaTAS-TP}
+\acronymused{PaTAS-TP}
 \acronymused{IPTA}
 \acronymused{IPTA}
 \acronymused{NN}
@@ -439,20 +440,24 @@
 \newlabel{tab:pois_provenance@cref}{{[table][9][7]7.9}{[1][166][]166}{}{}{}}
 \acronymused{PaTAS-TP}
 \acronymused{PaTAS-TP}
-\acronymused{OOD}
-\acronymused{IPTA}
+\acronymused{PaTAS-TP}
 \acronymused{OOD}
 \acronymused{NN}
+\acronymused{PaTAS-TP}
+\acronymused{PaTAS-TP}
 \acronymused{EDL}
-\@writefile{lot}{\contentsline {table}{\numberline {7.10}{\ignorespaces Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac {OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), a limit shared by all ten scores against an adversary that stays inside the per-feature range.}}{168}{table.caption.289}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.10}{\ignorespaces Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac {OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), a limit shared by all ten scores against an adversary that stays inside the per-feature range. The two \ac {PaTAS-TP} rows are components of one framework: the input route is the conformity opinions scored on their own, and the composed score adds path trust and confidence to them.}}{168}{table.caption.289}\protected@file@percent }
 \acronymused{OOD}
-\newlabel{tab:diss-detection}{{7.10}{168}{Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac {OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), a limit shared by all ten scores against an adversary that stays inside the per-feature range}{table.caption.289}{}}
+\acronymused{PaTAS-TP}
+\newlabel{tab:diss-detection}{{7.10}{168}{Detection of distribution violations (mean over three evaluation seeds, dispersion at most $\pm 0.005$): \ac {OOD} detection in both directions between MNIST and Fashion-MNIST, clean-versus-corrupted separation on the mixed batches (uniform feature noise), and the two hard MNIST corruptions (marginal-preserving translation; low-amplitude blended center trigger). The blended trigger defeats every method (best entry $0.574$), a limit shared by all ten scores against an adversary that stays inside the per-feature range. The two \ac {PaTAS-TP} rows are components of one framework: the input route is the conformity opinions scored on their own, and the composed score adds path trust and confidence to them}{table.caption.289}{}}
 \newlabel{tab:diss-detection@cref}{{[table][10][7]7.10}{[1][167][]168}{}{}{}}
-\acronymused{SL}
-\@writefile{lot}{\contentsline {table}{\numberline {7.11}{\ignorespaces A-priori applicability diagnostics of the conformity model, computed on clean training features before any model is trained (median effective deviation, maximum reliability weight, weight share of the top decile, fraction of features with $w_j \geq 4$), against the composed score's corruption detection later observed. Registered domains concentrate evidence in reliable witnesses; unregistered imagery has none, and the input-side signal is predicted, and confirmed, to be uninformative there.}}{168}{table.caption.291}\protected@file@percent }
-\newlabel{tab:diss-diagnostics}{{7.11}{168}{A-priori applicability diagnostics of the conformity model, computed on clean training features before any model is trained (median effective deviation, maximum reliability weight, weight share of the top decile, fraction of features with $w_j \geq 4$), against the composed score's corruption detection later observed. Registered domains concentrate evidence in reliable witnesses; unregistered imagery has none, and the input-side signal is predicted, and confirmed, to be uninformative there}{table.caption.291}{}}
-\newlabel{tab:diss-diagnostics@cref}{{[table][11][7]7.11}{[1][168][]168}{}{}{}}
 \acronymused{IPTA}
+\acronymused{OOD}
+\acronymused{SL}
+\acronymused{IPTA}
+\@writefile{lot}{\contentsline {table}{\numberline {7.11}{\ignorespaces A-priori applicability diagnostics of the conformity model, computed on clean training features before any model is trained (median effective deviation, maximum reliability weight, weight share of the top decile, fraction of features with $w_j \geq 4$), against the composed score's corruption detection later observed. Registered domains concentrate evidence in reliable witnesses; unregistered imagery has none, and the input-side signal is predicted, and confirmed, to be uninformative there.}}{169}{table.caption.291}\protected@file@percent }
+\newlabel{tab:diss-diagnostics}{{7.11}{169}{A-priori applicability diagnostics of the conformity model, computed on clean training features before any model is trained (median effective deviation, maximum reliability weight, weight share of the top decile, fraction of features with $w_j \geq 4$), against the composed score's corruption detection later observed. Registered domains concentrate evidence in reliable witnesses; unregistered imagery has none, and the input-side signal is predicted, and confirmed, to be uninformative there}{table.caption.291}{}}
+\newlabel{tab:diss-diagnostics@cref}{{[table][11][7]7.11}{[1][168][]169}{}{}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {7.12}{\ignorespaces Per-class output trust (projected probability under a fully trusted input) for the $4\times 4$ poisoned MNIST setup and its single-channel controls (784-128-10). Both flipped classes drop identically and far outside the clean-class band; the label channel carries most of the deficit, and the spurious patch alone remains detectable.}}{169}{table.caption.294}\protected@file@percent }
 \newlabel{tab:diss-classtrust}{{7.12}{169}{Per-class output trust (projected probability under a fully trusted input) for the $4\times 4$ poisoned MNIST setup and its single-channel controls (784-128-10). Both flipped classes drop identically and far outside the clean-class band; the label channel carries most of the deficit, and the spurious patch alone remains detectable}{table.caption.294}{}}
 \newlabel{tab:diss-classtrust@cref}{{[table][12][7]7.12}{[1][169][]169}{}{}{}}
@@ -472,6 +477,8 @@
 \acronymused{OOD}
 \acronymused{CNN}
 \acronymused{CNN}
+\acronymused{PaTAS-TP}
+\acronymused{PaTAS-TP}
 \acronymused{EDL}
 \@writefile{lot}{\contentsline {table}{\numberline {7.14}{\ignorespaces Convolutional battery (mean over three evaluation seeds, dispersion at most $\pm 0.004$): corruption detection on the mixed batch and \ac {OOD} detection where a counterpart dataset is defined. Base accuracies $99.3\%$, $88.7\%$, $84.5\%$.}}{171}{table.caption.298}\protected@file@percent }
 \acronymused{OOD}
@@ -483,49 +490,50 @@
 \acronymused{PaTAS-TP}
 \newlabel{tab:fusion_ops}{{7.15}{172}{Ablation of the trust-revision operator with \ac {PaTAS-TP} attached to a fresh training run for every operator (released implementation; breast cancer: $\epsilon = 0.1$, 15 epochs, mean $\pm $ standard deviation over three seeds; MNIST 784-128-10: $\epsilon = 0.05$, 20 epochs, one seed). The $(b, d, u)$ column is the mean parameter opinion of the first layer under trusted data. On the breast-cancer task, cumulative and belief constraint revision make every first-layer parameter opinion dogmatic ($u < 10^{-3}$); on MNIST all four operators do, the fixed point $u_q/15$ being $2 \cdot 10^{-4}$ for $785$ incoming edges}{table.caption.300}{}}
 \newlabel{tab:fusion_ops@cref}{{[table][15][7]7.15}{[1][172][]172}{}{}{}}
+\acronymused{PaTAS-TP}
 \acronymused{OOD}
 \acronymused{CNN}
 \acronymused{PaTAS-TP}
-\acronymused{PaTAS-TP}
 \@writefile{toc}{\contentsline {section}{\numberline {7.10}Discussion of \ac {PaTAS-TP} Findings}{173}{section.7.10}\protected@file@percent }
 \newlabel{sec:patas-discussion}{{7.10}{173}{Discussion of \ac {PaTAS-TP} Findings}{section.7.10}{}}
-\newlabel{sec:patas-discussion@cref}{{[section][10][7]7.10}{[1][172][]173}{}{}{}}
+\newlabel{sec:patas-discussion@cref}{{[section][10][7]7.10}{[1][173][]173}{}{}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {7.16}{\ignorespaces Asymptotic behavior of \(T_{n_i\mid \mid {Y_\text  {batch}}} \)}}{173}{table.caption.301}\protected@file@percent }
 \newlabel{tab:asympt}{{7.16}{173}{Asymptotic behavior of \(T_{n_i\mid \mid {Y_\text {batch}}} \)}{table.caption.301}{}}
-\newlabel{tab:asympt@cref}{{[table][16][7]7.16}{[1][172][]173}{}{}{}}
+\newlabel{tab:asympt@cref}{{[table][16][7]7.16}{[1][173][]173}{}{}{}}
 \acronymused{PaTAS-TP}
 \acronymused{NN}
 \acronymused{PaTAS-TP}
 \acronymused{PaTAS-TP}
+\acronymused{NN}
 \acronymused{IPTA}
 \acronymused{PaTAS-TP}
 \acronymused{PaTAS-TP}
 \acronymused{PaTAS-TP}
 \acronymused{PaTAS-TP}
-\acronymused{NN}
 \acronymused{PaTAS-TP}
 \AC@undonewlabel{acro:Adam}
 \newlabel{acro:Adam}{{7.10}{174}{Discussion of \ac {PaTAS-TP} Findings}{section*.302}{}}
 \newlabel{acro:Adam@cref}{{[section][10][7]7.10}{[1][174][]174}{}{}{}}
 \acronymused{Adam}
+\acronymused{PaTAS-TP}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.8}{\ignorespaces IPTA trust mass comparison between per-class neuron and softmax-weighted aggregation ($\DOTSB \sum@ \slimits@ _i p_i t_i$) for the \ac {NN} trained on the poisoned dataset with patch size $4 \times 4$. The softmax-weighted aggregation weights each output neuron's trust mass by the model's predicted probability, producing a ranking that better reflects the reliability of the final decision rather than the inference path alone.}}{175}{figure.caption.303}\protected@file@percent }
 \acronymused{NN}
 \newlabel{fig:mnistpoisipta2}{{7.8}{175}{IPTA trust mass comparison between per-class neuron and softmax-weighted aggregation ($\sum _i p_i t_i$) for the \ac {NN} trained on the poisoned dataset with patch size $4 \times 4$. The softmax-weighted aggregation weights each output neuron's trust mass by the model's predicted probability, producing a ranking that better reflects the reliability of the final decision rather than the inference path alone}{figure.caption.303}{}}
-\newlabel{fig:mnistpoisipta2@cref}{{[figure][8][7]7.8}{[1][174][]175}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.11}Summary \& Conclusions}{175}{section.7.11}\protected@file@percent }
-\newlabel{sec:patas-tp-conclusion}{{7.11}{175}{Summary \& Conclusions}{section.7.11}{}}
-\newlabel{sec:patas-tp-conclusion@cref}{{[section][11][7]7.11}{[1][174][]175}{}{}{}}
+\newlabel{fig:mnistpoisipta2@cref}{{[figure][8][7]7.8}{[1][175][]175}{}{}{}}
+\acronymused{NN}
+\@writefile{toc}{\contentsline {section}{\numberline {7.11}Summary \& Conclusions}{176}{section.7.11}\protected@file@percent }
+\newlabel{sec:patas-tp-conclusion}{{7.11}{176}{Summary \& Conclusions}{section.7.11}{}}
+\newlabel{sec:patas-tp-conclusion@cref}{{[section][11][7]7.11}{[1][175][]176}{}{}{}}
 \acronymused{PaTAS-TP}
 \acronymused{NN}
 \acronymused{OOD}
 \acronymused{IPTA}
-\acronymused{NN}
+\acronymused{PaTAS-TP}
 \acronymused{IPTA}
-\acronymused{OOD}
+\acronymused{IPTA}
 \acronymused{SL}
-\acronymused{PaTAS-TP}
 \@setckpt{Chapters/ptas}{
-\setcounter{page}{177}
+\setcounter{page}{178}
 \setcounter{equation}{7}
 \setcounter{enumi}{2}
 \setcounter{enumii}{3}
@@ -555,7 +563,7 @@
 \setcounter{citetotal}{0}
 \setcounter{multicitecount}{0}
 \setcounter{multicitetotal}{0}
-\setcounter{instcount}{265}
+\setcounter{instcount}{266}
 \setcounter{maxnames}{3}
 \setcounter{minnames}{1}
 \setcounter{maxitems}{3}
