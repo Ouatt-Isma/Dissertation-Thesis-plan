@@ -1,130 +1,130 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'main.blg'
-[35] biber-darwin:342> INFO - === Mon Aug 24, 2026, 17:25:50
-[45] Biber.pm:421> INFO - Reading 'main.bcf'
-[96] Biber.pm:1002> INFO - Found 10 citekeys in bib section 0
-[97] Biber.pm:1002> INFO - Found 6 citekeys in bib section 1
-[97] Biber.pm:1002> INFO - Found 0 citekeys in bib section 0
-[97] Biber.pm:1002> INFO - Found 2 citekeys in bib section 2
-[97] Biber.pm:1002> INFO - Found 0 citekeys in bib section 0
-[97] Biber.pm:1002> INFO - Found 2 citekeys in bib section 3
-[117] Biber.pm:1002> INFO - Found 125 citekeys in bib section 0
-[145] Biber.pm:4487> INFO - Processing section 0
-[151] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 0
-[156] bibtex.pm:1713> INFO - LaTeX decoding ...
+[37] biber-darwin:342> INFO - === Thu Sep 17, 2026, 12:01:24
+[47] Biber.pm:421> INFO - Reading 'main.bcf'
+[101] Biber.pm:1002> INFO - Found 10 citekeys in bib section 0
+[101] Biber.pm:1002> INFO - Found 6 citekeys in bib section 1
+[101] Biber.pm:1002> INFO - Found 0 citekeys in bib section 0
+[101] Biber.pm:1002> INFO - Found 2 citekeys in bib section 2
+[101] Biber.pm:1002> INFO - Found 0 citekeys in bib section 0
+[101] Biber.pm:1002> INFO - Found 2 citekeys in bib section 3
+[124] Biber.pm:1002> INFO - Found 129 citekeys in bib section 0
+[149] Biber.pm:4487> INFO - Processing section 0
+[156] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 0
+[157] bibtex.pm:1713> INFO - LaTeX decoding ...
 [163] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/papers.bib'
 [235] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/intro.bib' for section 0
 [236] bibtex.pm:1713> INFO - LaTeX decoding ...
-[245] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/intro.bib'
-[274] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/dspg.bib' for section 0
-[275] bibtex.pm:1713> INFO - LaTeX decoding ...
-[282] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/dspg.bib'
-[294] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/discount.bib' for section 0
+[243] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/intro.bib'
+[272] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/dspg.bib' for section 0
+[273] bibtex.pm:1713> INFO - LaTeX decoding ...
+[281] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/dspg.bib'
+[293] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/discount.bib' for section 0
 [295] bibtex.pm:1713> INFO - LaTeX decoding ...
-[306] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/discount.bib'
-[343] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/patas.bib' for section 0
-[346] bibtex.pm:1713> INFO - LaTeX decoding ...
-[374] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/patas.bib'
-[446] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/calibration.bib' for section 0
-[448] bibtex.pm:1713> INFO - LaTeX decoding ...
-[456] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/calibration.bib'
-[471] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/balancingBias.bib' for section 0
-[473] bibtex.pm:1713> INFO - LaTeX decoding ...
-[514] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/balancingBias.bib'
-[594] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/rw.bib' for section 0
-[595] bibtex.pm:1713> INFO - LaTeX decoding ...
-[605] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/rw.bib'
-[643] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/uq.bib' for section 0
-[644] bibtex.pm:1713> INFO - LaTeX decoding ...
-[649] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/uq.bib'
-[689] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/SL_NN.bib' for section 0
-[690] bibtex.pm:1713> INFO - LaTeX decoding ...
-[695] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/SL_NN.bib'
-[723] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/attacks.bib' for section 0
-[723] bibtex.pm:1713> INFO - LaTeX decoding ...
-[727] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/attacks.bib'
-[757] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/NN.bib' for section 0
-[758] bibtex.pm:1713> INFO - LaTeX decoding ...
-[761] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/NN.bib'
-[777] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/usecase.bib' for section 0
-[778] bibtex.pm:1713> INFO - LaTeX decoding ...
-[782] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/usecase.bib'
-[884] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[884] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[884] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[884] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[932] Biber.pm:4487> INFO - Processing section 1
-[932] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 1
-[969] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[969] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[969] Biber.pm:4307> INFO - Sorting list 'none/global/44C29EDB103A2872F519AD0C9A0FDAAA/global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[969] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[976] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[976] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[976] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[976] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[978] Biber.pm:4487> INFO - Processing section 2
-[979] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 2
-[985] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[985] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[985] Biber.pm:4307> INFO - Sorting list 'none/global/61E9C06EA9A85A5088A499DF6458D276/global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[985] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[989] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[989] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[989] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[989] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[990] Biber.pm:4487> INFO - Processing section 3
-[990] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 3
-[999] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/intro.bib' for section 3
-[1000] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/dspg.bib' for section 3
-[1000] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/discount.bib' for section 3
-[1000] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/patas.bib' for section 3
-[1000] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/calibration.bib' for section 3
-[1000] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/balancingBias.bib' for section 3
-[1000] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/rw.bib' for section 3
-[1000] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/uq.bib' for section 3
-[1001] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/SL_NN.bib' for section 3
-[1001] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/attacks.bib' for section 3
-[1001] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/NN.bib' for section 3
-[1002] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/usecase.bib' for section 3
-[1006] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1006] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1006] Biber.pm:4307> INFO - Sorting list 'none/global/A5F3C6A11B03839D46AF9FB43C97C188/global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[1006] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[1010] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1010] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1010] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[1010] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[1011] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[1059] bbl.pm:779> INFO - Output to main.bbl
-[1060] Biber.pm:132> WARN - ISBN '978-981-95-3543-9' in entry 'fotos2025actions' is invalid - run biber with '--validate_datamodel' for details.
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/4cba211c7098ce6d56874590d4a06a86_95535.utf8, line 102, warning: 12 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - legacy month field 'July' in entry 'NBERw31502' is not an integer - this will probably not sort properly.
-[1060] Biber.pm:132> WARN - legacy month field 'Aug' in entry '4622580' is not an integer - this will probably not sort properly.
-[1060] Biber.pm:132> WARN - Duplicate entry key: '8009820' in file 'bibtex/patas.bib', skipping ...
-[1060] Biber.pm:132> WARN - legacy month field 'Jan' in entry 'begoli2019need' is not an integer - this will probably not sort properly.
-[1060] Biber.pm:132> WARN - legacy month field 'Oct' in entry 'Gawlikowski2023' is not an integer - this will probably not sort properly.
-[1060] Biber.pm:132> WARN - legacy month field '23--29 Jul' in entry 'pmlr-v202-monchot23a' is not an integer - this will probably not sort properly.
-[1060] Biber.pm:132> WARN - Duplicate entry key: 'wong2021reallytrustyousimple' in file 'bibtex/calibration.bib', skipping ...
-[1060] Biber.pm:132> WARN - Duplicate entry key: '10.5555/1151699.1151710' in file 'bibtex/calibration.bib', skipping ...
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/f329edf482407ba2cb17af85929f043d_95535.utf8, line 10, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/f329edf482407ba2cb17af85929f043d_95535.utf8, line 20, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/f329edf482407ba2cb17af85929f043d_95535.utf8, line 31, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/f329edf482407ba2cb17af85929f043d_95535.utf8, line 59, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/f329edf482407ba2cb17af85929f043d_95535.utf8, line 68, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/f329edf482407ba2cb17af85929f043d_95535.utf8, line 77, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/f329edf482407ba2cb17af85929f043d_95535.utf8, line 98, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - Duplicate entry key: '9011418' in file 'bibtex/balancingBias.bib', skipping ...
-[1060] Biber.pm:132> WARN - legacy month field 'Feb' in entry 'SLencodings' is not an integer - this will probably not sort properly.
-[1060] Biber.pm:132> WARN - legacy month field 'jul' in entry '10.1145/3457607' is not an integer - this will probably not sort properly.
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/ae561458f41ddc554f33a4c840d2c74b_95535.utf8, line 217, warning: 1 characters of junk seen at toplevel
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/ae561458f41ddc554f33a4c840d2c74b_95535.utf8, line 754, warning: undefined macro "JACM"
-[1060] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_i7vH/ae561458f41ddc554f33a4c840d2c74b_95535.utf8, line 772, warning: undefined macro "CACM"
-[1061] Biber.pm:132> WARN - ISBN '9781439840955 1439840954' in entry 'gelman2013bayesian' is invalid - run biber with '--validate_datamodel' for details.
-[1061] Biber.pm:132> WARN - legacy month field 'Jul' in entry 'Baron1987' is not an integer - this will probably not sort properly.
-[1061] Biber.pm:132> WARN - legacy month field 'Feb.' in entry 'Naeini_Cooper_Hauskrecht_2015' is not an integer - this will probably not sort properly.
-[1061] Biber.pm:132> WARN - legacy month field 'jun' in entry 'Kargl2023Securing' is not an integer - this will probably not sort properly.
-[1061] Biber.pm:132> WARN - I didn't find a database entry for 'snn' (section 0)
-[1061] Biber.pm:132> WARN - ISBN '978-981-95-3543-9' in entry 'fotos2025actions' is invalid - run biber with '--validate_datamodel' for details.
-[1061] Biber.pm:132> WARN - I didn't find a database entry for 'snn' (section 3)
-[1061] Biber.pm:134> INFO - WARNINGS: 30
+[307] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/discount.bib'
+[342] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/patas.bib' for section 0
+[344] bibtex.pm:1713> INFO - LaTeX decoding ...
+[373] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/patas.bib'
+[445] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/calibration.bib' for section 0
+[447] bibtex.pm:1713> INFO - LaTeX decoding ...
+[455] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/calibration.bib'
+[472] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/balancingBias.bib' for section 0
+[475] bibtex.pm:1713> INFO - LaTeX decoding ...
+[521] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/balancingBias.bib'
+[629] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/rw.bib' for section 0
+[630] bibtex.pm:1713> INFO - LaTeX decoding ...
+[641] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/rw.bib'
+[684] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/uq.bib' for section 0
+[685] bibtex.pm:1713> INFO - LaTeX decoding ...
+[690] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/uq.bib'
+[737] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/SL_NN.bib' for section 0
+[738] bibtex.pm:1713> INFO - LaTeX decoding ...
+[743] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/SL_NN.bib'
+[774] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/attacks.bib' for section 0
+[775] bibtex.pm:1713> INFO - LaTeX decoding ...
+[779] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/attacks.bib'
+[808] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/NN.bib' for section 0
+[809] bibtex.pm:1713> INFO - LaTeX decoding ...
+[812] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/NN.bib'
+[829] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/usecase.bib' for section 0
+[831] bibtex.pm:1713> INFO - LaTeX decoding ...
+[834] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/usecase.bib'
+[949] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[949] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[949] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[949] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1012] Biber.pm:4487> INFO - Processing section 1
+[1013] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 1
+[1065] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1065] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1066] Biber.pm:4307> INFO - Sorting list 'none/global/44C29EDB103A2872F519AD0C9A0FDAAA/global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[1066] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1074] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1074] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1074] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[1074] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1077] Biber.pm:4487> INFO - Processing section 2
+[1077] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 2
+[1085] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1085] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1085] Biber.pm:4307> INFO - Sorting list 'none/global/61E9C06EA9A85A5088A499DF6458D276/global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[1085] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1089] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1089] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1090] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[1090] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1090] Biber.pm:4487> INFO - Processing section 3
+[1091] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 3
+[1101] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/intro.bib' for section 3
+[1102] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/dspg.bib' for section 3
+[1103] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/discount.bib' for section 3
+[1103] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/patas.bib' for section 3
+[1104] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/calibration.bib' for section 3
+[1104] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/balancingBias.bib' for section 3
+[1104] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/rw.bib' for section 3
+[1105] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/uq.bib' for section 3
+[1106] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/SL_NN.bib' for section 3
+[1106] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/attacks.bib' for section 3
+[1106] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/NN.bib' for section 3
+[1107] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/usecase.bib' for section 3
+[1112] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1112] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1112] Biber.pm:4307> INFO - Sorting list 'none/global/A5F3C6A11B03839D46AF9FB43C97C188/global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[1112] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1116] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1116] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1116] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[1116] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1117] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[1172] bbl.pm:779> INFO - Output to main.bbl
+[1172] Biber.pm:132> WARN - ISBN '978-981-95-3543-9' in entry 'fotos2025actions' is invalid - run biber with '--validate_datamodel' for details.
+[1172] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/4cba211c7098ce6d56874590d4a06a86_30185.utf8, line 102, warning: 12 characters of junk seen at toplevel
+[1172] Biber.pm:132> WARN - legacy month field 'July' in entry 'NBERw31502' is not an integer - this will probably not sort properly.
+[1172] Biber.pm:132> WARN - legacy month field 'Aug' in entry '4622580' is not an integer - this will probably not sort properly.
+[1172] Biber.pm:132> WARN - Duplicate entry key: '8009820' in file 'bibtex/patas.bib', skipping ...
+[1173] Biber.pm:132> WARN - legacy month field 'Jan' in entry 'begoli2019need' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - legacy month field 'Oct' in entry 'Gawlikowski2023' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - legacy month field '23--29 Jul' in entry 'pmlr-v202-monchot23a' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - Duplicate entry key: 'wong2021reallytrustyousimple' in file 'bibtex/calibration.bib', skipping ...
+[1173] Biber.pm:132> WARN - Duplicate entry key: '10.5555/1151699.1151710' in file 'bibtex/calibration.bib', skipping ...
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/f329edf482407ba2cb17af85929f043d_30185.utf8, line 10, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/f329edf482407ba2cb17af85929f043d_30185.utf8, line 20, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/f329edf482407ba2cb17af85929f043d_30185.utf8, line 31, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/f329edf482407ba2cb17af85929f043d_30185.utf8, line 59, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/f329edf482407ba2cb17af85929f043d_30185.utf8, line 68, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/f329edf482407ba2cb17af85929f043d_30185.utf8, line 77, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/f329edf482407ba2cb17af85929f043d_30185.utf8, line 98, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - Duplicate entry key: '9011418' in file 'bibtex/balancingBias.bib', skipping ...
+[1173] Biber.pm:132> WARN - legacy month field 'Feb' in entry 'SLencodings' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - legacy month field 'jul' in entry '10.1145/3457607' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/ae561458f41ddc554f33a4c840d2c74b_30185.utf8, line 217, warning: 1 characters of junk seen at toplevel
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/ae561458f41ddc554f33a4c840d2c74b_30185.utf8, line 754, warning: undefined macro "JACM"
+[1173] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_f6M_/ae561458f41ddc554f33a4c840d2c74b_30185.utf8, line 772, warning: undefined macro "CACM"
+[1173] Biber.pm:132> WARN - ISBN '9781439840955 1439840954' in entry 'gelman2013bayesian' is invalid - run biber with '--validate_datamodel' for details.
+[1173] Biber.pm:132> WARN - legacy month field 'Jul' in entry 'Baron1987' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - legacy month field 'Feb.' in entry 'Naeini_Cooper_Hauskrecht_2015' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - legacy month field 'jun' in entry 'Kargl2023Securing' is not an integer - this will probably not sort properly.
+[1173] Biber.pm:132> WARN - I didn't find a database entry for 'snn' (section 0)
+[1173] Biber.pm:132> WARN - ISBN '978-981-95-3543-9' in entry 'fotos2025actions' is invalid - run biber with '--validate_datamodel' for details.
+[1173] Biber.pm:132> WARN - I didn't find a database entry for 'snn' (section 3)
+[1173] Biber.pm:134> INFO - WARNINGS: 30

@@ -58,7 +58,7 @@ $\overline{\oplus}$ & Averaging belief fusion (ABF) \\
 $\hat{\oplus}$ & Weighted belief fusion (WBF) \\
 $\occ$ & Consensus \& compromise fusion (CCF) \\
 $\circledcirc$ & Inferential deduction operator \\
-$\circleddash$ & Trust-revision operator \\
+$\circleddash$ & Trust-revision operator (instantiated as the two-source averaging belief fusion $\underline{\oplus}$ in this thesis) \\
 $\oslash$ & Conservative trust-division operator \\
 $\otimes_{TE}$ & Two-edge path trust discounting \\
 $\otimes_{ME}$ & Multi-edge path trust discounting \\
@@ -142,7 +142,8 @@ $\epsilon$ & Gradient sensitivity threshold in \textsc{NodeTrust} \\[4pt]
 \\
 \hline
 \multicolumn{2}{l}{\textbf{Batch and Gradient Quantities}} \\
-$T_{y_{\text{batch}}}$ & Aggregated trust over labels in the current batch \\
+$T_{y_{\text{batch}}}$ & Batch label opinion: component-wise mean of the label opinions in the current batch \\
+$T_{lr}$ & Trust opinion on the learning rate (fully trusted in all experiments) \\
 $g^{(l)}_{i,j}$ & Gradient of loss w.r.t.\ $\theta^{(l)}_{i,j}$ \\
 $g^{(l)}_{i}$ & Gradient vector for neuron $n_i^{(l)}$ \\
 $r$ & Count of weak gradients: $|g^{(l)}_{i,j}| < \epsilon$ \\
@@ -152,7 +153,7 @@ $s$ & Count of strong gradients: $|g^{(l)}_{i,j}| \ge \epsilon$ \\[4pt]
 \hline
 \multicolumn{2}{l}{\textbf{Trust Values}} \\
 $T_{n_i \mid y_{\text{batch}}}$ & Trust in neuron $n_i$ conditioned on batch labels \\
-$T_{n_i \mid \overline{y_{\text{batch}}}}$ & Trust in neuron under incorrect labels (vacuous) \\
+$T_{n_i \mid \lnot y_{\text{batch}}}$ & Trust in neuron under incorrect labels (vacuous) \\
 $T_{n_i \parallel Y_{\text{batch}}}$ & Deduced trust in neuron $n_i$ \\
 $T_{\theta^{(l)}_{i,j}}$ & Trust opinion on parameter $\theta^{(l)}_{i,j}$ \\
 $T_{x^{(l-1)}_j}$ & Trust in the input to parameter $\theta^{(l)}_{i,j}$ \\

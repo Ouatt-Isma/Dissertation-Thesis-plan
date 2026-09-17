@@ -258,7 +258,7 @@ During backpropagation, gradient information is converted into trust evidence to
     \item \textbf{Revision and adjustment of parameter trust.} The weight opinion $T_{\theta_{i,j}^{(l)}}$ is first revised using $T_{n_i \| Y_{\text{batch}}}$, then adjusted by the joint influence of input feature trust $T_{x_j^{(l-1)}}$ and label trust $T_{y_{\text{batch}}}$. This adjustment reflects Eq.~(7.6) of \cref{chap:patas}: parameter updates depend jointly on gradient signals, input activations, and label quality, so parameter trust must account for all three.
 \end{enumerate}
 
-The net effect is that parameter trust accumulates evidence across mini-batches, converging as training progresses. Under clean conditions, weight opinions converge toward high belief; under noisy inputs or labels, trust accumulation is modulated by the degraded input and label opinions, leaving elevated uncertainty or disbelief in the affected weights.
+The net effect is that parameter trust tracks the recent stability of the gradients across mini-batches, as a running mean with a window of about sixteen batches under trusted data (\cref{chap:patas}), and settles as training progresses. Under clean conditions, weight opinions settle at high belief; under noisy inputs or labels, the adjustment by the degraded input and label opinions leaves elevated uncertainty or disbelief in the affected weights.
 
 
 \subsection{Implementation Details}
@@ -630,7 +630,7 @@ The \ac{PaTAS}-to-\ac{NN} overhead ratio is approximately $5.0\times$ at batch s
 
     \item \textbf{Filter threshold selection.} The coverage-accuracy results in \Cref{sec:selective_prediction} demonstrate that \ac{PaTAS} provides a reliable signal for selective prediction, but they do not prescribe how to choose the operating threshold in practice. The optimal threshold depends on the downstream cost structure: the relative cost of acting on a wrong prediction versus abstaining from a correct one. In this work we report the full coverage-accuracy curve rather than a single operating point, leaving threshold selection to the application context. A principled approach would be to derive the threshold from a decision-theoretic analysis that incorporates the specific cost structure of the deployment domain.
 
-    \item \textbf{Network depth.} We use a 2-layer \ac{MLP}. Trust propagation in deeper architectures may exhibit different dynamics, as trust discounting compounds across layers and residual connections introduce non-sequential trust paths that require the \ac{DSPG} synthesis of \cref{chap:patas} to handle correctly.
+    \item \textbf{Network depth.} We use a 2-layer \ac{MLP}. Trust propagation in deeper architectures may exhibit different dynamics, as trust discounting compounds across layers; \cref{chap:patas} quantifies this depth penalty. Residual connections need no special graph treatment in \ac{PaTAS}, since the propagation rule of \cref{chap:patas} is applied neuron by neuron and maps a skip connection to an averaging fusion of the block's input and output opinions; the resulting opinion, however, weights an input by the number of paths through which it reaches the output, a limitation discussed in \cref{chap:patas}.
 
     \item \textbf{Assumptions on noise distributions.} The trust quantification functions are designed for the specific noise models used in our experiments. Real-world noise may not follow Gaussian or flip-rate distributions, and the quantification functions should be adapted to the application domain before deployment.
 

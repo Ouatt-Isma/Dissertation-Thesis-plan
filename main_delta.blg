@@ -1,0 +1,70 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'main_delta.blg'
+[35] biber-darwin:342> INFO - === Mon Aug 24, 2026, 17:27:32
+[45] Biber.pm:421> INFO - Reading 'main_delta.bcf'
+[86] Biber.pm:1002> INFO - Found 23 citekeys in bib section 0
+[94] Biber.pm:4487> INFO - Processing section 0
+[100] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/papers.bib' for section 0
+[102] bibtex.pm:1713> INFO - LaTeX decoding ...
+[108] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/papers.bib'
+[195] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/intro.bib' for section 0
+[196] bibtex.pm:1713> INFO - LaTeX decoding ...
+[202] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/intro.bib'
+[203] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/dspg.bib' for section 0
+[204] bibtex.pm:1713> INFO - LaTeX decoding ...
+[211] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/dspg.bib'
+[212] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/discount.bib' for section 0
+[213] bibtex.pm:1713> INFO - LaTeX decoding ...
+[224] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/discount.bib'
+[225] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/patas.bib' for section 0
+[226] bibtex.pm:1713> INFO - LaTeX decoding ...
+[252] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/patas.bib'
+[277] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/calibration.bib' for section 0
+[278] bibtex.pm:1713> INFO - LaTeX decoding ...
+[286] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/calibration.bib'
+[292] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/balancingBias.bib' for section 0
+[294] bibtex.pm:1713> INFO - LaTeX decoding ...
+[334] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/balancingBias.bib'
+[339] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/rw.bib' for section 0
+[340] bibtex.pm:1713> INFO - LaTeX decoding ...
+[352] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/rw.bib'
+[353] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/uq.bib' for section 0
+[354] bibtex.pm:1713> INFO - LaTeX decoding ...
+[359] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/uq.bib'
+[373] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/SL_NN.bib' for section 0
+[374] bibtex.pm:1713> INFO - LaTeX decoding ...
+[379] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/SL_NN.bib'
+[380] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/attacks.bib' for section 0
+[381] bibtex.pm:1713> INFO - LaTeX decoding ...
+[384] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/attacks.bib'
+[384] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/NN.bib' for section 0
+[385] bibtex.pm:1713> INFO - LaTeX decoding ...
+[387] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/NN.bib'
+[388] Biber.pm:4678> INFO - Looking for bibtex file 'bibtex/usecase.bib' for section 0
+[388] bibtex.pm:1713> INFO - LaTeX decoding ...
+[392] bibtex.pm:1519> INFO - Found BibTeX data source 'bibtex/usecase.bib'
+[409] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[409] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[409] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[409] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[420] bbl.pm:676> INFO - Writing 'main_delta.bbl' with encoding 'UTF-8'
+[428] bbl.pm:779> INFO - Output to main_delta.bbl
+[428] Biber.pm:132> WARN - ISBN '978-981-95-3543-9' in entry 'fotos2025actions' is invalid - run biber with '--validate_datamodel' for details.
+[428] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/4cba211c7098ce6d56874590d4a06a86_95707.utf8, line 102, warning: 12 characters of junk seen at toplevel
+[428] Biber.pm:132> WARN - Duplicate entry key: '8009820' in file 'bibtex/patas.bib', skipping ...
+[428] Biber.pm:132> WARN - legacy month field '23--29 Jul' in entry 'pmlr-v202-monchot23a' is not an integer - this will probably not sort properly.
+[428] Biber.pm:132> WARN - Duplicate entry key: 'wong2021reallytrustyousimple' in file 'bibtex/calibration.bib', skipping ...
+[428] Biber.pm:132> WARN - Duplicate entry key: '10.5555/1151699.1151710' in file 'bibtex/calibration.bib', skipping ...
+[428] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/f329edf482407ba2cb17af85929f043d_95707.utf8, line 10, warning: 1 characters of junk seen at toplevel
+[428] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/f329edf482407ba2cb17af85929f043d_95707.utf8, line 20, warning: 1 characters of junk seen at toplevel
+[428] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/f329edf482407ba2cb17af85929f043d_95707.utf8, line 31, warning: 1 characters of junk seen at toplevel
+[428] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/f329edf482407ba2cb17af85929f043d_95707.utf8, line 59, warning: 1 characters of junk seen at toplevel
+[429] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/f329edf482407ba2cb17af85929f043d_95707.utf8, line 68, warning: 1 characters of junk seen at toplevel
+[429] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/f329edf482407ba2cb17af85929f043d_95707.utf8, line 77, warning: 1 characters of junk seen at toplevel
+[429] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/f329edf482407ba2cb17af85929f043d_95707.utf8, line 98, warning: 1 characters of junk seen at toplevel
+[429] Biber.pm:132> WARN - Duplicate entry key: '9011418' in file 'bibtex/balancingBias.bib', skipping ...
+[429] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/ae561458f41ddc554f33a4c840d2c74b_95707.utf8, line 217, warning: 1 characters of junk seen at toplevel
+[429] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/ae561458f41ddc554f33a4c840d2c74b_95707.utf8, line 754, warning: undefined macro "JACM"
+[429] Biber.pm:132> WARN - BibTeX subsystem: /var/folders/sj/z74sfn7x5td7by58dnxr4crh0000gn/T/biber_tmp_yzD6/ae561458f41ddc554f33a4c840d2c74b_95707.utf8, line 772, warning: undefined macro "CACM"
+[429] Biber.pm:132> WARN - I didn't find a database entry for 'snn' (section 0)
+[429] Biber.pm:134> INFO - WARNINGS: 18

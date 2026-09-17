@@ -1,133 +1,98 @@
-% Appendix Template
+% Appendix: PaTAS-TP theorems and proofs
 
 \chapter{\ac{PaTAS-TP} Theorems and Proofs (\cref{sec:ptastheory})}\label{app:proof}
-\subsection{Key theorems}
-\begin{theorem}[Convergence of Subjective Logic Arithmetic Sequence]\label{thm:arithm}
-Let $(\Omega, \ominus)$ be a group. \(\Omega\) is a set of opinions specified as \([0,1]^4\)
-Let $\omega_n = (b_n, d_n, u_n, a_n) \in \Omega$ be a sequence defined recursively by the operator $\ominus$ as follows:
-\[
-\omega_{n+1} = \omega_n \ominus q,
-\]
-where \(q\in \Omega\) and the operator $\ominus$ is a fusion operator.
 
-Then the sequence $(\omega_n)$ converges in $[0,1]^4$ to a limit:
-\[
-\begin{cases}
-\omega_0, & \text{if } q = (0, 0, 1, a_0), \\
-q & \text{otherwise}.
-\end{cases}
-\]
+Throughout this appendix, opinions are binomial, $\omega = (b, d, u)$ with $b + d + u = 1$ and a common base rate $a = 1/2$ unless stated otherwise, and $q = (b_q, d_q, u_q)$ denotes a fixed evidence opinion. The revision sequences studied are of the form $\omega_{n+1} = \omega_n \circleddash q$ for a fusion operator $\circleddash$; the operators are those of \cref{sec:fusion}. None of them makes the set of opinions a group (\cref{sec:ptas_convergence}), so convergence is established operator by operator.
 
-\end{theorem}
+\section{Revision with a Constant Evidence Opinion}
 
-\begin{proof}
-Let us define a distance \( d \) on the space \( \Omega \subseteq [0,1]^4 \), based on the Euclidean norm (2-norm). 
-
-Assume that the recursive update is expressed as:
-\[
-\omega_{n+1} = \omega_n \ominus q, q \in \Omega
-\]
-where \(\ominus\) denotes a fusion operator (e.g., cumulative or averaging fusion) that combines opinions \(\omega_n\) and \(q\). By the properties of subjective logic fusion, the result of this operation satisfies one of the following:
-
+\begin{theorem}[Averaging and weighted revision]\label{thm:abf}
+Let $\omega_{n+1} = \omega_n \,\underline{\oplus}\, q$ (averaging belief fusion, \cref{def:averaging_fuse}) with $\omega_0$ arbitrary and $0 < u_0 \le 1$.
 \begin{enumerate}
-    \item \(d(\omega_{n+1}, q) < d(\omega_n, q)\), i.e., the new opinion is strictly closer to \(q\), or \label{case:strict}
-    \item \(d(\omega_{n+1}, q) = d(\omega_n, q)\) and \(\omega_{n+1} = \omega_n\), meaning the sequence has reached a fixed point. \label{case:fixed}
+    \item If $q$ is not vacuous ($u_q < 1$), then $\omega_n \to q$, and the convergence is geometric: $1/u_{n} - 1/u_q = 2^{-n}\,(1/u_0 - 1/u_q)$ and $|b_{n+1} - b_q| = \frac{u_q}{u_n + u_q}\,|b_n - b_q|$, the contraction factor tending to $1/2$.
+    \item If $q$ is vacuous ($u_q = 1$), then $\omega_n \to (0, 0, 1)$: the evidence of $\omega_0$ is halved at every step, $1/u_n - 1 = 2^{-n}\,(1/u_0 - 1)$.
 \end{enumerate}
-
-This behavior reflects the nature of fusion operators, which are designed to generate an opinion that represents a consistent aggregation of the two inputs.
-
-In case~\ref{case:strict}, the distance to \(q\) strictly decreases at each step. Since the 2-norm is bounded in \([0,1]^4\), the sequence \((\omega_n)\) is contained in a compact space and forms a Cauchy sequence. Therefore, it converges to the unique fixed point \(q\).
-
-In case~\ref{case:fixed}, where \(\omega_{n+1} = \omega_n\), the sequence remains constant and equal to \(\omega_0\). This occurs, for instance, when \(q= (0, 0, 1, a_0)\), representing full uncertainty. In that case, most of the fusion operators (almost all except averaging fusion) has no effect, and the sequence stays fixed.
-
-Thus, in both cases, the sequence \((\omega_n)\) converges.
+The same limit $q$ is obtained under weighted belief fusion $\hat{\oplus}$ (\cref{def:weighted_fuse}) when $q$ is not vacuous, whereas a vacuous $q$ leaves $\omega_0$ unchanged under weighted fusion.
+\end{theorem}
+\begin{proof}
+For averaging fusion with $u_n + u_q > 0$,
+\[
+u_{n+1} = \frac{2\, u_n u_q}{u_n + u_q}, \qquad
+b_{n+1} = \frac{b_n u_q + b_q u_n}{u_n + u_q}, \qquad
+d_{n+1} = \frac{d_n u_q + d_q u_n}{u_n + u_q}.
+\]
+Taking reciprocals in the first relation gives $1/u_{n+1} = \tfrac12\,(1/u_n + 1/u_q)$, an affine recursion in $1/u_n$ with fixed point $1/u_q$ and contraction factor $1/2$, which proves the statements on $u_n$ in both cases. For the belief, $b_{n+1} - b_q = (b_n - b_q)\, u_q/(u_n + u_q)$, and $u_q/(u_n + u_q) \to 1/2 < 1$ when $u_q < 1$, so $b_n \to b_q$ geometrically; the same computation applies to $d_n$. When $u_q = 1$, $b_{n+1} = b_n/(u_n + 1)$ with $u_n \to 1$, so $b_n \to 0$, and likewise $d_n \to 0$. Note that a strictly decreasing distance to $q$ alone would not prove convergence \emph{to} $q$; the explicit contraction factors do. For weighted fusion the uncertainty obeys $u_{n+1} = (2 - u_n - u_q)\, u_n u_q / (u_n + u_q - 2 u_n u_q)$. For $u_q < 1$ this map is increasing on $(0,1]$ and its value lies strictly between $u_n$ and $u_q$, so $u_n \to u_q$ monotonically; the belief and disbelief recursions are convex combinations of $(b_n, d_n)$ and $(b_q, d_q)$ whose weight on $(b_n, d_n)$ tends to $1/2$, hence they converge to $(b_q, d_q)$ as above. When $u_q = 1$ the vacuous opinion is the neutral element of weighted fusion, so $\omega_n = \omega_0$.
 \end{proof}
 
+\begin{theorem}[Cumulative revision]\label{thm:cbf}
+Let $\omega_{n+1} = \omega_n \oplus q$ (cumulative belief fusion, \cref{def:cumulative_fuse}) with $0 < u_0 \le 1$.
+\begin{enumerate}
+    \item If $q$ is not vacuous, then $1/u_n = 1/u_0 + n\,(1/u_q - 1)$, so $u_n \to 0$ like $1/n$, and $\omega_n$ converges to the dogmatic opinion $(b_q, d_q, 0)/(b_q + d_q)$: the initial opinion $\omega_0$ is forgotten.
+    \item If $q$ is vacuous, then $\omega_n = \omega_0$ for all $n$, the vacuous opinion being the neutral element of cumulative fusion.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Cumulative fusion adds evidence: in terms of the evidence parameters $r = W b/u$ and $s = W d/u$ of an opinion (Beta--opinion mapping with prior weight $W$), $\omega_n \oplus q$ has evidence $(r_n + r_q,\; s_n + s_q)$. Hence $r_n = r_0 + n\, r_q$, $s_n = s_0 + n\, s_q$ and $u_n = W/(W + r_n + s_n)$. Since $1/u = 1 + (r + s)/W$ and $r_q + s_q = W\,(1 - u_q)/u_q$, this gives the stated expression for $1/u_n$, and $u_n \to 0$ unless $r_q = s_q = 0$, that is, unless $q$ is vacuous. Then $b_n = r_n/(W + r_n + s_n) \to r_q/(r_q + s_q) = b_q/(b_q + d_q)$, and likewise for $d_n$. If $q$ is vacuous the evidence is unchanged. For example, $q = (0.5, 0, 0.5)$ drives every non-dogmatic $\omega_0$ to $(1, 0, 0)$.
+\end{proof}
 
-\begin{theorem}[Convergence of Subjective Logic Geometric Sequence]\label{thm:geo}
-Let $(\Omega, \odot)$ be a group defined as in Theorem~\ref{thm:arithm}.
-Let $\omega_n = (b_n, d_n, u_n, a_n) \in \Omega$ be a sequence defined recursively by the operator $\odot$ as follows:
+\begin{theorem}[Belief constraint revision]\label{thm:bcf}
+Let $\omega_{n+1} = \omega_n \odot q$ (belief constraint fusion, \cref{def:constraint_fuse}) with $\omega_0$ non-dogmatic and $q$ neither vacuous nor totally conflicting with $\omega_0$. Then $\omega_n$ converges to $(1, 0, 0)$ if $b_q > d_q$, to $(0, 1, 0)$ if $d_q > b_q$, and, if $b_q = d_q$, to the dogmatic opinion $(\beta, 1 - \beta, 0)$ with $\beta = (b_0 + u_0)/(b_0 + d_0 + 2 u_0)$, fixed by the plausibilities of $\omega_0$. A vacuous $q$ leaves $\omega_0$ unchanged.
+\end{theorem}
+\begin{proof}
+Belief constraint fusion is Dempster's rule restricted to binomial opinions. Write $P_n = b_n + u_n$ and $\bar P_n = d_n + u_n$ for the plausibilities of $x$ and $\bar x$ under $\omega_n$. The unnormalised fused masses are $b_n b_q + b_n u_q + u_n b_q$, $d_n d_q + d_n u_q + u_n d_q$ and $u_n u_q$, so the plausibilities multiply: $P_{n+1} \propto P_n P_q$, $\bar P_{n+1} \propto \bar P_n \bar P_q$ and $u_{n+1} \propto u_n u_q$, all with the same normalisation constant $1/(1 - K_n)$, $K_n = b_n d_q + d_n b_q$. Therefore
 \[
-\omega_{n+1} = \omega_n \odot q,
+\frac{P_n}{\bar P_n} = \frac{P_0}{\bar P_0}\Big(\frac{b_q + u_q}{d_q + u_q}\Big)^{n}, \qquad
+\frac{u_n}{P_n} = \frac{u_0}{P_0}\Big(\frac{u_q}{b_q + u_q}\Big)^{n}.
 \]
-where \(q\in \Omega\) and the operator $\odot$ is the binomial multiplication defined by:
+If $b_q > d_q$, the first ratio diverges, so $\bar P_n = d_n + u_n \to 0$; the second ratio tends to zero because $b_q > 0$, so $u_n \to 0$, hence $d_n \to 0$ and $b_n \to 1$. The case $d_q > b_q$ is symmetric. If $b_q = d_q > 0$, the first ratio is constant, equal to $P_0/\bar P_0$, while $u_n \to 0$, so the limit is dogmatic with $b/d = P_0/\bar P_0$, which gives $\beta$. A vacuous $q$ has $K = 0$ and returns $\omega_n$ unchanged.
+\end{proof}
+
+\begin{remark}[Amplification and numerical caveat]\label{rem:bcf-numerics}
+The evidence $q = (0.4, 0.35, 0.25)$ drives the sequence to $(1, 0, 0)$: a slight majority of belief over disbelief is amplified to certainty. Iterating belief constraint fusion naively in floating point is moreover unstable, because each step multiplies the rounding error of $b + d + u$ by $1/(1 - K_n)$; in a test run with this $q$ the mass sum had drifted away from $1$ after $60$ steps and collapsed below $0.01$ after $100$ steps. An implementation that iterates this operator must renormalise after every step, as the implementation of this thesis does after every operator application.
+\end{remark}
+
+\section{The Implemented Update under Trusted Data}
+
+\begin{theorem}[Implemented update under trusted data]\label{thm:implemented}
+Let \cref{alg:trustupdate} run with averaging revision, base rate $a = 1/2$, $T_{lr} = (1, 0, 0)$, and a fully trusted conditioning factor, $T_x \oslash T_{y_\text{batch}} = (1, 0, 0)$, as holds for the first layer under trusted input and label opinions. Let $q_n = (b_{q_n}, d_{q_n}, u_q)$ be the node opinion of batch $n$; its uncertainty $u_q = W / (|\mathcal{N}(i)| + W)$ does not depend on $n$. Then, for any initial opinion with $u^{(0)} > 0$,
+\begin{enumerate}
+    \item $u^{(n)} \to u^* = u_q / 15$ monotonically, whatever the sequence $(q_n)$;
+    \item $d^{(n+1)} = \lambda_n\, d^{(n)} + (1 - \lambda_n)\, d_{q_n}$ with $\lambda_n = u_q / (u^{(n)} + u_q) \to 15/16$, so that $d^{(n)}$ is a convex combination of the past batch evidence with geometrically decaying weights, and $b^{(n)} = 1 - d^{(n)} - u^{(n)}$;
+    \item if $d_{q_n} \to d_q$, then $T_\theta^{(n)} \to (1 - d_q - u_q/15,\; d_q,\; u_q/15)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+With base rate $1/2$, binomial multiplication (\cref{def:binomial_multiplication}) by the dogmatic opinion $(1,0,0)$ maps $(b, d, u)$ to $(b + u/3,\; d,\; 2u/3)$. The three sub-steps of one batch act on the uncertainty as follows. The revision gives $u' = 2\, u\, u_q / (u + u_q)$. The learning-rate adjustment fuses $(b, d, u')$ with $(b + u'/3,\; d,\; 2u'/3)$ by averaging fusion, which gives $u'' = 2\, u' (2u'/3) / (u' + 2u'/3) = 4u'/5$. The auxiliary adjustment multiplies by $(1,0,0)$: $u''' = 2u''/3 = 8u'/15$. Composing the three maps, $u^{(n+1)} = \varphi(u^{(n)})$ with
 \[
-\begin{cases}
-b_{x \odot y} = b_x b_y + \dfrac{(1 - a_x) a_y b_x u_y + a_x (1 - a_y) u_x b_y}{1 - a_x a_y}, \\
-d_{x \odot y} = d_x + d_y - d_x d_y, \\
-u_{x \odot y} = u_x u_y + \dfrac{(1 - a_y) b_x u_y + (1 - a_x) u_x b_y}{1 - a_x a_y}, \\
-a_{x \odot y} = a_x a_y.
-\end{cases}
+\varphi(u) = \frac{16}{15}\cdot\frac{u\, u_q}{u + u_q},
 \]
-Then the sequence $(\omega_n)$ converges in $[0,1]^4$ if $a_q < 1$. In particular:
+which is increasing and concave on $(0, 1]$, satisfies $\varphi(u) > u$ exactly when $u < u_q/15$ and $\varphi(u) < u$ when $u > u_q/15$. Hence $u^{(n)}$ converges monotonically to $u^* = u_q/15$ from any positive start, and $\varphi'(u^*) = 15/16 < 1$ makes the convergence geometric. Only the revision changes the disbelief: multiplication by $(1,0,0)$ leaves $d$ unchanged, and the averaging fusion of two opinions with the same disbelief returns that disbelief. Thus $d^{(n+1)} = (d^{(n)} u_q + d_{q_n} u^{(n)}) / (u^{(n)} + u_q)$, which is the stated convex combination, with $\lambda_n \to u_q/(u^* + u_q) = 15/16$. The belief follows by normalisation, and the limit in the third statement is obtained by letting $n \to \infty$ in the two recursions.
+\end{proof}
+
+\begin{remark}[Worked example and the vacuous case]\label{rem:worked}
+For a neuron with $30$ incoming edges and $W = 2$, $u_q = 1/16$ and $u^* = 1/240 \approx 0.0042$. With constant evidence of $r = 27$ weak and $s = 3$ strong gradients, $q = (0.844, 0.094, 0.063)$, and a direct iteration of the released implementation converges to $(0.9021, 0.0938, 0.0042)$ within about $60$ batches, as predicted. Under cumulative revision the same iteration reaches a numerically zero uncertainty within $20$ batches (the implementation does not clip small uncertainties; in single precision the value settles at the rounding floor of the normalisation $b + d + u = 1$, about $10^{-8}$) and then freezes, since an effectively dogmatic opinion is no longer changed by a less certain one; under belief constraint revision it reaches exactly $(1, 0, 0)$ within five batches. Under a vacuous label opinion the auxiliary sub-step multiplies by $(0, 0, 1)$, which maps $(b, d, u)$ to $(b/3,\; d,\; 1 - b/3 - d)$ and expands the uncertainty instead of contracting it; the same iteration then converges to $(0.147, 0.047, 0.806)$ under averaging revision and to $(0.210, 0.183, 0.607)$ under cumulative revision. In this regime the parameter uncertainty is large and the choice of the revision operator matters. For layers beyond the first, the input opinion $T_x$ entering the auxiliary sub-step is the propagated opinion of the previous layer, which is close to but not exactly dogmatic, so the contraction is weaker and the uncertainty settles above $u_q/15$: in the breast-cancer network of Experiment~1 the mean parameter uncertainty after training is $0.005$ in the first layer and $0.06$ in the output layer.
+\end{remark}
+
+\section{Multiplicative Revision}
+
+\begin{theorem}[Convergence of the multiplicative sequence]\label{thm:geo}
+Let $\omega_{n+1} = \omega_n \odot q$ with the binomial multiplication of \cref{def:binomial_multiplication} evaluated at a fixed base rate $a \in [0,1)$ for both arguments, and write $c = a/(1+a)$ ($c = 1/3$ for $a = 1/2$). Then:
 \begin{itemize}
-    \item $a_n = a_0 a_q^n \to 0$ as $n \to \infty$,
-    \item $d_n \to 1$ if $d_q > 0$, and $d_n = d_0$ if $d_q = 0$,
-    \item $b_n \to 0 $ if $p_q = b_q + a_q u_q < 1$, and $b_n = b_0 $ if $p_q = 1$.
+    \item $d_{n+1} = d_n + d_q - d_n d_q$, so $d_n \to 1$ if $d_q > 0$, and $d_n = d_0$ for all $n$ if $d_q = 0$;
+    \item if $d_q > 0$, then $b_n \to 0$ and $u_n \to 0$, that is, $\omega_n \to (0, 1, 0)$;
+    \item if $d_q = 0$, then $b_n \to b^* = c\,(1 - d_0)\, b_q \big/ \big((1 - c)(1 - b_q) + c\, b_q\big)$, which equals $(1 - d_0)\, b_q/(2 - b_q)$ for $a = 1/2$, and $u_n \to 1 - b^* - d_0$.
 \end{itemize}
 \end{theorem}
-
 \begin{proof}
-We analyze each component of $\omega_n$ separately.
-
-\emph{1. Convergence of $a_n$:}  
-By definition, $a_{n+1} = a_n a_q$. Since $a_q \in [0,1[$, this is a geometric sequence:
-\[
-a_n = a_0 a_q^n \to 0 \quad \text{as } n \to \infty.
-\]
-
-\emph{2. Convergence of $d_n$:}  
-The recurrence relation is:
-\[
-d_{n+1} = d_n + d_q - d_n d_q = d_n (1 - d_q) + d_q.
-\]
-This is a first-order linear recurrence. If $d_q > 0$, the sequence is increasing and bounded above by 1. Therefore:
-\[
-\lim_{n \to \infty} d_n = 1\, (\text{the fixed point})
-\]
-If $d_q = 0$, then $d_{n+1} = d_n = d_0$ for all $n$.
-
-\emph{3. Behavior of $b_n$:}  
-The update equation for $b_{n+1}$ is a rational function involving $a_n$, $b_n$, and $u_n$. As $a_n \to 0$, the update expressions simplify:
-% \[
-% b_{n+1} \approx b_n b_q + \dfrac{(1 - a_n) a_q b_n u_q + a_n (1 - a_q) u_n b_q}{1 - a_n a_q},
-% \]
-\[
-b_{n+1} \approx b_n b_q + a_q b_n u_q = b_n (b_q + a_q u_q ) = b_n p_q
-\]
-this converges since the projected probability \(p_q \in [0,1] \).
- 
-To conclude with \(u_n\), since \(u_n = 1 - (b_n + d_n)\), it will also converge
-
+With equal base rates $a$ the multiplication reads $b_{n+1} = b_n b_q + c\,(b_n u_q + u_n b_q)$, $d_{n+1} = d_n + d_q - d_n d_q$ and $u_{n+1} = 1 - b_{n+1} - d_{n+1}$. The disbelief recursion is affine with fixed point $1$ and factor $1 - d_q$; if $d_q > 0$ it converges to $1$ monotonically, and if $d_q = 0$ it is constant. If $d_q > 0$, then $0 \le b_n \le 1 - d_n \to 0$ and $0 \le u_n \le 1 - d_n \to 0$, which proves the second statement without any approximation. If $d_q = 0$, then $u_q = 1 - b_q$, $d_n = d_0$ and $u_n = 1 - b_n - d_0$, so the belief recursion becomes the affine map $b_{n+1} = \rho\, b_n + c\,(1 - d_0)\, b_q$ with $\rho = (1 - c)\, b_q + c\,(1 - b_q)$. Since $0 \le c < 1/2$, $\rho$ is a convex combination of $b_q$ and $1 - b_q$ and satisfies $\rho < 1$, so $b_n$ converges to $b^* = c\,(1 - d_0)\, b_q / (1 - \rho)$, which is the stated value; $u_n$ follows by normalisation.
 \end{proof}
 
-\subsection{Proof for Theorem~\ref{thm:convergence}}
+\section{Proof of \cref{thm:convergence}}
 \begin{proof}
-Assume that the neural network training process converges, implying that weight updates become increasingly small, and the backpropagation gradients \( g \) stabilize. This stability in \( g \) reflects the fact that the model has reached a minimum or stable loss value.
-
-Moreover, the stability of \( T_x \) and \( T_y \)implies that trust inputs to the update mechanism are stable. Consequently, each new trust update for \( T_{\theta} \) is computed using consistent and bounded evidence, which over time results in the stabilization of the subjective opinions assigned to \( T_{\theta} \).
-
-In detail:
-\begin{itemize}
-    \item \(T_x\) converging implies (\(T_{y\prime}\) converging assuming the same \(T_\theta\)) implies convergence of \(T_{y_{batch}}\).
-
-    \item \(g\) converges so \(T_{n \mid y_\text{batch}}\) will remain the same. 
-    
-    \item since \(T_{n\mid \mid {Y_\text{batch}}}\) is a deterministic calculation from the convergent terms  \(T_{n \mid y_\text{batch}}\) and \(T_{y_{batch}}\), it follows that \(T_{n\mid \mid {Y_\text{batch}}}\) also converges 
-
-    \item Finally \(T_{\theta} \longleftarrow T_{\theta} \circleddash T_{n\mid \mid {Y_\text{batch}}}\) converges if \(\circleddash\) is set to any fusion operator or the binomial multiplication operator (see \cref{thm:arithm,thm:geo} in Appendix~\ref{app:proof}). 
-
-    \item The function \(f_{upd}\) in our implementation is based on \(T_{\theta}\), \(T_{y}\) and \({T_{x}}\) which all converge.
-\end{itemize}
-
-Therefore, assuming convergence of $T_x$, $T_y$, and $g$, the trust values for all PaTAS parameters stabilize as training progresses, proving convergence of PaTAS creation. 
+Statement (i) collects \cref{thm:abf,thm:cbf,thm:bcf}. Statement (ii) is \cref{thm:implemented}: under trusted data the node opinion $q_n$ enters the update only through the revision, and the theorem shows that the composed map contracts the uncertainty to $u_q/15$ independently of $(q_n)$ and turns the disbelief into a convex combination of the past $d_{q_n}$ with weights $(1 - \lambda_n)\prod_{k > n}\lambda_k$, which decay geometrically once $\lambda_n$ is close to $15/16$. If $d_{q_n}$ converges, so does this running mean, which gives the limit; if $d_{q_n}$ is stationary but fluctuating, the running mean stays within the range of the recent evidence and inherits its fluctuations, damped by the window. Statement (iii) is \cref{thm:geo}. The assumptions of stable input and label opinions enter through the auxiliary sub-step: they fix the factor $T_x \oslash T_{y_\text{batch}}$, so that the same map is applied at every batch and the fixed-point argument applies.
 \end{proof}
 
-
-
-
-
-\subsection{Proof for Theorem~\ref{thm:infvac}}
+\section{Proof of \cref{thm:infvac}}
 
 Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over any variable, with arbitrary base rate \( a \in [0, 1] \). Then the following two properties hold:
 
@@ -138,7 +103,7 @@ Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over
     \omega^{[A;B]}_X = \omega^A_B \otimes (0,0,1,a)= (0,0,1,a)
     \]
     \textit{Proof.} Using the trust discounting operator from Subjective Logic, we set $P$ to the projected probability of \(\omega^A_B\):
-    \[\omega^{[A;B]}_X = 
+    \[\omega^{[A;B]}_X =
     \begin{cases}
     b^{[A;B]}_X = P\cdot 0 = 0, \\
     d^{[A;B]}_X = P\cdot 0 = 0, \\
@@ -161,7 +126,7 @@ Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over
     \[
     T_{x_i} \otimes T_{\theta_i} = (0,0,1,a), \quad \forall i.
     \]
-    Then, by fusion of vacuous opinions:
+    Then, by fusion of vacuous opinions (averaging fusion is idempotent, so the mean of vacuous opinions is vacuous):
     \[
     T_z = \bigoplus_i (0,0,1,a) = (0,0,1,a).
     \]
@@ -171,7 +136,7 @@ Let \( \omega^\emptyset = (0, 0, 1, a) \) denote a vacuous binomial opinion over
     \]
 \end{enumerate}
 
-\subsection{Proof for Theorem~\ref{thm:sym}}
+\section{Proof of \cref{thm:sym}}
 \begin{proof}
 We prove the theorem in two steps.
 
@@ -192,7 +157,7 @@ Let $x = (b, d, u)$ be any binomial opinion and $\bar{x} = (d, b, u)$ its symmet
 Since $b + d = 1 - u$, both discounted opinions have identical uncertainty and symmetric belief/disbelief masses. Hence, $\omega_\theta \otimes x$ and $\omega_\theta \otimes \bar{x}$ are symmetric.
 
 \emph{(2) Symmetry Preservation under Fusion:} \\
-Let $\mathcal{X} = \{x_1, \dots, x_n\}$ be a set of discounted opinions resulting from symmetric inputs, and let $\bar{\mathcal{X}} = \{\bar{x}_1, \dots, \bar{x}_n\}$ be their symmetric counterparts. Consider any symmetric fusion operator $\bigoplus$ (such as averaging, cumulative fusion, or consensus fusion in Subjective Logic) applied to $\mathcal{X}$ and $\bar{\mathcal{X}}$.
+Let $\mathcal{X} = \{x_1, \dots, x_n\}$ be a set of discounted opinions resulting from symmetric inputs, and let $\bar{\mathcal{X}} = \{\bar{x}_1, \dots, \bar{x}_n\}$ be their symmetric counterparts. Consider any fusion operator $\bigoplus$ that treats belief and disbelief symmetrically (the component-wise mean used in this thesis, as well as averaging, cumulative or consensus fusion in Subjective Logic) applied to $\mathcal{X}$ and $\bar{\mathcal{X}}$.
 
 Since each pair $(x_i, \bar{x}_i)$ is symmetric and the operator treats belief and disbelief symmetrically, we have:
 \[
@@ -201,7 +166,7 @@ Since each pair $(x_i, \bar{x}_i)$ is symmetric and the operator treats belief a
 Thus, the output of the PaTAS feedforward inference remains symmetric when symmetric inputs are provided.
 
 \emph{(3) Invariance under Fusion:} \\
-A fundamental property of Subjective Logic fusion operators is that if all input opinions assign the same value to a specific mass (e.g., belief or disbelief), the result will preserve that value. In particular, if all input opinions have belief mass equal to zero, the fused result will also have belief mass zero. The same applies to disbelief mass.
+If all input opinions assign the value zero to a specific mass (belief or disbelief), the fused result preserves that value under every operator considered here, since the fused belief (disbelief) is a weighted average of the input beliefs (disbeliefs). In particular, if all input opinions have belief mass equal to zero, the fused result also has belief mass zero. The same applies to disbelief mass.
 
 Therefore, if the discounting step yields discounted opinions with zero belief (or zero disbelief) across all components, then the fusion stage will preserve that zero mass in the final output.
 
@@ -218,4 +183,3 @@ For $\bar{x} = (0, 1, 0)$ (fully distrusted), we have:
 \]
 so the discounted opinion assigns zero belief. Therefore, the belief from a fully distrusted input is always zero in the PaTAS output.
 \end{proof}
-
